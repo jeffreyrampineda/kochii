@@ -1,0 +1,11 @@
+<p>
+    inventory
+</p>
+<ul>
+    <li *ngFor="let item of items">
+        id: {{ item.id }} | 
+        name: {{ item.name }} | 
+        quantity: {{ item.quantity }} | 
+        expiration: {{ daysFromToday(item.expirationDate) }} day(s)
+    </li>
+</ul>
