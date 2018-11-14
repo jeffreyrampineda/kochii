@@ -1,0 +1,20 @@
+#top {
+    height: 100vh;
+}
+
+#heading {
+    position: absolute;
+    top: 38%;
+    text-align: center;
+    width: 100%;
+}
+
+#logo {
+    font-weight: normal;
+    font-size: 96px;
+    line-height: 72px;
+}
+
+#menu {
+    padding: 14px;
+}
