@@ -8,8 +8,6 @@ import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RecipeArchiveComponent } from './components/recipe-archive/recipe-archive.component';
-import { AboutComponent } from './components/about/about.component';
-import { ContactComponent } from './components/contact/contact.component';
 
 //--------- dashboard
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
@@ -44,8 +42,6 @@ const routes: Routes = [
       { path: '**', redirectTo: 'overview' }
     ]},
   { path: 'recipe-archive', component: RecipeArchiveComponent},
-  { path: 'about', component: AboutComponent },
-  { path: 'contact', component: ContactComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: '**', component: PagenotfoundComponent }

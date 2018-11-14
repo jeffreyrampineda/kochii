@@ -16,5 +16,18 @@
 }
 
 #menu {
-    padding: 14px;
+    margin: 18px;
+}
+
+section {
+    min-height: 40%;
+    border-bottom: 1px solid #eee;
+}
+
+.content {
+    margin: 0 auto;
+    max-width: 750px;
+    text-align: left;
+    margin-top: 100px;
+    margin-bottom: 100px;
 }
