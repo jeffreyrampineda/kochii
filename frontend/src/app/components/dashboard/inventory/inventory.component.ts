@@ -16,7 +16,8 @@ export class InventoryComponent implements OnInit {
     inventory: MatTableDataSource<ItemInstance>;
 
     constructor(
-        private inventoryService: InventoryService) { }
+        private inventoryService: InventoryService
+    ) { }
 
     ngOnInit() {
         this.getInventory();

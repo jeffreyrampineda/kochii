@@ -28,6 +28,13 @@ export class InventoryService {
       )
   }
 
+  addItem (item: ItemInstance): Observable<ItemInstance> {
+    return this.http.post<ItemInstance>(this.inventoryUrl, item, httpOptions).pipe(
+      tap((item: ItemInstance) => this.log(`added item w/ id=${item.id}`)),
+      catchError(this.handleError<ItemInstance>('addItem'))
+    );
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 

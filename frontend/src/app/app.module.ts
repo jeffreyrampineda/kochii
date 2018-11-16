@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import {
   MatButtonModule,
@@ -64,6 +65,7 @@ import { HistoryComponent } from './components/dashboard/history/history.compone
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
