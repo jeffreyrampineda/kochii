@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { InventoryService } from '../../../services/inventory.service';
 import { ItemInstance } from '../../../interfaces/item-instance';
+import { MatTableDataSource } from '@angular/material';
 
 @Component({
     selector: 'app-inventory',
@@ -9,19 +10,18 @@ import { ItemInstance } from '../../../interfaces/item-instance';
 })
 export class InventoryComponent implements OnInit {
 
-    items: ItemInstance[];
+    displayedColumns: string[] = ['id', 'name', 'quantity', 'expiration'];
+    inventory: MatTableDataSource<ItemInstance>;
 
-    constructor(private inventoryService: InventoryService) {
-        this.items = [];
-    }
+    constructor(
+        private inventoryService: InventoryService) { }
 
     ngOnInit() {
         this.getInventory();
     }
 
     getInventory(): void {
-        this.inventoryService.getInventory()
-            .subscribe(items => this.items = items);
+        this.inventoryService.getInventory().subscribe(inventory => this.inventory = new MatTableDataSource(inventory));
     }
 
     daysFromToday(date): number {
@@ -30,5 +30,9 @@ export class InventoryComponent implements OnInit {
         var timeDiff = Math.abs(expirationDate.getTime() - today.getTime());
         var diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
         return diffDays;
+    }
+
+    applyFilter(filterValue: string) {
+        this.inventory.filter = filterValue.trim().toLowerCase();
     }
 }
