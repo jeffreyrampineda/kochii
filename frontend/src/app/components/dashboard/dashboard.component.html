@@ -1,14 +1,12 @@
-<div>
-  <mat-toolbar>
-    <mat-toolbar-row>
-      <button mat-button routerLink="/">Kochii</button>
-      <button mat-button>jeffreyrampineda@example.com</button>
-    </mat-toolbar-row>
-  </mat-toolbar>
+<div class="container">
+  <nav class="nav justify-content-end">
+    <button class="navbar-brand" mat-button routerLink="/">Kochii</button>
+    <button mat-button>jeffreyrampineda@example.com</button>
+  </nav>
   <hr>
-  <div>
-    <div>
-      <nav>
+  <div class="row">
+    <div class="col-md-3">
+      <nav class="nav flex-column">
         <button mat-button routerLink="overview">Overview</button>
         <button mat-button routerLink="inventory">Inventory</button>
         <button mat-button routerLink="recipes">Recipe Book</button>
@@ -17,12 +15,12 @@
         <button mat-button routerLink="history">History</button>
       </nav>
     </div>
-    <div>
+    <div class="col-md-9">
       <router-outlet></router-outlet>
     </div>
   </div>
   <hr>
+  <footer>
+    jeffreyrampineda &copy; 2018
+  </footer>
 </div>
-<footer>
-  jeffreyrampineda &copy; 2018
-</footer>
