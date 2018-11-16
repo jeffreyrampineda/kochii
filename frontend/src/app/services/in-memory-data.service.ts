@@ -18,7 +18,18 @@ export class InMemoryDataService implements InMemoryDbService {
             new ItemInstance(1, "Eggs", 4, this.added_date, this.expiration_date ),
             new ItemInstance(2, "Butter", 2, this.added_date, this.expiration_date ),
             new ItemInstance(3, "Peanut", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(4, "Apples", 6, this.added_date, this.added_date )
+            new ItemInstance(4, "Apples", 6, this.added_date, this.added_date ),
+            new ItemInstance(5, "Lazy Item 1", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(6, "Lazy Item 2", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(7, "Lazy Item 3", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(8, "Lazy Item 4", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(9, "Lazy Item 5", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(10, "Lazy Item 6", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(11, "Lazy Item 7", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(12, "Lazy Item 8", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(13, "Lazy Item 9", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(14, "Lazy Item 10", 5, this.added_date, this.expiration_date ),
+            new ItemInstance(15, "Lazy Item 11", 5, this.added_date, this.expiration_date ),
         ];
 
         const recipes: Recipe[] = [{

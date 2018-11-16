@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { InventoryService } from '../../../services/inventory.service';
 import { ItemInstance } from '../../../interfaces/item-instance';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
 
 @Component({
     selector: 'app-inventory',
@@ -9,6 +9,8 @@ import { MatTableDataSource } from '@angular/material';
     styleUrls: ['./inventory.component.css']
 })
 export class InventoryComponent implements OnInit {
+
+    @ViewChild(MatPaginator) paginator: MatPaginator;
 
     displayedColumns: string[] = ['id', 'name', 'quantity', 'expiration'];
     inventory: MatTableDataSource<ItemInstance>;
@@ -21,7 +23,12 @@ export class InventoryComponent implements OnInit {
     }
 
     getInventory(): void {
-        this.inventoryService.getInventory().subscribe(inventory => this.inventory = new MatTableDataSource(inventory));
+        this.inventoryService.getInventory().subscribe(
+            inventory => {
+                this.inventory = new MatTableDataSource(inventory);
+                this.inventory.paginator = this.paginator;
+            }
+        );
     }
 
     daysFromToday(date): number {

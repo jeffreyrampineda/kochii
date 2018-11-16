@@ -8,7 +8,7 @@
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
     </mat-form-field>
 
-    <table mat-table [dataSource]="inventory" class="mat-elevation-z8">
+    <table mat-table [dataSource]="inventory">
 
       <!-- Id Column -->
       <ng-container matColumnDef="id">
@@ -37,5 +37,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
   </mat-card-content>
 </mat-card>
