@@ -1,7 +1,9 @@
+import Item from '../models/item';
+
 class InventoryController {
 
     async getInventory(ctx) {
-        ctx.body = {message: "hello inventory"}
+        ctx.body = await Item.find();
     }
 }
 
