@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MessageService } from './message.service';
 
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { ItemInstance } from '../interfaces/item-instance';
 
@@ -15,6 +15,7 @@ const httpOptions = {
 export class InventoryService {
 
   private inventoryUrl = 'api/inventory';
+  private queryUrl: string = '/?name=^';
 
   constructor(
     private http: HttpClient,
@@ -33,6 +34,21 @@ export class InventoryService {
       tap((item: ItemInstance) => this.log(`added item w/ id=${item.id}`)),
       catchError(this.handleError<ItemInstance>('addItem'))
     );
+  }
+
+  search(terms: Observable<string>) {
+    return terms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap(term => this.searchEntries(term))
+      )
+  }
+
+  searchEntries(term) {
+    if(term != "") {
+      return this.http.get(this.inventoryUrl + this.queryUrl + term);
+    }
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

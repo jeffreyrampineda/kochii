@@ -6,11 +6,12 @@
   <mat-card-content>
     <div class="form-container">
         <mat-form-field>
-            <input matInput placeholder="Id" [(ngModel)]="itemModel.id">
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput placeholder="Name" [(ngModel)]="itemModel.name">
+            <input matInput placeholder="Name" (keyup)="searchTerm$.next($event.target.value)" [matAutocomplete]="auto">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let result of results | slice:0:9" [value]="result.name">
+                {{ result.name }}
+              </mat-option>
+            </mat-autocomplete>
         </mat-form-field>
 
         <mat-form-field>
