@@ -5,7 +5,7 @@ import { MessageService } from './message.service';
 import { Observable, of } from 'rxjs';
 import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
-import { ItemInstance } from '../interfaces/item-instance';
+import { Item } from '../interfaces/item';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -21,18 +21,18 @@ export class InventoryService {
     private http: HttpClient,
     private messageService: MessageService) { }
 
-  getInventory(): Observable<ItemInstance[]> {
-    return this.http.get<ItemInstance[]>(this.inventoryUrl)
+  getInventory(): Observable<Item[]> {
+    return this.http.get<Item[]>(this.inventoryUrl)
       .pipe(
         tap(_ => console.log('fetched inventory')),
         catchError(this.handleError('getInventory', []))
       )
   }
 
-  addItem (item: ItemInstance): Observable<ItemInstance> {
-    return this.http.post<ItemInstance>(this.inventoryUrl, item, httpOptions).pipe(
-      tap((item: ItemInstance) => this.log(`added item w/ id=${item.id}`)),
-      catchError(this.handleError<ItemInstance>('addItem'))
+  addItem (item: Item): Observable<Item> {
+    return this.http.post<Item>(this.inventoryUrl, item, httpOptions).pipe(
+      tap((item: Item) => this.log(`added item w/ id=${item.id}`)),
+      catchError(this.handleError<Item>('addItem'))
     );
   }
 

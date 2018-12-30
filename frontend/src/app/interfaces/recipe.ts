@@ -1,9 +1,9 @@
-import { ItemInstance } from "./item-instance";
+import { Item } from "./item";
 
 export interface Recipe {
     id: number;
     title: string ;
     description: string;
-    ingredients: ItemInstance[];
+    ingredients: Item[];
     steps: string; 
 }

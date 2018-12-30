@@ -1,5 +1,5 @@
 import { InMemoryDbService } from 'angular-in-memory-web-api';
-import { ItemInstance } from '../interfaces/item-instance';
+import { Item } from '../interfaces/item';
 import { Injectable } from '@angular/core';
 import { Recipe } from '../interfaces/recipe';
 
@@ -14,22 +14,19 @@ export class InMemoryDataService implements InMemoryDbService {
     createDb() {
         this.expiration_date.setDate(this.expiration_date.getDate() + 7);
 
-        const inventory: ItemInstance[] = [
-            new ItemInstance(1, "Eggs", 4, this.added_date, this.expiration_date ),
-            new ItemInstance(2, "Butter", 2, this.added_date, this.expiration_date ),
-            new ItemInstance(3, "Peanut", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(4, "Apples", 6, this.added_date, this.added_date ),
-            new ItemInstance(5, "Lazy Item 1", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(6, "Lazy Item 2", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(7, "Lazy Item 3", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(8, "Lazy Item 4", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(9, "Lazy Item 5", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(10, "Lazy Item 6", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(11, "Lazy Item 7", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(12, "Lazy Item 8", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(13, "Lazy Item 9", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(14, "Lazy Item 10", 5, this.added_date, this.expiration_date ),
-            new ItemInstance(15, "Lazy Item 11", 5, this.added_date, this.expiration_date ),
+        const inventory: Item[] = [
+            { id: 1, name: "Egg", quantity: 4, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 2, name: "Butter", quantity: 2, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 3, name: "Peanut", quantity: 5, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 4, name: "Apple", quantity: 6, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 5, name: "Lazy Item 1", quantity: 7, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 6, name: "Lazy Item 2", quantity: 6, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 7, name: "Lazy Item 3", quantity: 5, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 8, name: "Lazy Item 4", quantity: 5, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 9, name: "Lazy Item 5", quantity: 4, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 10, name: "Lazy Item 6", quantity: 3, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 11, name: "Lazy Item 7", quantity: 2, addedDate: this.added_date, expirationDate: this.expiration_date },
+            { id: 12, name: "Lazy Item 8", quantity: 8, addedDate: this.added_date, expirationDate: this.expiration_date },
         ];
 
         const recipes: Recipe[] = [{
@@ -37,9 +34,9 @@ export class InMemoryDataService implements InMemoryDbService {
             title: "Eggs du le Butter et Peanut",
             description: "A delicious egg mixed with butter topped with peanuts",
             ingredients: [
-                new ItemInstance(1, "Eggs", 4, this.added_date, this.expiration_date ),
-                new ItemInstance(2, "Butter", 2, this.added_date, this.expiration_date ),
-                new ItemInstance(3, "Peanut", 5, this.added_date, this.expiration_date )
+                { id: 1, name: "Egg", quantity: 4, addedDate: this.added_date, expirationDate: this.expiration_date },
+                { id: 2, name: "Butter", quantity: 2, addedDate: this.added_date, expirationDate: this.expiration_date },
+                { id: 3, name: "Peanut", quantity: 5, addedDate: this.added_date, expirationDate: this.expiration_date },
             ],
             steps: "1. Heat up butter. 2. Put the egg inside. 3. Put the peanuts inside."
         }, {
@@ -47,8 +44,8 @@ export class InMemoryDataService implements InMemoryDbService {
             title: "Water du la fromage",
             description: "High quality sparkling water mixed with cheese",
             ingredients: [
-                new ItemInstance(4, "Water", 2, this.added_date, this.expiration_date ),
-                new ItemInstance(5, "Cheese", 4, this.added_date, this.expiration_date )
+                { id: 1, name: "Egg", quantity: 4, addedDate: this.added_date, expirationDate: this.expiration_date },
+                { id: 2, name: "Butter", quantity: 2, addedDate: this.added_date, expirationDate: this.expiration_date },
             ],
             steps: "1. Put the water in the bowl. 2. Put the cheese inside."
         }];
