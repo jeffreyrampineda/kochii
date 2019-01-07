@@ -15,7 +15,7 @@ const httpOptions = {
 export class InventoryService {
 
   private inventoryUrl = 'http://localhost:3001/api/inventory';
-  private queryUrl: string = '/?name=^';
+  private queryUrl: string = '/search/';
 
   constructor(
     private http: HttpClient,

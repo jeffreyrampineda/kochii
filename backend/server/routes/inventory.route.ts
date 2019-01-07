@@ -8,4 +8,6 @@ router.prefix('/api/inventory');
 // GET /api/inventory
 router.get('/', InventoryController.getInventory)
 
+router.get('/search/:name', InventoryController.searchItemByName)
+
 export const InventoryRoute = router.routes();
