@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Recipe } from 'src/app/interfaces/recipe';
 import { RecipeService } from 'src/app/services/recipe.service';
+import { MatTableDataSource, MatPaginator } from '@angular/material';
 
 @Component({
   selector: 'app-recipes',
@@ -9,18 +10,29 @@ import { RecipeService } from 'src/app/services/recipe.service';
 })
 export class RecipesComponent implements OnInit {
 
-  recipes: Recipe[];
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private recipeService: RecipeService) {
-    this.recipes = []
-  }
+  displayedColumns: string[] = ['name', 'description'];
+  recipes: MatTableDataSource<Recipe>;
+
+  constructor(
+    private recipeService: RecipeService
+  ) { }
 
   ngOnInit() {
     this.getRecipes()
   }
 
   getRecipes(): void {
-    this.recipeService.getRecipes()
-        .subscribe(recipes => this.recipes = recipes);
-}
+    this.recipeService.getRecipes().subscribe(
+      recipes => {
+        this.recipes = new MatTableDataSource(recipes);
+        this.recipes.paginator = this.paginator;
+      }
+    );
+  }
+
+  applyFilter(filterValue: string) {
+    this.recipes.filter = filterValue.trim().toLowerCase();
+  }
 }

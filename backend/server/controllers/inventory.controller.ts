@@ -11,7 +11,7 @@ class InventoryController {
     }
 
     async getByName(ctx) {
-        ctx.body = await Item.find({ name: ctx.params.name })
+        ctx.body = await Item.findOne({ name: ctx.params.name })
     }
 
     async getById(ctx) {

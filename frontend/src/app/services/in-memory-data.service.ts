@@ -1,4 +1,4 @@
-import { InMemoryDbService } from 'angular-in-memory-web-api';
+/* import { InMemoryDbService } from 'angular-in-memory-web-api';
 import { Item } from '../interfaces/item';
 import { Injectable } from '@angular/core';
 import { Recipe } from '../interfaces/recipe';
@@ -52,4 +52,4 @@ export class InMemoryDataService implements InMemoryDbService {
 
         return { inventory, recipes };
     }
-}
+} */

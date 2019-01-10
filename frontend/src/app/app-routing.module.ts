@@ -13,6 +13,7 @@ import { RecipeArchiveComponent } from './components/recipe-archive/recipe-archi
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
 import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
+import { RecipeComponent } from './components/dashboard/recipes/recipe/recipe.component';
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
@@ -35,7 +36,7 @@ const routes: Routes = [
       { path: 'inventory/add', component: AddItemComponent },
       { path: 'inventory/:id', component: ItemComponent },
       { path: 'recipes', component: RecipesComponent },
-      { path: 'recipes/:id', component: RecipesComponent },
+      { path: 'recipes/:id', component: RecipeComponent },
       { path: 'groceries', component: GroceriesComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'history', component: HistoryComponent },

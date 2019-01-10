@@ -11,13 +11,12 @@ const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
 
-  private recipesUrl = 'api/recipes';
+  private recipesUrl = 'http://localhost:3001/api/recipes';
 
   constructor(
     private http: HttpClient,
@@ -29,6 +28,14 @@ export class RecipeService {
         tap(_ => console.log('fetched recipes')),
         catchError(this.handleError('getRecipes', []))
       )
+  }
+
+  getRecipeById(id): Observable<Recipe> {
+    return this.http.get<Recipe>(this.recipesUrl + `/id/${id}`)
+      .pipe(
+        tap(_ => console.log(`fetched recipe id=${id}`)),
+        catchError(this.handleError<Recipe>(`getRecipeById id=${id}`))
+      );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {

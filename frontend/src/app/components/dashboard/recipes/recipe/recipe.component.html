@@ -1,0 +1,13 @@
+<div *ngIf="recipe">
+  <h2>{{recipe.name}} Details</h2><br>
+  <span>{{recipe.description}}</span><br>
+  Ingredients
+  <ul>
+    <li *ngFor="let ingredient of recipe.ingredients">{{ingredient}}</li>
+  </ul>
+  Steps
+  <ul>
+    <li *ngFor="let step of recipe.steps">{{step}}</li>
+  </ul>
+  <button (click)="goBack()">go back</button>
+</div>

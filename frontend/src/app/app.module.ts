@@ -46,6 +46,7 @@ import { RecipesComponent } from './components/dashboard/recipes/recipes.compone
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
+import { RecipeComponent } from './components/dashboard/recipes/recipe/recipe.component';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { HistoryComponent } from './components/dashboard/history/history.compone
     RecipesComponent,
     GroceriesComponent,
     SettingsComponent,
-    HistoryComponent
+    HistoryComponent,
+    RecipeComponent
   ],
   imports: [
     BrowserModule,

@@ -1,9 +1,7 @@
-import { Item } from "./item";
-
 export interface Recipe {
-    id: number;
+    _id: string;
     title: string ;
     description: string;
-    ingredients: Item[];
-    steps: string; 
+    ingredients: string[];
+    steps: string[]; 
 }
