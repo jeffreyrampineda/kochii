@@ -5,5 +5,10 @@ const router = new Router();
 
 router.get('/', InventoryController.getAll)
 router.get('/search/:name', InventoryController.searchByName)
+router.get('/:name', InventoryController.getByName)
+router.get('/:id', InventoryController.getById)
+router.post('/', InventoryController.create)
+router.put('/:id', InventoryController.update)
+router.del('/:id', InventoryController.delete)
 
 export const InventoryRoute = router.routes();
