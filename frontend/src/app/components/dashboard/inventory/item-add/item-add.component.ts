@@ -14,29 +14,33 @@ const DEFAULT_EXPIRATION = new Date().setDate(TODAY.getDate() + 7);
 })
 export class ItemAddComponent implements OnInit {
 
-  itemModel: Item = { 
-    id: 99, 
-    name: "New Item", 
-    quantity: 99, 
-    addedDate: TODAY, 
-    expirationDate: TODAY
-  }
+  itemModel: Item;
   results: Object;
   searchTerm$ = new Subject<string>();
   constructor(
     private router: Router,
     private inventoryService: InventoryService
   ) {
-    this.inventoryService.search(this.searchTerm$)
-      .subscribe(results => {
+    this.itemModel = {
+      name: "New Item", 
+      quantity: 1, 
+      addedDate: TODAY, 
+      expirationDate: TODAY
+    }
+    this.inventoryService.search(this.searchTerm$).subscribe(
+      results => {
         this.results = results;
-      });
+      }
+    );
   }
   ngOnInit() { }
 
   addItem(): void {
-    this.inventoryService.addItem(this.itemModel).subscribe(()=> {
-      this.router.navigate(['dashboard/inventory']);
-    })
+    this.inventoryService.addItem(this.itemModel).subscribe( 
+      results => {
+        console.log(results);
+        this.router.navigate(['dashboard/inventory']);
+      }
+    );
   }
 }

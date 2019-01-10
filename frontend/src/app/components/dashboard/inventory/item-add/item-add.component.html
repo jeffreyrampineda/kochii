@@ -6,7 +6,7 @@
   <mat-card-content>
     <div class="form-container">
         <mat-form-field>
-            <input matInput placeholder="Name" (keyup)="searchTerm$.next($event.target.value)" [matAutocomplete]="auto">
+            <input matInput placeholder="Name" [(ngModel)]="itemModel.name" (keyup)="searchTerm$.next($event.target.value)" [matAutocomplete]="auto" >
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let result of results | slice:0:9" [value]="result.name">
                 {{ result.name }}

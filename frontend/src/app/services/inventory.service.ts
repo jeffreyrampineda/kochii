@@ -26,14 +26,15 @@ export class InventoryService {
       .pipe(
         tap(_ => console.log('fetched inventory')),
         catchError(this.handleError('getInventory', []))
-      )
+      );
   }
 
-  addItem (item: Item): Observable<Item> {
-    return this.http.post<Item>(this.inventoryUrl, item, httpOptions).pipe(
-      tap((item: Item) => this.log(`added item w/ id=${item.id}`)),
-      catchError(this.handleError<Item>('addItem'))
-    );
+  addItem(item: Item): Observable<Item> {
+    return this.http.post<Item>(this.inventoryUrl, item, httpOptions)
+      .pipe(
+        tap((item: Item) => this.log(`added item w/ id=${item._id}`)),
+        catchError(this.handleError<Item>('addItem'))
+      );
   }
 
   search(terms: Observable<string>) {
@@ -42,7 +43,7 @@ export class InventoryService {
         debounceTime(400),
         distinctUntilChanged(),
         switchMap(term => this.searchEntries(term))
-      )
+      );
   }
 
   searchEntries(term) {
