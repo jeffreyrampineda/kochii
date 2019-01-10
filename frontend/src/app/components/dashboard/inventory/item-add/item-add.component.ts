@@ -8,11 +8,11 @@ const TODAY = new Date();
 const DEFAULT_EXPIRATION = new Date().setDate(TODAY.getDate() + 7);
 
 @Component({
-  selector: 'add-item',
-  templateUrl: './add-item.component.html',
-  styleUrls: ['./add-item.component.css']
+  selector: 'item-add',
+  templateUrl: './item-add.component.html',
+  styleUrls: ['./item-add.component.css']
 })
-export class AddItemComponent implements OnInit {
+export class ItemAddComponent implements OnInit {
 
   itemModel: Item = { 
     id: 99, 

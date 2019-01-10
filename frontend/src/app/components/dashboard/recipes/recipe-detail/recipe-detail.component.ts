@@ -5,11 +5,11 @@ import { RecipeService } from '../../../../services/recipe.service';
 import { Recipe } from 'src/app/interfaces/recipe';
 
 @Component({
-  selector: 'app-recipe',
-  templateUrl: './recipe.component.html',
-  styleUrls: ['./recipe.component.css']
+  selector: 'recipe-detail',
+  templateUrl: './recipe-detail.component.html',
+  styleUrls: ['./recipe-detail.component.css']
 })
-export class RecipeComponent implements OnInit {
+export class RecipeDetailComponent implements OnInit {
 
   @Input() recipe: Recipe;
 

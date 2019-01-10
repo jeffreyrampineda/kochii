@@ -38,15 +38,15 @@ import { RecipeArchiveComponent } from './components/recipe-archive/recipe-archi
 import { RegisterComponent } from './components/register/register.component';
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
-import { ItemComponent } from './components/dashboard/inventory/item.component';
-import { AddItemComponent } from './components/dashboard/inventory/add-item.component';
+import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
+import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
 
 import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
 
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
-import { RecipeComponent } from './components/dashboard/recipes/recipe/recipe.component';
+import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
 
 @NgModule({
   declarations: [
@@ -59,13 +59,13 @@ import { RecipeComponent } from './components/dashboard/recipes/recipe/recipe.co
     RegisterComponent,
     OverviewComponent,
     InventoryComponent,
-    ItemComponent,
-    AddItemComponent,
+    ItemDetailComponent,
+    ItemAddComponent,
     RecipesComponent,
     GroceriesComponent,
     SettingsComponent,
     HistoryComponent,
-    RecipeComponent
+    RecipeDetailComponent
   ],
   imports: [
     BrowserModule,

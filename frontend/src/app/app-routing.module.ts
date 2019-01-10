@@ -13,15 +13,15 @@ import { RecipeArchiveComponent } from './components/recipe-archive/recipe-archi
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
 import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
-import { RecipeComponent } from './components/dashboard/recipes/recipe/recipe.component';
+import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
 
 //--------- etc
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
-import { AddItemComponent } from './components/dashboard/inventory/add-item.component';
-import { ItemComponent } from './components/dashboard/inventory/item.component';
+import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
+import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
 
 
 
@@ -33,10 +33,10 @@ const routes: Routes = [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: OverviewComponent },
       { path: 'inventory', component: InventoryComponent },
-      { path: 'inventory/add', component: AddItemComponent },
-      { path: 'inventory/:id', component: ItemComponent },
+      { path: 'inventory/add', component: ItemAddComponent },
+      { path: 'inventory/:id', component: ItemDetailComponent },
       { path: 'recipes', component: RecipesComponent },
-      { path: 'recipes/:id', component: RecipeComponent },
+      { path: 'recipes/:id', component: RecipeDetailComponent },
       { path: 'groceries', component: GroceriesComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'history', component: HistoryComponent },
