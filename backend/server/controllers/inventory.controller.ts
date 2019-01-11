@@ -3,11 +3,11 @@ import Item from '../models/item';
 class InventoryController {
 
     async getAll(ctx) {
-        ctx.body = await Item.find();
+        ctx.body = await Item.find().sort({ expirationDate: -1 });
     }
 
     async searchByName(ctx) {
-        ctx.body = await Item.find({ name : {$regex: "^" + ctx.params.name } });
+        ctx.body = await Item.find({ name : { $regex: "^" + ctx.params.name } });
     }
 
     async getByName(ctx) {

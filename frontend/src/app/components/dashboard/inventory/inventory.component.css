@@ -1,5 +1,10 @@
 table {
     width: 100%;
+    table-layout:fixed;
+}
+
+.mat-column-select {
+    width: 100px;
 }
 
 .filter {

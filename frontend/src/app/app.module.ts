@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ExpirationPipe } from './pipes/expiration.pipes';
 
 import {
   MatButtonModule,
@@ -18,7 +19,10 @@ import {
   MatDatepickerModule,
   MatNativeDateModule,
   MatRadioModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatTooltipModule,
+  MatCheckboxModule,
+  MatSortModule
 } from '@angular/material';
 
 import { HttpClientModule }    from '@angular/common/http';
@@ -65,7 +69,8 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
     GroceriesComponent,
     SettingsComponent,
     HistoryComponent,
-    RecipeDetailComponent
+    RecipeDetailComponent,
+    ExpirationPipe
   ],
   imports: [
     BrowserModule,
@@ -97,7 +102,10 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
     MatDatepickerModule,
     MatNativeDateModule,
     MatRadioModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatTooltipModule,
+    MatCheckboxModule,
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]
