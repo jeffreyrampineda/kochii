@@ -41,7 +41,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RecipeArchiveComponent } from './components/recipe-archive/recipe-archive.component';
 import { RegisterComponent } from './components/register/register.component';
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
-import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
+import { 
+  InventoryComponent,
+  DeleteConfirmationDialog 
+} from './components/dashboard/inventory/inventory.component';
 import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
 import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
 
@@ -63,6 +66,7 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
     RegisterComponent,
     OverviewComponent,
     InventoryComponent,
+    DeleteConfirmationDialog,
     ItemDetailComponent,
     ItemAddComponent,
     RecipesComponent,
@@ -108,6 +112,9 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
     MatSortModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    DeleteConfirmationDialog
+  ]
 })
 export class AppModule { }

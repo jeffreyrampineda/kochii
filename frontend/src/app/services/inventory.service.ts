@@ -24,7 +24,7 @@ export class InventoryService {
   getInventory(): Observable<Item[]> {
     return this.http.get<Item[]>(this.inventoryUrl)
       .pipe(
-        tap(_ => console.log('fetched inventory')),
+        tap(_ => this.log('fetched inventory')),
         catchError(this.handleError('getInventory', []))
       );
   }
@@ -34,6 +34,39 @@ export class InventoryService {
       .pipe(
         tap((item: Item) => this.log(`added item w/ id=${item._id}`)),
         catchError(this.handleError<Item>('addItem'))
+      );
+  }
+
+  deleteItem(_id: string): Observable<any> {
+    const url = `${this.inventoryUrl}/${_id}`;
+ 
+    return this.http.delete(url, httpOptions)
+      .pipe(
+        tap(_ => this.log(`deleted item id=${_id}`)),
+        catchError(this.handleError<Item>('deleteItem'))
+      );
+  }
+
+  deleteManyItem(_ids: string[]): Observable<any> {
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      body: _ids
+    };
+
+    return this.http.delete(this.inventoryUrl, options)
+      .pipe(
+        tap(_ => this.log(`deleted many items ids=${_ids}`)),
+        catchError(this.handleError<Item>('deleteManyItem'))
+      );
+  }
+
+  updateItem(item: Item): Observable<any> {
+    const url = `${this.inventoryUrl}/${item._id}`;
+
+    return this.http.put(url, item, httpOptions)
+      .pipe(
+        tap(_ => this.log(`updated item id=${item._id}`)),
+        catchError(this.handleError<any>('updateItem'))
       );
   }
 

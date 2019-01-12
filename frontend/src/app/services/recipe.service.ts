@@ -25,7 +25,7 @@ export class RecipeService {
   getRecipes(): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(this.recipesUrl)
       .pipe(
-        tap(_ => console.log('fetched recipes')),
+        tap(_ => this.log('fetched recipes')),
         catchError(this.handleError('getRecipes', []))
       )
   }
@@ -33,7 +33,7 @@ export class RecipeService {
   getRecipeById(id): Observable<Recipe> {
     return this.http.get<Recipe>(this.recipesUrl + `/id/${id}`)
       .pipe(
-        tap(_ => console.log(`fetched recipe id=${id}`)),
+        tap(_ => this.log(`fetched recipe id=${id}`)),
         catchError(this.handleError<Recipe>(`getRecipeById id=${id}`))
       );
   }
