@@ -4,9 +4,6 @@ import { Router } from '@angular/router';
 import { Item } from 'src/app/interfaces/item';
 import { Subject } from 'rxjs';
 
-const TODAY = new Date();
-const DEFAULT_EXPIRATION = new Date().setDate(TODAY.getDate() + 7);
-
 @Component({
   selector: 'item-add',
   templateUrl: './item-add.component.html',
@@ -14,6 +11,7 @@ const DEFAULT_EXPIRATION = new Date().setDate(TODAY.getDate() + 7);
 })
 export class ItemAddComponent implements OnInit {
 
+  dateToday = new Date();
   itemModel: Item;
   results: Object;
   searchTerm$ = new Subject<string>();
@@ -21,11 +19,15 @@ export class ItemAddComponent implements OnInit {
     private router: Router,
     private inventoryService: InventoryService
   ) {
+
+    // time precision is not necessary.
+    this.dateToday.setHours(0,0,0,0);
+
     this.itemModel = {
       name: "New Item", 
       quantity: 1, 
-      addedDate: TODAY, 
-      expirationDate: TODAY
+      addedDate: this.dateToday, 
+      expirationDate: this.dateToday
     }
     this.inventoryService.search(this.searchTerm$).subscribe(
       results => {
@@ -37,7 +39,6 @@ export class ItemAddComponent implements OnInit {
 
   addItem(): void {
     // Check if item with same name and expiration date exists.
-    // TODO - error, expiration date checking is too precise. also checks time/seconds.
     this.inventoryService.getItemByNameAndExpirationDate(this.itemModel.name, this.itemModel.expirationDate).subscribe(
       results => {
         if(results) {
