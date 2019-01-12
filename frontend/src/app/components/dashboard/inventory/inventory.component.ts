@@ -113,12 +113,12 @@ export class InventoryComponent implements OnInit {
     }
 
     /** Selects all rows if they are not all selected; otherwise clear selection. */
-    masterToggle() {
-      this.isAllSelected() ? this.selection.clear() : this.inventory.data.forEach(row => this.selection.select(row));
+    selectMasterToggle() {
+      this.isAllSelected() ? this.selectionClear() : this.inventory.data.forEach(item => this.selectionSelect(item));
     }
 
     // Called by "Remove" button and "Cancel"
-    toggleSelectColumn() {
+    selectColumnToggle() {
         this.showSelect = !this.showSelect;
         if(this.showSelect) {
             this.displayedColumns.unshift("select");
@@ -142,13 +142,23 @@ export class InventoryComponent implements OnInit {
                 if(result.length > 0) {
                     this.updateManyItemRemoveQuantity(result);
                 }
-                this.toggleSelectColumn();
+                this.selectColumnToggle();
             }
         );
     }
 
+    selectionSelect(item: Item): void {
+        this.selection.select(item);
+        this.temporarySelectedItems.push(JSON.parse(JSON.stringify(item)));
+    }
+
+    selectionClear(): void {
+        this.selection.clear();
+        this.temporarySelectedItems = [];
+    }
+
     // Called when clicking selection checkbox
-    toggleSelection(item: Item): void {
+    selectionToggle(item: Item): void {
         this.selection.toggle(item);
         if(this.selection.isSelected(item)) {
 

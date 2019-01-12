@@ -3,8 +3,8 @@
     <mat-card-title>inventory</mat-card-title>
     <mat-card-subtitle>inventory quick description</mat-card-subtitle>
     <button mat-button routerLink="/dashboard/inventory/add">Add</button>
-    <button mat-button (click)="showSelect ? openDeleteConfirmationDialog() : toggleSelectColumn()">Remove</button>
-    <button mat-button (click)="toggleSelectColumn()" *ngIf="showSelect">Cancel</button>
+    <button mat-button (click)="showSelect ? openDeleteConfirmationDialog() : selectColumnToggle()">Remove</button>
+    <button mat-button (click)="selectColumnToggle()" *ngIf="showSelect">Cancel</button>
   </mat-card-header>
   <mat-card-content>
     <mat-form-field class="filter">
@@ -16,14 +16,14 @@
       <!-- Checkbox Column -->
       <ng-container matColumnDef="select" *ngIf="showSelect">
         <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox (change)="$event ? masterToggle() : null"
+          <mat-checkbox (change)="$event ? selectMasterToggle() : null"
                         [checked]="selection.hasValue() && isAllSelected()"
                         [indeterminate]="selection.hasValue() && !isAllSelected()">
           </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let item">
           <mat-checkbox (click)="$event.stopPropagation()"
-                        (change)="$event ? toggleSelection(item) : null"
+                        (change)="$event ? selectionToggle(item) : null"
                         [checked]="selection.isSelected(item)">
           </mat-checkbox>
         </td>
@@ -39,7 +39,7 @@
       <ng-container matColumnDef="quantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
         <td mat-cell *matCellDef="let item">
-          <mat-form-field *ngIf="selection.isSelected(item)">
+          <mat-form-field *ngIf="temporarySelectedItemsFind(item._id)">
             <input matInput type="number" [(ngModel)]="temporarySelectedItemsFind(item._id).quantity">
           </mat-form-field>
           {{ item.quantity }}
