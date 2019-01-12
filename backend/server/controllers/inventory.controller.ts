@@ -14,6 +14,10 @@ class InventoryController {
         ctx.body = await Item.findOne({ name: ctx.params.name })
     }
 
+    async getByNameAndExpirationDate(ctx) {
+        ctx.body = await Item.findOne({ name: ctx.params.name, expirationDate: ctx.params.expirationDate });
+    }
+
     async getById(ctx) {
         ctx.body = await Item.findOne({ _id: ctx.params.id })
     }

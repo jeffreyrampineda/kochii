@@ -29,6 +29,16 @@ export class InventoryService {
       );
   }
 
+  getItemByNameAndExpirationDate(name: string, expirationDate: Date): Observable<Item> {
+    const url = `${this.inventoryUrl}/${name}/${expirationDate}`;
+
+    return this.http.get<Item>(url)
+      .pipe(
+        tap(_ => this.log(`fetched item name=${name}, expirationDate=${expirationDate}`)),
+        catchError(this.handleError<Item>('getItemByNameAndExpirationDate'))
+      );
+  }
+
   addItem(item: Item): Observable<Item> {
     return this.http.post<Item>(this.inventoryUrl, item, httpOptions)
       .pipe(
