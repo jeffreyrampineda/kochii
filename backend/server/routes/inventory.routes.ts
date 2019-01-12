@@ -10,5 +10,6 @@ router.get('/:name', InventoryController.getByName)
 router.post('/', InventoryController.create)
 router.put('/:id', InventoryController.update)
 router.del('/:id', InventoryController.delete)
+router.del('/', InventoryController.deleteMany);
 
 export const InventoryRoute = router.routes();

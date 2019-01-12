@@ -29,6 +29,10 @@ class InventoryController {
     async delete(ctx) {
         ctx.body = await Item.deleteOne({ _id: ctx.params.id })
     }
+
+    async deleteMany(ctx) {
+        ctx.body = await Item.deleteMany({ _id: { $in: ctx.request.body }})
+    }
 }
 
 export default new InventoryController();
