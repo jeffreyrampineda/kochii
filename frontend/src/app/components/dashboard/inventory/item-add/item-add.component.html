@@ -5,8 +5,17 @@
   </mat-card-header>
   <mat-card-content>
     <div class="form-container">
+      <form [formGroup]="itemAddForm" (ngSubmit)="onSubmit()">
         <mat-form-field>
-            <input matInput placeholder="Name" [(ngModel)]="itemModel.name" (keyup)="searchTerm$.next($event.target.value)" [matAutocomplete]="auto" >
+            <input  matInput 
+                    formControlName="name"
+                    type="text"
+                    placeholder="Name"
+                    (keyup)="searchTerm$.next($event.target.value)" 
+                    [matAutocomplete]="auto" />
+            <mat-error *ngIf="f.name.errors">
+              <div *ngIf="f.name.errors.required">Name is required</div>
+            </mat-error>
             <mat-autocomplete #auto="matAutocomplete">
               <mat-option *ngFor="let result of results | slice:0:9" [value]="result.name">
                 {{ result.name }}
@@ -15,23 +24,36 @@
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput type="number" placeholder="Quantity" [(ngModel)]="itemModel.quantity">
+            <input  matInput
+                    formControlName="quantity"
+                    type="number"
+                    placeholder="Quantity" />
+            <mat-error *ngIf="f.quantity.errors">
+              <div *ngIf="f.quantity.errors.required">Quantity is required</div>
+            </mat-error>
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput [matDatepicker]="picker" placeholder="Date Added" [(ngModel)]="itemModel.addedDate">
+            <input  matInput
+                    formControlName="addedDate"
+                    placeholder="Added Date"
+                    [matDatepicker]="picker" />
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field>
-            <input matInput [matDatepicker]="picker2" placeholder="Expiration Date" [(ngModel)]="itemModel.expirationDate">
+            <input  matInput
+                    formControlName="expirationDate"
+                    placeholder="Expiration Date"
+                    [matDatepicker]="picker2" />
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
         </mat-form-field>
+      </form>
     </div>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-button (click)="addItem()">Add</button>
+    <button mat-button (click)="onSubmit()" [disabled]="itemAddForm.invalid">Add</button>
   </mat-card-actions>
 </mat-card>
