@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Router } from '@angular/router';
 import { Item } from 'src/app/interfaces/item';
-import { Subject } from 'rxjs';
+import { Subject, Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
 
 @Component({
@@ -15,7 +16,7 @@ export class ItemAddComponent implements OnInit {
   dateToday = new Date();
   results: Object;
   searchTerm$ = new Subject<string>();
-  itemAddForm: FormGroup;
+  itemAddForm: FormGroup[] = [];
 
   constructor(
     private router: Router,
@@ -33,7 +34,7 @@ export class ItemAddComponent implements OnInit {
     );
   }
   ngOnInit() {
-    this.itemAddForm = this.formBuilder.group({
+    this.itemAddForm.push(this.formBuilder.group({
       name: ['', [
         Validators.maxLength(20),
         Validators.required
@@ -41,52 +42,66 @@ export class ItemAddComponent implements OnInit {
       quantity: [null, Validators.required],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required]
-    });
+    }));
   }
 
   onSubmit(): void {
 
     // stop here if form is invalid
-    if (this.itemAddForm.invalid) {
+    if (this.checkIfInvalid()) {
+        console.log("rejected");
         return;
     }
+    let observables = [];
 
-    this.addItem(this.itemAddForm.value);
+    this.itemAddForm.forEach(
+      form => {
+
+        // Adds each item
+        observables.push(this.upsertItem(form.value));
+      }
+    );
+
+    forkJoin(observables).subscribe(
+      x => {
+        console.log(x);
+        this.router.navigate(['dashboard/inventory']);
+      }
+    );
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.itemAddForm.controls; }
+  get f() { return this.itemAddForm[0].controls; }
 
-  addItem(newItem: Item): void {
-    // Check if item with same name and expiration date exists.
-    this.inventoryService.getItemByNameAndExpirationDate(newItem.name, newItem.expirationDate).subscribe(
-      existingItem => {
-        if(existingItem) {
-          existingItem.quantity += newItem.quantity;
-          this.updateItem(existingItem);
-        } else {
-          this.createNewItem(newItem)
+  checkIfInvalid(): Boolean {
+    let g = false;
+    for (let form of this.itemAddForm) {
+      if(form.invalid) {
+        g = true;
+      }
+    };
+    return g;
+  }
+
+  addMoreInput(): void {
+    this.itemAddForm.push(this.formBuilder.group({
+      name: ['', [
+        Validators.maxLength(20),
+        Validators.required
+      ]], 
+      quantity: [null, Validators.required],
+      addedDate: [this.dateToday, Validators.required],
+      expirationDate: [this.dateToday, Validators.required]
+    }))
+  }
+
+  upsertItem(newItem: Item): Observable<any> {
+    return this.inventoryService.upsertItem(newItem).pipe(
+      map(
+        results => {
+          return results;
         }
-      }
-    );
-  }
-
-  createNewItem(newItem: Item): void {
-    // create new item.
-    this.inventoryService.addItem(newItem).subscribe( 
-      results => {
-        console.log(results);
-        this.router.navigate(['dashboard/inventory']);
-      }
-    );
-  }
-
-  updateItem(newItem: Item): void {
-    this.inventoryService.updateItem(newItem).subscribe(
-      results => {
-        console.log(results);
-        this.router.navigate(['dashboard/inventory']);
-      }
+      )
     );
   }
 }

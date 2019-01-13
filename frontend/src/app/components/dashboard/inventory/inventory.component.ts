@@ -59,6 +59,7 @@ export class InventoryComponent implements OnInit {
         );
     }
 
+    // TODO -- replace with upsert
     // update item quantity single
     updateItemRemoveQuantity(quantityToRemove: Item): void {
 

@@ -14,16 +14,29 @@ class InventoryController {
         ctx.body = await Item.findOne({ name: ctx.params.name })
     }
 
-    async getByNameAndExpirationDate(ctx) {
-        ctx.body = await Item.findOne({ name: ctx.params.name, expirationDate: ctx.params.expirationDate });
-    }
-
     async getById(ctx) {
         ctx.body = await Item.findOne({ _id: ctx.params.id })
     }
 
     async create(ctx) {
         ctx.body = await Item.create(ctx.request.body);
+    }
+
+    async upsert(ctx) {
+        let itemData = {
+            $set: { 
+                name: ctx.request.body.name, 
+                expirationDate: ctx.request.body.expirationDate },
+            $inc: {
+                quantity: ctx.request.body.quantity
+            }
+        }
+
+        ctx.body = await Item.findOneAndUpdate(
+            { name: ctx.params.name, expirationDate: ctx.params.expirationDate },
+            itemData,
+            { upsert: true }
+        )
     }
 
     async update(ctx) {

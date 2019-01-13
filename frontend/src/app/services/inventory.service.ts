@@ -29,16 +29,6 @@ export class InventoryService {
       );
   }
 
-  getItemByNameAndExpirationDate(name: string, expirationDate: Date): Observable<Item> {
-    const url = `${this.inventoryUrl}/${name}/${expirationDate}`;
-
-    return this.http.get<Item>(url)
-      .pipe(
-        tap(_ => this.log(`fetched item name=${name}, expirationDate=${expirationDate}`)),
-        catchError(this.handleError<Item>('getItemByNameAndExpirationDate'))
-      );
-  }
-
   addItem(item: Item): Observable<Item> {
     return this.http.post<Item>(this.inventoryUrl, item, httpOptions)
       .pipe(
@@ -55,6 +45,17 @@ export class InventoryService {
         tap(_ => this.log(`deleted item id=${_id}`)),
         catchError(this.handleError<Item>('deleteItem'))
       );
+  }
+
+  // Check if this item exists(same name, expiration).
+  // If exists, update (combine quantity), otherwise, create.
+  upsertItem(item: Item): Observable<any> {
+    const url = `${this.inventoryUrl}/${item.name}/${item.expirationDate}`;
+
+    return this.http.put<Item>(url, item, httpOptions).pipe(
+      tap(_ => this.log(`upsert item name=${item.name}, expirationDate=${item.expirationDate}`)),
+      catchError(this.handleError<any>('upsertItem'))
+    );
   }
 
   deleteManyItem(_ids: string[]): Observable<any> {
