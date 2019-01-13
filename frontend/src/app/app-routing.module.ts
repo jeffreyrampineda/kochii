@@ -1,29 +1,31 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+// Components
 
-//--------- main
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
-import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { RecipeArchiveComponent } from './components/recipe-archive/recipe-archive.component';
-
-//--------- dashboard
-import { OverviewComponent } from './components/dashboard/overview/overview.component';
-import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
-import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
-import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
-import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
-import { SettingsComponent } from './components/dashboard/settings/settings.component';
-import { HistoryComponent } from './components/dashboard/history/history.component';
-
-//--------- etc
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
 import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
+import { RecipeArchiveComponent } from './components/recipe-archive/recipe-archive.component';
+import { RegisterComponent } from './components/register/register.component';
+
+// Components - /dashboard
+import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
+import { HistoryComponent } from './components/dashboard/history/history.component';
+import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
+import { OverviewComponent } from './components/dashboard/overview/overview.component';
+import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
+import { SettingsComponent } from './components/dashboard/settings/settings.component';
+
+// Components - /dashboard/inventory
 import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
 import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
 
+// Components - /dashboard/recipes
+import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
 
+//-------------------------------------------------------------
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' }, 
@@ -47,7 +49,6 @@ const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: '**', component: PagenotfoundComponent }
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MessageService } from './message.service';
-
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 
-import { Recipe } from '../interfaces/recipe';
+import { MessageService } from './message.service';
+import { Recipe } from 'src/app/interfaces/recipe';
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+//-------------------------------------------------------------
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +17,12 @@ export class RecipeService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private messageService: MessageService
+  ) { }
 
+//-------------------------------------------------------------
+
+  /** Get all recipes. */
   getRecipes(): Observable<Recipe[]> {
     return this.http.get<Recipe[]>(this.recipesUrl)
       .pipe(
@@ -30,14 +31,25 @@ export class RecipeService {
       )
   }
 
-  getRecipeById(id): Observable<Recipe> {
-    return this.http.get<Recipe>(this.recipesUrl + `/id/${id}`)
+  /**
+   * Get the recipe with the specified id.
+   * @param _id - The id of the recipe.
+   */
+  getRecipeById(_id: string): Observable<Recipe> {
+    return this.http.get<Recipe>(this.recipesUrl + `/id/${_id}`)
       .pipe(
-        tap(_ => this.log(`fetched recipe id=${id}`)),
-        catchError(this.handleError<Recipe>(`getRecipeById id=${id}`))
+        tap(_ => this.log(`fetched recipe id=${_id}`)),
+        catchError(this.handleError<Recipe>(`getRecipeById id=${_id}`))
       );
   }
 
+//-------------------------------------------------------------
+
+  /**
+   * Error handler used for any http errors.
+   * @param operation - The type of operation used.
+   * @param result - The results received.
+   */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -52,6 +64,10 @@ export class RecipeService {
     };
   }
 
+  /**
+   * Adds the message to the messageService for logging.
+   * @param message - The message to log.
+   */
   private log(message: string) {
     this.messageService.add(`RecipeService: ${message}`);
   }

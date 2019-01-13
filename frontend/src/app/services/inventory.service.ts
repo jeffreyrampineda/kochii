@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { MessageService } from './message.service';
-
 import { Observable, of } from 'rxjs';
 import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
-import { Item } from '../interfaces/item';
+import { MessageService } from './message.service';
+import { Item } from 'src/app/interfaces/item';
+
+//-------------------------------------------------------------
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -19,8 +20,12 @@ export class InventoryService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private messageService: MessageService
+  ) { }
 
+//-------------------------------------------------------------
+
+  /** Get all items. */
   getInventory(): Observable<Item[]> {
     return this.http.get<Item[]>(this.inventoryUrl)
       .pipe(
@@ -29,6 +34,10 @@ export class InventoryService {
       );
   }
 
+  /** 
+   * Add the specified item.
+   * @param item - The item to be added.
+   */
   addItem(item: Item): Observable<Item> {
     return this.http.post<Item>(this.inventoryUrl, item, httpOptions)
       .pipe(
@@ -37,6 +46,10 @@ export class InventoryService {
       );
   }
 
+  /**
+   * Delete the item with the specified id.
+   * @param _id - The id of the item to delete.
+   */
   deleteItem(_id: string): Observable<any> {
     const url = `${this.inventoryUrl}/${_id}`;
  
@@ -47,8 +60,11 @@ export class InventoryService {
       );
   }
 
-  // Check if this item exists(same name, expiration).
-  // If exists, update (combine quantity), otherwise, create.
+  /**
+   * Update the item with the same name and expirationDate,
+   * If no item is found, create new item.
+   * @param item - The item to be upserted.
+   */
   upsertItem(item: Item): Observable<any> {
     const url = `${this.inventoryUrl}/${item.name}/${item.expirationDate}`;
 
@@ -58,6 +74,10 @@ export class InventoryService {
     );
   }
 
+  /**
+   * Delete all items with the id in the specified array.
+   * @param _ids - The array of ids to be deleted.
+   */
   deleteManyItem(_ids: string[]): Observable<any> {
     const options = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -71,6 +91,10 @@ export class InventoryService {
       );
   }
 
+  /**
+   * Update the item with the same _id.
+   * @param item - The item to be updated.
+   */
   updateItem(item: Item): Observable<any> {
     const url = `${this.inventoryUrl}/${item._id}`;
 
@@ -81,6 +105,10 @@ export class InventoryService {
       );
   }
 
+  /**
+   * Search for the specified terms every 400ms.
+   * @param terms - The terms used to search.
+   */
   search(terms: Observable<string>) {
     return terms
       .pipe(
@@ -90,12 +118,23 @@ export class InventoryService {
       );
   }
 
+  /**
+   * Search for the item with the similar name as the term.
+   * @param term - The term used to search
+   */
   searchEntries(term) {
     if(term != "") {
       return this.http.get(this.inventoryUrl + this.queryUrl + term);
     }
   }
 
+//-------------------------------------------------------------
+
+  /**
+   * Error handler used for any http errors.
+   * @param operation - The type of operation used.
+   * @param result - The results received.
+   */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
 
@@ -110,6 +149,10 @@ export class InventoryService {
     };
   }
 
+  /**
+   * Adds the message to the messageService for logging.
+   * @param message - The message to log.
+   */
   private log(message: string) {
     this.messageService.add(`InventoryService: ${message}`);
   }

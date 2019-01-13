@@ -1,10 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { InventoryService } from 'src/app/services/inventory.service';
 import { Router } from '@angular/router';
-import { Item } from 'src/app/interfaces/item';
 import { Subject, Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
+
+import { InventoryService } from 'src/app/services/inventory.service';
+import { Item } from 'src/app/interfaces/item';
+
+//-------------------------------------------------------------
 
 @Component({
   selector: 'item-add',
@@ -24,7 +27,7 @@ export class ItemAddComponent implements OnInit {
     private formBuilder: FormBuilder
   ) {
 
-    // time precision is not necessary.
+    // Time is removed.
     this.dateToday.setHours(0,0,0,0);
 
     this.inventoryService.search(this.searchTerm$).subscribe(
@@ -33,6 +36,9 @@ export class ItemAddComponent implements OnInit {
       }
     );
   }
+
+//-------------------------------------------------------------
+
   ngOnInit() {
     this.itemAddForm.push(this.formBuilder.group({
       name: ['', [
@@ -45,24 +51,27 @@ export class ItemAddComponent implements OnInit {
     }));
   }
 
+  /**
+   * Submits each form then navigate to 'dashboard/inventory'
+   * after each form has been submitted successfully.
+   */
   onSubmit(): void {
 
-    // stop here if form is invalid
+    // Stop here if any form is invalid.
     if (this.checkIfInvalid()) {
         console.log("rejected");
         return;
     }
-    let observables = [];
+
+    let observablesGroup = [];
 
     this.itemAddForm.forEach(
       form => {
-
-        // Adds each item
-        observables.push(this.upsertItem(form.value));
+        observablesGroup.push(this.upsertItem(form.value));
       }
     );
 
-    forkJoin(observables).subscribe(
+    forkJoin(observablesGroup).subscribe(
       x => {
         console.log(x);
         this.router.navigate(['dashboard/inventory']);
@@ -70,19 +79,35 @@ export class ItemAddComponent implements OnInit {
     );
   }
 
-  // convenience getter for easy access to form fields
-  get f() { return this.itemAddForm[0].controls; }
-
+  /** Loops through itemAddForm and checks if any form is invalid.
+   * @returns isInvalid - True if any form is invalid.
+   */
   checkIfInvalid(): Boolean {
-    let g = false;
+    let isInvalid = false;
     for (let form of this.itemAddForm) {
       if(form.invalid) {
-        g = true;
+        isInvalid = true;
       }
     };
-    return g;
+    return isInvalid;
   }
 
+  /**
+   * Update the item with the same name and expirationDate,
+   * If no item is found, create new item.
+   * @param item - The item to be upserted.
+   */
+  upsertItem(newItem: Item): Observable<any> {
+    return this.inventoryService.upsertItem(newItem).pipe(
+      map(
+        results => {
+          return results;
+        }
+      )
+    );
+  }
+
+  /** Adds more form for adding multiple items. */
   addMoreInput(): void {
     this.itemAddForm.push(this.formBuilder.group({
       name: ['', [
@@ -95,13 +120,6 @@ export class ItemAddComponent implements OnInit {
     }))
   }
 
-  upsertItem(newItem: Item): Observable<any> {
-    return this.inventoryService.upsertItem(newItem).pipe(
-      map(
-        results => {
-          return results;
-        }
-      )
-    );
-  }
+  /** Convenience getter for easy access to form fields. */
+  get f() { return this.itemAddForm[0].controls; }
 }

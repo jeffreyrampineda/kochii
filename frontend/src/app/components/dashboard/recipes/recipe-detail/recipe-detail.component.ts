@@ -1,8 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
-import { RecipeService } from '../../../../services/recipe.service';
+
+import { RecipeService } from 'src/app/services/recipe.service';
 import { Recipe } from 'src/app/interfaces/recipe';
+
+//-------------------------------------------------------------
 
 @Component({
   selector: 'recipe-detail',
@@ -19,10 +22,16 @@ export class RecipeDetailComponent implements OnInit {
     private location: Location
   ) { }
 
+//-------------------------------------------------------------
+
   ngOnInit() {
     this.getRecipe();
   }
 
+  /** 
+   * Get the recipe with the snapshot id received and set it 
+   * for presentation. 
+   * */
   getRecipe(): void {
     const id = this.route.snapshot.paramMap.get('id');
     this.recipeService.getRecipeById(id).subscribe(
@@ -32,6 +41,7 @@ export class RecipeDetailComponent implements OnInit {
     );
   }
 
+  /** Go back to the previous URL */
   goBack(): void {
     this.location.back();
   }

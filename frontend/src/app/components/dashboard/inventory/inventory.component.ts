@@ -1,9 +1,12 @@
 import { Component, OnInit, ViewChild, Inject } from '@angular/core';
-import { InventoryService } from '../../../services/inventory.service';
-import { Item } from '../../../interfaces/item';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+
+import { InventoryService } from 'src/app/services/inventory.service';
+import { Item } from 'src/app/interfaces/item';
+
+//-------------------------------------------------------------
 
 @Component({
     selector: 'app-inventory',
@@ -28,16 +31,24 @@ export class InventoryComponent implements OnInit {
         public dialog: MatDialog
     ) { }
 
+//-------------------------------------------------------------
+
     ngOnInit() {
         this.getInventory();
     }
 
+    /**
+     * Get all items then sets up the inventory: MatTableDataSource for
+     * presentation.
+     */
     getInventory(): void {
         this.inventoryService.getInventory().subscribe(
             inventory => {
                 this.inventory = new MatTableDataSource(inventory);
                 this.inventory.paginator = this.paginator;
                 this.inventory.sort = this.sort;
+
+                // Used to sort data by expirationDate | asc.
                 this.inventory.sortingDataAccessor = (item, property) => {
                     switch (property) {
                       case 'expirationDate': return new Date(item.expirationDate);
@@ -48,7 +59,11 @@ export class InventoryComponent implements OnInit {
         );
     }
 
-    // delete single
+    /**
+     * Delete the item with the specified id. If successful, update
+     * the inventory for presentation.
+     * @param _id - The id of the item to delete.
+     */
     deleteItem(_id: string): void {
         this.inventoryService.deleteItem(_id).subscribe(
             results => {
@@ -59,8 +74,13 @@ export class InventoryComponent implements OnInit {
         );
     }
 
-    // TODO -- replace with upsert
-    // update item quantity single
+    /**
+     * TODO -- replace with upsert by submitting -negative quantity.
+     * 
+     * Update the item with the same _id by deducting from quantity.
+     * If quantity net amount is 0, delete the item.
+     * @param quantityToRemove - The item with the amount of quantity to remove.
+     */
     updateItemRemoveQuantity(quantityToRemove: Item): void {
 
         // Get the currentQuantity for reference.
@@ -88,12 +108,24 @@ export class InventoryComponent implements OnInit {
         }
     }
 
+    /**
+     * TODO -- replace with forkJoin to wait for all update to finish for
+     * final cleanups and client-side updating.
+     * 
+     * Loops through itemsNewValues and updates each item individually.
+     * @param itemsNewValues - The array of items to be updated.
+     */
     updateManyItemRemoveQuantity(itemsNewValues: Item[]): void {
         itemsNewValues.forEach(newValues => {
             this.updateItemRemoveQuantity(newValues);
         });
     }
 
+    /**
+     * Calculates the amount of days left before expiration.
+     * @param date - The expiration date.
+     * @returns diffDays - The number of days left.
+     */
     expirationCountdown(date: string): number {
         const expirationDate = new Date(date);
         const today = new Date();
@@ -102,23 +134,12 @@ export class InventoryComponent implements OnInit {
         return diffDays;
     }
 
-    applyFilter(filterValue: string) {
-        this.inventory.filter = filterValue.trim().toLowerCase();
-    }
-
-    /** Whether the number of selected elements matches the total number of rows. */
-    isAllSelected() {
-      const numSelected = this.selection.selected.length;
-      const numRows = this.inventory.data.length;
-      return numSelected === numRows;
-    }
-
     /** Selects all rows if they are not all selected; otherwise clear selection. */
     selectMasterToggle() {
       this.isAllSelected() ? this.selectionClear() : this.inventory.data.forEach(item => this.selectionSelect(item));
     }
 
-    // Called by "Remove" button and "Cancel"
+    /** Toggles when to show the select checkboxes. */
     selectColumnToggle() {
         this.showSelect = !this.showSelect;
         if(this.showSelect) {
@@ -130,7 +151,7 @@ export class InventoryComponent implements OnInit {
         }
     }
 
-    // Called by "Remove" button
+    /** Opens the confirmation dialog for deleting items. */
     openDeleteConfirmationDialog(): void {
         const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
             width: '250px',
@@ -148,17 +169,33 @@ export class InventoryComponent implements OnInit {
         );
     }
 
+    /**
+     * Adds extra functionality for SelectionModel.select(Item).
+     * Also pushes the specified item to temporarySelectedItems array.
+     * @param item - The item selected.
+     */
     selectionSelect(item: Item): void {
         this.selection.select(item);
+
+        // Stringify then parse to clone the values instead of reference.
         this.temporarySelectedItems.push(JSON.parse(JSON.stringify(item)));
     }
 
+    /**
+     * Adds extra functionality for SelectionModel.clear().
+     * Also clears the temporarySelectedItems array.
+     */
     selectionClear(): void {
         this.selection.clear();
         this.temporarySelectedItems = [];
     }
 
-    // Called when clicking selection checkbox
+    /**
+     * Adds extra functionality for SelectionModel.toggle(Item).
+     * Also pushes the specified item to temporarySelectedItems array
+     * or removes the specified item from temporarySelectedItems array.
+     * @param item - The item to toggle.
+     */
     selectionToggle(item: Item): void {
         this.selection.toggle(item);
         if(this.selection.isSelected(item)) {
@@ -173,11 +210,32 @@ export class InventoryComponent implements OnInit {
         }
     }
     
-    // Called by each selected row. Used to two-way bind quantity.
+    /**
+     * Called by each selected row. Used to two-way bind quantity.
+     * @param _id - The id to find in temporarySelectedItems array.
+     * @returns Item - The item with the same id.
+     */
     temporarySelectedItemsFind(_id: string): Item {
         return this.temporarySelectedItems.find(a => a._id === _id);
     }
+
+    /**
+     * Filters the inventory data by the specified filterValue. 
+     * @param filterValue - The value to look for.
+     */
+    applyFilter(filterValue: string) {
+        this.inventory.filter = filterValue.trim().toLowerCase();
+    }
+
+    /** Whether the number of selected elements matches the total number of rows. */
+    isAllSelected() {
+      const numSelected = this.selection.selected.length;
+      const numRows = this.inventory.data.length;
+      return numSelected === numRows;
+    }
 }
+
+//-------------------------------------------------------------
 
 @Component({
     selector: 'delete-confirmation-dialog',
@@ -190,6 +248,9 @@ export class DeleteConfirmationDialog {
         @Inject(MAT_DIALOG_DATA) public data: Item[]
     ) { }
   
+//-------------------------------------------------------------
+
+    /** Close this dialog without sending data. */
     onNoClick(): void {
         this.dialogRef.close();
     }

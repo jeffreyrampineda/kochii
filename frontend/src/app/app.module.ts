@@ -1,80 +1,65 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule }    from '@angular/common/http';
+
+// Pipes
 import { ExpirationPipe } from './pipes/expiration.pipes';
 
-import {
-  MatButtonModule,
-  MatMenuModule,
-  MatCardModule,
-  MatExpansionModule,
-  MatPaginatorModule,
-  MatTableModule,
-  MatListModule,
-  MatFormFieldModule,
-  MatInputModule,
-  MatDialogModule,
-  MatToolbarModule,
-  MatIconModule,
-  MatDatepickerModule,
-  MatNativeDateModule,
-  MatRadioModule,
-  MatAutocompleteModule,
-  MatTooltipModule,
-  MatCheckboxModule,
-  MatSortModule
-} from '@angular/material';
-
-import { HttpClientModule }    from '@angular/common/http';
-/*
-import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
-import { InMemoryDataService } from './services/in-memory-data.service';
-*/
-
+// App-level
+import { AppMaterialModule } from './app-material.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
+
+// Components
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { RecipeArchiveComponent } from './components/recipe-archive/recipe-archive.component';
 import { RegisterComponent } from './components/register/register.component';
-import { OverviewComponent } from './components/dashboard/overview/overview.component';
+
+// Components - /dashboard
+import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
+import { HistoryComponent } from './components/dashboard/history/history.component';
 import { 
   InventoryComponent,
   DeleteConfirmationDialog 
 } from './components/dashboard/inventory/inventory.component';
-import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
-import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
-
+import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
-
-import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
-import { HistoryComponent } from './components/dashboard/history/history.component';
+
+// Components - /dashboard/inventory
+import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
+import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
+
+// Components - /dashboard/recipes
 import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
+
+//-------------------------------------------------------------
 
 @NgModule({
   declarations: [
+    ExpirationPipe,
     AppComponent,
-    PagenotfoundComponent,
+    DashboardComponent,
     HomeComponent,
     LoginComponent,
-    DashboardComponent,
+    PagenotfoundComponent,
     RecipeArchiveComponent,
     RegisterComponent,
-    OverviewComponent,
+    GroceriesComponent,
+    HistoryComponent,
     InventoryComponent,
     DeleteConfirmationDialog,
-    ItemDetailComponent,
-    ItemAddComponent,
+    OverviewComponent,
     RecipesComponent,
-    GroceriesComponent,
     SettingsComponent,
-    HistoryComponent,
+    ItemAddComponent,
+    ItemDetailComponent,
     RecipeDetailComponent,
-    ExpirationPipe
   ],
   imports: [
     BrowserModule,
@@ -83,34 +68,7 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-
-    // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
-    // and returns simulated server responses.
-    // Remove it when a real server is ready to receive requests.
-/*
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    ),
-*/
-    MatButtonModule,
-    MatMenuModule,
-    MatCardModule,
-    MatExpansionModule,
-    MatPaginatorModule,
-    MatTableModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    MatCheckboxModule,
-    MatSortModule
+    AppMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent],
