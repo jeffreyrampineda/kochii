@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/index.js",
   "scripts": {
-    "watch-server": "nodemon --watch 'server/**/*' -e ts,tsx --exec 'ts-node' ./server/server.ts",
+    "start": "nodemon --watch 'server/**/*' -e ts,tsx --exec 'ts-node' ./server/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

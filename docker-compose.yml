@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  db:
+    image: mongo:latest
+    volumes:
+      - ~/data/db:/data/db
+    ports:
+      - 27017:27017
+    command: mongod
+  backend:
+    image: node:10.6.0
+    environment:
+      - DB_HOST=db
+    working_dir: /usr/src/app
+    volumes:
+      - ./backend:/usr/src/app
+    ports:
+      - "3001:3001"
+    links:
+      - db
+    command: "npm run start"
+  frontend:
+    image: node:10.6.0
+    working_dir: /usr/src/app
+    volumes:
+      - ./frontend:/usr/src/app
+    ports:
+      - "4200:4200"
+    links:
+      - "backend"
+    command: "npm run docker-start"

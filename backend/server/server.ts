@@ -7,7 +7,8 @@ import routes from './routes/routes';
 
 // Create Koa Application
 const app = new Koa();
-const port = process.env.PORT || 3001
+const port = process.env.PORT || 3001;
+const db_host = process.env.DB_HOST || 'localhost';
 const API_URL = "http://localhost:4200"
 const options:cors.CorsOptions = {
     allowHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
@@ -23,7 +24,7 @@ app.use(bodyParser());
 app.use(cors(options));
 app.use(router.routes());
 
-mongoose.connect('mongodb://localhost/kochii', { useNewUrlParser: true });
+mongoose.connect(`mongodb://${db_host}:27017/kochii`, { useNewUrlParser: true });
 mongoose.connection.on('error', console.error);
 mongoose.connection.once('open', () => console.log('Connection to mongodb established'));
 
