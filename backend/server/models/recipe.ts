@@ -9,19 +9,13 @@ const recipeSchema = new Schema({
     description: {
         type: String
     },
-    ingredients: [{
-        type: String
-    }],
-    steps: [{
-        type: String
-    }],
     image: { 
         data: Buffer,
         contentType: String
     },
-    tags: [{
-        type: String
-    }]
+    tags: [{ type: String }],
+    ingredients: [{ name: String, quantity: Number }],
+    steps: [{ type: String }]
 });
 
 export default mongoose.model('Recipe', recipeSchema);
