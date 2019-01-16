@@ -22,20 +22,31 @@ class InventoryController {
         ctx.body = await Item.create(ctx.request.body);
     }
 
-    // TODO -- move delete function to update instead of upsert.
-    async upsert(ctx) {
+    async update(ctx) {
         try {
             if(ctx.request.body.quantity === 0) {
                 throw new Error('Quantity is 0');
             }
 
-            let itemData = {
+            let itemData: any = {
                 $set: { 
                     name: ctx.request.body.name, 
-                    expirationDate: ctx.request.body.expirationDate },
-                $inc: {
-                    quantity: ctx.request.body.quantity
+                    expirationDate: ctx.request.body.expirationDate
                 }
+            }
+
+            // Setting or incrementing ?
+            switch(ctx.params.option) {
+                case 'inc':
+                    itemData.$inc = {
+                        quantity: ctx.request.body.quantity
+                    }
+                    break;
+                
+                // default to set.
+                default:
+                    itemData.$set.quantity = ctx.request.body.quantity
+                    break;
             }
     
             // Result is the previous value of Item. Null if Item is new.
@@ -45,8 +56,12 @@ class InventoryController {
                 { upsert: true }
             )
     
-            // If old quantity + new quantity net to 0, delete Item.
-            if(result && result.quantity + ctx.request.body.quantity <= 0) {
+            // If inc and old quantity + new quantity net to 0, delete Item.
+            // If set and new quantity == 0, delete Item.
+            if(result && 
+                    (ctx.params.option==='inc' && result.quantity + ctx.request.body.quantity <= 0) ||
+                    (ctx.params.option==='set' && ctx.request.body.quantity == 0)
+                ) {
                 console.log("Removing item.");
                 result = await Item.deleteOne({ _id: result.id });
             }
@@ -57,10 +72,6 @@ class InventoryController {
             ctx.body = err.message;
         }
 
-    }
-
-    async update(ctx) {
-        ctx.body = await Item.findOneAndUpdate({ _id: ctx.params.id }, ctx.request.body)
     }
 
     async delete(ctx) {

@@ -61,20 +61,6 @@ export class InventoryService {
   }
 
   /**
-   * Update the item with the same name and expirationDate,
-   * If no item is found, create new item.
-   * @param item - The item to be upserted.
-   */
-  upsertItem(item: Item): Observable<any> {
-    const url = `${this.inventoryUrl}/${item.name}/${item.expirationDate}`;
-
-    return this.http.put<Item>(url, item, httpOptions).pipe(
-      tap(_ => this.log(`upsert item name=${item.name}, expirationDate=${item.expirationDate}`)),
-      catchError(this.handleError<any>('upsertItem'))
-    );
-  }
-
-  /**
    * Delete all items with the id in the specified array.
    * @param _ids - The array of ids to be deleted.
    */
@@ -92,15 +78,17 @@ export class InventoryService {
   }
 
   /**
-   * Update the item with the same _id.
+   * Update the item with the same name and expirationDate.
+   * If no item is found, create new item.
    * @param item - The item to be updated.
+   * @param option - The option for updating. Can be inc, or set.
    */
-  updateItem(item: Item): Observable<any> {
-    const url = `${this.inventoryUrl}/${item._id}`;
+  updateItem(item: Item, option: string): Observable<any> {
+    const url = `${this.inventoryUrl}/${option}/${item.name}/${item.expirationDate}`;
 
     return this.http.put(url, item, httpOptions)
       .pipe(
-        tap(_ => this.log(`updated item id=${item._id}`)),
+        tap(_ => this.log(`updated item name=${item.name}, expirationDate=${item.expirationDate}`)),
         catchError(this.handleError<any>('updateItem'))
       );
   }

@@ -28,6 +28,7 @@ export class InventoryComponent implements OnInit {
     // Used for updating/removing items.
     temporarySelectedItems: Item[] = [];
     isDeducting: Boolean = false;
+    option: string = 'set';
 
     constructor(
         private inventoryService: InventoryService,
@@ -78,26 +79,29 @@ export class InventoryComponent implements OnInit {
     }
 
     /**
-     * TODO -- use update instead of upsert. REASON -- upsert is only for adding
-     * Also change this method so it only deduct quantity, set quantity, 
-     * set name, or set dates.
-     * 
-     * Update the item with the same _id by deducting from quantity.
+     * Update the item with the same name and expirationDate.
+     * Option declares whether to set or inc.
      * @param newItem - The item to be updated.
      */
     updateItem(newItem: Item): Observable<any> {
         if(this.isDeducting) {
             console.log("Deducting quantity");
             newItem.quantity = -newItem.quantity;
+            this.option = 'inc';
         }
 
-        return this.inventoryService.upsertItem(newItem).pipe(
+        return this.inventoryService.updateItem(newItem, this.option).pipe(
             map(
                 results => {
 
                     // If item is updated.
                     if(results._id) {
-                        this.inventory.data.find(i => i._id === results._id).quantity += newItem.quantity;
+                        if(this.option === 'inc') {
+                            this.inventory.data.find(i => i._id === results._id).quantity += newItem.quantity;
+                        }
+                        else if(this.option === 'set') {
+                            this.inventory.data.find(i => i._id === results._id).quantity = newItem.quantity;
+                        }
                     }
                     
                     // If item is deleted.
