@@ -4,6 +4,7 @@ import * as mongoose from 'mongoose';
 import * as cors from '@koa/cors';
 import * as bodyParser from 'koa-bodyparser';
 import routes from './routes/routes';
+import logger from './middlewares/logger';
 
 // Create Koa Application
 const app = new Koa();
@@ -20,8 +21,9 @@ const router = new Router();
 
 routes(router);
 
-app.use(bodyParser());
 app.use(cors(options));
+app.use(logger());
+app.use(bodyParser());
 app.use(router.routes());
 
 mongoose.connect(`mongodb://${db_host}:27017/kochii`, { useNewUrlParser: true });
