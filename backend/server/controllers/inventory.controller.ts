@@ -22,21 +22,41 @@ class InventoryController {
         ctx.body = await Item.create(ctx.request.body);
     }
 
+    // TODO -- move delete function to update instead of upsert.
     async upsert(ctx) {
-        let itemData = {
-            $set: { 
-                name: ctx.request.body.name, 
-                expirationDate: ctx.request.body.expirationDate },
-            $inc: {
-                quantity: ctx.request.body.quantity
+        try {
+            if(ctx.request.body.quantity === 0) {
+                throw new Error('Quantity is 0');
             }
+
+            let itemData = {
+                $set: { 
+                    name: ctx.request.body.name, 
+                    expirationDate: ctx.request.body.expirationDate },
+                $inc: {
+                    quantity: ctx.request.body.quantity
+                }
+            }
+    
+            // Result is the previous value of Item. Null if Item is new.
+            let result = await Item.findOneAndUpdate(
+                { name: ctx.params.name, expirationDate: ctx.params.expirationDate },
+                itemData,
+                { upsert: true }
+            )
+    
+            // If old quantity + new quantity net to 0, delete Item.
+            if(result && result.quantity + ctx.request.body.quantity <= 0) {
+                console.log("Removing item.");
+                result = await Item.deleteOne({ _id: result.id });
+            }
+
+            ctx.body = result;
+        } catch(err) {
+            ctx.status = err.status || 500;
+            ctx.body = err.message;
         }
 
-        ctx.body = await Item.findOneAndUpdate(
-            { name: ctx.params.name, expirationDate: ctx.params.expirationDate },
-            itemData,
-            { upsert: true }
-        )
     }
 
     async update(ctx) {

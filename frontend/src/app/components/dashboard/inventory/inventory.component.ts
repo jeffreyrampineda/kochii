@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
@@ -25,6 +27,7 @@ export class InventoryComponent implements OnInit {
 
     // Used for updating/removing items.
     temporarySelectedItems: Item[] = [];
+    isDeducting: Boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -75,50 +78,58 @@ export class InventoryComponent implements OnInit {
     }
 
     /**
-     * TODO -- replace with upsert by submitting -negative quantity.
+     * TODO -- use update instead of upsert. REASON -- upsert is only for adding
+     * Also change this method so it only deduct quantity, set quantity, 
+     * set name, or set dates.
      * 
      * Update the item with the same _id by deducting from quantity.
-     * If quantity net amount is 0, delete the item.
-     * @param quantityToRemove - The item with the amount of quantity to remove.
+     * @param newItem - The item to be updated.
      */
-    updateItemRemoveQuantity(quantityToRemove: Item): void {
-
-        // Get the currentQuantity for reference.
-        const currentQuantity = this.inventory.data.find(a => a._id === quantityToRemove._id);
-
-        // Delete item if quantityToRemove is same as currentQuantity
-        if(quantityToRemove.quantity === currentQuantity.quantity) {
-            this.deleteItem(currentQuantity._id);
+    updateItem(newItem: Item): Observable<any> {
+        if(this.isDeducting) {
+            console.log("Deducting quantity");
+            newItem.quantity = -newItem.quantity;
         }
-        
-        // Only allow ranges between 1 to currentQuantity
-        else if(quantityToRemove.quantity > 0 && quantityToRemove.quantity < currentQuantity.quantity) {
 
-            // Update currentQuantity before updating to backend.
-            currentQuantity.quantity -= quantityToRemove.quantity;
-
-            // Update to backend.
-            this.inventoryService.updateItem(currentQuantity).subscribe(
+        return this.inventoryService.upsertItem(newItem).pipe(
+            map(
                 results => {
-                    console.log(results);
+
+                    // If item is updated.
+                    if(results._id) {
+                        this.inventory.data.find(i => i._id === results._id).quantity += newItem.quantity;
+                    }
+                    
+                    // If item is deleted.
+                    else if(results.n === 1) {
+                        this.inventory.data = this.inventory.data.filter(i => i._id !== newItem._id);
+                    }
+    
+                    return results;
                 }
-            );
-        } else {
-            console.log("updateItem - error");
-        }
+            )
+        );
     }
 
     /**
-     * TODO -- replace with forkJoin to wait for all update to finish for
-     * final cleanups and client-side updating.
-     * 
-     * Loops through itemsNewValues and updates each item individually.
-     * @param itemsNewValues - The array of items to be updated.
+     * Loops through newItems and update each item individually.
+     * @param newItems - The array of items to be updated.
      */
-    updateManyItemRemoveQuantity(itemsNewValues: Item[]): void {
-        itemsNewValues.forEach(newValues => {
-            this.updateItemRemoveQuantity(newValues);
-        });
+    updateManyItem(newItems: Item[]): void {
+        let observablesGroup = [];
+
+        newItems.forEach(
+            newItem => {
+              observablesGroup.push(this.updateItem(newItem));
+            }
+          );
+
+        forkJoin(observablesGroup).subscribe(
+            x => {
+                console.log(x);
+                this.isDeducting = false;
+            }
+        );
     }
 
     /**
@@ -161,8 +172,9 @@ export class InventoryComponent implements OnInit {
         // Confirmed.
         dialogRef.afterClosed().subscribe(
             result => {
+                this.isDeducting = true;
                 if(result.length > 0) {
-                    this.updateManyItemRemoveQuantity(result);
+                    this.updateManyItem(result);
                 }
                 this.selectColumnToggle();
             }
