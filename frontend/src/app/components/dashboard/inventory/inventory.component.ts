@@ -27,7 +27,6 @@ export class InventoryComponent implements OnInit {
 
     // Used for updating/removing items.
     temporarySelectedItems: Item[] = [];
-    isDeducting: Boolean = false;
     option: string = 'set';
 
     constructor(
@@ -84,10 +83,9 @@ export class InventoryComponent implements OnInit {
      * @param newItem - The item to be updated.
      */
     updateItem(newItem: Item): Observable<any> {
-        if(this.isDeducting) {
+        if(this.option === 'inc') {
             console.log("Deducting quantity");
             newItem.quantity = -newItem.quantity;
-            this.option = 'inc';
         }
 
         return this.inventoryService.updateItem(newItem, this.option).pipe(
@@ -131,7 +129,7 @@ export class InventoryComponent implements OnInit {
         forkJoin(observablesGroup).subscribe(
             x => {
                 console.log(x);
-                this.isDeducting = false;
+                this.option = 'set';
             }
         );
     }
@@ -166,17 +164,25 @@ export class InventoryComponent implements OnInit {
         }
     }
 
-    /** Opens the confirmation dialog for deleting items. */
-    openDeleteConfirmationDialog(): void {
-        const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
+    /** Opens the confirmation dialog. */
+    openConfirmationDialog(title: string, action: string, option: string): void {
+        const dialogRef = this.dialog.open(ConfirmationDialog, {
             width: '250px',
-            data: this.temporarySelectedItems
-        });
+            data: {
+                items: this.temporarySelectedItems,
+                info: {
+                    title: title,
+                    action: action,
+                    option: option
+                }
+            }
+        },);
 
         // Confirmed.
         dialogRef.afterClosed().subscribe(
             result => {
-                this.isDeducting = true;
+                console.log(`Confirmed... ${option}`);
+                this.option = option;
                 if(result.length > 0) {
                     this.updateManyItem(result);
                 }
@@ -254,14 +260,14 @@ export class InventoryComponent implements OnInit {
 //-------------------------------------------------------------
 
 @Component({
-    selector: 'delete-confirmation-dialog',
-    templateUrl: 'delete-confirmation-dialog.component.html',
+    selector: 'confirmation-dialog',
+    templateUrl: 'confirmation-dialog.component.html',
 })
-export class DeleteConfirmationDialog {
+export class ConfirmationDialog {
 
     constructor(
-        public dialogRef: MatDialogRef<DeleteConfirmationDialog>,
-        @Inject(MAT_DIALOG_DATA) public data: Item[]
+        public dialogRef: MatDialogRef<ConfirmationDialog>,
+        @Inject(MAT_DIALOG_DATA) public data: any,
     ) { }
   
 //-------------------------------------------------------------

@@ -3,7 +3,8 @@
     <mat-card-title>inventory</mat-card-title>
     <mat-card-subtitle>inventory quick description</mat-card-subtitle>
     <button mat-button routerLink="/dashboard/inventory/add">Add</button>
-    <button mat-button (click)="showSelect ? openDeleteConfirmationDialog() : selectColumnToggle()">Remove</button>
+    <button mat-button (click)="showSelect ? openConfirmationDialog('Remove', 'Removing', 'inc') : selectColumnToggle()">Remove</button>
+    <button mat-button (click)="showSelect ? openConfirmationDialog('Update', 'Setting', 'set') : selectColumnToggle()">Update</button>
     <button mat-button (click)="selectColumnToggle()" *ngIf="showSelect">Cancel</button>
   </mat-card-header>
   <mat-card-content>

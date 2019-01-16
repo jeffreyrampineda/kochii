@@ -25,7 +25,7 @@ import { GroceriesComponent } from './components/dashboard/groceries/groceries.c
 import { HistoryComponent } from './components/dashboard/history/history.component';
 import { 
   InventoryComponent,
-  DeleteConfirmationDialog 
+  ConfirmationDialog 
 } from './components/dashboard/inventory/inventory.component';
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
@@ -53,7 +53,7 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
     GroceriesComponent,
     HistoryComponent,
     InventoryComponent,
-    DeleteConfirmationDialog,
+    ConfirmationDialog,
     OverviewComponent,
     RecipesComponent,
     SettingsComponent,
@@ -73,7 +73,7 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
-    DeleteConfirmationDialog
+    ConfirmationDialog
   ]
 })
 export class AppModule { }
