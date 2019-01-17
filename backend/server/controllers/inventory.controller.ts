@@ -6,8 +6,13 @@ class InventoryController {
         ctx.body = await Item.find().sort({ expirationDate: -1 });
     }
 
+    async getByNames(ctx) {
+        let names = ctx.query.names.split(',');
+        ctx.body = await Item.find({ name: { $in: names } })
+    }
+
     async searchByName(ctx) {
-        ctx.body = await Item.find({ name : { $regex: "^" + ctx.params.name } });
+        ctx.body = await Item.find({ name: { $regex: "^" + ctx.params.name } });
     }
 
     async getByName(ctx) {

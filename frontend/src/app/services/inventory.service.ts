@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
@@ -31,6 +31,27 @@ export class InventoryService {
       .pipe(
         tap(_ => this.log('fetched inventory')),
         catchError(this.handleError('getInventory', []))
+      );
+  }
+
+  /**
+   * Get all items with the name in the specified array.
+   * @param names - The array of names to get.
+   */
+  getItemsByNames(names: string[]): Observable<Item[]> {
+    let params = new HttpParams();
+    params = params.append('names', names.join(','));
+
+    const url = `${this.inventoryUrl}/names`;
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      params: params
+    };
+
+    return this.http.get<Item[]>(url, options)
+      .pipe(
+        tap(_ => this.log(`fetched items names=${names}`)),
+        catchError(this.handleError('getItemsByNames', []))
       );
   }
 
