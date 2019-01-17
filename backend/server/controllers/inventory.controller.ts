@@ -1,4 +1,5 @@
 import Item from '../models/item';
+import HistoryController from './history.controller';
 
 class InventoryController {
 
@@ -27,6 +28,9 @@ class InventoryController {
         ctx.body = await Item.create(ctx.request.body);
     }
 
+    /**
+     * NOTES - can be simplified.
+     */
     async update(ctx) {
         try {
             if(ctx.request.body.quantity === 0) {
@@ -60,15 +64,35 @@ class InventoryController {
                 itemData,
                 { upsert: true }
             )
-    
+
+            // If new item was created.
+            if(!result) {
+                HistoryController.create({ date: Date.now(), method: 'Create', target: ctx.request.body.name, description: '' })
+            }
+
             // If inc and old quantity + new quantity net to 0, delete Item.
             // If set and new quantity == 0, delete Item.
-            if(result && 
+            else if(result && 
                     (ctx.params.option==='inc' && result.quantity + ctx.request.body.quantity <= 0) ||
                     (ctx.params.option==='set' && ctx.request.body.quantity == 0)
                 ) {
                 console.log("Removing item.");
+
+                HistoryController.create({ date: Date.now(), method: 'Remove', target: ctx.request.body.name, description: '' })
+
                 result = await Item.deleteOne({ _id: result.id });
+            }
+
+            // Otherwise, item was updated.
+            else {
+                if(ctx.params.option==='inc') {
+                    HistoryController.create({ date: Date.now(), method: 'Update', target: ctx.request.body.name, 
+                        description: `${result.quantity} -> ${result.quantity + ctx.request.body.quantity}` })
+                }
+                if(ctx.params.option==='set') {
+                    HistoryController.create({ date: Date.now(), method: 'Update', target: ctx.request.body.name, 
+                        description: `${result.quantity} -> ${ctx.request.body.quantity}` })
+                }
             }
 
             ctx.body = result;
