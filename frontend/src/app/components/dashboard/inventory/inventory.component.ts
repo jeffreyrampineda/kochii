@@ -181,9 +181,9 @@ export class InventoryComponent implements OnInit {
         // Confirmed.
         dialogRef.afterClosed().subscribe(
             result => {
-                console.log(`Confirmed... ${option}`);
-                this.option = option;
-                if(result.length > 0) {
+                if(result && result.length > 0) {
+                    console.log(`Confirmed... ${option}`);
+                    this.option = option;
                     this.updateManyItem(result);
                 }
                 this.selectColumnToggle();
@@ -259,6 +259,9 @@ export class InventoryComponent implements OnInit {
 
 //-------------------------------------------------------------
 
+/**
+ * TODO: Generalize dialog to be reusable.
+ */
 @Component({
     selector: 'confirmation-dialog',
     templateUrl: 'confirmation-dialog.component.html',

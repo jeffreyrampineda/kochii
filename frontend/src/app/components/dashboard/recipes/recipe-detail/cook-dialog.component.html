@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Cooking {{ data.title }}</h1>
+<div mat-dialog-content>
+  <span *ngIf="data.canCook">Left over ingredients</span>
+  <span *ngIf="!data.canCook">Required ingredients</span>
+  <ul>
+    <li *ngFor="let ingredient of data.ingredients">{{ ingredient.name }} - {{ ingredient.quantity }}</li>
+  </ul>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.items" cdkFocusInitial [disabled]="!data.canCook">Confirmed</button>
+</div>

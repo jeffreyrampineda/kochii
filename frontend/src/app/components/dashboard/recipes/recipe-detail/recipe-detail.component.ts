@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { forkJoin, Observable } from 'rxjs';
@@ -8,6 +8,7 @@ import { RecipeService } from 'src/app/services/recipe.service';
 import { Recipe } from 'src/app/interfaces/recipe';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 //-------------------------------------------------------------
 
@@ -24,7 +25,8 @@ export class RecipeDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private inventoryService: InventoryService,
     private recipeService: RecipeService,
-    private location: Location
+    private location: Location,
+    public dialog: MatDialog
   ) { }
 
 //-------------------------------------------------------------
@@ -86,11 +88,11 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   /**
+   * TODO: Simplify
+   * 
    * Checks if inventory have enough of the required ingredients.
    * If enough is available, deduct the required ingredients' quantity
    * from the inventory. Otherwise, show the missing ingredients.
-   * 
-   * NOTES - Can be simplified.
    */
   cook(): void {
     let ingredientsRequired = JSON.parse(JSON.stringify(this.recipe.ingredients));
@@ -104,7 +106,7 @@ export class RecipeDetailComponent implements OnInit {
         //let duplicates: any = [];
 
         // Has duplicate due to different expirationDates.
-        if(items.length > ingredientsRequiredNames.length) {
+        if(items.length > ingredientsRequired.length) {
           items.forEach(
             i => {
 
@@ -134,11 +136,12 @@ export class RecipeDetailComponent implements OnInit {
         }
 
         // Has missing ingredients.
-        if(noDuplicates.length < ingredientsRequiredNames.length) {
-          let missing = ingredientsRequiredNames.filter(
-            i => { return noDuplicates.map(n => { return n.name }).indexOf(i) }
+        if(noDuplicates.length < ingredientsRequired.length) {
+          let missing = ingredientsRequired.filter(
+            i => { return noDuplicates.map(n => { return n.name }).indexOf(i.name) }
           );
-          console.log("missing ingredients - " + missing);
+
+          this.openCookDialog(false, missing);
         } 
         
         // Otherwise, continue.
@@ -161,6 +164,7 @@ export class RecipeDetailComponent implements OnInit {
           if(insufficientIngredientsRequiredQuantity.length !== 0) {
             console.log("insufficient ingredients quantity");
             console.log(insufficientIngredientsRequiredQuantity);
+            this.openCookDialog(false, insufficientIngredientsRequiredQuantity);
           }
           
           // Otherwise, continue.
@@ -201,13 +205,57 @@ export class RecipeDetailComponent implements OnInit {
             }
 
             console.log(ingredientsPossessed);
-            console.log("cooking");
-
-            // Update with ingredientsPossessed. 
-            //this.updateManyItem(ingredientsPossessed);
+            this.openCookDialog(true, ingredientsPossessed);
           }
         }
       }
     );
+  }
+
+  /** Opens the cook dialog. */
+  openCookDialog(canCook: boolean, items: Item[]): void {
+    const dialogRef = this.dialog.open(CookDialog, {
+      width: '250px',
+      data: {
+        title: this.recipe.title,
+        canCook: canCook, 
+        ingredients: items
+      }
+    },);
+
+    // Confirmed.
+    dialogRef.afterClosed().subscribe(
+      result => {
+        if(result && result.length > 0) {
+          console.log("Cooking");
+          // TODO: Update with result.
+          //this.updateManyItem(result);
+        }
+      }
+    );
+  }
+}
+
+//-------------------------------------------------------------
+
+/**
+ * TODO: Generalize dialog to be reusable.
+ */
+@Component({
+  selector: 'cook-dialog',
+  templateUrl: 'cook-dialog.component.html',
+})
+export class CookDialog {
+
+  constructor(
+      public dialogRef: MatDialogRef<CookDialog>,
+      @Inject(MAT_DIALOG_DATA) public data: { canCook: boolean, items: Item[] },
+  ) { }
+
+//-------------------------------------------------------------
+
+  /** Close this dialog without sending data. */
+  onNoClick(): void {
+      this.dialogRef.close();
   }
 }

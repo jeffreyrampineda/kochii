@@ -36,7 +36,10 @@ import { ItemAddComponent } from './components/dashboard/inventory/item-add/item
 import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
 
 // Components - /dashboard/recipes
-import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
+import { 
+  RecipeDetailComponent,
+  CookDialog
+} from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
 
 //-------------------------------------------------------------
 
@@ -60,6 +63,7 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
     ItemAddComponent,
     ItemDetailComponent,
     RecipeDetailComponent,
+    CookDialog,
   ],
   imports: [
     BrowserModule,
@@ -73,7 +77,8 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
-    ConfirmationDialog
+    ConfirmationDialog,
+    CookDialog,
   ]
 })
 export class AppModule { }
