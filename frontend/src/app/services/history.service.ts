@@ -6,7 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from './message.service';
 import { History } from 'src/app/interfaces/history';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class HistoryService {
     private messageService: MessageService
   ) { }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   /** Get all history. */
   getHistory(): Observable<History[]> {
@@ -28,7 +28,7 @@ export class HistoryService {
       .pipe(
         tap(_ => this.log('fetched history')),
         catchError(this.handleError('getHistory', []))
-      )
+      );
   }
 
   /** Delete all history. */
@@ -40,7 +40,7 @@ export class HistoryService {
       );
   }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   /**
    * Error handler used for any http errors.

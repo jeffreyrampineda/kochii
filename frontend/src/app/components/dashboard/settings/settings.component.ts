@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-settings',
+  selector: 'kochii-settings',
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.css']
 })

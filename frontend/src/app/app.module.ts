@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule }    from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 // Pipes
 import { ExpirationPipe } from './pipes/expiration.pipes';
@@ -23,9 +23,9 @@ import { RegisterComponent } from './components/register/register.component';
 // Components - /dashboard
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
-import { 
+import {
   InventoryComponent,
-  ConfirmationDialog 
+  ConfirmationDialogComponent
 } from './components/dashboard/inventory/inventory.component';
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
@@ -36,12 +36,12 @@ import { ItemAddComponent } from './components/dashboard/inventory/item-add/item
 import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
 
 // Components - /dashboard/recipes
-import { 
+import {
   RecipeDetailComponent,
-  CookDialog
+  CookDialogComponent
 } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 @NgModule({
   declarations: [
@@ -56,14 +56,14 @@ import {
     GroceriesComponent,
     HistoryComponent,
     InventoryComponent,
-    ConfirmationDialog,
+    ConfirmationDialogComponent,
     OverviewComponent,
     RecipesComponent,
     SettingsComponent,
     ItemAddComponent,
     ItemDetailComponent,
     RecipeDetailComponent,
-    CookDialog,
+    CookDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,8 +77,8 @@ import {
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
-    ConfirmationDialog,
-    CookDialog,
+    ConfirmationDialogComponent,
+    CookDialogComponent,
   ]
 })
 export class AppModule { }

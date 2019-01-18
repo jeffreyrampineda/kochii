@@ -8,10 +8,10 @@ import { map } from 'rxjs/operators';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 @Component({
-    selector: 'app-inventory',
+    selector: 'kochii-inventory',
     templateUrl: './inventory.component.html',
     styleUrls: ['./inventory.component.css']
 })
@@ -27,14 +27,14 @@ export class InventoryComponent implements OnInit {
 
     // Used for updating/removing items.
     temporarySelectedItems: Item[] = [];
-    option: string = 'set';
+    option = 'set';
 
     constructor(
         private inventoryService: InventoryService,
         public dialog: MatDialog
     ) { }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
     ngOnInit() {
         this.getInventory();
@@ -70,7 +70,7 @@ export class InventoryComponent implements OnInit {
     deleteItem(_id: string): void {
         this.inventoryService.deleteItem(_id).subscribe(
             results => {
-                if(results.ok === 1) {
+                if (results.ok === 1) {
                     this.inventory.data = this.inventory.data.filter(i => i._id !== _id);
                 }
             }
@@ -83,8 +83,8 @@ export class InventoryComponent implements OnInit {
      * @param newItem - The item to be updated.
      */
     updateItem(newItem: Item): Observable<any> {
-        if(this.option === 'inc') {
-            console.log("Deducting quantity");
+        if (this.option === 'inc') {
+            console.log('Deducting quantity');
             newItem.quantity = -newItem.quantity;
         }
 
@@ -93,20 +93,16 @@ export class InventoryComponent implements OnInit {
                 results => {
 
                     // If item is updated.
-                    if(results._id) {
-                        if(this.option === 'inc') {
+                    if (results._id) {
+                        if (this.option === 'inc') {
                             this.inventory.data.find(i => i._id === results._id).quantity += newItem.quantity;
-                        }
-                        else if(this.option === 'set') {
+                        } else if (this.option === 'set') {
                             this.inventory.data.find(i => i._id === results._id).quantity = newItem.quantity;
                         }
-                    }
-                    
-                    // If item is deleted.
-                    else if(results.n === 1) {
+                    } else if (results.n === 1) {
+                        // If item is deleted.
                         this.inventory.data = this.inventory.data.filter(i => i._id !== newItem._id);
                     }
-    
                     return results;
                 }
             )
@@ -118,7 +114,7 @@ export class InventoryComponent implements OnInit {
      * @param newItems - The array of items to be updated.
      */
     updateManyItem(newItems: Item[]): void {
-        let observablesGroup = [];
+        const observablesGroup = [];
 
         newItems.forEach(
             newItem => {
@@ -155,18 +151,18 @@ export class InventoryComponent implements OnInit {
     /** Toggles when to show the select checkboxes. */
     selectColumnToggle() {
         this.showSelect = !this.showSelect;
-        if(this.showSelect) {
-            this.displayedColumns.unshift("select");
+        if (this.showSelect) {
+            this.displayedColumns.unshift('select');
         } else {
             this.temporarySelectedItems = [];
-            this.selection.clear(); 
+            this.selection.clear();
             this.displayedColumns.shift();
         }
     }
 
     /** Opens the confirmation dialog. */
     openConfirmationDialog(title: string, action: string, option: string): void {
-        const dialogRef = this.dialog.open(ConfirmationDialog, {
+        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             width: '250px',
             data: {
                 items: this.temporarySelectedItems,
@@ -176,12 +172,12 @@ export class InventoryComponent implements OnInit {
                     option: option
                 }
             }
-        },);
+        });
 
         // Confirmed.
         dialogRef.afterClosed().subscribe(
             result => {
-                if(result && result.length > 0) {
+                if (result && result.length > 0) {
                     console.log(`Confirmed... ${option}`);
                     this.option = option;
                     this.updateManyItem(result);
@@ -220,18 +216,18 @@ export class InventoryComponent implements OnInit {
      */
     selectionToggle(item: Item): void {
         this.selection.toggle(item);
-        if(this.selection.isSelected(item)) {
+        if (this.selection.isSelected(item)) {
 
             // Stringify then parse to clone the values instead of reference.
             this.temporarySelectedItems.push(JSON.parse(JSON.stringify(item)));
         } else {
             const idx = this.temporarySelectedItems.findIndex(a => a._id === item._id);
-            if(idx > -1) {
+            if (idx > -1) {
                 this.temporarySelectedItems.splice(idx, 1);
             }
         }
     }
-    
+
     /**
      * Called by each selected row. Used to two-way bind quantity.
      * @param _id - The id to find in temporarySelectedItems array.
@@ -242,7 +238,7 @@ export class InventoryComponent implements OnInit {
     }
 
     /**
-     * Filters the inventory data by the specified filterValue. 
+     * Filters the inventory data by the specified filterValue.
      * @param filterValue - The value to look for.
      */
     applyFilter(filterValue: string) {
@@ -257,23 +253,21 @@ export class InventoryComponent implements OnInit {
     }
 }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
-/**
- * TODO: Generalize dialog to be reusable.
- */
+// TODO: Generalize dialog to be reusable.
 @Component({
-    selector: 'confirmation-dialog',
+    selector: 'kochii-confirmation-dialog',
     templateUrl: 'confirmation-dialog.component.html',
 })
-export class ConfirmationDialog {
+export class ConfirmationDialogComponent {
 
     constructor(
-        public dialogRef: MatDialogRef<ConfirmationDialog>,
+        public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
     ) { }
-  
-//-------------------------------------------------------------
+
+// -------------------------------------------------------------
 
     /** Close this dialog without sending data. */
     onNoClick(): void {

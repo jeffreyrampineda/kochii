@@ -25,12 +25,12 @@ import { ItemDetailComponent } from './components/dashboard/inventory/item-detai
 // Components - /dashboard/recipes
 import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' }, 
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'dashboard', component: DashboardComponent, 
+  { path: 'dashboard', component: DashboardComponent,
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: OverviewComponent },

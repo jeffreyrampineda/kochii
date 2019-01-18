@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-groceries',
+  selector: 'kochii-groceries',
   templateUrl: './groceries.component.html',
   styleUrls: ['./groceries.component.css']
 })

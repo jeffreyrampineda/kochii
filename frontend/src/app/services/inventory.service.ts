@@ -6,7 +6,7 @@ import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from '
 import { MessageService } from './message.service';
 import { Item } from 'src/app/interfaces/item';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -16,14 +16,14 @@ const httpOptions = {
 export class InventoryService {
 
   private inventoryUrl = 'http://localhost:3001/api/inventory';
-  private queryUrl: string = '/search/';
+  private queryUrl = '/search/';
 
   constructor(
     private http: HttpClient,
     private messageService: MessageService
   ) { }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   /** Get all items. */
   getInventory(): Observable<Item[]> {
@@ -55,14 +55,14 @@ export class InventoryService {
       );
   }
 
-  /** 
+  /**
    * Add the specified item.
    * @param item - The item to be added.
    */
   addItem(item: Item): Observable<Item> {
     return this.http.post<Item>(this.inventoryUrl, item, httpOptions)
       .pipe(
-        tap((item: Item) => this.log(`added item w/ id=${item._id}`)),
+        tap(_ => this.log(`added item w/ id=${item._id}`)),
         catchError(this.handleError<Item>('addItem'))
       );
   }
@@ -73,7 +73,7 @@ export class InventoryService {
    */
   deleteItem(_id: string): Observable<any> {
     const url = `${this.inventoryUrl}/${_id}`;
- 
+
     return this.http.delete(url, httpOptions)
       .pipe(
         tap(_ => this.log(`deleted item id=${_id}`)),
@@ -132,12 +132,12 @@ export class InventoryService {
    * @param term - The term used to search
    */
   searchEntries(term) {
-    if(term != "") {
+    if (term !== '') {
       return this.http.get(this.inventoryUrl + this.queryUrl + term);
     }
   }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   /**
    * Error handler used for any http errors.

@@ -4,10 +4,10 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { Recipe } from 'src/app/interfaces/recipe';
 import { RecipeService } from 'src/app/services/recipe.service';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 @Component({
-  selector: 'app-recipes',
+  selector: 'kochii-recipes',
   templateUrl: './recipes.component.html',
   styleUrls: ['./recipes.component.css']
 })
@@ -15,17 +15,17 @@ export class RecipesComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['name', 'description'];
+  displayedColumns: string[] = ['title', 'description'];
   recipes: MatTableDataSource<Recipe>;
 
   constructor(
     private recipeService: RecipeService
   ) { }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   ngOnInit() {
-    this.getRecipes()
+    this.getRecipes();
   }
 
   /** Get all recipes and set them for presentation. */
@@ -39,7 +39,7 @@ export class RecipesComponent implements OnInit {
   }
 
   /**
-   * Filters the recipes data by the specified filterValue. 
+   * Filters the recipes data by the specified filterValue.
    * @param filterValue - The value to look for.
    */
   applyFilter(filterValue: string) {

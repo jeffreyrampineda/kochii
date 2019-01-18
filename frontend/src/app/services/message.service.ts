@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 @Injectable({
   providedIn: 'root',
@@ -8,8 +8,8 @@ import { Injectable } from '@angular/core';
 export class MessageService {
 
   messages: string[] = [];
- 
-//-------------------------------------------------------------
+
+// -------------------------------------------------------------
 
   /**
    * Add the message to the messages array.
@@ -19,7 +19,7 @@ export class MessageService {
     console.log(`[Message] - ${message}`);
     this.messages.push(message);
   }
- 
+
   /** Clears the messages array. */
   clear() {
     this.messages = [];

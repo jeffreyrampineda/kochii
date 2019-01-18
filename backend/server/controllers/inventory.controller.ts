@@ -28,9 +28,7 @@ class InventoryController {
         ctx.body = await Item.create(ctx.request.body);
     }
 
-    /**
-     * NOTES - can be simplified.
-     */
+    // TODO: Simplify.
     async update(ctx) {
         try {
             if(ctx.request.body.quantity === 0) {

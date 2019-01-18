@@ -4,10 +4,10 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { History } from 'src/app/interfaces/history';
 import { HistoryService } from 'src/app/services/history.service';
 
-//------------------------------------------------------------- 
+// -------------------------------------------------------------
 
 @Component({
-  selector: 'app-history',
+  selector: 'kochii-history',
   templateUrl: './history.component.html',
   styleUrls: ['./history.component.css']
 })
@@ -22,10 +22,10 @@ export class HistoryComponent implements OnInit {
     private historyService: HistoryService
   ) { }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   ngOnInit() {
-    this.getHistory()
+    this.getHistory();
   }
 
   /** Get all history and set them for presentation. */
@@ -43,7 +43,7 @@ export class HistoryComponent implements OnInit {
     this.historyService.deleteAllHistory().subscribe(
       response => {
         console.log(response);
-        if(response.n === this.history.data.length) {
+        if (response.n === this.history.data.length) {
           this.history.data = [];
         }
       }

@@ -6,7 +6,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { MessageService } from './message.service';
 import { Recipe } from 'src/app/interfaces/recipe';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class RecipeService {
     private messageService: MessageService
   ) { }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   /** Get all recipes. */
   getRecipes(): Observable<Recipe[]> {
@@ -28,7 +28,7 @@ export class RecipeService {
       .pipe(
         tap(_ => this.log('fetched recipes')),
         catchError(this.handleError('getRecipes', []))
-      )
+      );
   }
 
   /**
@@ -43,7 +43,7 @@ export class RecipeService {
       );
   }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   /**
    * Error handler used for any http errors.

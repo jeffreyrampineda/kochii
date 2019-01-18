@@ -7,10 +7,10 @@ import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
 @Component({
-  selector: 'item-add',
+  selector: 'kochii-item-add',
   templateUrl: './item-add.component.html',
   styleUrls: ['./item-add.component.css']
 })
@@ -28,7 +28,7 @@ export class ItemAddComponent implements OnInit {
   ) {
 
     // Time is removed.
-    this.dateToday.setHours(0,0,0,0);
+    this.dateToday.setHours(0, 0, 0, 0);
 
     this.inventoryService.search(this.searchTerm$).subscribe(
       results => {
@@ -37,14 +37,14 @@ export class ItemAddComponent implements OnInit {
     );
   }
 
-//-------------------------------------------------------------
+// -------------------------------------------------------------
 
   ngOnInit() {
     this.itemAddForm.push(this.formBuilder.group({
       name: ['', [
         Validators.maxLength(20),
         Validators.required
-      ]], 
+      ]],
       quantity: [null, Validators.required],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required]
@@ -59,11 +59,11 @@ export class ItemAddComponent implements OnInit {
 
     // Stop here if any form is invalid.
     if (this.checkIfInvalid()) {
-        console.log("rejected");
+        console.log('rejected');
         return;
     }
 
-    let observablesGroup = [];
+    const observablesGroup = [];
 
     this.itemAddForm.forEach(
       form => {
@@ -84,11 +84,11 @@ export class ItemAddComponent implements OnInit {
    */
   checkIfInvalid(): Boolean {
     let isInvalid = false;
-    for (let form of this.itemAddForm) {
-      if(form.invalid) {
+    for (const form of this.itemAddForm) {
+      if (form.invalid) {
         isInvalid = true;
       }
-    };
+    }
     return isInvalid;
   }
 
@@ -113,11 +113,11 @@ export class ItemAddComponent implements OnInit {
       name: ['', [
         Validators.maxLength(20),
         Validators.required
-      ]], 
+      ]],
       quantity: [null, Validators.required],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required]
-    }))
+    }));
   }
 
   /** Convenience getter for easy access to form fields. */
