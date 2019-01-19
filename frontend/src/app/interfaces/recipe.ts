@@ -5,4 +5,5 @@ export interface Recipe {
     tags: string[];
     ingredients: { name: string, quantity: number }[];
     steps: string[];
+    // TODO: include nutrition facts.
 }

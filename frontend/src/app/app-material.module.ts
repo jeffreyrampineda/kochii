@@ -19,7 +19,8 @@ import {
   MatAutocompleteModule,
   MatTooltipModule,
   MatCheckboxModule,
-  MatSortModule
+  MatSortModule,
+  MatTabsModule,
 } from '@angular/material';
 
 // -------------------------------------------------------------
@@ -46,7 +47,8 @@ import {
     MatAutocompleteModule,
     MatTooltipModule,
     MatCheckboxModule,
-    MatSortModule
+    MatSortModule,
+    MatTabsModule,
   ],
   exports: [
     MatButtonModule,
@@ -67,7 +69,8 @@ import {
     MatAutocompleteModule,
     MatTooltipModule,
     MatCheckboxModule,
-    MatSortModule
+    MatSortModule,
+    MatTabsModule,
   ]
 })
 export class AppMaterialModule { }
