@@ -23,10 +23,7 @@ import { RegisterComponent } from './components/register/register.component';
 // Components - /dashboard
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
-import {
-  InventoryComponent,
-  ConfirmationDialogComponent
-} from './components/dashboard/inventory/inventory.component';
+import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
@@ -36,10 +33,10 @@ import { ItemAddComponent } from './components/dashboard/inventory/item-add/item
 import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
 
 // Components - /dashboard/recipes
-import {
-  RecipeDetailComponent,
-  CookDialogComponent
-} from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
+import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
+
+// Components - dialogs
+import { GeneralDialogComponent } from './components/dialogs/general-dialog/general-dialog.component';
 
 // -------------------------------------------------------------
 
@@ -56,14 +53,13 @@ import {
     GroceriesComponent,
     HistoryComponent,
     InventoryComponent,
-    ConfirmationDialogComponent,
     OverviewComponent,
     RecipesComponent,
     SettingsComponent,
     ItemAddComponent,
     ItemDetailComponent,
     RecipeDetailComponent,
-    CookDialogComponent,
+    GeneralDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,8 +73,7 @@ import {
   providers: [],
   bootstrap: [AppComponent],
   entryComponents: [
-    ConfirmationDialogComponent,
-    CookDialogComponent,
+    GeneralDialogComponent,
   ]
 })
 export class AppModule { }

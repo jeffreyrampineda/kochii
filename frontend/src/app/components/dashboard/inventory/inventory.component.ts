@@ -1,12 +1,13 @@
-import { Component, OnInit, ViewChild, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 import { SelectionModel } from '@angular/cdk/collections';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
+import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
 
 // -------------------------------------------------------------
 
@@ -174,15 +175,14 @@ export class InventoryComponent implements OnInit {
     }
 
     /** Opens the confirmation dialog. */
-    openConfirmationDialog(title: string, action: string): void {
-        const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+    openConfirmationDialog(title: string, description: string): void {
+        const dialogRef = this.dialog.open(GeneralDialogComponent, {
             width: '250px',
             data: {
+                title: 'Confirmation: ' + title,
+                description: description,
                 items: this.temporarySelectedItems,
-                info: {
-                    title: title,
-                    action: action,
-                }
+                canConfirm: true
             }
         });
 
@@ -260,27 +260,5 @@ export class InventoryComponent implements OnInit {
       const numSelected = this.selection.selected.length;
       const numRows = this.inventory.data.length;
       return numSelected === numRows;
-    }
-}
-
-// -------------------------------------------------------------
-
-// TODO: Generalize dialog to be reusable.
-@Component({
-    selector: 'kochii-confirmation-dialog',
-    templateUrl: 'confirmation-dialog.component.html',
-})
-export class ConfirmationDialogComponent {
-
-    constructor(
-        public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,
-    ) { }
-
-// -------------------------------------------------------------
-
-    /** Close this dialog without sending data. */
-    onNoClick(): void {
-        this.dialogRef.close();
     }
 }

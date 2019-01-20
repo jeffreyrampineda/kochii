@@ -3,12 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { MatDialog } from '@angular/material';
 
 import { RecipeService } from 'src/app/services/recipe.service';
 import { Recipe } from 'src/app/interfaces/recipe';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
 
 // -------------------------------------------------------------
 
@@ -199,12 +200,15 @@ export class RecipeDetailComponent implements OnInit {
 
   /** Opens the cook dialog. */
   openCookDialog(canCook: boolean, items: Item[]): void {
-    const dialogRef = this.dialog.open(CookDialogComponent, {
+    const description = canCook ? 'Using ingredients' : 'Required ingredients';
+
+    const dialogRef = this.dialog.open(GeneralDialogComponent, {
       width: '250px',
       data: {
-        title: this.recipe.title,
-        canCook: canCook,
-        ingredients: items
+        title: 'Cooking' + this.recipe.title,
+        description: description,
+        items: items,
+        canConfirm: canCook
       }
     });
 
@@ -214,31 +218,10 @@ export class RecipeDetailComponent implements OnInit {
         if (result && result.length > 0) {
           console.log('Cooking');
           // TODO: Update with result.
+          // DISABLED: Quantity Check.
           // this.updateManyItem(result);
         }
       }
     );
-  }
-}
-
-// -------------------------------------------------------------
-
-// TODO: Generalize dialog to be reusable.
-@Component({
-  selector: 'kochii-cook-dialog',
-  templateUrl: 'cook-dialog.component.html',
-})
-export class CookDialogComponent {
-
-  constructor(
-      public dialogRef: MatDialogRef<CookDialogComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: { canCook: boolean, items: Item[] },
-  ) { }
-
-// -------------------------------------------------------------
-
-  /** Close this dialog without sending data. */
-  onNoClick(): void {
-      this.dialogRef.close();
   }
 }
