@@ -10,6 +10,15 @@ const itemSchema = new Schema({
         type: Number,
         required: true
     },
+    quantityType: {
+        type: String,           // Example: 'slices', 'bottles', 'box'
+    },
+    measurementPerQuantity: {
+        type: Number,
+    },
+    measurementType: {
+        type: String,           // Example: 'mg', 'g', 'pieces'
+    },
     addedDate: {
         type: Date,
         default: Date.now

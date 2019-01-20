@@ -27,7 +27,7 @@ export class InventoryComponent implements OnInit {
 
     // Used for updating/removing items.
     temporarySelectedItems: Item[] = [];
-    option = 'set';
+    option: string;
 
     constructor(
         private inventoryService: InventoryService,
@@ -78,6 +78,8 @@ export class InventoryComponent implements OnInit {
     }
 
     /**
+     * TODO: measurementPerQuantity reduction.
+     *
      * Update the item with the same name and expirationDate.
      * Option declares whether to set or inc.
      * @param newItem - The item to be updated.
@@ -92,16 +94,25 @@ export class InventoryComponent implements OnInit {
             map(
                 results => {
 
-                    // If item is updated.
-                    if (results._id) {
-                        if (this.option === 'inc') {
-                            this.inventory.data.find(i => i._id === results._id).quantity += newItem.quantity;
-                        } else if (this.option === 'set') {
-                            this.inventory.data.find(i => i._id === results._id).quantity = newItem.quantity;
+                    if (results) {
+                        // If item is updated.
+                        if (results._id) {
+                            if (this.option === 'inc') {
+                                this.inventory.data.find(i => i._id === results._id).quantity += newItem.quantity;
+                            } else if (this.option === 'set') {
+                                const ref = this.inventory.data.find(i => i._id === results._id);
+                                ref.quantity = newItem.quantity;
+                                ref.quantityType = newItem.quantityType;
+                                ref.measurementPerQuantity = newItem.measurementPerQuantity;
+                                ref.measurementType = newItem.measurementType;
+                            }
+                        } else if (results.n === 1) {
+                            // If item is deleted.
+                            this.inventory.data = this.inventory.data.filter(i => i._id !== newItem._id);
                         }
-                    } else if (results.n === 1) {
-                        // If item is deleted.
-                        this.inventory.data = this.inventory.data.filter(i => i._id !== newItem._id);
+                    } else {
+                        // If new item is created.
+                        // TODO: update inventory. Used for measurementPerQuantity reduction.
                     }
                     return results;
                 }
@@ -125,7 +136,7 @@ export class InventoryComponent implements OnInit {
         forkJoin(observablesGroup).subscribe(
             x => {
                 console.log(x);
-                this.option = 'set';
+                this.selectColumnToggle('');
             }
         );
     }
@@ -149,19 +160,21 @@ export class InventoryComponent implements OnInit {
     }
 
     /** Toggles when to show the select checkboxes. */
-    selectColumnToggle() {
+    selectColumnToggle(option: string) {
         this.showSelect = !this.showSelect;
         if (this.showSelect) {
             this.displayedColumns.unshift('select');
+            this.option = option;
         } else {
             this.temporarySelectedItems = [];
             this.selection.clear();
             this.displayedColumns.shift();
+            this.option = '';
         }
     }
 
     /** Opens the confirmation dialog. */
-    openConfirmationDialog(title: string, action: string, option: string): void {
+    openConfirmationDialog(title: string, action: string): void {
         const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
             width: '250px',
             data: {
@@ -169,7 +182,6 @@ export class InventoryComponent implements OnInit {
                 info: {
                     title: title,
                     action: action,
-                    option: option
                 }
             }
         });
@@ -178,11 +190,9 @@ export class InventoryComponent implements OnInit {
         dialogRef.afterClosed().subscribe(
             result => {
                 if (result && result.length > 0) {
-                    console.log(`Confirmed... ${option}`);
-                    this.option = option;
+                    console.log(`Confirmed... ${this.option}`);
                     this.updateManyItem(result);
                 }
-                this.selectColumnToggle();
             }
         );
     }

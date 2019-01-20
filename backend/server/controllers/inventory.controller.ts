@@ -29,6 +29,8 @@ class InventoryController {
     }
 
     // TODO: Simplify.
+    // TODO: Redesign for adding new items with measurements. 
+        // Ex: same name and expiration but different measurement.
     async update(ctx) {
         try {
             if(ctx.request.body.quantity === 0) {
@@ -38,7 +40,10 @@ class InventoryController {
             let itemData: any = {
                 $set: { 
                     name: ctx.request.body.name, 
-                    expirationDate: ctx.request.body.expirationDate
+                    expirationDate: ctx.request.body.expirationDate,
+                    quantityType: ctx.request.body.quantityType,
+                    measurementPerQuantity: ctx.request.body.measurementPerQuantity,
+                    measurementType: ctx.request.body.measurementType
                 }
             }
 

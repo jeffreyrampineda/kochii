@@ -34,6 +34,36 @@
         </mat-form-field>
 
         <mat-form-field>
+            <input  matInput 
+                    formControlName="quantityType"
+                    type="text"
+                    placeholder="Quantity Type" />
+            <mat-error *ngIf="f.quantityType.errors">
+              <div *ngIf="f.quantityType.errors.required">Quantity type is required</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input  matInput
+                    formControlName="measurementPerQuantity"
+                    type="number"
+                    placeholder="Measurement per Quantity" />
+            <mat-error *ngIf="f.measurementPerQuantity.errors">
+              <div *ngIf="f.measurementPerQuantity.errors.required">Measurement per quantity is required</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input  matInput 
+                    formControlName="measurementType"
+                    type="text"
+                    placeholder="Measurement Type" />
+            <mat-error *ngIf="f.measurementType.errors">
+              <div *ngIf="f.measurementType.errors.required">Measurement type is required</div>
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
             <input  matInput
                     formControlName="addedDate"
                     placeholder="Added Date"

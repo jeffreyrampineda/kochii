@@ -40,15 +40,7 @@ export class ItemAddComponent implements OnInit {
 // -------------------------------------------------------------
 
   ngOnInit() {
-    this.itemAddForm.push(this.formBuilder.group({
-      name: ['', [
-        Validators.maxLength(20),
-        Validators.required
-      ]],
-      quantity: [null, Validators.required],
-      addedDate: [this.dateToday, Validators.required],
-      expirationDate: [this.dateToday, Validators.required]
-    }));
+    this.addMoreInput();
   }
 
   /**
@@ -115,6 +107,9 @@ export class ItemAddComponent implements OnInit {
         Validators.required
       ]],
       quantity: [null, Validators.required],
+      quantityType: ['', Validators.required],
+      measurementPerQuantity: [null, Validators.required],
+      measurementType: ['', Validators.required],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required]
     }));

@@ -3,8 +3,8 @@
     <mat-card-title>inventory</mat-card-title>
     <mat-card-subtitle>inventory quick description</mat-card-subtitle>
     <button mat-button routerLink="/dashboard/inventory/add">Add</button>
-    <button mat-button (click)="showSelect ? openConfirmationDialog('Remove', 'Removing', 'inc') : selectColumnToggle()">Remove</button>
-    <button mat-button (click)="showSelect ? openConfirmationDialog('Update', 'Setting', 'set') : selectColumnToggle()">Update</button>
+    <button mat-button (click)="showSelect ? openConfirmationDialog('Remove', 'Removing') : selectColumnToggle('inc')">Remove</button>
+    <button mat-button (click)="showSelect ? openConfirmationDialog('Update', 'Setting') : selectColumnToggle('set')">Update</button>
     <button mat-button (click)="selectColumnToggle()" *ngIf="showSelect">Cancel</button>
   </mat-card-header>
   <mat-card-content>
@@ -40,10 +40,25 @@
       <ng-container matColumnDef="quantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
         <td mat-cell *matCellDef="let item">
-          <mat-form-field *ngIf="temporarySelectedItemsFind(item._id)">
-            <input matInput type="number" [(ngModel)]="temporarySelectedItemsFind(item._id).quantity">
-          </mat-form-field>
-          {{ item.quantity }}
+          <div *ngIf="temporarySelectedItemsFind(item._id)">
+            <mat-form-field >
+              <input matInput type="number" [(ngModel)]="temporarySelectedItemsFind(item._id).quantity">
+            </mat-form-field>
+            <div *ngIf="option === 'set'">
+              <mat-form-field >
+                <input matInput type="text" [(ngModel)]="temporarySelectedItemsFind(item._id).quantityType">
+              </mat-form-field>
+              <mat-form-field >
+                <input matInput type="number" [(ngModel)]="temporarySelectedItemsFind(item._id).measurementPerQuantity">
+              </mat-form-field>
+              <mat-form-field >
+                <input matInput type="text" [(ngModel)]="temporarySelectedItemsFind(item._id).measurementType">
+              </mat-form-field>
+            </div>
+          </div>
+          <span matTooltip="{{ item.measurementPerQuantity }}{{ item.measurementType }}/ {{ item.quantityType }}">
+            {{ item.quantity }} {{ item.quantityType }}
+          </span>
         </td>
       </ng-container>
 
