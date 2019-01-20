@@ -28,7 +28,6 @@ class InventoryController {
         ctx.body = await Item.create(ctx.request.body);
     }
 
-    // TODO: Simplify.
     // TODO: Redesign for adding new items with measurements. 
         // Ex: same name and expiration but different measurement.
     async update(ctx) {
@@ -48,17 +47,12 @@ class InventoryController {
             }
 
             // Setting or incrementing ?
-            switch(ctx.params.option) {
-                case 'inc':
-                    itemData.$inc = {
-                        quantity: ctx.request.body.quantity
-                    }
-                    break;
-                
-                // default to set.
-                default:
-                    itemData.$set.quantity = ctx.request.body.quantity
-                    break;
+            if (ctx.params.option === 'inc') {
+                itemData.$inc = { quantity: ctx.request.body.quantity }
+            } else if (ctx.params.option === 'set') {
+                itemData.$set.quantity = ctx.request.body.quantity
+            } else {
+                throw new Error('invalid option');
             }
     
             // Result is the previous value of Item. Null if Item is new.
@@ -73,26 +67,20 @@ class InventoryController {
                 HistoryController.create({ date: Date.now(), method: 'Create', target: ctx.request.body.name, description: '' })
             }
 
-            // If inc and old quantity + new quantity net to 0, delete Item.
-            // If set and new quantity == 0, delete Item.
-            else if(result && 
-                    (ctx.params.option==='inc' && result.quantity + ctx.request.body.quantity <= 0) ||
-                    (ctx.params.option==='set' && ctx.request.body.quantity == 0)
-                ) {
-                console.log("Removing item.");
-
-                HistoryController.create({ date: Date.now(), method: 'Remove', target: ctx.request.body.name, description: '' })
-
-                result = await Item.deleteOne({ _id: result.id });
-            }
-
             // Otherwise, item was updated.
             else {
-                if(ctx.params.option==='inc') {
+                // If old quantity + new quantity net to 0 OR new quantity == 0, delete Item.
+                if (result.quantity + ctx.request.body.quantity <= 0 || ctx.request.body.quantity == 0) {
+                    console.log("Removing item.");
+
+                    HistoryController.create({ date: Date.now(), method: 'Remove', target: ctx.request.body.name, description: '' })
+                    result = await Item.deleteOne({ _id: result.id });
+                } else if (ctx.params.option==='inc') {
+
                     HistoryController.create({ date: Date.now(), method: 'Update', target: ctx.request.body.name, 
                         description: `${result.quantity} -> ${result.quantity + ctx.request.body.quantity}` })
-                }
-                if(ctx.params.option==='set') {
+                } else if (ctx.params.option==='set') {
+
                     HistoryController.create({ date: Date.now(), method: 'Update', target: ctx.request.body.name, 
                         description: `${result.quantity} -> ${ctx.request.body.quantity}` })
                 }
