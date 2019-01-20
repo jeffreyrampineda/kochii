@@ -24,9 +24,28 @@
         </div>
       </mat-tab>
       <mat-tab label="Nutrition Facts">
-        <div>
-          TODO: Nutrition facts
-        </div>
+        <mat-list role="list">
+          <mat-list-item role="listitem">servingsPerContainer: {{ recipe.nutritionFacts.servingsPerContainer }}</mat-list-item>
+          <mat-list-item role="listitem">quantity: {{ recipe.nutritionFacts.quantity }}</mat-list-item>
+          <mat-list-item role="listitem">units: {{ recipe.nutritionFacts.units }}</mat-list-item>
+          <mat-list-item role="listitem">size: {{ recipe.nutritionFacts.size }}</mat-list-item>
+
+          <mat-list-item role="listitem">calories: {{ recipe.nutritionFacts.calories }}</mat-list-item>
+          
+          <mat-list-item role="listitem">total: {{ recipe.nutritionFacts.fats.total }}</mat-list-item>
+          <mat-list-item role="listitem">saturated: {{ recipe.nutritionFacts.fats.saturated }}</mat-list-item>
+          <mat-list-item role="listitem">trans: {{ recipe.nutritionFacts.fats.trans }}</mat-list-item>
+
+          <mat-list-item role="listitem">cholesterol: {{ recipe.nutritionFacts.cholesterol }}</mat-list-item>
+          <mat-list-item role="listitem">sodium: {{ recipe.nutritionFacts.sodium }}</mat-list-item>
+
+          <mat-list-item role="listitem">total: {{ recipe.nutritionFacts.carbohydrates.total }}</mat-list-item>
+          <mat-list-item role="listitem">dietaryFiber: {{ recipe.nutritionFacts.carbohydrates.dietaryFiber }}</mat-list-item>
+          <mat-list-item role="listitem">sugars: {{ recipe.nutritionFacts.carbohydrates.sugars }}</mat-list-item>
+          <mat-list-item role="listitem">addedSugars: {{ recipe.nutritionFacts.carbohydrates.addedSugars }}</mat-list-item>
+
+          <mat-list-item role="listitem">protein: {{ recipe.nutritionFacts.protein }}</mat-list-item>
+        </mat-list>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
