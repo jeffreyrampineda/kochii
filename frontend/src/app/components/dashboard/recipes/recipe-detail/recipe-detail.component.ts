@@ -99,10 +99,8 @@ export class RecipeDetailComponent implements OnInit {
 
     this.inventoryService.getItemsByNames(ingredientsRequiredNames).subscribe(
       items => {
-        // console.log(items);
 
         let noDuplicates: any = [];
-        // let duplicates: any = [];
 
         // Has duplicate due to different expirationDates.
         if (items.length > ingredientsRequired.length) {
@@ -115,16 +113,12 @@ export class RecipeDetailComponent implements OnInit {
               // Item 'i's name already exists, append 'i's quantity to the existing item in noDuplicate instead.
               if (notUnique) {
                 notUnique.quantity += i.quantity;
-                // duplicates.push(JSON.parse(JSON.stringify(i)));
               } else {
                 // Otherwise, item 'i's name is unique. Push to noDuplicate.
                 noDuplicates.push(JSON.parse(JSON.stringify(i)));
               }
             }
           );
-
-          // console.log(duplicates);
-          // console.log(noDuplicates);
         } else {
           // Otherwise, there are no duplicates.
           noDuplicates = JSON.parse(JSON.stringify(items));
@@ -133,11 +127,13 @@ export class RecipeDetailComponent implements OnInit {
         // Has missing ingredients.
         if (noDuplicates.length < ingredientsRequired.length) {
           const missing = ingredientsRequired.filter(
-            i => noDuplicates.map(n => n.name).indexOf(i.name)
+            i => !noDuplicates.map(n => n.name).includes(i.name)
           );
 
           this.openCookDialog(false, missing);
         } else {
+          // DISABLED: Quantity Check.
+/*
           // Otherwise, continue.
           const insufficientIngredientsRequiredQuantity = [];
 
@@ -190,13 +186,12 @@ export class RecipeDetailComponent implements OnInit {
                 ingredientsRequired.find(e => e.name === ingredientsPossessed[x].name).quantity = -surplus;
                 ingredientsPossessed[x].quantity = 0;
               }
-
-              // console.log(surplus);
             }
-
-            console.log(ingredientsPossessed);
             this.openCookDialog(true, ingredientsPossessed);
           }
+*/
+          // DISABLED: Quantity Check.
+          this.openCookDialog(true, ingredientsRequired);
         }
       }
     );
