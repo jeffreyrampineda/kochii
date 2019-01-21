@@ -2,6 +2,7 @@
   <div id="heading">
     <span id="logo">Kochii</span>
     <nav id="menu">
+      <button mat-button routerLink="/home" fragment="introduction">Introduction</button>
       <button mat-button routerLink="/dashboard">Dashboard</button>
       <button mat-button routerLink="/recipe-archive" disabled>Recipe Archive</button>
       <button mat-button routerLink="/home" fragment="about">About</button>
@@ -9,7 +10,7 @@
     </nav>
   </div>
 </section>
-<section>
+<section id="introduction">
   <div class="k-content">
     <h1>Introduction</h1>
     <p>
@@ -77,3 +78,6 @@
     </p>
   </div>
 </section>
+<footer>
+  jeffreyrampineda &copy; 2018
+</footer>
