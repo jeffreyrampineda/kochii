@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-// Components
+import { AuthGuard } from './guards/auth.guard';
 
+// Components
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
@@ -30,7 +31,7 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'dashboard', component: DashboardComponent,
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: OverviewComponent },
@@ -44,7 +45,7 @@ const routes: Routes = [
       { path: 'history', component: HistoryComponent },
       { path: '**', redirectTo: 'overview' }
     ]},
-  { path: 'recipe-archive', component: RecipeArchiveComponent},
+  { path: 'recipe-archive', component: RecipeArchiveComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: '**', component: PagenotfoundComponent }

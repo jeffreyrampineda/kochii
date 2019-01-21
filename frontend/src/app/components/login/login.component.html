@@ -5,18 +5,34 @@
       <mat-card-subtitle>Enter your authentication</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-      <form class="login-form" (ngSubmit)="onSubmit()">
-          <mat-form-field class="login-full-width">
-              <input matInput placeholder="Username">
-          </mat-form-field>
+      <form class="login-form" [formGroup]="loginForm">
+        <mat-form-field>
+            <input  class="login-full-width"
+                    matInput 
+                    formControlName="username"
+                    type="text"
+                    placeholder="Username" />
+            <mat-error *ngIf="f.username.errors">
+              <div *ngIf="f.username.errors.required">Username is required</div>
+            </mat-error>
+        </mat-form-field>
 
-          <mat-form-field class="login-full-width">
-              <input matInput placeholder="Password" type="password">
-          </mat-form-field>
+        <mat-form-field>
+            <input  class="login-full-width"
+                    matInput 
+                    formControlName="password"
+                    type="password"
+                    placeholder="Password" />
+            <mat-error *ngIf="f.password.errors">
+              <div *ngIf="f.password.errors.required">Password is required</div>
+            </mat-error>
+        </mat-form-field>
       </form>
   </mat-card-content>
   <mat-card-actions>
+    <div class="k-action-buttons">
       <button mat-button routerLink="/register">Register</button>
-      <button type="submit" mat-button [disabled]="!loginForm.form.valid">Login</button>
+      <button type="submit" mat-button [disabled]="loginForm.invalid" (click)="onSubmit()">Login</button>
+    </div>
   </mat-card-actions>
 </mat-card>

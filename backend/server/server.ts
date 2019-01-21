@@ -3,6 +3,7 @@ import * as Router from 'koa-router';
 import * as mongoose from 'mongoose';
 import * as cors from '@koa/cors';
 import * as bodyParser from 'koa-bodyparser';
+import * as jwt from 'koa-jwt';
 import routes from './routes/routes';
 import logger from './middlewares/logger';
 
@@ -12,7 +13,7 @@ const port = process.env.PORT || 3001;
 const db_host = process.env.DB_HOST || 'localhost';
 const API_URL = "http://localhost:4200"
 const options:cors.CorsOptions = {
-    allowHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+    allowHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token", "Authorization"],
     credentials: true,
     allowMethods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
     origin: API_URL
@@ -22,6 +23,7 @@ const router = new Router();
 routes(router);
 
 app.use(cors(options));
+app.use(jwt({ secret: 'shared-secret' }).unless({ path: [/^\/public/] }));
 app.use(logger());
 app.use(bodyParser());
 app.use(router.routes());

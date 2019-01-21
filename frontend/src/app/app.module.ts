@@ -2,7 +2,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+// Interceptors
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
 
 // Pipes
 import { ExpirationPipe } from './pipes/expiration.pipes';
@@ -70,7 +73,9 @@ import { GeneralDialogComponent } from './components/dialogs/general-dialog/gene
     HttpClientModule,
     AppMaterialModule
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent],
   entryComponents: [
     GeneralDialogComponent,
