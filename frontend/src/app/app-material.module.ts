@@ -21,6 +21,7 @@ import {
   MatCheckboxModule,
   MatSortModule,
   MatTabsModule,
+  MatSidenavModule,
 } from '@angular/material';
 
 // -------------------------------------------------------------
@@ -49,6 +50,7 @@ import {
     MatCheckboxModule,
     MatSortModule,
     MatTabsModule,
+    MatSidenavModule,
   ],
   exports: [
     MatButtonModule,
@@ -71,6 +73,7 @@ import {
     MatCheckboxModule,
     MatSortModule,
     MatTabsModule,
+    MatSidenavModule,
   ]
 })
 export class AppMaterialModule { }

@@ -2,3 +2,16 @@ table {
     width: 100%;
     table-layout:fixed;
 }
+
+.k-action-buttons {
+    float: left;
+}
+
+.k-action-buttons * {
+    margin: 0px;
+}
+
+.mat-card-actions {
+    margin: 0px;
+    overflow: hidden;
+}

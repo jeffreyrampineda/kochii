@@ -4,3 +4,27 @@ footer {
     display: flex;
     justify-content: center;
 }
+
+/* Used for navigation buttons. */
+.k-dashboard-menu {
+    width: 200px;
+}
+.k-dashboard-menu * {
+    display: block;
+    width: 100%;
+}                               
+/* ---------------------------- */
+
+/* Overrides default style */
+.mat-sidenav-container {
+    min-height: 500px;
+}
+
+.mat-sidenav-container {
+    background-color: white;
+}
+
+.mat-sidenav-content {
+    padding: 10px;
+}
+/* ----------------------- */

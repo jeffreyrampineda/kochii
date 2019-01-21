@@ -1,15 +1,18 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>Recipes</mat-card-title>
-    <mat-card-subtitle>recipes quick description</mat-card-subtitle>
-    <button mat-button routerLink="/dashboard/recipes/add">Add</button>
+    <mat-card-title>Recipe Book</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
-    <mat-form-field class="filter">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+  <mat-card-actions>
+    <mat-form-field class="k-search">
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
     </mat-form-field>
-
-    <table mat-table [dataSource]="recipes">
+    <div class="k-action-buttons">
+      <button mat-button routerLink="/dashboard/recipes/add">Add</button>
+      <button mat-button >Remove</button>
+    </div>
+  </mat-card-actions>
+  <mat-card-content>
+    <table class="mat-elevation-z1" mat-table [dataSource]="recipes">
 
       <!-- Name Column -->
       <ng-container matColumnDef="title">
