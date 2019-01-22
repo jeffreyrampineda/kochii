@@ -31,8 +31,12 @@
   </mat-card-content>
   <mat-card-actions>
     <div class="k-action-buttons">
+      <span *ngIf="loading">Loading...</span>
+      <mat-error>
+        <div *ngIf="error">{{ error }}</div>
+      </mat-error>
       <button mat-button routerLink="/register">Register</button>
-      <button type="submit" mat-button [disabled]="loginForm.invalid" (click)="onSubmit()">Login</button>
+      <button type="submit" mat-button [disabled]="loginForm.invalid || loading" (click)="onSubmit()">Login</button>
     </div>
   </mat-card-actions>
 </mat-card>

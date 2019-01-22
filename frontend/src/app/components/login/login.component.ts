@@ -45,10 +45,19 @@ export class LoginComponent implements OnInit {
 
     console.log('submitted');
     this.loading = true;
+    this.error = '';
+
     this.authenticationService.login(this.loginForm.value).subscribe(
-      _ => {
+      response => {
+        if (response && response.token) {
+          this.router.navigate(['/dashboard']);
+        }
+      },
+      err => {
+        if (err.status === 401) {
+          this.error = err.error;
+        }
         this.loading = false;
-        this.router.navigate(['/dashboard']);
       }
     );
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
 import { User } from '../interfaces/user';
@@ -37,8 +37,7 @@ export class AuthenticationService {
                         localStorage.setItem('currentUser', JSON.stringify(response));
                         this.currentUserSubject.next(response);
                     }
-
-                    return user;
+                    return response;
                 }),
                 tap(_ => this.log(`logging in`)),
                 catchError(this.handleError<User>('login'))
@@ -60,7 +59,12 @@ export class AuthenticationService {
      * @param result - The results received.
      */
     private handleError<T>(operation = 'operation', result?: T) {
-        return this.messageService.handleError<T>(operation, result);
+        return (error: any): Observable<T> => {
+            if (error.status === 401) {
+                return throwError(error);
+            }
+            return of(result as T);
+        };
     }
 
     /**
