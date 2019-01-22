@@ -15,6 +15,11 @@ export class JwtInterceptor implements HttpInterceptor {
 
         console.log('Intercepting HTTP');
 
+        // TODO: temporary fix - prevents reload on /login component.
+        if (request.url === 'http://localhost:3001/public/login') {
+            return next.handle(request);
+        }
+
         // add authorization header with jwt token if available
         const currentUser = this.authenticationService.currentUserValue;
         if (currentUser && currentUser.token) {
