@@ -1,9 +1,9 @@
 <mat-card>
-  <mat-card-header>
-      <mat-card-title>Register</mat-card-title>
-      <mat-card-subtitle>Enter your authentication</mat-card-subtitle>
-  </mat-card-header>
-  <mat-card-content>
+    <mat-card-header>
+        <mat-card-title>Register</mat-card-title>
+        <mat-card-subtitle>Enter your authentication</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
         <form class="register-form" [formGroup]="registerForm">
             <mat-form-field class="register-full-width">
                 <input  matInput 
@@ -40,7 +40,7 @@
         <mat-error>
             <div *ngIf="error">{{ error }}</div>
         </mat-error>
-        <button mat-button routerLink="/cancel">Cancel</button>
+        <button mat-button routerLink="/home">Cancel</button>
         <button type="submit" mat-button [disabled]="registerForm.invalid || loading" (click)="onSubmit()">Register</button>
     </div>
   </mat-card-actions>
