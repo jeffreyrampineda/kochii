@@ -9,7 +9,7 @@ import { MessageService } from './message.service';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
-    private authenticationUrl = 'http://localhost:3001/public/login';
+    private authenticationUrl = 'http://localhost:3001/public';
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
@@ -21,27 +21,44 @@ export class AuthenticationService {
         this.currentUser = this.currentUserSubject.asObservable();
     }
 
+    private onAuthenticated(response: User): void {
+        // login successful if there's a jwt token in the response
+        if (response && response.token) {
+
+            // store user details and jwt token in local storage to keep user logged in between page refreshes
+            localStorage.setItem('currentUser', JSON.stringify(response));
+            this.currentUserSubject.next(response);
+        }
+    }
+
     public get currentUserValue(): User {
         return this.currentUserSubject.value;
     }
 
     login(user: User): Observable<User> {
-        return this.http.post<User>(this.authenticationUrl, user)
+        return this.http.post<User>(`${this.authenticationUrl}/login`, user)
             .pipe(
                 map(response => {
 
-                    // login successful if there's a jwt token in the response
-                    if (response && response.token) {
-
-                        // store user details and jwt token in local storage to keep user logged in between page refreshes
-                        localStorage.setItem('currentUser', JSON.stringify(response));
-                        this.currentUserSubject.next(response);
-                    }
+                    this.onAuthenticated(response);
                     return response;
                 }),
                 tap(_ => this.log(`logging in`)),
                 catchError(this.handleError<User>('login'))
             );
+    }
+
+    register(user: User): Observable<User> {
+        return this.http.post<User>(`${this.authenticationUrl}/register`, user).pipe(
+
+            // Login if successful.
+            map(response => {
+                this.onAuthenticated(response);
+                return response;
+            }),
+            tap(_ => this.log(`registering`)),
+            catchError(this.handleError<User>('register'))
+        );
     }
 
     logout(): void {
@@ -60,7 +77,15 @@ export class AuthenticationService {
      */
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
+
+            // Do something before throwing to login/register component
             if (error.status === 401) {
+
+                // Authentication failed.
+                return throwError(error);
+            } else if (error.status === 409) {
+
+                // Username already exists.
                 return throwError(error);
             }
             return of(result as T);

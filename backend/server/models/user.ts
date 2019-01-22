@@ -12,4 +12,22 @@ const userSchema = new Schema({
     }
 });
 
-export default mongoose.model('User', userSchema);
+userSchema.pre('save', async function(next) {
+    const self = this;
+    const result = await UserModel.find({ username : self.username });
+
+    if (result.length === 0) {
+
+        // Username doesn't exist.
+        next();
+    } else {
+
+        // Username exists. Throw error for controller to catch.
+        console.log(`Username '${self.username}' already exists`);
+        next(new Error("Username already exists"));
+    }
+});
+
+const UserModel = mongoose.model('User', userSchema);
+
+export default UserModel;

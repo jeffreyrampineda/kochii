@@ -13,10 +13,13 @@ export class JwtInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-        console.log('Intercepting HTTP');
+        console.log(`Intercepting ${request.url}`);
 
-        // TODO: temporary fix - prevents reload on /login component.
+        // TODO: temporary fix - prevents reload on /login, /register component.
         if (request.url === 'http://localhost:3001/public/login') {
+            return next.handle(request);
+        }
+        if (request.url === 'http://localhost:3001/public/register') {
             return next.handle(request);
         }
 
@@ -43,7 +46,7 @@ export class JwtInterceptor implements HttpInterceptor {
   private handleError<T>(result?: T) {
     return (error: any): Observable<T> => {
 
-        console.log(error);
+        console.log('interceptor caught error');
 
         if (error.status === 401) {
             // auto logout if 401 response returned from api
