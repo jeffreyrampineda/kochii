@@ -12,7 +12,18 @@ footer {
 .k-dashboard-menu * {
     display: block;
     width: 100%;
-}                               
+}
+
+.k-dashboard-menu-bottom {
+    position: absolute;
+    bottom: 0;
+}
+
+.k-dashboard-menu-toggle {
+    position: absolute;
+    background-color: #f6f6f6;
+}
+
 /* ---------------------------- */
 
 /* Overrides default style */
