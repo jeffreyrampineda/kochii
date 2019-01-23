@@ -56,6 +56,9 @@ export class LoginComponent implements OnInit {
       err => {
         if (err.status === 401) {
           this.error = err.error;
+        } else {
+          this.error = 'Unknown error';
+          console.log('unknown error from login');
         }
         this.loading = false;
       }

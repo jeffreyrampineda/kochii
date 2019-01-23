@@ -79,13 +79,13 @@ export class AuthenticationService {
         return (error: any): Observable<T> => {
 
             // Do something before throwing to login/register component
-            if (error.status === 401) {
-
-                // Authentication failed.
+            if (error.status === 401 || error.status === 409 || error.status === 406) {
+                // 401 - Authentication failed.
+                // 409 - Username already exists.
+                // 406 - Password too short.
                 return throwError(error);
-            } else if (error.status === 409) {
-
-                // Username already exists.
+            } else {
+                console.log('unknown error from authentication');
                 return throwError(error);
             }
             return of(result as T);

@@ -63,9 +63,10 @@ export class RegisterComponent implements OnInit {
         }
       },
       err => {
-        if (err.status === 409) {
+        if (err.status === 409 || err.status === 406) {
           this.error = err.error;
         } else {
+          this.error = 'Unknown error';
           console.log('unknown error from register');
         }
         this.loading = false;
