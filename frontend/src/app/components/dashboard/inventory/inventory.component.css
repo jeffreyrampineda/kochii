@@ -3,16 +3,7 @@ table {
     table-layout:fixed;
 }
 
-.k-search {
-    float: left;
-    width: 50%;
-}
-
-.k-action-buttons {
-    float: right;
-}
-
-.k-action-buttons * {
+.k-actions-buttons * {
     margin: 0px;
 }
 

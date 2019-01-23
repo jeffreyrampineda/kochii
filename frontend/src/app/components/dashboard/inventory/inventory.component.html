@@ -6,7 +6,7 @@
     <mat-form-field class="k-search">
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
     </mat-form-field>
-    <div class="k-action-buttons">
+    <div class="k-actions-buttons">
       <button mat-button routerLink="/dashboard/inventory/add">Add</button>
       <button mat-button (click)="showSelect ? openConfirmationDialog('Remove', 'Removing items') : selectColumnToggle('inc')">Remove</button>
       <button mat-button (click)="showSelect ? openConfirmationDialog('Update', 'Setting items') : selectColumnToggle('set')">Update</button>

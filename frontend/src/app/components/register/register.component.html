@@ -1,11 +1,11 @@
-<mat-card>
+<mat-card class="k-card">
     <mat-card-header>
         <mat-card-title>Register</mat-card-title>
         <mat-card-subtitle>Enter your authentication</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <form class="register-form" [formGroup]="registerForm">
-            <mat-form-field class="register-full-width">
+        <form class="k-card-form" [formGroup]="registerForm">
+            <mat-form-field class="k-card-form-field-full">
                 <input  matInput 
                         formControlName="username"
                         type="text"
@@ -14,7 +14,7 @@
                     <div *ngIf="f.username.errors.required">Username is required</div>
                 </mat-error>
             </mat-form-field>
-            <mat-form-field class="register-full-width">
+            <mat-form-field class="k-card-form-field-full">
                 <input  matInput 
                         formControlName="password"
                         type="password"
@@ -23,7 +23,7 @@
                     <div *ngIf="f.password.errors.required">Password is required</div>
                 </mat-error>
             </mat-form-field>
-            <mat-form-field class="register-full-width">
+            <mat-form-field class="k-card-form-field-full">
                 <input  matInput 
                         formControlName="passwordre"
                         type="password"
@@ -35,7 +35,7 @@
         </form>
   </mat-card-content>
   <mat-card-actions>
-    <div class="k-action-buttons">
+    <div class="k-card-actions">
         <span *ngIf="loading">Loading...</span>
         <mat-error>
             <div *ngIf="error">{{ error }}</div>

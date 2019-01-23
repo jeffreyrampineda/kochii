@@ -1,8 +1,3 @@
-.form-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
-.form-container > * {
-    width: 100%;
+.k-item-add-form {
+    margin: 16px;
 }

@@ -102,7 +102,7 @@ export class ItemAddComponent implements OnInit {
   /** Adds more form for adding multiple items. */
   addMoreInput(): void {
     this.itemAddForm.push(this.formBuilder.group({
-      name: ['', [
+      name: ['New Item', [
         Validators.maxLength(20),
         Validators.required
       ]],

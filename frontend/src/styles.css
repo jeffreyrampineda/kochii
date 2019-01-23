@@ -4,3 +4,42 @@
 button:focus {
     outline:none !important;
 }
+
+/* Used for login/register */
+.k-card {
+    margin: auto;
+    width: 30%;
+    padding: 10px;
+    margin-top: 200px;
+}
+
+.k-card-form {
+    min-width: 150px;
+    max-width: 500px;
+    padding: 15px;
+}
+
+.k-card-form-field-full {
+    width: 100%;
+}
+
+.k-card-actions {
+    text-align: center;
+    padding-bottom: 15px;
+}
+/* ----------------------- */
+
+/* Used for item-add/inventory/recipes */
+.k-actions-buttons {
+    float: right;
+}
+
+.k-actions-buttons * {
+    margin: 0px;
+}
+
+.k-search {
+    float: left;
+    width: 50%;
+}
+/* ----------------------------------- */

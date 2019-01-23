@@ -1,11 +1,11 @@
-<mat-card>
+<mat-card class="k-card">
     <mat-card-header>
         <mat-card-title>Login</mat-card-title>
         <mat-card-subtitle>Enter your authentication</mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <form class="login-form" [formGroup]="loginForm">
-            <mat-form-field class="login-full-width">
+        <form class="k-card-form" [formGroup]="loginForm">
+            <mat-form-field class="k-card-form-field-full">
                 <input  matInput 
                         formControlName="username"
                         type="text"
@@ -15,7 +15,7 @@
                 </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="login-full-width">
+            <mat-form-field class="k-card-form-field-full">
                 <input  matInput 
                         formControlName="password"
                         type="password"
@@ -27,7 +27,7 @@
         </form>
     </mat-card-content>
     <mat-card-actions>
-        <div class="k-action-buttons">
+        <div class="k-card-actions">
         <span *ngIf="loading">Loading...</span>
         <mat-error>
             <div *ngIf="error">{{ error }}</div>
