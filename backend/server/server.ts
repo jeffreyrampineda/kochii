@@ -6,6 +6,7 @@ import * as bodyParser from 'koa-bodyparser';
 import * as jwt from 'koa-jwt';
 import routes from './routes/routes';
 import logger from './middlewares/logger';
+const config = require('./config.json');
 
 // Create Koa Application
 const app = new Koa();
@@ -23,7 +24,7 @@ const router = new Router();
 routes(router);
 
 app.use(cors(options));
-app.use(jwt({ secret: 'shared-secret' }).unless({ path: [/^\/public/] }));
+app.use(jwt({ secret: config.secretKey }).unless({ path: [/^\/public/] }));
 app.use(logger());
 app.use(bodyParser());
 app.use(router.routes());
