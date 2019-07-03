@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import {
   trigger,
   state,
@@ -6,7 +6,7 @@ import {
   animate,
   transition,
 } from '@angular/animations';
-
+import { MessageService } from 'src/app/services/message.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 // -------------------------------------------------------------
@@ -39,7 +39,8 @@ export class DashboardComponent implements OnInit {
   opened = true;
 
   constructor(
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private messageSevice: MessageService,
   ) { }
 
 // -------------------------------------------------------------
@@ -47,10 +48,17 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
   }
 
+  @HostListener('window:online', ['$event'])
+  private openOnlineNotification() {
+    this.messageSevice.notify('Internet is back ;D');
+  }
+
+  @HostListener('window:offline', ['$event'])
+  private openOfflineNotification() {
+    this.messageSevice.notify('Connection Lost!');
+  }
+
   logout(): void {
     this.authenticationService.logout();
-
-    // TODO: Change this - reason: deprecated.
-    location.reload(true);
   }
 }
