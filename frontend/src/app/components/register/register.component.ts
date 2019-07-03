@@ -33,14 +33,16 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
+    // If currently logged in, redirect to dashboard.
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(['/dashboard']);
+    }
+
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
       passwordre: ['']
     }, { validator: this.checkPasswords });
-
-    // TODO: check
-    this.authenticationService.logout();
   }
 
   /** convenience getter for easy access to form fields */

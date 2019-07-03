@@ -25,13 +25,15 @@ export class LoginComponent implements OnInit {
 // -------------------------------------------------------------
 
   ngOnInit() {
+    // If currently logged in, redirect to dashboard.
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(['/dashboard']);
+    }
+
     this.loginForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
-
-    // reset login status
-    this.authenticationService.logout();
   }
 
   // convenience getter for easy access to form fields
