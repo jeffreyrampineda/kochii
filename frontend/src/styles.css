@@ -43,3 +43,9 @@ button:focus {
     width: 50%;
 }
 /* ----------------------------------- */
+
+/* Used for home/dashboard */
+.k-float-right {
+    float: right;
+}
+/* ----------------------- */

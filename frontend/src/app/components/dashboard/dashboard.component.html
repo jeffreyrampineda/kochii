@@ -1,8 +1,10 @@
 <div class="container">
   <p style='color: white;'>hi</p>
-  <nav class="nav justify-content-end">
-    <button class="navbar-brand" mat-button routerLink="/">Kochii</button>
-    <button mat-button (click)="logout()">Logout</button>
+  <nav>
+    <button mat-button routerLink="/">Kochii</button>
+    <div class="k-float-right">
+      <button mat-button (click)="logout()">Logout</button>
+    </div>
   </nav>
   <button class="k-dashboard-menu-toggle" mat-button (click)="sidenav.toggle()" [@openClose]="!opened ? 'open' : 'closed'" >Menu</button>
   <hr>

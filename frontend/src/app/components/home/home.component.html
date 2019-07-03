@@ -1,35 +1,33 @@
-<section id="top">
-  <div id="heading">
-    <span id="logo">Kochii</span>
-    <nav id="menu">
-      <button mat-button routerLink="/home" fragment="introduction">Introduction</button>
-      <button mat-button routerLink="/dashboard">Dashboard</button>
-      <button mat-button routerLink="/recipe-archive" disabled>Recipe Archive</button>
-      <button mat-button routerLink="/home" fragment="about">About</button>
-      <button mat-button routerLink="/home" fragment="contact">Contact</button>
-    </nav>
+<nav class="k-fixed-top">
+  <div class="k-float-right">
+    <div *ngIf="isLoggedIn; else loggedOut">
+      <button mat-button (click)="logout()">Logout</button>
+    </div>
+    <ng-template #loggedOut>
+      <button mat-button routerLink="/register">Register</button>
+      <button mat-button routerLink="/login">Login</button>
+    </ng-template>
   </div>
-</section>
-<section id="introduction">
-  <div class="k-content">
-    <h1>Introduction</h1>
-    <p>
-      Lorem Ipsum is simply dummy text of the printing and
-      typesetting industry. Lorem Ipsum has been the industry's
-      standard dummy text ever since the 1500s, when an unknown
-      printer took a galley of type and scrambled it to make a
-      type specimen book. It has survived not only five centuries,
-      but also the leap into electronic typesetting, remaining
-      essentially unchanged. It was popularised in the 1960s with
-      the release of Letraset sheets containing Lorem Ipsum passages,
-      and more recently with desktop publishing software like Aldus
-      PageMaker including versions of Lorem Ipsum.
-    </p>
-  </div>
-</section>
-<section>
+</nav>
+<div class="k-side-icons" [@scrollAnimation]="state">
+  <button mat-fab (click)="goto('.top')"><mat-icon>keyboard_arrow_up</mat-icon></button>
+</div>
+<main class="mat-typography">
+  <section class="top">
+    <div class="heading">
+      <span class="mat-display-4">Kochii</span>
+      <nav>
+        <button mat-button (click)="goto('#introduction')">Introduction</button>
+        <button mat-button routerLink="/dashboard">Dashboard</button>
+        <button mat-button routerLink="/recipe-archive" disabled>Recipe Archive</button>
+        <button mat-button (click)="goto('#about')">About</button>
+        <button mat-button (click)="goto('#contact')">Contact</button>
+      </nav>
+    </div>
+  </section>
+  <section id="introduction">
     <div class="k-content">
-      <h1>Recipe Archive</h1>
+      <h1>Introduction</h1>
       <p>
         Lorem Ipsum is simply dummy text of the printing and
         typesetting industry. Lorem Ipsum has been the industry's
@@ -44,40 +42,58 @@
       </p>
     </div>
   </section>
-<section id="about">
-  <div class="k-content">
-    <h1>About</h1>
-    <p>
-      Lorem Ipsum is simply dummy text of the printing and
-      typesetting industry. Lorem Ipsum has been the industry's
-      standard dummy text ever since the 1500s, when an unknown
-      printer took a galley of type and scrambled it to make a
-      type specimen book. It has survived not only five centuries,
-      but also the leap into electronic typesetting, remaining
-      essentially unchanged. It was popularised in the 1960s with
-      the release of Letraset sheets containing Lorem Ipsum passages,
-      and more recently with desktop publishing software like Aldus
-      PageMaker including versions of Lorem Ipsum.
-    </p>
-  </div>
-</section>
-<section id="contact">
-  <div class="k-content">
-    <h1>Contact</h1>
-    <p>
-      Lorem Ipsum is simply dummy text of the printing and
-      typesetting industry. Lorem Ipsum has been the industry's
-      standard dummy text ever since the 1500s, when an unknown
-      printer took a galley of type and scrambled it to make a
-      type specimen book. It has survived not only five centuries,
-      but also the leap into electronic typesetting, remaining
-      essentially unchanged. It was popularised in the 1960s with
-      the release of Letraset sheets containing Lorem Ipsum passages,
-      and more recently with desktop publishing software like Aldus
-      PageMaker including versions of Lorem Ipsum.
-    </p>
-  </div>
-</section>
+  <section>
+      <div class="k-content">
+        <h1>Recipe Archive</h1>
+        <p>
+          Lorem Ipsum is simply dummy text of the printing and
+          typesetting industry. Lorem Ipsum has been the industry's
+          standard dummy text ever since the 1500s, when an unknown
+          printer took a galley of type and scrambled it to make a
+          type specimen book. It has survived not only five centuries,
+          but also the leap into electronic typesetting, remaining
+          essentially unchanged. It was popularised in the 1960s with
+          the release of Letraset sheets containing Lorem Ipsum passages,
+          and more recently with desktop publishing software like Aldus
+          PageMaker including versions of Lorem Ipsum.
+        </p>
+      </div>
+    </section>
+  <section id="about">
+    <div class="k-content">
+      <h1>About</h1>
+      <p>
+        Lorem Ipsum is simply dummy text of the printing and
+        typesetting industry. Lorem Ipsum has been the industry's
+        standard dummy text ever since the 1500s, when an unknown
+        printer took a galley of type and scrambled it to make a
+        type specimen book. It has survived not only five centuries,
+        but also the leap into electronic typesetting, remaining
+        essentially unchanged. It was popularised in the 1960s with
+        the release of Letraset sheets containing Lorem Ipsum passages,
+        and more recently with desktop publishing software like Aldus
+        PageMaker including versions of Lorem Ipsum.
+      </p>
+    </div>
+  </section>
+  <section id="contact">
+    <div class="k-content">
+      <h1>Contact</h1>
+      <p>
+        Lorem Ipsum is simply dummy text of the printing and
+        typesetting industry. Lorem Ipsum has been the industry's
+        standard dummy text ever since the 1500s, when an unknown
+        printer took a galley of type and scrambled it to make a
+        type specimen book. It has survived not only five centuries,
+        but also the leap into electronic typesetting, remaining
+        essentially unchanged. It was popularised in the 1960s with
+        the release of Letraset sheets containing Lorem Ipsum passages,
+        and more recently with desktop publishing software like Aldus
+        PageMaker including versions of Lorem Ipsum.
+      </p>
+    </div>
+  </section>
+</main>
 <footer>
   jeffreyrampineda &copy; 2018
 </footer>

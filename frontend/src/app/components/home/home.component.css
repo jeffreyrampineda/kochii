@@ -1,27 +1,22 @@
-#top {
+.top {
     height: 100vh;
 }
 
-#heading {
+.heading {
     position: absolute;
     top: 38%;
     text-align: center;
     width: 100%;
 }
 
-#logo {
-    font-weight: normal;
-    font-size: 96px;
-    line-height: 72px;
-}
-
-#menu {
-    margin: 18px;
-}
-
 section {
-    min-height: 40%;
     border-bottom: 1px solid #eee;
+}
+
+.k-fixed-top {
+    position: fixed;
+    width: 100%;
+    padding: 32px;
 }
 
 .k-content {
@@ -30,6 +25,12 @@ section {
     text-align: left;
     margin-top: 100px;
     margin-bottom: 100px;
+}
+
+.k-side-icons {
+    position: fixed;
+    margin-top: 128px;
+    margin-left: 164px;
 }
 
 footer {
