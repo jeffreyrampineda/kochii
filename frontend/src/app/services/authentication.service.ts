@@ -61,11 +61,17 @@ export class AuthenticationService {
         );
     }
 
+    /**
+     * Logs out the current user then reloads the page.
+     */
     logout(): void {
 
         // remove user from local storage to log user out
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
+
+        // TODO: Change this - reason: deprecated.
+        location.reload(true);
     }
 
 // -------------------------------------------------------------

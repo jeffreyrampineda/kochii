@@ -51,9 +51,6 @@ export class JwtInterceptor implements HttpInterceptor {
         if (error.status === 401) {
             // auto logout if 401 response returned from api
             this.authenticationService.logout();
-
-            // TODO: Change this - reason: deprecated.
-            location.reload(true);
         }
 
         // Let the app keep running by returning an empty result.
