@@ -20,6 +20,7 @@ import { RecipesComponent } from './components/dashboard/recipes/recipes.compone
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
 
 // Components - /dashboard/inventory
+import { GroupComponent } from './components/dashboard/inventory/group/group.component';
 import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
 import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
 
@@ -37,6 +38,7 @@ const routes: Routes = [
       { path: 'overview', component: OverviewComponent },
       { path: 'inventory', component: InventoryComponent },
       { path: 'inventory/add', component: ItemAddComponent },
+      { path: 'inventory/groups/:groupName', component: GroupComponent},
       { path: 'inventory/:id', component: ItemDetailComponent },
       { path: 'recipes', component: RecipesComponent },
       { path: 'recipes/:id', component: RecipeDetailComponent },

@@ -5,6 +5,7 @@ import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from '
 
 import { MessageService } from './message.service';
 import { Item } from 'src/app/interfaces/item';
+import { Group } from 'src/app/interfaces/group';
 
 // -------------------------------------------------------------
 
@@ -24,6 +25,31 @@ export class InventoryService {
   ) { }
 
 // -------------------------------------------------------------
+
+  /** Get all inventory groups. */
+  getGroups(): Observable<Group[]> {
+    const url = `${this.inventoryUrl}/groups`;
+
+    return this.http.get<Group[]>(url)
+      .pipe(
+        tap(_ => this.log('fetched groups')),
+        catchError(this.handleError('getGroups', []))
+      );
+  }
+
+  /**
+   * Get all items in the specified group.
+   * @param groupName - The name of the specified group.
+   */
+  getItemsInGroup(groupName: string): Observable<Item[]> {
+    const url = `${this.inventoryUrl}/groups/${groupName}`;
+
+    return this.http.get<Item[]>(url)
+      .pipe(
+        tap(_ => this.log(`fetched items in group ${groupName}`)),
+        catchError(this.handleError('getItemsInGroup', []))
+      );
+  }
 
   /** Get all items. */
   getInventory(): Observable<Item[]> {

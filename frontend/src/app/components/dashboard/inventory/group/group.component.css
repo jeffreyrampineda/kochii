@@ -1,0 +1,17 @@
+table {
+    width: 100%;
+    table-layout:fixed;
+}
+
+.k-actions-buttons * {
+    margin: 0px;
+}
+
+.mat-column-select {
+    width: 100px;
+}
+
+.mat-card-actions {
+    margin: 0px;
+    overflow: hidden;
+}

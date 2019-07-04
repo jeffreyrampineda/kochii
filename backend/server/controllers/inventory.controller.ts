@@ -1,10 +1,19 @@
 import Item from '../models/item';
+import Group from '../models/group';
 import HistoryController from './history.controller';
 
 class InventoryController {
 
     async getAll(ctx) {
         ctx.body = await Item.find().sort({ expirationDate: -1 });
+    }
+
+    async getGroups(ctx) {
+        ctx.body = await Group.find();
+    }
+
+    async getItemsInGroup(ctx) {
+        ctx.body = await Item.find({ group: ctx.params.groupName }).sort({ expirationDate: -1 });
     }
 
     async getByNames(ctx) {

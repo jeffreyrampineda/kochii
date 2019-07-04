@@ -40,6 +40,7 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
 
 // Components - dialogs
 import { GeneralDialogComponent } from './components/dialogs/general-dialog/general-dialog.component';
+import { GroupComponent } from './components/dashboard/inventory/group/group.component';
 
 // -------------------------------------------------------------
 
@@ -63,6 +64,7 @@ import { GeneralDialogComponent } from './components/dialogs/general-dialog/gene
     ItemDetailComponent,
     RecipeDetailComponent,
     GeneralDialogComponent,
+    GroupComponent,
   ],
   imports: [
     BrowserModule,

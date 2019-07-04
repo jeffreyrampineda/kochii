@@ -4,6 +4,8 @@ import InventoryController from '../controllers/inventory.controller';
 const router = new Router();
 
 router.get('/', InventoryController.getAll)
+router.get('/groups', InventoryController.getGroups)
+router.get('/groups/:groupName', InventoryController.getItemsInGroup)
 router.get('/names', InventoryController.getByNames)
 router.get('/search/:name', InventoryController.searchByName)
 router.get('/id/:id', InventoryController.getById)
