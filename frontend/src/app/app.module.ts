@@ -32,15 +32,14 @@ import { RecipesComponent } from './components/dashboard/recipes/recipes.compone
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
 
 // Components - /dashboard/inventory
+import { GroupComponent } from './components/dashboard/inventory/group/group.component';
 import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
-import { ItemDetailComponent } from './components/dashboard/inventory/item-detail/item-detail.component';
 
 // Components - /dashboard/recipes
 import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-detail/recipe-detail.component';
 
 // Components - dialogs
 import { GeneralDialogComponent } from './components/dialogs/general-dialog/general-dialog.component';
-import { GroupComponent } from './components/dashboard/inventory/group/group.component';
 
 // -------------------------------------------------------------
 
@@ -61,10 +60,9 @@ import { GroupComponent } from './components/dashboard/inventory/group/group.com
     RecipesComponent,
     SettingsComponent,
     ItemAddComponent,
-    ItemDetailComponent,
+    GroupComponent,
     RecipeDetailComponent,
     GeneralDialogComponent,
-    GroupComponent,
   ],
   imports: [
     BrowserModule,
