@@ -115,6 +115,14 @@ export class ItemAddComponent implements OnInit {
     }));
   }
 
+  /**
+   * Remove one of the form from the array specified by its index.
+   * @param index - the index to be removed.
+   */
+  removeInput(index: number): void {
+    this.itemAddForm.splice(index, 1);
+  }
+
   /** Convenience getter for easy access to form fields. */
   get f() { return this.itemAddForm[0].controls; }
 }

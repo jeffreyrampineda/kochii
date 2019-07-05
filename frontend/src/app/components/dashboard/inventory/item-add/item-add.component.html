@@ -86,7 +86,7 @@
               <mat-datepicker #picker2></mat-datepicker>
           </mat-form-field>
         </form>
-        <button *ngIf="iform != itemAddForm[0]" mat-icon-button><mat-icon>clear</mat-icon></button>
+        <button mat-icon-button *ngIf="iform != itemAddForm[0]" (click)="removeInput(itemAddForm.indexOf(iform))"><mat-icon>clear</mat-icon></button>
       </mat-tab>
       <mat-tab disabled>
           <ng-template mat-tab-label>
