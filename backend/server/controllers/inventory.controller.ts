@@ -37,6 +37,15 @@ class InventoryController {
         ctx.body = await Item.create(ctx.request.body);
     }
 
+    /**
+     * Creates a new group.
+     * TODO: backend validation check - see if group already exists
+     * @param ctx - Context
+     */
+    async createGroup(ctx) {
+        ctx.body = await Group.create(ctx.request.body);
+    }
+
     // TODO: Redesign for adding new items with measurements. 
         // Ex: same name and expiration but different measurement.
     async update(ctx) {

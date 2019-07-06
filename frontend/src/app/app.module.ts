@@ -40,6 +40,7 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
 
 // Components - dialogs
 import { GeneralDialogComponent } from './components/dialogs/general-dialog/general-dialog.component';
+import { DialogOverviewExampleDialogComponent } from './components/dashboard/inventory/inventory.component';
 
 // -------------------------------------------------------------
 
@@ -63,6 +64,7 @@ import { GeneralDialogComponent } from './components/dialogs/general-dialog/gene
     GroupComponent,
     RecipeDetailComponent,
     GeneralDialogComponent,
+    DialogOverviewExampleDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,6 +81,7 @@ import { GeneralDialogComponent } from './components/dialogs/general-dialog/gene
   bootstrap: [AppComponent],
   entryComponents: [
     GeneralDialogComponent,
+    DialogOverviewExampleDialogComponent,
   ]
 })
 export class AppModule { }

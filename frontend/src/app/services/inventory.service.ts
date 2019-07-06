@@ -94,6 +94,23 @@ export class InventoryService {
   }
 
   /**
+   * Add the specified group.
+   * @param name - The name of the group.
+   */
+  addGroup(name: string): Observable<Group> {
+    const url = `${this.inventoryUrl}/groups`;
+    const g = {
+      name: name
+    };
+
+    return this.http.post<Group>(url, g, httpOptions)
+      .pipe(
+        tap(_ => this.log(`added group w/ name=${name}`)),
+        catchError(this.handleError<Group>('addGroup'))
+      );
+  }
+
+  /**
    * Delete the item with the specified id.
    * @param _id - The id of the item to delete.
    */
