@@ -24,7 +24,7 @@ export class GroupComponent implements OnInit {
     @ViewChild(MatSort) sort: MatSort;
 
     groupName: string;
-    displayedColumns: string[] = ['name', 'quantity', 'expirationDate'];
+    displayedColumns: string[] = ['name', 'quantity', 'expirationDate', 'group'];
     inventory: MatTableDataSource<Item>;
     showSelect: Boolean = false;
     selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
@@ -131,6 +131,9 @@ export class GroupComponent implements OnInit {
                                 ref.quantityType = newItem.quantityType;
                                 ref.measurementPerQuantity = newItem.measurementPerQuantity;
                                 ref.measurementType = newItem.measurementType;
+                                if (newItem.group !== this.groupName) {
+                                    this.removeItemFromLocalInventoryById(ref._id);
+                                }
                             }
                         } else if (results.n === 1) {
                             // If item is deleted.
@@ -144,6 +147,10 @@ export class GroupComponent implements OnInit {
                 }
             )
         );
+    }
+
+    removeItemFromLocalInventoryById(id: string): void {
+        this.inventory.data = this.inventory.data.filter(i => i._id !== id);
     }
 
     /**
@@ -185,7 +192,9 @@ export class GroupComponent implements OnInit {
       this.isAllSelected() ? this.selectionClear() : this.inventory.data.forEach(item => this.selectionSelect(item));
     }
 
-    /** Toggles when to show the select checkboxes. */
+    /** Toggles when to show the select checkboxes.
+     *  @param option - Can be 'inc', 'set' or ''.
+     */
     selectColumnToggle(option: string) {
         this.showSelect = !this.showSelect;
         if (this.showSelect) {
