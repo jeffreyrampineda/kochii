@@ -27,6 +27,9 @@ const itemSchema = new Schema({
         type: Date,
         default: Date.now
     },
+    group: {
+        type: String,
+    },
 });
 
 export default mongoose.model('Item', itemSchema);

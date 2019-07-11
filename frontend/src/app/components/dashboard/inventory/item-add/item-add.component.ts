@@ -111,7 +111,8 @@ export class ItemAddComponent implements OnInit {
       measurementPerQuantity: [null, Validators.required],
       measurementType: ['', Validators.required],
       addedDate: [this.dateToday, Validators.required],
-      expirationDate: [this.dateToday, Validators.required]
+      expirationDate: [this.dateToday, Validators.required],
+      group: ['', Validators.required],
     }));
   }
 

@@ -7,4 +7,5 @@ export interface Item {
     measurementType: string;        // Example: 'mg', 'g', 'pieces'
     addedDate: Date;
     expirationDate: Date;
+    group: string;
 }

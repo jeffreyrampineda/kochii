@@ -60,7 +60,8 @@ class InventoryController {
                     expirationDate: ctx.request.body.expirationDate,
                     quantityType: ctx.request.body.quantityType,
                     measurementPerQuantity: ctx.request.body.measurementPerQuantity,
-                    measurementType: ctx.request.body.measurementType
+                    measurementType: ctx.request.body.measurementType,
+                    group: ctx.request.body.group,
                 }
             }
 
