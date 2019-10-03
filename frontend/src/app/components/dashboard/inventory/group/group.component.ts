@@ -10,6 +10,7 @@ import { Observable, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
+import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
 import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
 import { DashboardComponent } from '../../dashboard.component';
@@ -44,6 +45,7 @@ export class GroupComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private inventoryService: InventoryService,
+        private groupsService: GroupsService,
         private location: Location,
         private injector: Injector,
         public dialog: MatDialog,
@@ -82,7 +84,7 @@ export class GroupComponent implements OnInit {
     }
 
     getGroups(): void {
-        this.inventoryService.getGroups().subscribe(gro => {
+        this.groupsService.getGroups().subscribe(gro => {
             this.localGroups = gro;
         });
     }
@@ -344,7 +346,7 @@ export class GroupComponent implements OnInit {
 
     private deleteThisGroup(): void {
         console.log('delete group');
-        this.inventoryService.deleteGroup(this.groupName).subscribe(results => {
+        this.groupsService.deleteGroup(this.groupName).subscribe(results => {
             if (results.ok === 1) {
                 this.back();
             }

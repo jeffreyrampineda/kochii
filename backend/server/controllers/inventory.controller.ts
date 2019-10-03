@@ -1,19 +1,11 @@
 import Item from '../models/item';
-import Group from '../models/group';
 import HistoryController from './history.controller';
+import GroupController from './group.controller';
 
 class InventoryController {
 
     async getAll(ctx) {
         ctx.body = await Item.find().sort({ expirationDate: -1 });
-    }
-
-    async getGroups(ctx) {
-        ctx.body = await Group.find();
-    }
-
-    async getItemsInGroup(ctx) {
-        ctx.body = await Item.find({ group: ctx.params.groupName }).sort({ expirationDate: -1 });
     }
 
     async getByNames(ctx) {
@@ -35,15 +27,6 @@ class InventoryController {
 
     async create(ctx) {
         ctx.body = await Item.create(ctx.request.body);
-    }
-
-    /**
-     * Creates a new group.
-     * TODO: backend validation check - see if group already exists
-     * @param ctx - Context
-     */
-    async createGroup(ctx) {
-        ctx.body = await Group.create(ctx.request.body);
     }
 
     async update(ctx) {
@@ -84,9 +67,11 @@ class InventoryController {
                 HistoryController.create({ date: Date.now(), method: 'Create', target: ctx.request.body.name, description: '' })
                 
                 // TODO - group size updating needs polishing for all create/update/remove items.
-                await Group.findOneAndUpdate(
-                    { name: result.group },
-                    { $inc : { size: 1 }},
+                await GroupController.update(
+                    { request: { body: {
+                        name: result.group,
+                        size: 1,
+                    } } }
                 );
             }
 
@@ -98,15 +83,19 @@ class InventoryController {
                 if (ctx.request.body.prevGroup && ctx.request.body.prevGroup !== result.group) {
 
                     // Find old group and decrement size by 1
-                    await Group.findOneAndUpdate(
-                        { name: ctx.request.body.prevGroup },
-                        { $inc : { size: -1 }},
+                    await GroupController.update(
+                        { request: { body: {
+                            name: ctx.request.body.prevGroup,
+                            size: -1,
+                        } } }
                     );
 
                     // Find new group and increment size by 1
-                    await Group.findOneAndUpdate(
-                        { name: result.group },
-                        { $inc : { size: 1 }},
+                    await GroupController.update(
+                        { request: { body: {
+                            name: result.group,
+                            size: 1,
+                        } } }
                     );
                     console.log('updating group');
                 }
@@ -116,9 +105,11 @@ class InventoryController {
                     console.log("Removing item.");
 
                     HistoryController.create({ date: Date.now(), method: 'Remove', target: ctx.request.body.name, description: '' })
-                    await Group.findOneAndUpdate(
-                        { name: ctx.request.body.group},
-                        { $inc : { size: -1 }},
+                    await GroupController.update(
+                        { request: { body: {
+                            name: ctx.request.body.group,
+                            size: -1,
+                        } } }
                     );
                     result = await Item.deleteOne({ _id: result.id });
                 } else if (ctx.params.option==='inc') {
@@ -146,10 +137,6 @@ class InventoryController {
 
     async deleteMany(ctx) {
         ctx.body = await Item.deleteMany({ _id: { $in: ctx.request.body }})
-    }
-
-    async deleteGroup(ctx) {
-        ctx.body = await Group.deleteOne({ name: ctx.params.name });
     }
 }
 

@@ -4,8 +4,8 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
+import { GroupsService } from './groups.service';
 import { Item } from 'src/app/interfaces/item';
-import { Group } from 'src/app/interfaces/group';
 
 // -------------------------------------------------------------
 
@@ -19,34 +19,14 @@ export class InventoryService {
   private inventoryUrl = 'http://localhost:3001/api/inventory';
   private queryUrl = '/search/';
   private localInv: Item[] = [];
-  private localGroups: Group[] = [];
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private groupsService: GroupsService,
   ) { }
 
 // -------------------------------------------------------------
-
-  /** Get all inventory groups. */
-  getGroups(): Observable<Group[]> {
-    const url = `${this.inventoryUrl}/groups`;
-
-    return new Observable(obs => {
-      if (this.localGroups.length !== 0) {
-        obs.next(this.localGroups);
-        return obs.complete();
-      }
-      this.http.get<Group[]>(url).pipe(
-       tap(_ => this.log('fetched groups')),
-        catchError(this.handleError('getGroups', []))
-      ).subscribe(gro => {
-        this.localGroups = gro;
-        obs.next(this.localGroups);
-        obs.complete();
-      });
-    });
-  }
 
   /**
    * Get all items in the specified group.
@@ -123,46 +103,6 @@ export class InventoryService {
   } */
 
   /**
-   * Add the specified group.
-   * @param group - The group to add.
-   */
-  addGroup(group: Group): Observable<Group> {
-    const url = `${this.inventoryUrl}/groups`;
-
-    return new Observable(obs => {
-      this.http.post<Group>(url, group, httpOptions).pipe(
-        tap(_ => this.log(`added group w/ name=${group.name}`)),
-        catchError(this.handleError<Group>('addGroup'))
-      ).subscribe(gro => {
-        this.localGroups.push(gro);
-        obs.next(gro);
-        obs.complete();
-      });
-    });
-  }
-
-  // TODO - check if group is empty before deleting. move logic from group.component's
-  // deleteGroup here.
-  deleteGroup(name: string): Observable<any> {
-    const url = `${this.inventoryUrl}/groups/${name}`;
-
-    return new Observable(obs => {
-      this.http.delete(url, httpOptions).pipe(
-        tap(_ => this.log(`deleted group name=${name}`)),
-        catchError(this.handleError<any>('deleteGroup'))
-      ).subscribe(results => {
-        if (results) {
-          if (results.ok === 1) {
-            this.localGroups = this.localGroups.filter(g => g.name !== name);
-          }
-        }
-        obs.next(results);
-        obs.complete();
-      });
-    });
-  }
-
-  /**
    * Delete the item with the specified id.
    * @param _id - The id of the item to delete.
    */
@@ -225,8 +165,8 @@ export class InventoryService {
               itemExists.addedDate = results.addedDate;
               itemExists.expirationDate = results.expirationDate;
               itemExists.group = results.group;
-              this.localGroups.find(g => g.name === item.prevGroup).size -= 1;
-              this.localGroups.find(g => g.name === results.group).size += 1;
+              this.groupsService.addLocalGroupSize(item.prevGroup, -1);
+              this.groupsService.addLocalGroupSize(results.group, 1);
             } else {
               // new item. push results
               console.log('new item');
@@ -234,17 +174,17 @@ export class InventoryService {
               console.log('localInv before: ');
               console.log(this.localInv);
               console.log('localGroups before: ');
-              console.log(this.localGroups);
+              console.log(this.groupsService.getLocalGroups());
               this.localInv.push(results);
               // TODO - you add-item does not fetch for localInv. if you add items with empty localInv,
               // only the new items are pushed into the localInv, making the array not have size==0, so
               // it will not fetch data from backend.
-              this.localGroups.find(g => g.name === results.group).size += 1;
+              this.groupsService.addLocalGroupSize(results.group, 1);
             }
           } else if (results.n === 1) {
             // If item is deleted.
             this.localInv = this.localInv.filter(i => i._id !== item._id);
-            this.localGroups.find(g => g.name === item.group).size -= 1;
+            this.groupsService.addLocalGroupSize(item.group, -1);
           }
         }
         obs.next(results);

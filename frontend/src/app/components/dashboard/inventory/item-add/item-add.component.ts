@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
 
 import { InventoryService } from 'src/app/services/inventory.service';
+import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
 import { Group } from 'src/app/interfaces/group';
 
@@ -26,6 +27,7 @@ export class ItemAddComponent implements OnInit {
   constructor(
     private router: Router,
     private inventoryService: InventoryService,
+    private groupsService: GroupsService,
     private formBuilder: FormBuilder
   ) {
 
@@ -75,7 +77,7 @@ export class ItemAddComponent implements OnInit {
   }
 
   getGroups(): void {
-    this.inventoryService.getGroups().subscribe(gro => {
+    this.groupsService.getGroups().subscribe(gro => {
       this.localGroups = gro;
     });
   }

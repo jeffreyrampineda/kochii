@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import { InventoryService } from 'src/app/services/inventory.service';
+import { GroupsService } from 'src/app/services/groups.service';
 import { Group } from 'src/app/interfaces/group';
 import { Item } from 'src/app/interfaces/item';
 
@@ -24,6 +25,7 @@ export class InventoryComponent implements OnInit {
     constructor(
         private dialog: MatDialog,
         private inventoryService: InventoryService,
+        private groupsService: GroupsService,
     ) { }
 
 // -------------------------------------------------------------
@@ -33,7 +35,7 @@ export class InventoryComponent implements OnInit {
     }
 
     getGroups(): void {
-        this.inventoryService.getGroups().subscribe(gro => {
+        this.groupsService.getGroups().subscribe(gro => {
             this.localGroups = gro;
         });
     }
@@ -52,7 +54,7 @@ export class InventoryComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result && result !== '') {
-                this.inventoryService.addGroup(result).subscribe(x => {
+                this.groupsService.addGroup(result).subscribe(x => {
                     console.log(x);
                 });
             }
