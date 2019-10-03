@@ -13,7 +13,7 @@ import { RecipeService } from 'src/app/services/recipe.service';
 })
 export class RecipesComponent implements OnInit {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   displayedColumns: string[] = ['title', 'description'];
   recipes: MatTableDataSource<Recipe>;

@@ -13,7 +13,7 @@ import { HistoryService } from 'src/app/services/history.service';
 })
 export class HistoryComponent implements OnInit {
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   displayedColumns: string[] = ['date', 'method', 'description', 'target'];
   history: MatTableDataSource<History>;

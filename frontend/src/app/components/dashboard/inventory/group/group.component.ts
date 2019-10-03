@@ -20,8 +20,8 @@ import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialo
 })
 export class GroupComponent implements OnInit {
 
-    @ViewChild(MatPaginator) paginator: MatPaginator;
-    @ViewChild(MatSort) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     groupName: string;
     displayedColumns: string[] = ['name', 'quantity', 'expirationDate', 'group'];
