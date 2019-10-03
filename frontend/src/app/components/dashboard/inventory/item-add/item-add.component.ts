@@ -118,7 +118,6 @@ export class ItemAddComponent implements OnInit {
         Validators.required
       ]],
       quantity: [null, Validators.required],
-      quantityType: ['', Validators.required],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required],
       group: ['Default', Validators.required],

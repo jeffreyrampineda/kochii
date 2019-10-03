@@ -41,17 +41,6 @@
               </mat-error>
           </mat-form-field>
 
-          <!-- quantityType field -->
-          <mat-form-field class="k-card-form-field-full">
-              <input  matInput 
-                      formControlName="quantityType"
-                      type="text"
-                      placeholder="Quantity Type" />
-              <mat-error *ngIf="f.quantityType.errors">
-                <div *ngIf="f.quantityType.errors.required">Quantity type is required</div>
-              </mat-error>
-          </mat-form-field>
-
           <!-- addedDate field -->
           <mat-form-field class="k-card-form-field-full">
               <input  matInput

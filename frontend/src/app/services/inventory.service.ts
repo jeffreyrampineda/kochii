@@ -161,7 +161,6 @@ export class InventoryService {
               // update old item with new value from results
               itemExists.name = results.name;
               itemExists.quantity = results.quantity;
-              itemExists.quantityType = results.quantityType;
               itemExists.addedDate = results.addedDate;
               itemExists.expirationDate = results.expirationDate;
               itemExists.group = results.group;

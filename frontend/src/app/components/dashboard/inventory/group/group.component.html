@@ -51,14 +51,9 @@
             <mat-form-field >
               <input matInput type="number" [(ngModel)]="temporarySelectedItemsFind(item._id).quantity">
             </mat-form-field>
-            <div *ngIf="option === 'set'">
-              <mat-form-field >
-                <input matInput type="text" [(ngModel)]="temporarySelectedItemsFind(item._id).quantityType">
-              </mat-form-field>
-            </div>
           </div>
-          <span matTooltip="{{ item.quantityType }}">
-            {{ item.quantity }} {{ item.quantityType }}
+          <span matTooltip="quantity">
+            {{ item.quantity }}
           </span>
         </td>
       </ng-container>

@@ -10,9 +10,6 @@ const itemSchema = new Schema({
         type: Number,
         required: true
     },
-    quantityType: {
-        type: String,           // Example: 'slices', 'bottles', 'box'
-    },
     addedDate: {
         type: Date,
         default: Date.now

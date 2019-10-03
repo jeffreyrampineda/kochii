@@ -126,7 +126,6 @@ export class GroupComponent implements OnInit {
                             } else if (this.option === 'set') {
                                 const ref = this.inventory.data.find(i => i._id === results._id);
                                 ref.quantity = newItem.quantity;
-                                ref.quantityType = newItem.quantityType;
                                 if (newItem.group !== this.groupName) {
                                     this.removeItemFromLocalInventoryById(ref._id);
                                 }

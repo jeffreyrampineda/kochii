@@ -39,7 +39,6 @@ class InventoryController {
                 $set: { 
                     name: ctx.request.body.name, 
                     expirationDate: ctx.request.body.expirationDate,
-                    quantityType: ctx.request.body.quantityType,
                     group: ctx.request.body.group,
                 }
             }
