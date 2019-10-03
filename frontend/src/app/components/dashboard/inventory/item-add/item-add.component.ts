@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
+import { Group } from 'src/app/interfaces/group';
 
 // -------------------------------------------------------------
 
@@ -20,6 +21,7 @@ export class ItemAddComponent implements OnInit {
   results: Object;
   searchTerm$ = new Subject<string>();
   itemAddForm: FormGroup[] = [];
+  localGroups: Group[];
 
   constructor(
     private router: Router,
@@ -41,6 +43,7 @@ export class ItemAddComponent implements OnInit {
 
   ngOnInit() {
     this.addMoreInput();
+    this.getGroups();
   }
 
   /**
@@ -69,6 +72,12 @@ export class ItemAddComponent implements OnInit {
         this.router.navigate(['dashboard/inventory']);
       }
     );
+  }
+
+  getGroups(): void {
+    this.inventoryService.getGroups().subscribe(gro => {
+      this.localGroups = gro;
+    });
   }
 
   /** Loops through itemAddForm and checks if any form is invalid.
@@ -108,11 +117,9 @@ export class ItemAddComponent implements OnInit {
       ]],
       quantity: [null, Validators.required],
       quantityType: ['', Validators.required],
-      measurementPerQuantity: [null, Validators.required],
-      measurementType: ['', Validators.required],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required],
-      group: ['', Validators.required],
+      group: ['Default', Validators.required],
     }));
   }
 

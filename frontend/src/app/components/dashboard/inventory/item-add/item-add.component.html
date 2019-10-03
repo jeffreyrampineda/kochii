@@ -52,28 +52,6 @@
               </mat-error>
           </mat-form-field>
 
-          <!-- measurementPerQuantity field -->
-          <mat-form-field class="k-card-form-field-full">
-              <input  matInput
-                      formControlName="measurementPerQuantity"
-                      type="number"
-                      placeholder="Measurement per Quantity" />
-              <mat-error *ngIf="f.measurementPerQuantity.errors">
-                <div *ngIf="f.measurementPerQuantity.errors.required">Measurement per quantity is required</div>
-              </mat-error>
-          </mat-form-field>
-
-          <!-- measurementType field -->
-          <mat-form-field class="k-card-form-field-full">
-              <input  matInput 
-                      formControlName="measurementType"
-                      type="text"
-                      placeholder="Measurement Type" />
-              <mat-error *ngIf="f.measurementType.errors">
-                <div *ngIf="f.measurementType.errors.required">Measurement type is required</div>
-              </mat-error>
-          </mat-form-field>
-
           <!-- addedDate field -->
           <mat-form-field class="k-card-form-field-full">
               <input  matInput
@@ -96,13 +74,13 @@
 
           <!-- group field -->
           <mat-form-field class="k-card-form-field-full">
-              <input  matInput
-                      formControlName="group"
-                      type="text"
-                      placeholder="Group" />
-              <mat-error *ngIf="f.group.errors">
-                <div *ngIf="f.group.errors.required">Group is required</div>
-              </mat-error>
+            <mat-label>Select a group</mat-label>
+            <mat-select formControlName="group">
+              <mat-option *ngFor="let group of localGroups" [value]="group.name">{{ group.name }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="f.group.errors">
+              <div *ngIf="f.group.errors.required">Group is required</div>
+            </mat-error>
           </mat-form-field>
         </form>
         <button mat-icon-button *ngIf="iform != itemAddForm[0]" (click)="removeInput(itemAddForm.indexOf(iform))"><mat-icon>clear</mat-icon></button>
