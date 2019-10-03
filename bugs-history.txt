@@ -1,0 +1,23 @@
+bug#0001 - ERROR if new item is added and name already exists:
+    Error Message)
+        ERROR TypeError: "this.localGroups.find(...) is undefined".
+    Scenario A)
+        Item with name "Bobby" with group "John" exists.
+        add item name "Bobby" with group "John".
+        frontend:
+            X - ERROR TypeError: "this.localGroups.find(...) is undefined".
+        backend:
+            O - item still updates with 'inc' quantity option.
+    Scenario B)
+        Item with name "Bobb" with group "John" exists.
+        add item name "Bobby" with group "Default".
+        frontend:
+            X - ERROR TypeError: "this.localGroups.find(...) is undefined".
+        backend:
+            O - item still updates with 'inc' quantity option.
+            O - item still updates with "Default" group.
+    Problem)
+        item._id doesn't exists when adding items so it cannot set prevGroup property.
+        item.prevGroup is undefined when adding items.
+    Fixed)
+        find existing item based on (name, expirationDate) then set (prevGroup).

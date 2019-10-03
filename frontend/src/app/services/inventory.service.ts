@@ -202,9 +202,11 @@ export class InventoryService {
   updateItem(item: Item, option: string): Observable<any> {
     const url = `${this.inventoryUrl}/${option}/${item.name}/${item.expirationDate}`;
 
-    // If there is id, it means that item is being updated. NOT created
-    if (item._id) {
-      item.prevGroup = this.localInv.find(i => i._id === item._id).group;
+    // Returns item if exists, otherwise null.
+    const itemExists = this.findItemFromLocal(item.name, item.expirationDate);
+  
+    if (itemExists) {
+      item.prevGroup = itemExists.group;
     }
 
     return new Observable(obs => {
@@ -213,18 +215,16 @@ export class InventoryService {
         catchError(this.handleError<any>('updateItem'))
       ).subscribe(results => {
         if (results) {
-          // If item exists.
+          // If item was returned.
           if (results._id) {
-            // find the item in localInv
-            const ref = this.localInv.find(i => i._id === results._id);
-            if (ref) {
+            if (itemExists) {
               // update old item with new value from results
-              ref.name = results.name;
-              ref.quantity = results.quantity;
-              ref.quantityType = results.quantityType;
-              ref.addedDate = results.addedDate;
-              ref.expirationDate = results.expirationDate;
-              ref.group = results.group;
+              itemExists.name = results.name;
+              itemExists.quantity = results.quantity;
+              itemExists.quantityType = results.quantityType;
+              itemExists.addedDate = results.addedDate;
+              itemExists.expirationDate = results.expirationDate;
+              itemExists.group = results.group;
               this.localGroups.find(g => g.name === item.prevGroup).size -= 1;
               this.localGroups.find(g => g.name === results.group).size += 1;
             } else {
@@ -293,5 +293,18 @@ export class InventoryService {
    */
   private log(message: string) {
     this.messageService.add(`InventoryService: ${message}`);
+  }
+
+  private findItemFromLocal(name: string, expirationDate: Date): Item {
+    const item = this.localInv.find(i => i.name === name);
+
+    if (item) {
+      // If expiration dates are the same, item is the same.
+      const compareDates = new Date(item.expirationDate).getTime() - new Date(expirationDate).getTime();
+      if (compareDates === 0) {
+        return item;
+      }
+    }
+    return null;
   }
 }
