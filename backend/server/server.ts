@@ -24,7 +24,7 @@ const router = new Router();
 routes(router);
 
 app.use(cors(options));
-app.use(jwt({ secret: config.secretKey }).unless({ path: [/^\/public/] }));
+app.use(jwt({ secret: config.secretKey }).unless({ path: [/^\/public/, /^\/dev/] }));
 app.use(logger());
 app.use(bodyParser());
 app.use(router.routes());
