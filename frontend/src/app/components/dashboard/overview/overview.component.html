@@ -1,3 +1,42 @@
-<p>
-  overview works!
-</p>
+<div class="k-overview-row">
+  <div class="k-overview-column-25">
+    <mat-card class="k-overview-card">
+      <span class="k-overview-value">{{ localInv.length }}</span>
+      <span>Inventory size</span>
+    </mat-card>
+  </div>
+  <div class="k-overview-column-25">
+    <mat-card class="k-overview-card">
+      <span class="k-overview-value">{{ numberOfExpired }}</span>
+      <span>Expired items</span>
+    </mat-card>
+  </div>
+  <div class="k-overview-column-25">
+    <mat-card class="k-overview-card">
+      <span class="k-overview-value">{{ 100 | currency }}</span>
+      <span>Weekly $ spent</span>
+    </mat-card>
+  </div>
+  <div class="k-overview-column-25">
+    <mat-card class="k-overview-card">
+      <span class="k-overview-value">N/A</span>
+      <span>Weekly items removed</span>
+    </mat-card>
+  </div>
+</div>
+<div class="k-overview-row">
+  <div class="k-overview-column-50">
+    <mat-card class="k-overview-card">
+      <canvas id="chart-line">
+        {{ lineChart }}
+      </canvas>
+    </mat-card>
+  </div>
+  <div class="k-overview-column-50">
+    <mat-card class="k-overview-card">
+      <canvas id="chart-doughnut">
+        {{ doughnutChart }}
+      </canvas>
+    </mat-card>
+  </div>
+</div>
