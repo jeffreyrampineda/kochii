@@ -16,6 +16,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatSortModule } from '@angular/material/sort';
@@ -26,58 +27,41 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 // -------------------------------------------------------------
 
+const matModules = [
+  CommonModule,
+  MatButtonModule,
+  MatMenuModule,
+  MatCardModule,
+  MatExpansionModule,
+  MatPaginatorModule,
+  MatTableModule,
+  MatListModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatDialogModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
+  MatRadioModule,
+  MatAutocompleteModule,
+  MatTooltipModule,
+  MatCheckboxModule,
+  MatSortModule,
+  MatTabsModule,
+  MatSidenavModule,
+  MatSnackBarModule,
+  MatGridListModule,
+  MatSelectModule,
+];
+
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatCardModule,
-    MatExpansionModule,
-    MatPaginatorModule,
-    MatTableModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    MatCheckboxModule,
-    MatSortModule,
-    MatTabsModule,
-    MatSidenavModule,
-    MatSnackBarModule,
-    MatGridListModule,
+    ...matModules,
   ],
   exports: [
-    MatButtonModule,
-    MatMenuModule,
-    MatCardModule,
-    MatExpansionModule,
-    MatPaginatorModule,
-    MatTableModule,
-    MatListModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatDialogModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatRadioModule,
-    MatAutocompleteModule,
-    MatTooltipModule,
-    MatCheckboxModule,
-    MatSortModule,
-    MatTabsModule,
-    MatSidenavModule,
-    MatSnackBarModule,
-    MatGridListModule,
+    ...matModules,
   ]
 })
 export class AppMaterialModule { }
