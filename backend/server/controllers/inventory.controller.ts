@@ -46,8 +46,6 @@ class InventoryController {
         ctx.body = await Group.create(ctx.request.body);
     }
 
-    // TODO: Redesign for adding new items with measurements. 
-        // Ex: same name and expiration but different measurement.
     async update(ctx) {
         try {
             if(ctx.request.body.quantity === 0) {
@@ -59,8 +57,6 @@ class InventoryController {
                     name: ctx.request.body.name, 
                     expirationDate: ctx.request.body.expirationDate,
                     quantityType: ctx.request.body.quantityType,
-                    measurementPerQuantity: ctx.request.body.measurementPerQuantity,
-                    measurementType: ctx.request.body.measurementType,
                     group: ctx.request.body.group,
                 }
             }
@@ -78,21 +74,52 @@ class InventoryController {
             let result = await Item.findOneAndUpdate(
                 { name: ctx.params.name, expirationDate: ctx.params.expirationDate },
                 itemData,
-                { upsert: true }
+                { upsert: true, new: true, rawResult: true }
             )
 
             // If new item was created.
-            if(!result) {
+            if(result.lastErrorObject.updatedExisting === false) {
+                result = result.value;
+
                 HistoryController.create({ date: Date.now(), method: 'Create', target: ctx.request.body.name, description: '' })
+                
+                // TODO - group size updating needs polishing for all create/update/remove items.
+                await Group.findOneAndUpdate(
+                    { name: result.group },
+                    { $inc : { size: 1 }},
+                );
             }
 
             // Otherwise, item was updated.
             else {
+                result = result.value;
+
+                // If updating group.
+                if (ctx.request.body.prevGroup && ctx.request.body.prevGroup !== result.group) {
+
+                    // Find old group and decrement size by 1
+                    await Group.findOneAndUpdate(
+                        { name: ctx.request.body.prevGroup },
+                        { $inc : { size: -1 }},
+                    );
+
+                    // Find new group and increment size by 1
+                    await Group.findOneAndUpdate(
+                        { name: result.group },
+                        { $inc : { size: 1 }},
+                    );
+                    console.log('updating group');
+                }
+
                 // If old quantity + new quantity net to 0 OR new quantity == 0, delete Item.
                 if (result.quantity + ctx.request.body.quantity <= 0 || ctx.request.body.quantity == 0) {
                     console.log("Removing item.");
 
                     HistoryController.create({ date: Date.now(), method: 'Remove', target: ctx.request.body.name, description: '' })
+                    await Group.findOneAndUpdate(
+                        { name: ctx.request.body.group},
+                        { $inc : { size: -1 }},
+                    );
                     result = await Item.deleteOne({ _id: result.id });
                 } else if (ctx.params.option==='inc') {
 
@@ -119,6 +146,10 @@ class InventoryController {
 
     async deleteMany(ctx) {
         ctx.body = await Item.deleteMany({ _id: { $in: ctx.request.body }})
+    }
+
+    async deleteGroup(ctx) {
+        ctx.body = await Group.deleteOne({ name: ctx.params.name });
     }
 }
 

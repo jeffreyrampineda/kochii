@@ -13,7 +13,8 @@ router.get('/:name', InventoryController.getByName)
 router.post('/', InventoryController.create)
 router.post('/groups', InventoryController.createGroup)
 router.put('/:option/:name/:expirationDate', InventoryController.update)
-router.del('/:id', InventoryController.delete)
 router.del('/', InventoryController.deleteMany);
+router.del('/groups/:name', InventoryController.deleteGroup);
+router.del('/:id', InventoryController.delete)
 
 export const InventoryRoute = router.routes();
