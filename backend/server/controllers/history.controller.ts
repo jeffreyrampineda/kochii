@@ -1,6 +1,6 @@
 import HistoryModel from '../models/history';
 
-class RecipesController {
+class HistoryController {
 
     async getAll(ctx) {
         ctx.body = await HistoryModel.find();
@@ -19,4 +19,4 @@ class RecipesController {
     }
 }
 
-export default new RecipesController();
+export default new HistoryController();
