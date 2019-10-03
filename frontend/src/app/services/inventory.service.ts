@@ -94,13 +94,37 @@ export class InventoryService {
    * Add the specified item.
    * @param item - The item to be added.
    */
-/*   addItem(item: Item): Observable<Item> {
-    return this.http.post<Item>(this.inventoryUrl, item, httpOptions)
-      .pipe(
+  addItem(item: Item): Observable<Item> {
+    this.log('adding item');
+
+    const existing = this.findItemFromLocal(item.name, item.expirationDate);
+
+    // Change to updating
+    if(existing) {
+      this.log('item exists, switching to update');
+
+      return this.updateItem(item, 'inc');
+    }
+
+    return new Observable(obs => {
+      this.http.post<Item>(this.inventoryUrl, item, httpOptions).pipe(
         tap(_ => this.log(`added item w/ id=${item._id}`)),
         catchError(this.handleError<Item>('addItem'))
-      );
-  } */
+      ).subscribe(result => {
+        if(result) {
+          this.log('success - item is created');
+
+          this.localInv.push(result);
+          // TODO - you add-item does not fetch for localInv. if you add items with empty localInv,
+          // only the new items are pushed into the localInv, making the array not have size==0, so
+          // it will not fetch data from backend.
+          this.groupsService.addLocalGroupSize(result.group, 1);
+        }
+        obs.next(result);
+        obs.complete();
+      });
+    });
+  }
 
   /**
    * Delete the item with the specified id.
@@ -140,13 +164,16 @@ export class InventoryService {
    * @param option - The option for updating. Can be inc, or set.
    */
   updateItem(item: Item, option: string): Observable<any> {
+    this.log('updating item');
     const url = `${this.inventoryUrl}/${option}/${item.name}/${item.expirationDate}`;
 
     // Returns item if exists, otherwise null.
-    const itemExists = this.findItemFromLocal(item.name, item.expirationDate);
+    const existing = this.findItemFromLocal(item.name, item.expirationDate);
   
-    if (itemExists) {
-      item.prevGroup = itemExists.group;
+    if (existing) {
+      item.prevGroup = existing.group;
+    } else {
+      throw new Error("updating non-existing item");
     }
 
     return new Observable(obs => {
@@ -157,31 +184,22 @@ export class InventoryService {
         if (results) {
           // If item was returned.
           if (results._id) {
-            if (itemExists) {
-              // update old item with new value from results
-              itemExists.name = results.name;
-              itemExists.quantity = results.quantity;
-              itemExists.addedDate = results.addedDate;
-              itemExists.expirationDate = results.expirationDate;
-              itemExists.group = results.group;
-              this.groupsService.addLocalGroupSize(item.prevGroup, -1);
-              this.groupsService.addLocalGroupSize(results.group, 1);
-            } else {
-              // new item. push results
-              console.log('new item');
-              console.log(results);
-              console.log('localInv before: ');
-              console.log(this.localInv);
-              console.log('localGroups before: ');
-              console.log(this.groupsService.getLocalGroups());
-              this.localInv.push(results);
-              // TODO - you add-item does not fetch for localInv. if you add items with empty localInv,
-              // only the new items are pushed into the localInv, making the array not have size==0, so
-              // it will not fetch data from backend.
-              this.groupsService.addLocalGroupSize(results.group, 1);
-            }
+
+            // update old item with new value from results
+            this.log('success - item is updated');
+            
+            existing.name = results.name;
+            existing.quantity = results.quantity;
+            existing.addedDate = results.addedDate;
+            existing.expirationDate = results.expirationDate;
+            existing.group = results.group;
+            this.groupsService.addLocalGroupSize(item.prevGroup, -1);
+            this.groupsService.addLocalGroupSize(results.group, 1);
           } else if (results.n === 1) {
+
             // If item is deleted.
+            this.log('success - item is deleted');
+
             this.localInv = this.localInv.filter(i => i._id !== item._id);
             this.groupsService.addLocalGroupSize(item.group, -1);
           }

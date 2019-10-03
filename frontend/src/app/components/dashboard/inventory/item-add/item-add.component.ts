@@ -64,13 +64,12 @@ export class ItemAddComponent implements OnInit {
 
     this.itemAddForm.forEach(
       form => {
-        observablesGroup.push(this.updateItem(form.value));
+        observablesGroup.push(this.addItem(form.value));
       }
     );
 
     forkJoin(observablesGroup).subscribe(
       x => {
-        console.log(x);
         this.router.navigate(['dashboard/inventory']);
       }
     );
@@ -100,8 +99,8 @@ export class ItemAddComponent implements OnInit {
    * If no item is found, create new item.
    * @param item - The item to be upserted.
    */
-  updateItem(newItem: Item): Observable<any> {
-    return this.inventoryService.updateItem(newItem, 'inc').pipe(
+  addItem(newItem: Item): Observable<any> {
+    return this.inventoryService.addItem(newItem).pipe(
       map(
         results => {
           return results;

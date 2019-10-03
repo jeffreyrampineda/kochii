@@ -86,6 +86,8 @@ export class GroupsService {
   }
 
   addLocalGroupSize(name: string, size: number): void {
+    this.log('updating localGroups')
+
     this.localGroups.find(g => g.name === name).size += size;
   }
 
@@ -109,6 +111,6 @@ export class GroupsService {
    * @param message - The message to log.
    */
   private log(message: string) {
-    this.messageService.add(`InventoryService: ${message}`);
+    this.messageService.add(`GroupsService: ${message}`);
   }
 }
