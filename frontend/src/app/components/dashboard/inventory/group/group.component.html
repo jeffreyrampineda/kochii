@@ -3,6 +3,7 @@
     <mat-card-title>Inventory - {{ groupName }}
       <div class="k-actions-buttons">
         <button mat-button (click)="back()">Back</button>
+        <button mat-button (click)="deleteGroup()">Remove group</button>
       </div>
     </mat-card-title>
   </mat-card-header>
@@ -54,17 +55,37 @@
               <mat-form-field >
                 <input matInput type="text" [(ngModel)]="temporarySelectedItemsFind(item._id).quantityType">
               </mat-form-field>
-              <mat-form-field >
-                <input matInput type="number" [(ngModel)]="temporarySelectedItemsFind(item._id).measurementPerQuantity">
-              </mat-form-field>
-              <mat-form-field >
-                <input matInput type="text" [(ngModel)]="temporarySelectedItemsFind(item._id).measurementType">
-              </mat-form-field>
             </div>
           </div>
-          <span matTooltip="{{ item.measurementPerQuantity }}{{ item.measurementType }}/ {{ item.quantityType }}">
+          <span matTooltip="{{ item.quantityType }}">
             {{ item.quantity }} {{ item.quantityType }}
           </span>
+        </td>
+      </ng-container>
+
+      <!-- group Column -->
+      <ng-container matColumnDef="group">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
+        <td mat-cell *matCellDef="let item">
+          <div *ngIf="temporarySelectedItemsFind(item._id); else viewGroup">
+            <div *ngIf="option === 'set'; then editGroup else viewGroup"></div>
+            <ng-template #editGroup>
+              <mat-form-field>
+                <mat-select [(ngModel)]="temporarySelectedItemsFind(item._id).group">
+                  <mat-option *ngFor="let group of localGroups" [value]="group.name">{{ group.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ng-template>
+          </div>
+          <ng-template #viewGroup><span matTooltip="Group">{{ item.group }}</span></ng-template>
+        </td>
+      </ng-container>
+
+      <!-- addedDate Column -->
+      <ng-container matColumnDef="addedDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Added</th>
+        <td mat-cell *matCellDef="let item">
+          <span matTooltip="{{item.addedDate | date}}">{{ item.addedDate | date }}</span>
         </td>
       </ng-container>
 
@@ -74,23 +95,7 @@
         <td mat-cell *matCellDef="let item">
           <span matTooltip="{{item.expirationDate | date}}">
             {{ expirationCountdown(item.expirationDate) | expiration }}
-          </span>
-        </td>
-      </ng-container>
-
-      <!-- group Column -->
-      <ng-container matColumnDef="group">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
-        <td mat-cell *matCellDef="let item">
-          <div *ngIf="temporarySelectedItemsFind(item._id)">
-            <div *ngIf="option === 'set'">
-              <mat-form-field >
-                <input matInput type="text" [(ngModel)]="temporarySelectedItemsFind(item._id).group">
-              </mat-form-field>
-            </div>
-          </div>
-          <span matTooltip="Group">
-            {{ item.group }}
+            <span [ngClass]="['label', generateStatusLabel(item.expirationDate)]">{{ generateStatusLabel(item.expirationDate) | titlecase }}</span>
           </span>
         </td>
       </ng-container>

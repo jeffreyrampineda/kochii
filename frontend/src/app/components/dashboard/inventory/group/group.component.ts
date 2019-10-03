@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Injector } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatPaginator } from '@angular/material/paginator';
@@ -12,6 +12,8 @@ import { map } from 'rxjs/operators';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
 import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
+import { DashboardComponent } from '../../dashboard.component';
+import { Group } from 'src/app/interfaces/group';
 
 // -------------------------------------------------------------
 
@@ -22,14 +24,18 @@ import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialo
 })
 export class GroupComponent implements OnInit {
 
-    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: true }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
 
     groupName: string;
-    displayedColumns: string[] = ['name', 'quantity', 'expirationDate', 'group'];
+    displayedColumns: string[] = ['name', 'quantity', 'group', 'addedDate', 'expirationDate'];
     inventory: MatTableDataSource<Item>;
     showSelect: Boolean = false;
     selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
+    localGroups: Group[];
+
+    // Used for closing and opening side menu
+    parentComponent: DashboardComponent;
 
     // Used for updating/removing items.
     temporarySelectedItems: Item[] = [];
@@ -39,64 +45,54 @@ export class GroupComponent implements OnInit {
         private route: ActivatedRoute,
         private inventoryService: InventoryService,
         private location: Location,
+        private injector: Injector,
         public dialog: MatDialog,
-    ) { }
+    ) {
+        this.parentComponent = this.injector.get(DashboardComponent);
+    }
 
 // -------------------------------------------------------------
 
     ngOnInit() {
-        this.getItemsInGroup();
-    }
-
-    getItemsInGroup(): void {
-        const groupName = this.route.snapshot.paramMap.get('groupName');
-        this.groupName = groupName;
-
-        this.inventoryService.getItemsInGroup(groupName).subscribe(
-            inventory => {
-                this.inventory = new MatTableDataSource(inventory);
-                this.inventory.paginator = this.paginator;
-                this.inventory.sort = this.sort;
-
-                // Used to sort data by expirationDate | asc.
-                this.inventory.sortingDataAccessor = (item, property) => {
-                    switch (property) {
-                      case 'expirationDate': return new Date(item.expirationDate);
-                      default: return item[property];
-                    }
-                };
-            }
-        );
+        this.getInventory();
+        this.getGroups();
     }
 
     /**
      * Get all items then sets up the inventory: MatTableDataSource for
      * presentation.
      */
-/*     getInventory(): void {
-        this.inventoryService.getInventory().subscribe(
-            inventory => {
-                this.inventory = new MatTableDataSource(inventory);
-                this.inventory.paginator = this.paginator;
-                this.inventory.sort = this.sort;
+    getInventory(): void {
+        const groupName = this.route.snapshot.paramMap.get('groupName');
+        this.groupName = groupName;
 
-                // Used to sort data by expirationDate | asc.
-                this.inventory.sortingDataAccessor = (item, property) => {
-                    switch (property) {
-                      case 'expirationDate': return new Date(item.expirationDate);
-                      default: return item[property];
-                    }
-                };
-            }
-        );
-    } */
+        this.inventoryService.getInventory(this.groupName).subscribe(inventory => {
+            this.inventory = new MatTableDataSource(inventory);
+            this.inventory.paginator = this.paginator;
+            this.inventory.sort = this.sort;
+
+            // Used to sort data by expirationDate | asc.
+            this.inventory.sortingDataAccessor = (item, property) => {
+                switch (property) {
+                  case 'expirationDate': return new Date(item.expirationDate);
+                  default: return item[property];
+                }
+            };
+        });
+    }
+
+    getGroups(): void {
+        this.inventoryService.getGroups().subscribe(gro => {
+            this.localGroups = gro;
+        });
+    }
 
     /**
      * Delete the item with the specified id. If successful, update
      * the inventory for presentation.
      * @param _id - The id of the item to delete.
      */
-    deleteItem(_id: string): void {
+/*     deleteItem(_id: string): void {
         this.inventoryService.deleteItem(_id).subscribe(
             results => {
                 if (results.ok === 1) {
@@ -104,11 +100,9 @@ export class GroupComponent implements OnInit {
                 }
             }
         );
-    }
+    } */
 
     /**
-     * TODO: measurementPerQuantity reduction.
-     *
      * Update the item with the same name and expirationDate.
      * Option declares whether to set or inc.
      * @param newItem - The item to be updated.
@@ -131,8 +125,6 @@ export class GroupComponent implements OnInit {
                                 const ref = this.inventory.data.find(i => i._id === results._id);
                                 ref.quantity = newItem.quantity;
                                 ref.quantityType = newItem.quantityType;
-                                ref.measurementPerQuantity = newItem.measurementPerQuantity;
-                                ref.measurementType = newItem.measurementType;
                                 if (newItem.group !== this.groupName) {
                                     this.removeItemFromLocalInventoryById(ref._id);
                                 }
@@ -141,9 +133,6 @@ export class GroupComponent implements OnInit {
                             // If item is deleted.
                             this.inventory.data = this.inventory.data.filter(i => i._id !== newItem._id);
                         }
-                    } else {
-                        // If new item is created.
-                        // TODO: update inventory. Used for measurementPerQuantity reduction.
                     }
                     return results;
                 }
@@ -202,11 +191,13 @@ export class GroupComponent implements OnInit {
         if (this.showSelect) {
             this.displayedColumns.unshift('select');
             this.option = option;
+            this.parentComponent.opened = false;
         } else {
             this.temporarySelectedItems = [];
             this.selection.clear();
             this.displayedColumns.shift();
             this.option = '';
+            this.parentComponent.opened = true;
         }
     }
 
@@ -300,5 +291,63 @@ export class GroupComponent implements OnInit {
 
     back(): void {
         this.location.back();
+    }
+
+    // TODO - move updateItem to inventory.service's deleteGroup().
+    deleteGroup(): void {
+        if (this.groupName === 'Default') {
+            console.log('cannot remove default group');
+            return;
+        }
+
+        if (this.inventory.data.length !== 0) {
+            console.log('group is not empty');
+            const rogueItems = JSON.parse(JSON.stringify(this.inventory.data));
+
+            rogueItems.forEach(i => {
+                i.group = 'Default';
+            });
+
+            // TODO - simplify updateManyItems(). remove subscribe in the function
+            // make it return Observable so it can be used in other functions with subscribe
+            const observablesGroup = [];
+
+            rogueItems.forEach(r => {
+                observablesGroup.push(this.inventoryService.updateItem(r, 'set').pipe(
+                    map(results => {
+                        return results;
+                    })
+                ));
+            });
+
+            forkJoin(observablesGroup).subscribe(
+                x => {
+                    this.deleteThisGroup();
+                }
+            );
+
+        } else {
+            this.deleteThisGroup();
+        }
+    }
+
+    generateStatusLabel(date: string): string {
+        const d = this.expirationCountdown(date.toString());
+
+        if (d > 10) {
+            return 'good';
+        } else if (d < 10 && d >= 0) {
+            return 'warning';
+        }
+        return 'expired';
+    }
+
+    private deleteThisGroup(): void {
+        console.log('delete group');
+        this.inventoryService.deleteGroup(this.groupName).subscribe(results => {
+            if (results.ok === 1) {
+                this.back();
+            }
+        });
     }
 }

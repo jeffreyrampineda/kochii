@@ -1,4 +1,4 @@
 <mat-grid-list cols="2" rowHeight="2:1">
-  <mat-grid-tile *ngFor="let group of groups" routerLink="{{ group.name }}">{{ group.name }}</mat-grid-tile>
+  <mat-grid-tile *ngFor="let group of localGroups" routerLink="{{ group.name }}">{{ group.name }} - size: {{ group.size }} items</mat-grid-tile>
   <mat-grid-tile (click)="addGroup()">Add Group</mat-grid-tile>
 </mat-grid-list>

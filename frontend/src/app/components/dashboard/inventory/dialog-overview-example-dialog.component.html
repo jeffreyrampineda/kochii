@@ -2,10 +2,10 @@
 <div mat-dialog-content>
   <label>Group Name:</label>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.groupName">
+    <input matInput [(ngModel)]="data.name">
   </mat-form-field>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data.groupName" cdkFocusInitial>Ok</button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
   <button mat-button (click)="onNoClick()">No Thanks</button>
 </div>

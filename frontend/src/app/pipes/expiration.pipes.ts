@@ -15,6 +15,6 @@ export class ExpirationPipe implements PipeTransform {
     } else if (value === 0) {
       return 'Today';
     }
-    return `Expired ${Math.abs(value)} days ago`;
+    return `${Math.abs(value)} days ago`;
   }
 }

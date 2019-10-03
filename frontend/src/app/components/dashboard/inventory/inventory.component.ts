@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialo
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Group } from 'src/app/interfaces/group';
+import { Item } from 'src/app/interfaces/item';
 
 export interface DialogData {
     groupName: string;
@@ -17,7 +18,8 @@ export interface DialogData {
 })
 export class InventoryComponent implements OnInit {
 
-    groups: Group[] = [];
+    localGroups: Group[] = [];
+    localInv: Item[] = [];
 
     constructor(
         private dialog: MatDialog,
@@ -31,27 +33,28 @@ export class InventoryComponent implements OnInit {
     }
 
     getGroups(): void {
-        this.inventoryService.getGroups().subscribe(
-            groups => {
-                this.groups = groups;
-            }
-        );
+        this.inventoryService.getGroups().subscribe(gro => {
+            this.localGroups = gro;
+        });
+    }
+
+    getInventory(): void {
+        this.inventoryService.getInventory().subscribe(inv => {
+            this.localInv = inv;
+        });
     }
 
     addGroup(): void {
         const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
             width: '250px',
-            data: { groupName: '' }
+            data: { name: '', size: 0 }
         });
 
         dialogRef.afterClosed().subscribe(result => {
             if (result && result !== '') {
-                this.inventoryService.addGroup(result).subscribe(
-                    x => {
-                        console.log(x);
-                        this.groups.push(x);
-                    }
-                );
+                this.inventoryService.addGroup(result).subscribe(x => {
+                    console.log(x);
+                });
             }
         });
     }
