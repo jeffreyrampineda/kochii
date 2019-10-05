@@ -16,7 +16,7 @@ const httpOptions = {
 @Injectable({ providedIn: 'root' })
 export class InventoryService {
 
-  private inventoryUrl = 'http://localhost:3001/api/inventory';
+  private inventoryUrl = '/api/inventory';
   private queryUrl = '/search/';
   private localInv: Item[] = [];
 

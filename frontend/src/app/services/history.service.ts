@@ -13,7 +13,7 @@ import { History } from 'src/app/interfaces/history';
 })
 export class HistoryService {
 
-  private historyUrl = 'http://localhost:3001/api/history';
+  private historyUrl = '/api/history';
 
   constructor(
     private http: HttpClient,

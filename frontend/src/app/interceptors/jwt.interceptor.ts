@@ -16,10 +16,10 @@ export class JwtInterceptor implements HttpInterceptor {
         console.log(`Intercepting ${request.url}`);
 
         // TODO: temporary fix - prevents reload on /login, /register component.
-        if (request.url === 'http://localhost:3001/public/login') {
+        if (request.url === '/public/login') {
             return next.handle(request);
         }
-        if (request.url === 'http://localhost:3001/public/register') {
+        if (request.url === '/public/register') {
             return next.handle(request);
         }
 

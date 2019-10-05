@@ -17,7 +17,7 @@ const httpOptions = {
 })
 export class GroupsService {
 
-  private groupsUrl = 'http://localhost:3001/api/groups';
+  private groupsUrl = '/api/groups';
   private localGroups: Group[] = [];
 
   constructor(

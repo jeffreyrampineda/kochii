@@ -13,7 +13,7 @@ import { Recipe } from 'src/app/interfaces/recipe';
 })
 export class RecipeService {
 
-  private recipesUrl = 'http://localhost:3001/api/recipes';
+  private recipesUrl = '/api/recipes';
 
   constructor(
     private http: HttpClient,
