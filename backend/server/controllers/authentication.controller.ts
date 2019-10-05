@@ -1,7 +1,6 @@
 import UserModel from '../models/user';
 import * as jsonwebtoken from 'jsonwebtoken';
 const bcrypt = require('bcrypt');
-const config = require('../config.json');
 
 class AuthenticationController {
 
@@ -9,7 +8,7 @@ class AuthenticationController {
     private readonly saltRounds = 10;
 
     private generateToken(signature: any): string {
-        return jsonwebtoken.sign(signature, config.secretKey);
+        return jsonwebtoken.sign(signature, process.env.SECRET_KEY);
     }
 
     private verifyBody(body: any): boolean {

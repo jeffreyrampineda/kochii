@@ -6,12 +6,15 @@ import * as bodyParser from 'koa-bodyparser';
 import * as jwt from 'koa-jwt';
 import routes from './routes/routes';
 import logger from './middlewares/logger';
-const config = require('./config.json');
+
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config();
+}
 
 // Create Koa Application
 const app = new Koa();
-const port = process.env.PORT || 3001;
-const db_host = process.env.DB_HOST || 'localhost';
+const port = process.env.PORT;
+const mognodb_uri = process.env.MONGODB_URI;
 const API_URL = "http://localhost:4200"
 const options:cors.CorsOptions = {
     allowHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token", "Authorization"],
@@ -24,12 +27,12 @@ const router = new Router();
 routes(router);
 
 app.use(cors(options));
-app.use(jwt({ secret: config.secretKey }).unless({ path: [/^\/public/, /^\/dev/] }));
+app.use(jwt({ secret: process.env.SECRET_KEY }).unless({ path: [/^\/public/, /^\/dev/] }));
 app.use(logger());
 app.use(bodyParser());
 app.use(router.routes());
 
-mongoose.connect(`mongodb://${db_host}:27017/kochii`, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mognodb_uri, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on('error', console.error);
 mongoose.connection.once('open', () => console.log('Connection to mongodb established'));
 
