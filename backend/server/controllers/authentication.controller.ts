@@ -51,10 +51,10 @@ class AuthenticationController {
             let status = 400;
             let message = 'Unknown';
 
-            if (err.message === 'Authentication failed') {
+            if (err.message === 'Authentication failed' || err.message === 'Username does not exist') {
                 // 401-Unauthorized
                 status = 401;
-                message = err.message;
+                message = 'Authentication failed';
             } else {
                 console.log(err.status);
                 console.log(err.message);

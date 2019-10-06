@@ -58,22 +58,20 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.authenticationService.register(this.registerForm.value).subscribe(
-      response => {
+    this.authenticationService.register(this.registerForm.value).subscribe({
+      next: response => {
         if (response && response.token) {
           this.router.navigate(['/dashboard']);
         }
+      }, 
+      error: err => {
+        this.error = err.error;
+        this.loading = false;
       },
-      err => {
-        if (err.status === 409 || err.status === 406) {
-          this.error = err.error;
-        } else {
-          this.error = 'Unknown error';
-          console.log('unknown error from register');
-        }
+      complete: () => {
         this.loading = false;
       }
-    );
+    });
   }
 
 }

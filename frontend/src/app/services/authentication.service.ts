@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
@@ -84,17 +84,28 @@ export class AuthenticationService {
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
 
+            this.log(`error - ${error.status} - ${error.message}`);
+
             // Do something before throwing to login/register component
-            if (error.status === 401 || error.status === 409 || error.status === 406) {
+            switch(error.status) {
                 // 401 - Authentication failed.
                 // 409 - Username already exists.
                 // 406 - Password too short.
-                return throwError(error);
-            } else {
-                console.log('unknown error from authentication');
-                return throwError(error);
+                // 504 - Server is busy.
+
+                case 401:
+                case 409:
+                case 406:
+                    return throwError(error);
+                case 504:
+
+                    // Create appropriate error.message for displaying to user.
+                    return throwError(new HttpErrorResponse({status: 504, error: "Connection to server failed"}))
+                default:
+
+                    // Create appropriate error.message for displaying to user.
+                    return throwError(new HttpErrorResponse({status: error.status, error: "Unknown error"}));
             }
-            return of(result as T);
         };
     }
 

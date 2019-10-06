@@ -49,21 +49,19 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.authenticationService.login(this.loginForm.value).subscribe(
-      response => {
+    this.authenticationService.login(this.loginForm.value).subscribe({
+      next: response => {
         if (response && response.token) {
           this.router.navigate(['/dashboard']);
         }
       },
-      err => {
-        if (err.status === 401) {
-          this.error = err.error;
-        } else {
-          this.error = 'Unknown error';
-          console.log('unknown error from login');
-        }
+      error: err => {
+        this.error = err.error;
+        this.loading = false;
+      },
+      complete: () => {
         this.loading = false;
       }
-    );
+    });
   }
 }
