@@ -23,7 +23,6 @@ userSchema.pre('save', async function(next) {
     } else {
 
         // Username exists. Throw error for controller to catch.
-        console.log(`Username '${self.username}' already exists`);
         next(new Error("Username already exists"));
     }
 });

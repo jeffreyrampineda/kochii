@@ -6,6 +6,7 @@ import * as bodyParser from 'koa-bodyparser';
 import * as jwt from 'koa-jwt';
 import routes from './routes/routes';
 import logger from './middlewares/logger';
+import errorHandler from './middlewares/errorHandler';
 
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
@@ -26,6 +27,7 @@ const router = new Router();
 
 routes(router);
 
+app.use(errorHandler);
 app.use(cors(options));
 app.use(jwt({ secret: process.env.SECRET_KEY }).unless({ path: [/^\/public/, /^\/dev/] }));
 app.use(logger());

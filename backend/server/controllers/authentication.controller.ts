@@ -17,52 +17,35 @@ class AuthenticationController {
 
     // TODO: documentation.
     login = async (ctx) => {
-        try {
 
-            // Length should be 2, username and password.
-            if (!this.verifyBody(ctx.request.body)) {
-                throw new Error('Corrupted request');
-            }
-
-            const username = ctx.request.body.username;
-            const password = ctx.request.body.password;
-
-            const user = await UserModel.findOne({ 
-                username: username,
-            });
-
-            // Username and password should exist.
-            if (!user) {
-                throw new Error('Username does not exist');
-            }
-
-            const match = await bcrypt.compare(password, user.password);
-
-            if (!match) {
-                throw new Error('Authentication failed');
-            }
-
-            // 202-Accepted
-            ctx.status = 202;
-            ctx.body = {
-                token: this.generateToken(user.toJSON())
-            };
-        } catch (err) {
-            let status = 400;
-            let message = 'Unknown';
-
-            if (err.message === 'Authentication failed' || err.message === 'Username does not exist') {
-                // 401-Unauthorized
-                status = 401;
-                message = 'Authentication failed';
-            } else {
-                console.log(err.status);
-                console.log(err.message);
-            }
-
-            ctx.status = status;
-            ctx.message = message;
+        // Length should be 2, username and password.
+        if (!this.verifyBody(ctx.request.body)) {
+            ctx.throw(400, 'Bad Request');
         }
+
+        const username = ctx.request.body.username;
+        const password = ctx.request.body.password;
+
+        const user = await UserModel.findOne({ 
+            username: username,
+        });
+
+        // Username and password should exist.
+        if (!user) {
+            ctx.throw(401, 'Authentication failed');
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (!match) {
+            ctx.throw(401, 'Authentication failed');
+        }
+
+        // 202-Accepted
+        ctx.status = 202;
+        ctx.body = {
+            token: this.generateToken(user.toJSON())
+        };
     }
 
     /**
@@ -70,25 +53,25 @@ class AuthenticationController {
      * UserModel throws an error causing a status 409.
      */
     register = async (ctx) => {
-        try {
-
-            // TODO: Should be 3. Username and password. no passwordRe
-            if (Object.keys(ctx.request.body).length != 3) {
-                throw new Error('Corrupted request');
-            }
+        // TODO: Should be 3. Username and password. no passwordRe
+        if (Object.keys(ctx.request.body).length != 3) {
+            ctx.throw(400, 'Bad Request');
+        }
     
-            const username = ctx.request.body.username;
-            const password = ctx.request.body.password;
+        const username = ctx.request.body.username;
+        const password = ctx.request.body.password;
 
-            if (password.length < this.passwordMinimumLength) {
-                throw new Error('Password too short');
-            }
+        if (password.length < this.passwordMinimumLength) {
+            ctx.throw(406, 'Password too short');
+        }
 
-            await bcrypt.hash(password, this.saltRounds).then(async (hash) => {
-                const user = new UserModel({
-                    username: username,
-                    password: hash
-                });
+        await bcrypt.hash(password, this.saltRounds).then(async (hash) => {
+            const user = new UserModel({
+                username: username,
+                password: hash
+            });
+
+            try {
 
                 // Can throw an error. 'Username already exists'
                 const result = await user.save();
@@ -98,27 +81,14 @@ class AuthenticationController {
                 ctx.body = {
                     token: this.generateToken(result.toJSON())
                 };
-            });
-        } catch (err) {
-            let status = 400;
-            let message = 'Unknown';
 
-            if (err.message === 'Password too short') {
-                // 406-Not Acceptable
-                status = 406;
-                message = err.message;
-            } else if (err.message === 'Username already exists') {
-                // 409-Conflict
-                status = 409;
-                message = err.message;
-            } else {
-                console.log(err.status);
-                console.log(err.message);
+            } catch (error) {
+                if (error.message === 'Username already exists') {
+                    ctx.throw(409, 'Username already exists');
+                }
+                ctx.throw(500, 'Register error');
             }
-
-            ctx.status = status;
-            ctx.message = message;
-        }
+        });
     }
 }
 
