@@ -11,7 +11,9 @@ class RecipesController {
     }
 
     async getByName(ctx) {
-        ctx.body = await Recipe.findOne({ name: ctx.params.name })
+        const name = ctx.params.name;
+
+        ctx.body = await Recipe.findOne({ name, })
     }
 
     async getById(ctx) {

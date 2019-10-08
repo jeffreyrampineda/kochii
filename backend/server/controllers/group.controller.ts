@@ -20,9 +20,11 @@ class GroupController {
     }
 
     async update(ctx) {
+        const { name, size, } = ctx.request.body;
+
         let result = await Group.findOneAndUpdate(
-            { name: ctx.request.body.name },
-            { $inc : { size: ctx.request.body.size }},
+            { name, },
+            { $inc : { size, }},
         )
 
         ctx.body = result;
@@ -33,11 +35,12 @@ class GroupController {
     }
 
     async refreshSize(ctx) {
-        const size = await Item.countDocuments({ group: ctx.params.name }, (err, count) => count);
+        const name = ctx.params.name;
+        const size = await Item.countDocuments({ group: name }, (err, count) => count);
 
         await Group.findOneAndUpdate(
-            { name: ctx.params.name },
-            { $set: { size }},
+            { name, },
+            { $set: { size, }},
         )
 
         ctx.body = 'done';

@@ -23,11 +23,10 @@ class AuthenticationController {
             ctx.throw(400, 'Bad Request');
         }
 
-        const username = ctx.request.body.username;
-        const password = ctx.request.body.password;
+        const { username, password, } = ctx.request.body;
 
         const user = await UserModel.findOne({ 
-            username: username,
+            username,
         });
 
         // Username and password should exist.
@@ -58,8 +57,7 @@ class AuthenticationController {
             ctx.throw(400, 'Bad Request');
         }
     
-        const username = ctx.request.body.username;
-        const password = ctx.request.body.password;
+        const { username, password, } = ctx.request.body;
 
         if (password.length < this.passwordMinimumLength) {
             ctx.throw(406, 'Password too short');
@@ -67,8 +65,8 @@ class AuthenticationController {
 
         await bcrypt.hash(password, this.saltRounds).then(async (hash) => {
             const user = new UserModel({
-                username: username,
-                password: hash
+                username,
+                password: hash,
             });
 
             try {

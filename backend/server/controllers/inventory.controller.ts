@@ -18,7 +18,9 @@ class InventoryController {
     }
 
     async getByName(ctx) {
-        ctx.body = await Item.findOne({ name: ctx.params.name })
+        const name = ctx.params.name;
+
+        ctx.body = await Item.findOne({ name, });
     }
 
     async getById(ctx) {
@@ -46,24 +48,25 @@ class InventoryController {
     async update(ctx) {
         try {
             console.log("updating item.");
+            const { name, quantity, expirationDate, group, prevGroup } = ctx.request.body;
 
-            if(ctx.request.body.quantity === 0) {
+            if(quantity === 0) {
                 throw new Error('Quantity is 0');
             }
 
             let itemData: any = {
                 $set: { 
-                    name: ctx.request.body.name, 
-                    expirationDate: ctx.request.body.expirationDate,
-                    group: ctx.request.body.group,
+                    name, 
+                    expirationDate,
+                    group,
                 }
             }
 
             // Setting or incrementing ?
             if (ctx.params.option === 'inc') {
-                itemData.$inc = { quantity: ctx.request.body.quantity }
+                itemData.$inc = { quantity, }
             } else if (ctx.params.option === 'set') {
-                itemData.$set.quantity = ctx.request.body.quantity
+                itemData.$set.quantity = quantity;
             } else {
                 throw new Error('invalid option');
             }
@@ -76,12 +79,12 @@ class InventoryController {
             )
 
             // If updating group.
-            if (ctx.request.body.prevGroup && ctx.request.body.prevGroup !== result.group) {
+            if (prevGroup && prevGroup !== result.group) {
                 console.log('updating group.');
                 // Find old group and decrement size by 1
                 GroupController.update(
                     { request: { body: {
-                        name: ctx.request.body.prevGroup,
+                        name: prevGroup,
                         size: -1,
                     } } }
                 );
@@ -96,25 +99,25 @@ class InventoryController {
             }
 
             // If old quantity + new quantity net to 0 OR new quantity == 0, delete Item.
-            if (result.quantity + ctx.request.body.quantity <= 0 || ctx.request.body.quantity == 0) {
+            if (result.quantity + quantity <= 0 || quantity == 0) {
                 console.log("removing item.");
 
-                HistoryController.create({ date: Date.now(), method: 'Remove', target: ctx.request.body.name, description: '' })
+                HistoryController.create({ date: Date.now(), method: 'Remove', target: name, description: '' })
                 await GroupController.update(
                     { request: { body: {
-                        name: ctx.request.body.group,
+                        name: group,
                         size: -1,
                     } } }
                 );
                 result = await Item.deleteOne({ _id: result.id });
             } else if (ctx.params.option==='inc') {
 
-                HistoryController.create({ date: Date.now(), method: 'Update', target: ctx.request.body.name, 
-                    description: `${result.quantity} -> ${result.quantity + ctx.request.body.quantity}` })
+                HistoryController.create({ date: Date.now(), method: 'Update', target: name, 
+                    description: `${result.quantity} -> ${result.quantity + quantity}` })
             } else if (ctx.params.option==='set') {
 
-                HistoryController.create({ date: Date.now(), method: 'Update', target: ctx.request.body.name, 
-                        description: `${result.quantity} -> ${ctx.request.body.quantity}` })
+                HistoryController.create({ date: Date.now(), method: 'Update', target: name, 
+                        description: `${result.quantity} -> ${quantity}` })
             }
 
             ctx.body = result;
