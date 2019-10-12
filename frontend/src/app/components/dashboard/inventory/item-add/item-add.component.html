@@ -38,6 +38,7 @@
                       placeholder="Quantity" />
               <mat-error *ngIf="f.quantity.errors">
                 <div *ngIf="f.quantity.errors.required">Quantity is required</div>
+                <div *ngIf="f.quantity.errors.min">Minimum quantity is 1</div>
               </mat-error>
           </mat-form-field>
 

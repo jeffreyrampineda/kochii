@@ -1,3 +1,29 @@
+bug#0002 - ERROR if item is updated or added with quantity 0:
+    Error Message)
+        throw new Error('Quantity is 0');
+    Scenario A)
+        Item with name "Bobby" with expiration "x" already exists.
+        add item name "Bobby" with expiration "x" and quantity "0".
+        item exists, switching to update
+        frontend:
+            X - interceptor caught error
+        backend:
+            X - throw new Error('Quantity is 0');
+    Scenario B)
+        update item name with quantity "0".
+        frontend:
+            X - interceptor caught error
+        backend:
+            X - throw new Error('Quantity is 0');
+    Problem)
+        end-user is not being notified of the error
+        needs frontend validation
+    Fixed)
+        changed backend quantity throw error with ctx.throw(400, 'Quantity cannot be 0'); for http status.
+        errors are rethrown by jwt.interceptor and inventory.service to be displayed by the component.
+        end-user is notified if there is an error.
+        frontend validation.
+
 bug#0001 - ERROR if new item is added and name already exists:
     Error Message)
         ERROR TypeError: "this.localGroups.find(...) is undefined".

@@ -47,9 +47,15 @@
       <ng-container matColumnDef="quantity">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
         <td mat-cell *matCellDef="let item">
-          <div *ngIf="temporarySelectedItemsFind(item._id)">
-            <mat-form-field >
-              <input matInput type="number" [(ngModel)]="temporarySelectedItemsFind(item._id).quantity">
+          <div *ngIf="selection.isSelected(item)">
+            <mat-form-field>
+              <input 
+                matInput 
+                type="number" 
+                [formControl]="f(item._id).quantity">
+              <mat-error *ngIf="f(item._id).quantity.errors">
+                <div *ngIf="f(item._id).quantity.errors.min">Minimum quantity is 1</div>
+              </mat-error>
             </mat-form-field>
           </div>
           <span matTooltip="quantity">
@@ -62,13 +68,16 @@
       <ng-container matColumnDef="group">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
         <td mat-cell *matCellDef="let item">
-          <div *ngIf="temporarySelectedItemsFind(item._id); else viewGroup">
+          <div *ngIf="selection.isSelected(item); else viewGroup">
             <div *ngIf="option === 'set'; then editGroup else viewGroup"></div>
             <ng-template #editGroup>
               <mat-form-field>
-                <mat-select [(ngModel)]="temporarySelectedItemsFind(item._id).group">
+                <mat-select [formControl]="f(item._id).group">
                   <mat-option *ngFor="let group of localGroups" [value]="group.name">{{ group.name }}</mat-option>
                 </mat-select>
+                <mat-error *ngIf="f(item._id).group.errors">
+                  <div *ngIf="f(item._id).group.errors.required">Group is required</div>
+                </mat-error>
               </mat-form-field>
             </ng-template>
           </div>

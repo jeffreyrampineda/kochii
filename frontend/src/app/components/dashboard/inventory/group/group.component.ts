@@ -6,8 +6,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, forkJoin, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { GroupsService } from 'src/app/services/groups.service';
@@ -15,6 +15,8 @@ import { Item } from 'src/app/interfaces/item';
 import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
 import { DashboardComponent } from '../../dashboard.component';
 import { Group } from 'src/app/interfaces/group';
+import { MessageService } from 'src/app/services/message.service';
+import { FormGroup, FormBuilder, Validators, } from '@angular/forms';
 
 // -------------------------------------------------------------
 
@@ -39,16 +41,18 @@ export class GroupComponent implements OnInit {
     parentComponent: DashboardComponent;
 
     // Used for updating/removing items.
-    temporarySelectedItems: Item[] = [];
+    itemUpdateForm: Object = {};
     option: string;
 
     constructor(
         private route: ActivatedRoute,
         private inventoryService: InventoryService,
+        private messageService: MessageService,
         private groupsService: GroupsService,
         private location: Location,
         private injector: Injector,
         public dialog: MatDialog,
+        private formBuilder: FormBuilder,
     ) {
         this.parentComponent = this.injector.get(DashboardComponent);
     }
@@ -137,7 +141,10 @@ export class GroupComponent implements OnInit {
                     }
                     return results;
                 }
-            )
+            ),
+            catchError((error: any): Observable<any> => {
+                return of(undefined);
+            }),
         );
     }
 
@@ -156,14 +163,25 @@ export class GroupComponent implements OnInit {
             newItem => {
               observablesGroup.push(this.updateItem(newItem));
             }
-          );
+        );
 
-        forkJoin(observablesGroup).subscribe(
-            x => {
-                console.log(x);
+        forkJoin(observablesGroup).subscribe({
+            next: response => {
+                const successful = response.reduce((acc: number, curr) => {
+                    if (curr) {
+                        acc += 1;
+                    }
+                    return acc;
+                }, 0);
+                this.notify(`${successful}/${observablesGroup.length} items were successfully updated.`);
+            },
+            error: err => {
+                // forkJoin handle error
+            },
+            complete: () => {
                 this.selectColumnToggle('');
             }
-        );
+        });
     }
 
     /**
@@ -194,7 +212,7 @@ export class GroupComponent implements OnInit {
             this.option = option;
             this.parentComponent.opened = false;
         } else {
-            this.temporarySelectedItems = [];
+            this.itemUpdateForm = {};
             this.selection.clear();
             this.displayedColumns.shift();
             this.option = '';
@@ -209,14 +227,14 @@ export class GroupComponent implements OnInit {
             data: {
                 title: 'Confirmation: ' + title,
                 description: description,
-                items: this.temporarySelectedItems,
-                canConfirm: true
+                items: Object.values(this.itemUpdateForm).map<FormGroup[]>((form: FormGroup) => form.value),
+                canConfirm: !this.checkIfInvalid(),
             }
         });
 
         // Confirmed.
         dialogRef.afterClosed().subscribe(
-            result => {
+            (result: Item[]) => {
                 if (result && result.length > 0) {
                     console.log(`Confirmed... ${this.option}`);
                     this.updateManyItem(result);
@@ -227,29 +245,41 @@ export class GroupComponent implements OnInit {
 
     /**
      * Adds extra functionality for SelectionModel.select(Item).
-     * Also pushes the specified item to temporarySelectedItems array.
+     * Also adds the specified item to itemUpdateForm object.
      * @param item - The item selected.
      */
     selectionSelect(item: Item): void {
         this.selection.select(item);
 
         // Stringify then parse to clone the values instead of reference.
-        this.temporarySelectedItems.push(JSON.parse(JSON.stringify(item)));
+        this.itemUpdateForm[item._id] = this.formBuilder.group({
+            name: [item.name, [
+              Validators.maxLength(20),
+              Validators.required
+            ]],
+            quantity: [item.quantity, [
+              Validators.min(1),
+              Validators.required
+            ]],
+            addedDate: [item.addedDate, Validators.required],
+            expirationDate: [item.expirationDate, Validators.required],
+            group: [item.group, Validators.required],
+        });
     }
 
     /**
      * Adds extra functionality for SelectionModel.clear().
-     * Also clears the temporarySelectedItems array.
+     * Also clears the itemUpdateForm object.
      */
     selectionClear(): void {
         this.selection.clear();
-        this.temporarySelectedItems = [];
+        this.itemUpdateForm = {};
     }
 
     /**
      * Adds extra functionality for SelectionModel.toggle(Item).
-     * Also pushes the specified item to temporarySelectedItems array
-     * or removes the specified item from temporarySelectedItems array.
+     * Also adds the specified item to itemUpdateForm object
+     * or removes the specified item from itemUpdateForm object.
      * @param item - The item to toggle.
      */
     selectionToggle(item: Item): void {
@@ -257,22 +287,10 @@ export class GroupComponent implements OnInit {
         if (this.selection.isSelected(item)) {
 
             // Stringify then parse to clone the values instead of reference.
-            this.temporarySelectedItems.push(JSON.parse(JSON.stringify(item)));
+            this.selectionSelect(item);
         } else {
-            const idx = this.temporarySelectedItems.findIndex(a => a._id === item._id);
-            if (idx > -1) {
-                this.temporarySelectedItems.splice(idx, 1);
-            }
+            delete this.itemUpdateForm[item._id];
         }
-    }
-
-    /**
-     * Called by each selected row. Used to two-way bind quantity.
-     * @param _id - The id to find in temporarySelectedItems array.
-     * @returns Item - The item with the same id.
-     */
-    temporarySelectedItemsFind(_id: string): Item {
-        return this.temporarySelectedItems.find(a => a._id === _id);
     }
 
     /**
@@ -343,6 +361,23 @@ export class GroupComponent implements OnInit {
         return 'expired';
     }
 
+    f(id) {
+        return this.itemUpdateForm[id].controls;
+    }
+
+    /** Loops through itemAddForm and checks if any form is invalid.
+     * @returns isInvalid - True if any form is invalid.
+     */
+    checkIfInvalid(): Boolean {
+        let isInvalid = false;
+        for (const form of Object.values(this.itemUpdateForm)) {
+            if (form.invalid) {
+                isInvalid = true;
+            }
+        }
+        return isInvalid;
+    }
+
     private deleteThisGroup(): void {
         console.log('delete group');
         this.groupsService.deleteGroup(this.groupName).subscribe(results => {
@@ -350,5 +385,9 @@ export class GroupComponent implements OnInit {
                 this.back();
             }
         });
+    }
+
+    private notify(message: string) {
+        this.messageService.notify(message);
     }
 }

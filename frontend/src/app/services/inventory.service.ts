@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
@@ -110,18 +110,25 @@ export class InventoryService {
       this.http.post<Item>(this.inventoryUrl, item, httpOptions).pipe(
         tap(_ => this.log(`added item w/ id=${item._id}`)),
         catchError(this.handleError<Item>('addItem'))
-      ).subscribe(result => {
-        if(result) {
-          this.log('success - item is created');
-
-          this.localInv.push(result);
-          // TODO - you add-item does not fetch for localInv. if you add items with empty localInv,
-          // only the new items are pushed into the localInv, making the array not have size==0, so
-          // it will not fetch data from backend.
-          this.groupsService.addLocalGroupSize(result.group, 1);
+      ).subscribe({
+        next: response => {
+          if(response) {
+            this.log('success - item is created');
+  
+            this.localInv.push(response);
+            // TODO - you add-item does not fetch for localInv. if you add items with empty localInv,
+            // only the new items are pushed into the localInv, making the array not have size==0, so
+            // it will not fetch data from backend.
+            this.groupsService.addLocalGroupSize(response.group, 1);
+          }
+          obs.next(response);
+        },
+        error: err => {
+          obs.error(err);
+        },
+        complete: () => {
+          obs.complete();
         }
-        obs.next(result);
-        obs.complete();
       });
     });
   }
@@ -180,32 +187,39 @@ export class InventoryService {
       this.http.put(url, item, httpOptions).pipe(
         tap(_ => this.log(`updated item name=${item.name}, expirationDate=${item.expirationDate}`)),
         catchError(this.handleError<any>('updateItem'))
-      ).subscribe(results => {
-        if (results) {
-          // If item was returned.
-          if (results._id) {
-
-            // update old item with new value from results
-            this.log('success - item is updated');
-            
-            existing.name = results.name;
-            existing.quantity = results.quantity;
-            existing.addedDate = results.addedDate;
-            existing.expirationDate = results.expirationDate;
-            existing.group = results.group;
-            this.groupsService.addLocalGroupSize(item.prevGroup, -1);
-            this.groupsService.addLocalGroupSize(results.group, 1);
-          } else if (results.n === 1) {
-
-            // If item is deleted.
-            this.log('success - item is deleted');
-
-            this.localInv = this.localInv.filter(i => i._id !== item._id);
-            this.groupsService.addLocalGroupSize(item.group, -1);
+      ).subscribe({
+        next: response => {
+          if (response) {
+            // If item was returned.
+            if (response._id) {
+  
+              // update old item with new value from response
+              this.log('success - item is updated');
+              
+              existing.name = response.name;
+              existing.quantity = response.quantity;
+              existing.addedDate = response.addedDate;
+              existing.expirationDate = response.expirationDate;
+              existing.group = response.group;
+              this.groupsService.addLocalGroupSize(item.prevGroup, -1);
+              this.groupsService.addLocalGroupSize(response.group, 1);
+            } else if (response.n === 1) {
+  
+              // If item is deleted.
+              this.log('success - item is deleted');
+  
+              this.localInv = this.localInv.filter(i => i._id !== item._id);
+              this.groupsService.addLocalGroupSize(item.group, -1);
+            }
           }
+          obs.next(response);
+        },
+        error: err => {
+          obs.error(err);
+        },
+        complete: () => {
+          obs.complete();
         }
-        obs.next(results);
-        obs.complete();
       });
     });
   }
@@ -241,7 +255,26 @@ export class InventoryService {
    * @param result - The results received.
    */
   private handleError<T>(operation = 'operation', result?: T) {
-    return this.messageService.handleError<T>(operation, result);
+    return (error: any): Observable<T> => {
+
+      console.log('caught an error from inventory.service');
+
+      switch(error.status) {
+        case 400:
+        case 401:
+        case 403:
+        case 409:
+          return throwError(error);
+        case 504:
+
+          // Create appropriate error.message for displaying to user.
+          return throwError(new HttpErrorResponse({status: 504, error: "Connection to server failed"}))
+        default:
+
+          // Create appropriate error.message for displaying to user.
+          return throwError(new HttpErrorResponse({status: error.status, error: "Unknown error"}));
+      }
+    };
   }
 
   /**

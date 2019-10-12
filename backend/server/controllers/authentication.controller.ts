@@ -60,7 +60,7 @@ class AuthenticationController {
         const { username, password, } = ctx.request.body;
 
         if (password.length < this.passwordMinimumLength) {
-            ctx.throw(406, 'Password too short');
+            ctx.throw(400, 'Password too short');
         }
 
         await bcrypt.hash(password, this.saltRounds).then(async (hash) => {

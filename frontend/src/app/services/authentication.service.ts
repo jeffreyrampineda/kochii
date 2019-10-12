@@ -84,18 +84,18 @@ export class AuthenticationService {
     private handleError<T>(operation = 'operation', result?: T) {
         return (error: any): Observable<T> => {
 
-            this.log(`error - ${error.status} - ${error.message}`);
+            this.log(`${error.status} - ${error.message}`, 'Error');
 
             // Do something before throwing to login/register component
             switch(error.status) {
+                // 400 - Password too short.
                 // 401 - Authentication failed.
                 // 409 - Username already exists.
-                // 406 - Password too short.
-                // 504 - Server is busy.
+                // 504 - Cannot connect to server.
 
+                case 400:
                 case 401:
                 case 409:
-                case 406:
                     return throwError(error);
                 case 504:
 
@@ -113,7 +113,7 @@ export class AuthenticationService {
      * Adds the message to the messageService for logging.
      * @param message - The message to log.
      */
-    private log(message: string) {
-        this.messageService.add(`authenticationService: ${message}`);
+    private log(message: string, type: string = 'Message') {
+        this.messageService.add(`authenticationService: ${message}`, type);
     }
 }

@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subject, Observable, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Subject, Observable, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
 import { Group } from 'src/app/interfaces/group';
+import { MessageService } from 'src/app/services/message.service';
 
 // -------------------------------------------------------------
 
@@ -27,6 +28,7 @@ export class ItemAddComponent implements OnInit {
   constructor(
     private router: Router,
     private inventoryService: InventoryService,
+    private messageService: MessageService,
     private groupsService: GroupsService,
     private formBuilder: FormBuilder
   ) {
@@ -68,11 +70,23 @@ export class ItemAddComponent implements OnInit {
       }
     );
 
-    forkJoin(observablesGroup).subscribe(
-      x => {
+    forkJoin(observablesGroup).subscribe({
+      next: response => {
+        const successful = response.reduce((acc: number, curr) => {
+          if (curr) {
+            acc += 1;
+          }
+          return acc;
+        }, 0);
+        this.notify(`${successful}/${observablesGroup.length} items were successfully added.`);
+      },
+      error: err => {
+        // forkJoin handle error
+      },
+      complete: () => {
         this.router.navigate(['dashboard/inventory']);
       }
-    );
+    });
   }
 
   getGroups(): void {
@@ -101,11 +115,9 @@ export class ItemAddComponent implements OnInit {
    */
   addItem(newItem: Item): Observable<any> {
     return this.inventoryService.addItem(newItem).pipe(
-      map(
-        results => {
-          return results;
-        }
-      )
+      catchError((error: any): Observable<any> => {
+        return of(undefined);
+      }),
     );
   }
 
@@ -116,7 +128,10 @@ export class ItemAddComponent implements OnInit {
         Validators.maxLength(20),
         Validators.required
       ]],
-      quantity: [null, Validators.required],
+      quantity: [1, [
+        Validators.min(1),
+        Validators.required
+      ]],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required],
       group: ['Default', Validators.required],
@@ -133,4 +148,8 @@ export class ItemAddComponent implements OnInit {
 
   /** Convenience getter for easy access to form fields. */
   get f() { return this.itemAddForm[0].controls; }
+
+  private notify(message: string) {
+    this.messageService.notify(message);
+  }
 }
