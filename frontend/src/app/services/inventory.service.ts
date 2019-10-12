@@ -57,14 +57,21 @@ export class InventoryService {
       this.http.get<Item[]>(this.inventoryUrl).pipe(
         tap(_ => this.log('fetched inventory')),
         catchError(this.handleError('getInventory', []))
-      ).subscribe(inv => {
-        this.localInv = inv;
-        let filtered = this.localInv;
-        if (group !== '') {
-          filtered = this.localInv.filter(i => i.group === group);
+      ).subscribe({
+        next: response => {
+          this.localInv = response;
+          let filtered = this.localInv;
+          if (group !== '') {
+            filtered = this.localInv.filter(i => i.group === group);
+          }
+          obs.next(filtered);
+        },
+        error: err => {
+          obs.error(err);
+        },
+        complete: () => {
+          obs.complete();
         }
-        obs.next(filtered);
-        obs.complete();
       });
     });
   }
@@ -207,8 +214,7 @@ export class InventoryService {
   
               // If item is deleted.
               this.log('success - item is deleted');
-  
-              this.localInv = this.localInv.filter(i => i._id !== item._id);
+              this.localInv = this.localInv.filter(i => i._id !== existing._id);
               this.groupsService.addLocalGroupSize(item.group, -1);
             }
           }

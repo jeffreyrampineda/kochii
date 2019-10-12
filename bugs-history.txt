@@ -1,3 +1,21 @@
+bug#0003 - Deducting extra quantity when using Remove.
+    Error Message)
+        None
+    Scenario A)
+        item with quantity=2 exists,
+        remove item quantity=-1,
+        item is deleted.
+        frontend:
+            X - inventory.data sets item quantity=0
+        backend:
+            X - item is deleted from database
+    Problem)
+        
+        backend deducts extra quantity when checking item to be deleted. (line 81-107).
+    Fixed)
+        backend change (line 107) to *[result.quantity <= 0]*.
+        frontend inventory.data refresh by getInventory()
+
 bug#0002 - ERROR if item is updated or added with quantity 0:
     Error Message)
         throw new Error('Quantity is 0');

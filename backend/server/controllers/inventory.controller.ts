@@ -101,8 +101,8 @@ class InventoryController {
             );
         }
 
-        // If old quantity + new quantity net to 0 OR new quantity == 0, delete Item.
-        if (result.quantity + quantity <= 0 || quantity == 0) {
+        // If new quantity is less than or equal to 0, delete Item.
+        if (result.quantity <= 0) {
             console.log("removing item.");
 
             HistoryController.create({ date: Date.now(), method: 'Remove', target: name, description: '' })

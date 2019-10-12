@@ -60,30 +60,42 @@ export class GroupComponent implements OnInit {
 // -------------------------------------------------------------
 
     ngOnInit() {
+        // Set up inventory: MatTableDataSource with empty inital data
+        this.inventory = new MatTableDataSource();
+        this.inventory.paginator = this.paginator;
+        this.inventory.sort = this.sort;
+
+        // Used to sort data by expirationDate | asc.
+        this.inventory.sortingDataAccessor = (item, property) => {
+            switch (property) {
+                case 'expirationDate': return new Date(item.expirationDate);
+                default: return item[property];
+            }
+        };
+
+        // Populate inventory.data with data
         this.getInventory();
         this.getGroups();
     }
 
     /**
-     * Get all items then sets up the inventory: MatTableDataSource for
+     * Get all items then populate/refresh inventory.data for
      * presentation.
      */
     getInventory(): void {
         const groupName = this.route.snapshot.paramMap.get('groupName');
         this.groupName = groupName;
 
-        this.inventoryService.getInventory(this.groupName).subscribe(inventory => {
-            this.inventory = new MatTableDataSource(inventory);
-            this.inventory.paginator = this.paginator;
-            this.inventory.sort = this.sort;
-
-            // Used to sort data by expirationDate | asc.
-            this.inventory.sortingDataAccessor = (item, property) => {
-                switch (property) {
-                  case 'expirationDate': return new Date(item.expirationDate);
-                  default: return item[property];
-                }
-            };
+        this.inventoryService.getInventory(this.groupName).subscribe({
+            next: response => {
+                this.inventory.data = response;
+            },
+            error: err => {
+                // Error
+            },
+            complete: () => {
+                // Complete
+            }
         });
     }
 
@@ -120,36 +132,10 @@ export class GroupComponent implements OnInit {
         }
 
         return this.inventoryService.updateItem(newItem, this.option).pipe(
-            map(
-                results => {
-                    if (results) {
-                        // If item is updated.
-                        if (results._id) {
-                            if (this.option === 'inc') {
-                                this.inventory.data.find(i => i._id === results._id).quantity += newItem.quantity;
-                            } else if (this.option === 'set') {
-                                const ref = this.inventory.data.find(i => i._id === results._id);
-                                ref.quantity = newItem.quantity;
-                                if (newItem.group !== this.groupName) {
-                                    this.removeItemFromLocalInventoryById(ref._id);
-                                }
-                            }
-                        } else if (results.n === 1) {
-                            // If item is deleted.
-                            this.inventory.data = this.inventory.data.filter(i => i._id !== newItem._id);
-                        }
-                    }
-                    return results;
-                }
-            ),
             catchError((error: any): Observable<any> => {
                 return of(undefined);
             }),
         );
-    }
-
-    removeItemFromLocalInventoryById(id: string): void {
-        this.inventory.data = this.inventory.data.filter(i => i._id !== id);
     }
 
     /**
@@ -179,6 +165,7 @@ export class GroupComponent implements OnInit {
                 // forkJoin handle error
             },
             complete: () => {
+                this.getInventory();
                 this.selectColumnToggle('');
             }
         });
