@@ -43,7 +43,6 @@ export class HistoryComponent implements OnInit {
   clear(): void {
     this.historyService.deleteAllHistory().subscribe(
       response => {
-        console.log(response);
         if (response.n === this.history.data.length) {
           this.history.data = [];
         }

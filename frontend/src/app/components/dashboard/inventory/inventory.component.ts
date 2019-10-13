@@ -54,9 +54,7 @@ export class InventoryComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result && result !== '') {
-                this.groupsService.addGroup(result).subscribe(x => {
-                    console.log(x);
-                });
+                this.groupsService.addGroup(result).subscribe();
             }
         });
     }

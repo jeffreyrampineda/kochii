@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 import { User } from '../interfaces/user';
 import { MessageService } from './message.service';
@@ -35,6 +35,10 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
+    isLoggedIn(): boolean {
+        return this.currentUserSubject.value ? true : false;
+    }
+
     login(user: User): Observable<User> {
         return this.http.post<User>(`${this.authenticationUrl}/login`, user)
             .pipe(
@@ -44,7 +48,6 @@ export class AuthenticationService {
                     return response;
                 }),
                 tap(_ => this.log(`logging in`)),
-                catchError(this.handleError<User>('login'))
             );
     }
 
@@ -57,7 +60,6 @@ export class AuthenticationService {
                 return response;
             }),
             tap(_ => this.log(`registering`)),
-            catchError(this.handleError<User>('register'))
         );
     }
 
@@ -75,39 +77,6 @@ export class AuthenticationService {
     }
 
 // -------------------------------------------------------------
-
-    /**
-     * Error handler used for any http errors.
-     * @param operation - The type of operation used.
-     * @param result - The results received.
-     */
-    private handleError<T>(operation = 'operation', result?: T) {
-        return (error: any): Observable<T> => {
-
-            this.log(`${error.status} - ${error.message}`, 'Error');
-
-            // Do something before throwing to login/register component
-            switch(error.status) {
-                // 400 - Password too short.
-                // 401 - Authentication failed.
-                // 409 - Username already exists.
-                // 504 - Cannot connect to server.
-
-                case 400:
-                case 401:
-                case 409:
-                    return throwError(error);
-                case 504:
-
-                    // Create appropriate error.message for displaying to user.
-                    return throwError(new HttpErrorResponse({status: 504, error: "Connection to server failed"}))
-                default:
-
-                    // Create appropriate error.message for displaying to user.
-                    return throwError(new HttpErrorResponse({status: error.status, error: "Unknown error"}));
-            }
-        };
-    }
 
     /**
      * Adds the message to the messageService for logging.

@@ -6,6 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 // Interceptors
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 
 // Pipes
 import { ExpirationPipe } from './pipes/expiration.pipes';
@@ -76,7 +77,8 @@ import { DialogOverviewExampleDialogComponent } from './components/dashboard/inv
     AppMaterialModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
   entryComponents: [

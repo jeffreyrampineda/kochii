@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
 import { Group } from 'src/app/interfaces/group';
@@ -36,7 +36,6 @@ export class GroupsService {
       }
       this.http.get<Group[]>(url).pipe(
        tap(_ => this.log('fetched groups')),
-        catchError(this.handleError('getGroups', []))
       ).subscribe(gro => {
         this.localGroups = gro;
         obs.next(this.localGroups);
@@ -55,7 +54,6 @@ export class GroupsService {
     return new Observable(obs => {
       this.http.post<Group>(url, group, httpOptions).pipe(
         tap(_ => this.log(`added group w/ name=${group.name}`)),
-        catchError(this.handleError<Group>('addGroup'))
       ).subscribe(gro => {
         this.localGroups.push(gro);
         obs.next(gro);
@@ -72,8 +70,7 @@ export class GroupsService {
     return new Observable(obs => {
       this.http.delete(url, httpOptions).pipe(
         tap(_ => this.log(`deleted group name=${name}`)),
-        catchError(this.handleError<any>('deleteGroup'))
-      ).subscribe(results => {
+      ).subscribe((results: any) => {
         if (results) {
           if (results.ok === 1) {
             this.localGroups = this.localGroups.filter(g => g.name !== name);
@@ -96,15 +93,6 @@ export class GroupsService {
   }
 
 // -------------------------------------------------------------
-
-  /**
-   * Error handler used for any http errors.
-   * @param operation - The type of operation used.
-   * @param result - The results received.
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return this.messageService.handleError<T>(operation, result);
-  }
 
   /**
    * Adds the message to the messageService for logging.

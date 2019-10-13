@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
 import { Recipe } from 'src/app/interfaces/recipe';
@@ -27,7 +27,6 @@ export class RecipeService {
     return this.http.get<Recipe[]>(this.recipesUrl)
       .pipe(
         tap(_ => this.log('fetched recipes')),
-        catchError(this.handleError('getRecipes', []))
       );
   }
 
@@ -39,20 +38,10 @@ export class RecipeService {
     return this.http.get<Recipe>(this.recipesUrl + `/id/${_id}`)
       .pipe(
         tap(_ => this.log(`fetched recipe id=${_id}`)),
-        catchError(this.handleError<Recipe>(`getRecipeById id=${_id}`))
       );
   }
 
 // -------------------------------------------------------------
-
-  /**
-   * Error handler used for any http errors.
-   * @param operation - The type of operation used.
-   * @param result - The results received.
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return this.messageService.handleError<T>(operation, result);
-  }
 
   /**
    * Adds the message to the messageService for logging.

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
 import { GroupsService } from './groups.service';
@@ -39,7 +39,6 @@ export class InventoryService {
     return this.http.get<Item[]>(url)
       .pipe(
         tap(_ => this.log(`fetched items in group ${groupName}`)),
-        catchError(this.handleError('getItemsInGroup', []))
       );
   } */
 
@@ -56,7 +55,6 @@ export class InventoryService {
       }
       this.http.get<Item[]>(this.inventoryUrl).pipe(
         tap(_ => this.log('fetched inventory')),
-        catchError(this.handleError('getInventory', []))
       ).subscribe({
         next: response => {
           this.localInv = response;
@@ -93,7 +91,6 @@ export class InventoryService {
     return this.http.get<Item[]>(url, options)
       .pipe(
         tap(_ => this.log(`fetched items names=${names}`)),
-        catchError(this.handleError('getItemsByNames', []))
       );
   }
 
@@ -116,7 +113,6 @@ export class InventoryService {
     return new Observable(obs => {
       this.http.post<Item>(this.inventoryUrl, item, httpOptions).pipe(
         tap(_ => this.log(`added item w/ id=${item._id}`)),
-        catchError(this.handleError<Item>('addItem'))
       ).subscribe({
         next: response => {
           if(response) {
@@ -150,7 +146,6 @@ export class InventoryService {
     return this.http.delete(url, httpOptions)
       .pipe(
         tap(_ => this.log(`deleted item id=${_id}`)),
-        catchError(this.handleError<Item>('deleteItem'))
       );
   } */
 
@@ -167,7 +162,6 @@ export class InventoryService {
     return this.http.delete(this.inventoryUrl, options)
       .pipe(
         tap(_ => this.log(`deleted many items ids=${_ids}`)),
-        catchError(this.handleError<Item>('deleteManyItem'))
       );
   } */
 
@@ -193,9 +187,8 @@ export class InventoryService {
     return new Observable(obs => {
       this.http.put(url, item, httpOptions).pipe(
         tap(_ => this.log(`updated item name=${item.name}, expirationDate=${item.expirationDate}`)),
-        catchError(this.handleError<any>('updateItem'))
       ).subscribe({
-        next: response => {
+        next: (response: any) => {
           if (response) {
             // If item was returned.
             if (response._id) {
@@ -254,34 +247,6 @@ export class InventoryService {
   }
 
 // -------------------------------------------------------------
-
-  /**
-   * Error handler used for any http errors.
-   * @param operation - The type of operation used.
-   * @param result - The results received.
-   */
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      console.log('caught an error from inventory.service');
-
-      switch(error.status) {
-        case 400:
-        case 401:
-        case 403:
-        case 409:
-          return throwError(error);
-        case 504:
-
-          // Create appropriate error.message for displaying to user.
-          return throwError(new HttpErrorResponse({status: 504, error: "Connection to server failed"}))
-        default:
-
-          // Create appropriate error.message for displaying to user.
-          return throwError(new HttpErrorResponse({status: error.status, error: "Unknown error"}));
-      }
-    };
-  }
 
   /**
    * Adds the message to the messageService for logging.
