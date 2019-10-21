@@ -1,0 +1,28 @@
+.k-card {
+    text-align: center;
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.k-card-title {
+    font-size: 20px;
+    font-weight: bold;
+    display: block;
+}
+
+/* Used for login/register */
+.k-card-form {
+    min-width: 150px;
+    max-width: 500px;
+    padding: 15px;
+}
+
+.k-card-form-field-full {
+    width: 100%;
+}
+
+.k-card-actions {
+    text-align: center;
+    padding-bottom: 15px;
+}
+/* ----------------------- */

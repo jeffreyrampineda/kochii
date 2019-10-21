@@ -1,4 +1,9 @@
-<mat-grid-list cols="2" rowHeight="2:1">
-  <mat-grid-tile *ngFor="let group of localGroups" routerLink="{{ group.name }}">{{ group.name }} - size: {{ group.size }} items</mat-grid-tile>
-  <mat-grid-tile (click)="addGroup()">Add Group</mat-grid-tile>
-</mat-grid-list>
+<div class="k-grid k-grid-2">
+  <mat-card class="k-card" *ngFor="let group of localGroups" routerLink="{{ group.name }}">
+    <span class="k-card-title">{{ group.name }}</span>
+    <span>{{ group.size }} items</span>
+  </mat-card>
+  <mat-card class="k-card">
+    <span class="k-card-title"(click)="addGroup()">Add Group</span>
+  </mat-card>
+</div>

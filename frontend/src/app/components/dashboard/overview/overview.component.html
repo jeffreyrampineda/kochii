@@ -1,42 +1,33 @@
-<div class="k-overview-row">
-  <div class="k-overview-column-25">
-    <mat-card class="k-overview-card">
-      <span class="k-overview-value">{{ localInv.length }}</span>
-      <span>Inventory size</span>
+<div class="k-grid k-grid-4">
+  <mat-card class="k-card">
+    <span class="k-card-title">{{ localInv.length }}</span>
+    <span>Inventory size</span>
+  </mat-card>
+  <mat-card class="k-card">
+    <span class="k-card-title">{{ numberOfExpired }}</span>
+    <span>Expired items</span>
+  </mat-card>
+  <mat-card class="k-card">
+    <span class="k-card-title">{{ 100 | currency }}</span>
+    <span>Weekly $ spent</span>
+  </mat-card>
+  <mat-card class="k-card">
+    <span class="k-card-title">N/A</span>
+    <span>Weekly items removed</span>
+  </mat-card>
+
+  <div class="k-grid-column-2">
+    <mat-card class="k-card">
+      <div class="canvas-container">
+        <canvas id="chart-line">{{ lineChart }}</canvas>
+      </div>
     </mat-card>
   </div>
-  <div class="k-overview-column-25">
-    <mat-card class="k-overview-card">
-      <span class="k-overview-value">{{ numberOfExpired }}</span>
-      <span>Expired items</span>
-    </mat-card>
-  </div>
-  <div class="k-overview-column-25">
-    <mat-card class="k-overview-card">
-      <span class="k-overview-value">{{ 100 | currency }}</span>
-      <span>Weekly $ spent</span>
-    </mat-card>
-  </div>
-  <div class="k-overview-column-25">
-    <mat-card class="k-overview-card">
-      <span class="k-overview-value">N/A</span>
-      <span>Weekly items removed</span>
-    </mat-card>
-  </div>
-</div>
-<div class="k-overview-row">
-  <div class="k-overview-column-50">
-    <mat-card class="k-overview-card">
-      <canvas id="chart-line">
-        {{ lineChart }}
-      </canvas>
-    </mat-card>
-  </div>
-  <div class="k-overview-column-50">
-    <mat-card class="k-overview-card">
-      <canvas id="chart-doughnut">
-        {{ doughnutChart }}
-      </canvas>
+  <div class="k-grid-column-2">
+    <mat-card class="k-card">
+      <div class="canvas-container">
+        <canvas id="chart-doughnut">{{ doughnutChart }}</canvas>
+      </div>
     </mat-card>
   </div>
 </div>
