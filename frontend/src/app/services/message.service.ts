@@ -21,8 +21,8 @@ export class MessageService {
    * Add the message to the messages array.
    * @param message - The message received.
    */
-  add(message: string) {
-    console.log(`[Message] - ${message}`);
+  add(message: string, type: string = 'Message') {
+    console.log(`[${type}] - ${message}`);
     this.messages.push(message);
   }
 

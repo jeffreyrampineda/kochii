@@ -1,9 +1,13 @@
 <div class="k-grid k-grid-2">
   <mat-card class="k-card" *ngFor="let group of groups" routerLink="{{ group.name }}">
-    <span class="k-card-title">{{ group.name }}</span>
-    <span>{{ group.size }} items</span>
+    <mat-card-header>
+      <mat-card-title>{{ group.name }}</mat-card-title>
+      <mat-card-subtitle>{{ group.size }} items</mat-card-subtitle>
+    </mat-card-header>
   </mat-card>
-  <mat-card class="k-card">
-    <span class="k-card-title"(click)="addGroup()">Add Group</span>
+  <mat-card class="k-card" (click)="addGroup()">
+    <mat-card-header>
+      <mat-card-title>Add Group</mat-card-title>
+    </mat-card-header>
   </mat-card>
 </div>

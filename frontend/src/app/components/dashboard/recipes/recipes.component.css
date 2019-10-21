@@ -1,15 +1,3 @@
-table {
-    width: 100%;
-}
-
-.k-actions-buttons * {
-    margin: 0px;
-}
-
-.mat-card-actions {
-    margin: 0px;
-    overflow: hidden;
-}
 
 .mat-row:hover {
     background-color: #f6f6f6;

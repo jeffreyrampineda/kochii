@@ -8,11 +8,6 @@ class InventoryController {
         ctx.body = await Item.find().sort({ expirationDate: -1 });
     }
 
-    async getByNames(ctx) {
-        let names = ctx.query.names.split(',');
-        ctx.body = await Item.find({ name: { $in: names } })
-    }
-
     async searchByName(ctx) {
         ctx.body = await Item.find({ name: { $regex: "^" + ctx.params.name } });
     }
@@ -21,6 +16,11 @@ class InventoryController {
         const name = ctx.params.name;
 
         ctx.body = await Item.findOne({ name, });
+    }
+
+    async getByNames(ctx) {
+        let names = ctx.query.names.split(',');
+        ctx.body = await Item.find({ name: { $in: names } })
     }
 
     async getById(ctx) {
@@ -124,14 +124,6 @@ class InventoryController {
         }
 
         ctx.body = result;
-    }
-
-    async delete(ctx) {
-        ctx.body = await Item.deleteOne({ _id: ctx.params.id })
-    }
-
-    async deleteMany(ctx) {
-        ctx.body = await Item.deleteMany({ _id: { $in: ctx.request.body }})
     }
 }
 

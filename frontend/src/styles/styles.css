@@ -5,6 +5,16 @@ button:focus {
     outline:none !important;
 }
 
+table {
+    width: 100%;
+    table-layout:fixed;
+}
+
+.mat-card-actions {
+    margin: 0px;
+    overflow: hidden;
+}
+
 /* Used for item-add/inventory/recipes */
 .k-actions-buttons {
     float: right;
@@ -30,4 +40,8 @@ button:focus {
     margin: auto;
     width: 30%;
     margin-top: 200px;
+}
+
+.k-text-center {
+    text-align: center;
 }

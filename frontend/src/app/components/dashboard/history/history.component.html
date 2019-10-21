@@ -1,12 +1,11 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>History</mat-card-title>
+    <mat-card-title>History
+      <div class="k-actions-buttons">
+        <button mat-button (click)="clear()">Clear</button>
+      </div>
+    </mat-card-title>
   </mat-card-header>
-  <mat-card-actions>
-    <div class="k-action-buttons">
-      <button mat-button (click)="clear()">Clear</button>
-    </div>
-  </mat-card-actions>
   <mat-card-content>
     <table mat-table [dataSource]="history" matSort>
 

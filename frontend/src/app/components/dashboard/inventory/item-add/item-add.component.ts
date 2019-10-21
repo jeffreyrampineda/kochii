@@ -20,8 +20,8 @@ import { MessageService } from 'src/app/services/message.service';
 export class ItemAddComponent implements OnInit {
 
   dateToday = new Date();
-  results: Object;
-  searchTerm$ = new Subject<string>();
+  existingItems: Item[];
+  searchTerm = new Subject<string>();
   itemAddForm: FormGroup[] = [];
   groups: Group[];
 
@@ -36,9 +36,9 @@ export class ItemAddComponent implements OnInit {
     // Time is removed.
     this.dateToday.setHours(0, 0, 0, 0);
 
-    this.inventoryService.search(this.searchTerm$).subscribe({
+    this.inventoryService.search(this.searchTerm).subscribe({
       next: response => {
-        this.results = response;
+        this.existingItems = response;
       },
       error: err => {
         // Error

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 import { tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
@@ -137,35 +137,6 @@ export class InventoryService {
   }
 
   /**
-   * Delete the item with the specified id.
-   * @param _id - The id of the item to delete.
-   */
-/*   deleteItem(_id: string): Observable<any> {
-    const url = `${this.inventoryUrl}/${_id}`;
-
-    return this.http.delete(url, httpOptions)
-      .pipe(
-        tap(_ => this.log(`deleted item id=${_id}`)),
-      );
-  } */
-
-  /**
-   * Delete all items with the id in the specified array.
-   * @param _ids - The array of ids to be deleted.
-   */
-/*   deleteManyItem(_ids: string[]): Observable<any> {
-    const options = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      body: _ids
-    };
-
-    return this.http.delete(this.inventoryUrl, options)
-      .pipe(
-        tap(_ => this.log(`deleted many items ids=${_ids}`)),
-      );
-  } */
-
-  /**
    * Update the item with the same name and expirationDate.
    * If no item is found, create new item.
    * @param item - The item to be updated.
@@ -227,7 +198,7 @@ export class InventoryService {
    * Search for the specified terms every 400ms.
    * @param terms - The terms used to search.
    */
-  search(terms: Observable<string>) {
+  search(terms: Observable<string>): Observable<Item[]> {
     return terms
       .pipe(
         debounceTime(400),
@@ -240,10 +211,11 @@ export class InventoryService {
    * Search for the item with the similar name as the term.
    * @param term - The term used to search
    */
-  searchEntries(term) {
+  searchEntries(term): Observable<Item[]> {
     if (term !== '') {
-      return this.http.get(this.inventoryUrl + this.queryUrl + term);
+      return this.http.get<Item[]>(this.inventoryUrl + this.queryUrl + term);
     }
+    return of(undefined);
   }
 
 // -------------------------------------------------------------

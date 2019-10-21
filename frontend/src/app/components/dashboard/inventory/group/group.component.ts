@@ -114,21 +114,6 @@ export class GroupComponent implements OnInit {
     }
 
     /**
-     * Delete the item with the specified id. If successful, update
-     * the inventory for presentation.
-     * @param _id - The id of the item to delete.
-     */
-/*     deleteItem(_id: string): void {
-        this.inventoryService.deleteItem(_id).subscribe(
-            results => {
-                if (results.ok === 1) {
-                    this.inventory.data = this.inventory.data.filter(i => i._id !== _id);
-                }
-            }
-        );
-    } */
-
-    /**
      * Update the item with the same name and expirationDate.
      * Option declares whether to set or inc.
      * @param newItem - The item to be updated.

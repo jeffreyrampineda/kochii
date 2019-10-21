@@ -4,7 +4,6 @@ import HistoryController from '../controllers/history.controller';
 const router = new Router();
 
 router.get('/', HistoryController.getAll);
-/* router.del('/:id', HistoryController.delete); */
 router.del('/', HistoryController.deleteAll);
 
 export const HistoryRoute = router.routes();

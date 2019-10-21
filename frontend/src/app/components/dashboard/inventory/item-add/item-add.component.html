@@ -18,14 +18,14 @@
                       formControlName="name"
                       type="text"
                       placeholder="Name"
-                      (keyup)="searchTerm$.next($event.target.value)" 
+                      (keyup)="searchTerm.next($event.target.value)" 
                       [matAutocomplete]="auto" />
               <mat-error *ngIf="f.name.errors">
                 <div *ngIf="f.name.errors.required">Name is required</div>
               </mat-error>
               <mat-autocomplete #auto="matAutocomplete">
-                <mat-option *ngFor="let result of results | slice:0:9" [value]="result.name">
-                  {{ result.name }}
+                <mat-option *ngFor="let item of existingItems | slice:0:9" [value]="item.name">
+                  {{ item.name }}
                 </mat-option>
               </mat-autocomplete>
           </mat-form-field>
