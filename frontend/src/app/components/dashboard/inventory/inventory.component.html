@@ -1,5 +1,5 @@
 <div class="k-grid k-grid-2">
-  <mat-card class="k-card" *ngFor="let group of localGroups" routerLink="{{ group.name }}">
+  <mat-card class="k-card" *ngFor="let group of groups" routerLink="{{ group.name }}">
     <span class="k-card-title">{{ group.name }}</span>
     <span>{{ group.size }} items</span>
   </mat-card>

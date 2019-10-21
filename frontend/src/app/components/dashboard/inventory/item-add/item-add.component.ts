@@ -23,7 +23,7 @@ export class ItemAddComponent implements OnInit {
   results: Object;
   searchTerm$ = new Subject<string>();
   itemAddForm: FormGroup[] = [];
-  localGroups: Group[];
+  groups: Group[];
 
   constructor(
     private router: Router,
@@ -36,11 +36,17 @@ export class ItemAddComponent implements OnInit {
     // Time is removed.
     this.dateToday.setHours(0, 0, 0, 0);
 
-    this.inventoryService.search(this.searchTerm$).subscribe(
-      results => {
-        this.results = results;
+    this.inventoryService.search(this.searchTerm$).subscribe({
+      next: response => {
+        this.results = response;
+      },
+      error: err => {
+        // Error
+      },
+      complete: () => {
+        // TODO - stop loading.
       }
-    );
+    });
   }
 
 // -------------------------------------------------------------
@@ -90,8 +96,16 @@ export class ItemAddComponent implements OnInit {
   }
 
   getGroups(): void {
-    this.groupsService.getGroups().subscribe(gro => {
-      this.localGroups = gro;
+    this.groupsService.getGroups().subscribe({
+      next: response => {
+        this.groups = response;
+      },
+      error: err => {
+        // Error
+      },
+      complete: () => {
+        // TODO - stop loading.
+      }
     });
   }
 
@@ -147,6 +161,7 @@ export class ItemAddComponent implements OnInit {
   }
 
   /** Convenience getter for easy access to form fields. */
+  // TODO - Review if and why this works: only gets itemAddForm[0] but what if theres more.
   get f() { return this.itemAddForm[0].controls; }
 
   private notify(message: string) {

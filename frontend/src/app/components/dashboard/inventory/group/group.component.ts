@@ -35,7 +35,7 @@ export class GroupComponent implements OnInit {
     inventory: MatTableDataSource<Item>;
     showSelect: Boolean = false;
     selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
-    localGroups: Group[];
+    groups: Group[];
 
     // Used for closing and opening side menu
     parentComponent: DashboardComponent;
@@ -94,14 +94,22 @@ export class GroupComponent implements OnInit {
                 // Error
             },
             complete: () => {
-                // Complete
+                // TODO - stop loading.
             }
         });
     }
 
     getGroups(): void {
-        this.groupsService.getGroups().subscribe(gro => {
-            this.localGroups = gro;
+        this.groupsService.getGroups().subscribe({
+            next: response => {
+                this.groups = response;
+            },
+            error: err => {
+                // Error
+            },
+            complete: () => {
+                // TODO - stop loading.
+            }
         });
     }
 
@@ -162,7 +170,7 @@ export class GroupComponent implements OnInit {
                 this.notify(`${successful}/${observablesGroup.length} items were successfully updated.`);
             },
             error: err => {
-                // forkJoin handle error
+                // Error
             },
             complete: () => {
                 this.getInventory();
@@ -220,14 +228,20 @@ export class GroupComponent implements OnInit {
         });
 
         // Confirmed.
-        dialogRef.afterClosed().subscribe(
-            (result: Item[]) => {
-                if (result && result.length > 0) {
+        dialogRef.afterClosed().subscribe({
+            next: (response: Item[]) => {
+                if (response && response.length > 0) {
                     console.log(`Confirmed... ${this.option}`);
-                    this.updateManyItem(result);
+                    this.updateManyItem(response);
                 }
+            },
+            error: err => {
+                // Error
+            },
+            complete: () => {
+                // TODO - stop loading.
             }
-        );
+        });
     }
 
     /**
@@ -326,11 +340,17 @@ export class GroupComponent implements OnInit {
                 ));
             });
 
-            forkJoin(observablesGroup).subscribe(
-                x => {
+            forkJoin(observablesGroup).subscribe({
+                next: response => {
                     this.deleteThisGroup();
+                },
+                error: err => {
+                    // Error
+                },
+                complete: () => {
+                    // TODO - stop loading.
                 }
-            );
+            });
 
         } else {
             this.deleteThisGroup();
@@ -367,9 +387,17 @@ export class GroupComponent implements OnInit {
 
     private deleteThisGroup(): void {
         console.log('delete group');
-        this.groupsService.deleteGroup(this.groupName).subscribe(results => {
-            if (results.ok === 1) {
-                this.back();
+        this.groupsService.deleteGroup(this.groupName).subscribe({
+            next: response => {
+                if (response.ok === 1) {
+                    this.back();
+                }
+            },
+            error: err => {
+                // Error
+            },
+            complete: () => {
+                // TODO - stop loading.
             }
         });
     }

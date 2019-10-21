@@ -36,10 +36,17 @@ export class GroupsService {
       }
       this.http.get<Group[]>(url).pipe(
        tap(_ => this.log('fetched groups')),
-      ).subscribe(gro => {
-        this.localGroups = gro;
-        obs.next(this.localGroups);
-        obs.complete();
+      ).subscribe({
+        next: response => {
+          this.localGroups = response;
+          obs.next(this.localGroups);
+        },
+        error: err => {
+          obs.error(err);
+        },
+        complete: () => {
+          obs.complete();
+        }
       });
     });
   }
@@ -54,10 +61,17 @@ export class GroupsService {
     return new Observable(obs => {
       this.http.post<Group>(url, group, httpOptions).pipe(
         tap(_ => this.log(`added group w/ name=${group.name}`)),
-      ).subscribe(gro => {
-        this.localGroups.push(gro);
-        obs.next(gro);
-        obs.complete();
+      ).subscribe({
+        next: response => {
+          this.localGroups.push(response);
+          obs.next(response);
+        },
+        error: err => {
+          obs.error(err);
+        },
+        complete: () => {
+          obs.complete();
+        }
       });
     });
   }
@@ -70,14 +84,21 @@ export class GroupsService {
     return new Observable(obs => {
       this.http.delete(url, httpOptions).pipe(
         tap(_ => this.log(`deleted group name=${name}`)),
-      ).subscribe((results: any) => {
-        if (results) {
-          if (results.ok === 1) {
-            this.localGroups = this.localGroups.filter(g => g.name !== name);
+      ).subscribe({
+        next: (response: any) => {
+          if (response) {
+            if (response.ok === 1) {
+              this.localGroups = this.localGroups.filter(g => g.name !== name);
+            }
           }
+          obs.next(response);
+        },
+        error: err => {
+          obs.error(err);
+        },
+        complete: () => {
+          obs.complete();
         }
-        obs.next(results);
-        obs.complete();
       });
     });
   }

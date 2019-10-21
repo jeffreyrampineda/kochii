@@ -31,12 +31,18 @@ export class RecipesComponent implements OnInit {
 
   /** Get all recipes and set them for presentation. */
   getRecipes(): void {
-    this.recipeService.getRecipes().subscribe(
-      recipes => {
-        this.recipes = new MatTableDataSource(recipes);
+    this.recipeService.getRecipes().subscribe({
+      next: response => {
+        this.recipes = new MatTableDataSource(response);
         this.recipes.paginator = this.paginator;
+      },
+      error: err => {
+          // Error
+      },
+      complete: () => {
+          // TODO - stop loading.
       }
-    );
+    });
   }
 
   /**

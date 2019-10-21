@@ -31,22 +31,34 @@ export class HistoryComponent implements OnInit {
 
   /** Get all history and set them for presentation. */
   getHistory(): void {
-    this.historyService.getHistory().subscribe(
-      history => {
-        this.history = new MatTableDataSource(history);
+    this.historyService.getHistory().subscribe({
+      next: response => {
+        this.history = new MatTableDataSource(response);
         this.history.paginator = this.paginator;
+      },
+      error: err => {
+        // Error
+      },
+      complete: () => {
+        // TODO - stop loading.
       }
-    );
+    });
   }
 
   /** Delete all history. */
   clear(): void {
-    this.historyService.deleteAllHistory().subscribe(
-      response => {
+    this.historyService.deleteAllHistory().subscribe({
+      next: response => {
         if (response.n === this.history.data.length) {
           this.history.data = [];
         }
+      },
+      error: err => {
+        // Error
+      },
+      complete: () => {
+        // TODO - stop loading.
       }
-    );
+    });
   }
 }

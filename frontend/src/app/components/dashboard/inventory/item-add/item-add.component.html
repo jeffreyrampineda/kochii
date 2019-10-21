@@ -66,7 +66,7 @@
           <mat-form-field class="k-card-form-field-full">
             <mat-label>Select a group</mat-label>
             <mat-select formControlName="group">
-              <mat-option *ngFor="let group of localGroups" [value]="group.name">{{ group.name }}</mat-option>
+              <mat-option *ngFor="let group of groups" [value]="group.name">{{ group.name }}</mat-option>
             </mat-select>
             <mat-error *ngIf="f.group.errors">
               <div *ngIf="f.group.errors.required">Group is required</div>

@@ -12,7 +12,7 @@ export class OverviewComponent implements OnInit {
 
   doghnutChart;
   lineChart;
-  localInv: Item[] = [];
+  inventory: Item[] = [];
   numberOfExpired = 0;
 
   constructor(
@@ -24,13 +24,21 @@ export class OverviewComponent implements OnInit {
   }
 
   getData(): void {
-    this.inventoryService.getInventory().subscribe(inv => {
-      this.localInv = inv;
-      this.numberOfExpired = (this.localInv.filter(i => this.expirationCountdown(i.expirationDate.toString()) < 0)).length;
-      this.initializeDoughnut();
-      this.initializeLineOne();
-
-      // TODO - make general config/data/options generator to be used by all charts.
+    this.inventoryService.getInventory().subscribe({
+      next: response => {
+        this.inventory = response;
+        this.numberOfExpired = (this.inventory.filter(i => this.expirationCountdown(i.expirationDate.toString()) < 0)).length;
+        this.initializeDoughnut();
+        this.initializeLineOne();
+  
+        // TODO - make general config/data/options generator to be used by all charts.
+      },
+      error: err => {
+          // Error
+      },
+      complete: () => {
+          // TODO - stop loading.
+      }
     });
   }
 
@@ -40,8 +48,8 @@ export class OverviewComponent implements OnInit {
       labels: ['Good', 'Ok', 'Bad'],
       datasets: [{
         data: [
-          (this.localInv.filter(i => this.expirationCountdown(i.expirationDate.toString()) > 10)).length,
-          (this.localInv.filter(i =>
+          (this.inventory.filter(i => this.expirationCountdown(i.expirationDate.toString()) > 10)).length,
+          (this.inventory.filter(i =>
             this.expirationCountdown(i.expirationDate.toString()) < 10 &&
             this.expirationCountdown(i.expirationDate.toString()) >= 0
           )).length,
@@ -70,8 +78,8 @@ export class OverviewComponent implements OnInit {
         // TODO - fix this. find a way to get weekly relativity data then relative to that data
         // calculate the items added during that day + before that day.
         data: [
-          this.localInv.length,
-          this.localInv.length,
+          this.inventory.length,
+          this.inventory.length,
         ],
         fill: false,
       }]

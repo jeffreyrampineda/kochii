@@ -19,8 +19,8 @@ export interface DialogData {
 })
 export class InventoryComponent implements OnInit {
 
-    localGroups: Group[] = [];
-    localInv: Item[] = [];
+    groups: Group[] = [];
+    inventory: Item[] = [];
 
     constructor(
         private dialog: MatDialog,
@@ -35,14 +35,30 @@ export class InventoryComponent implements OnInit {
     }
 
     getGroups(): void {
-        this.groupsService.getGroups().subscribe(gro => {
-            this.localGroups = gro;
+        this.groupsService.getGroups().subscribe({
+            next: response => {
+                this.groups = response;
+            },
+            error: err => {
+                // Error
+            },
+            complete: () => {
+                // TODO - stop loading.
+            }
         });
     }
 
     getInventory(): void {
-        this.inventoryService.getInventory().subscribe(inv => {
-            this.localInv = inv;
+        this.inventoryService.getInventory().subscribe({
+            next: response => {
+                this.inventory = response;
+            },
+            error: err => {
+                // Error
+            },
+            complete: () => {
+                // TODO - stop loading.
+            }
         });
     }
 
@@ -52,9 +68,17 @@ export class InventoryComponent implements OnInit {
             data: { name: '', size: 0 }
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result && result !== '') {
-                this.groupsService.addGroup(result).subscribe();
+        dialogRef.afterClosed().subscribe({
+            next: response => {
+                if (response && response !== '') {
+                    this.groupsService.addGroup(response).subscribe();
+                }
+            },
+            error: err => {
+                // Error
+            },
+            complete: () => {
+                // TODO - stop loading.
             }
         });
     }

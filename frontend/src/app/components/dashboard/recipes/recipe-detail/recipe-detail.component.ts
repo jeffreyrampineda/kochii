@@ -42,11 +42,17 @@ export class RecipeDetailComponent implements OnInit {
    * */
   getRecipe(): void {
     const id = this.route.snapshot.paramMap.get('id');
-    this.recipeService.getRecipeById(id).subscribe(
-      recipe => {
-        this.recipe = recipe;
+    this.recipeService.getRecipeById(id).subscribe({
+      next: response => {
+        this.recipe = response;
+      },
+      error: err => {
+          // Error
+      },
+      complete: () => {
+          // TODO - stop loading.
       }
-    );
+    });
   }
 
   /** Go back to the previous URL */
@@ -67,11 +73,17 @@ export class RecipeDetailComponent implements OnInit {
       }
     );
 
-    forkJoin(observablesGroup).subscribe(
-      x => {
-        console.log(x);
+    forkJoin(observablesGroup).subscribe({
+      next: response => {
+        console.log(response);
+      },
+      error: err => {
+          // Error
+      },
+      complete: () => {
+          // TODO - stop loading.
       }
-    );
+    });
   }
 
   /**
@@ -98,14 +110,13 @@ export class RecipeDetailComponent implements OnInit {
     const ingredientsRequired = JSON.parse(JSON.stringify(this.recipe.ingredients));
     const ingredientsRequiredNames = ingredientsRequired.map(e => e.name);
 
-    this.inventoryService.getItemsByNames(ingredientsRequiredNames).subscribe(
-      items => {
-
+    this.inventoryService.getItemsByNames(ingredientsRequiredNames).subscribe({
+      next: response => {
         let noDuplicates: any = [];
 
         // Has duplicate due to different expirationDates.
-        if (items.length > ingredientsRequired.length) {
-          items.forEach(
+        if (response.length > ingredientsRequired.length) {
+          response.forEach(
             i => {
 
               // Try to find if item 'i's name exists in noDuplicate.
@@ -122,7 +133,7 @@ export class RecipeDetailComponent implements OnInit {
           );
         } else {
           // Otherwise, there are no duplicates.
-          noDuplicates = JSON.parse(JSON.stringify(items));
+          noDuplicates = JSON.parse(JSON.stringify(response));
         }
 
         // Has missing ingredients.
@@ -194,8 +205,14 @@ export class RecipeDetailComponent implements OnInit {
           // DISABLED: Quantity Check.
           this.openCookDialog(true, ingredientsRequired);
         }
+      },
+      error: err => {
+          // Error
+      },
+      complete: () => {
+          // TODO - stop loading.
       }
-    );
+    });
   }
 
   /** Opens the cook dialog. */
@@ -213,15 +230,21 @@ export class RecipeDetailComponent implements OnInit {
     });
 
     // Confirmed.
-    dialogRef.afterClosed().subscribe(
-      result => {
-        if (result && result.length > 0) {
+    dialogRef.afterClosed().subscribe({
+      next: response => {
+        if (response && response.length > 0) {
           console.log('Cooking');
           // TODO: Update with result.
           // DISABLED: Quantity Check.
           // this.updateManyItem(result);
         }
+      },
+      error: err => {
+          // Error
+      },
+      complete: () => {
+          // TODO - stop loading.
       }
-    );
+    });
   }
 }
