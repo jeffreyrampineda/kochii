@@ -9,7 +9,9 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 
 // Pipes
+import { CountdownPipe } from './pipes/countdown.pipes';
 import { ExpirationPipe } from './pipes/expiration.pipes';
+import { StatusPipe } from './pipes/status.pipes';
 
 // App-level
 import { AppMaterialModule } from './app-material.module';
@@ -27,13 +29,12 @@ import { RegisterComponent } from './components/register/register.component';
 // Components - /dashboard
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
-import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
+import { InventoryComponent, DialogOverviewExampleDialogComponent } from './components/dashboard/inventory/inventory.component';
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { RecipesComponent } from './components/dashboard/recipes/recipes.component';
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
 
 // Components - /dashboard/inventory
-import { GroupComponent } from './components/dashboard/inventory/group/group.component';
 import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
 
 // Components - /dashboard/recipes
@@ -41,13 +42,14 @@ import { RecipeDetailComponent } from './components/dashboard/recipes/recipe-det
 
 // Components - dialogs
 import { GeneralDialogComponent } from './components/dialogs/general-dialog/general-dialog.component';
-import { DialogOverviewExampleDialogComponent } from './components/dashboard/inventory/inventory.component';
 
 // -------------------------------------------------------------
 
 @NgModule({
   declarations: [
+    CountdownPipe,
     ExpirationPipe,
+    StatusPipe,
     AppComponent,
     DashboardComponent,
     HomeComponent,
@@ -62,7 +64,6 @@ import { DialogOverviewExampleDialogComponent } from './components/dashboard/inv
     RecipesComponent,
     SettingsComponent,
     ItemAddComponent,
-    GroupComponent,
     RecipeDetailComponent,
     GeneralDialogComponent,
     DialogOverviewExampleDialogComponent,
