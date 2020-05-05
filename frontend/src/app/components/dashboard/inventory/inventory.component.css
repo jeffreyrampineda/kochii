@@ -1,0 +1,14 @@
+.mat-column-select {
+    width: 100px;
+}
+
+.label {
+  color: white;
+  border-radius: 5px;
+  padding: 3px;
+  font-size: 10px;
+}
+
+.good {background-color: #4CAF50;} /* Green */
+.warning {background-color: #ff9800;} /* Orange */
+.expired {background-color: #f44336;} /* Red */
