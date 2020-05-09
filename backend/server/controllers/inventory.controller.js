@@ -1,6 +1,6 @@
-import Item from '../models/item';
-import HistoryController from './history.controller';
-import GroupController from './group.controller';
+const Item = require('../models/item');
+const HistoryController = require('./history.controller');
+const GroupController = require('./group.controller');
 
 class InventoryController {
 
@@ -20,11 +20,11 @@ class InventoryController {
 
     async getByNames(ctx) {
         let names = ctx.query.names.split(',');
-        ctx.body = await Item.find({ name: { $in: names } })
+        ctx.body = await Item.find({ name: { $in: names } });
     }
 
     async getById(ctx) {
-        ctx.body = await Item.findOne({ _id: ctx.params.id })
+        ctx.body = await Item.findOne({ _id: ctx.params.id });
     }
 
     async create(ctx) {
@@ -57,7 +57,7 @@ class InventoryController {
             ctx.throw(400, 'Quantity cannot be 0');
         }
 
-        let itemData: any = {
+        let itemData = {
             $set: { 
                 name, 
                 expirationDate,
@@ -79,7 +79,7 @@ class InventoryController {
             { name: ctx.params.name, expirationDate: ctx.params.expirationDate },
             itemData,
             { upsert: true, new: true }
-        )
+        );
 
         // If updating group.
         if (prevGroup && prevGroup !== result.group) {
@@ -105,7 +105,7 @@ class InventoryController {
         if (result.quantity <= 0) {
             console.log("removing item.");
 
-            HistoryController.create({ date: Date.now(), method: 'Remove', target: name, description: '' })
+            HistoryController.create({ date: Date.now(), method: 'Remove', target: name, description: '' });
             await GroupController.update(
                 { request: { body: {
                     name: group,
@@ -116,15 +116,15 @@ class InventoryController {
         } else if (ctx.params.option==='inc') {
 
             HistoryController.create({ date: Date.now(), method: 'Update', target: name, 
-                description: `${result.quantity} -> ${result.quantity + quantity}` })
+                description: `${result.quantity} -> ${result.quantity + quantity}` });
         } else if (ctx.params.option==='set') {
 
             HistoryController.create({ date: Date.now(), method: 'Update', target: name, 
-                description: `${result.quantity} -> ${quantity}` })
+                description: `${result.quantity} -> ${quantity}` });
         }
 
         ctx.body = result;
     }
 }
 
-export default new InventoryController();
+module.exports = new InventoryController();

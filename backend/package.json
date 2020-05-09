@@ -2,11 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "server/index.js",
+  "main": "index.js",
   "scripts": {
     "start": "node ./dist/server.js",
-    "dev": "ts-node-dev --respawn --transpileOnly ./server/server.ts",
-    "build": "tsc",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -14,7 +13,7 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^2.2.3",
-    "bcrypt": "^3.0.4",
+    "bcrypt": "^4.0.1",
     "dotenv": "^8.1.0",
     "jsonwebtoken": "^8.4.0",
     "koa": "^2.6.2",
@@ -24,9 +23,6 @@
     "mongoose": "^5.3.12"
   },
   "devDependencies": {
-    "@types/koa": "^2.0.46",
-    "@types/koa-router": "^7.0.34",
-    "ts-node-dev": "^1.0.0-pre.43",
-    "typescript": "^3.1.6"
+    "nodemon": "^2.0.3"
   }
 }

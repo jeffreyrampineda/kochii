@@ -1,4 +1,4 @@
-import HistoryModel from '../models/history';
+const HistoryModel = require('../models/history');
 
 class HistoryController {
 
@@ -15,4 +15,4 @@ class HistoryController {
     }
 }
 
-export default new HistoryController();
+module.exports = new HistoryController();

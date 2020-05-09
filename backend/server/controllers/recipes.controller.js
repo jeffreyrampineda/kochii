@@ -1,4 +1,4 @@
-import Recipe from '../models/recipe';
+const Recipe = require('../models/recipe');
 
 class RecipesController {
 
@@ -13,11 +13,11 @@ class RecipesController {
     async getByName(ctx) {
         const name = ctx.params.name;
 
-        ctx.body = await Recipe.findOne({ name, })
+        ctx.body = await Recipe.findOne({ name, });
     }
 
     async getById(ctx) {
-        ctx.body = await Recipe.findOne({ _id: ctx.params.id })
+        ctx.body = await Recipe.findOne({ _id: ctx.params.id });
     }
 
     async create(ctx) {
@@ -25,12 +25,12 @@ class RecipesController {
     }
 
     async update(ctx) {
-        ctx.body = await Recipe.findOneAndUpdate({ _id: ctx.params.id }, ctx.request.body)
+        ctx.body = await Recipe.findOneAndUpdate({ _id: ctx.params.id }, ctx.request.body);
     }
 
     async delete(ctx) {
-        ctx.body = await Recipe.deleteOne({ _id: ctx.params.id })
+        ctx.body = await Recipe.deleteOne({ _id: ctx.params.id });
     }
 }
 
-export default new RecipesController();
+module.exports = new RecipesController();

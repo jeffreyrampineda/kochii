@@ -1,7 +1,8 @@
-import Item from '../models/item';
-import Group from '../models/group';
+const Item = require('../models/item');
+const Group = require('../models/group');
 
 class GroupController {
+
     async getAll(ctx) {
         ctx.body = await Group.find();
     }
@@ -25,7 +26,7 @@ class GroupController {
         let result = await Group.findOneAndUpdate(
             { name, },
             { $inc : { size, }},
-        )
+        );
 
         ctx.body = result;
     }
@@ -41,10 +42,10 @@ class GroupController {
         await Group.findOneAndUpdate(
             { name, },
             { $set: { size, }},
-        )
+        );
 
         ctx.body = 'done';
     }
 }
 
-export default new GroupController();
+module.exports = new GroupController();

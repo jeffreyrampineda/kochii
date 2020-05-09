@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 const historySchema = new Schema({
@@ -19,4 +19,4 @@ const historySchema = new Schema({
     }
 });
 
-export default mongoose.model('History', historySchema);
+module.exports = mongoose.model('History', historySchema);

@@ -1,17 +1,17 @@
-import UserModel from '../models/user';
-import * as jsonwebtoken from 'jsonwebtoken';
+const UserModel = require('../models/user');
 const bcrypt = require('bcrypt');
+const jsonwebtoken = require('jsonwebtoken');
 
 class AuthenticationController {
 
-    private readonly passwordMinimumLength = 6;
-    private readonly saltRounds = 10;
+    passwordMinimumLength = 6;
+    saltRounds = 10;
 
-    private generateToken(signature: any): string {
+    generateToken(signature) {
         return jsonwebtoken.sign(signature, process.env.SECRET_KEY);
     }
 
-    private verifyBody(body: any): boolean {
+    verifyBody(body) {
         return Object.keys(body).length == 2;
     }
 
@@ -90,4 +90,4 @@ class AuthenticationController {
     }
 }
 
-export default new AuthenticationController();
+module.exports = new AuthenticationController();

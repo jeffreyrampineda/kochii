@@ -1,8 +1,6 @@
-import * as mongoose from 'mongoose';
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-
-// TODO: redesign to reduce payload.
 const recipeSchema = new Schema({
     title: {
         type: String,
@@ -43,4 +41,4 @@ const recipeSchema = new Schema({
     }
 });
 
-export default mongoose.model('Recipe', recipeSchema);
+module.exports = mongoose.model('Recipe', recipeSchema);
