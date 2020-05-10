@@ -7,7 +7,6 @@ import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
-import { Group } from 'src/app/interfaces/group';
 import { MessageService } from 'src/app/services/message.service';
 
 // -------------------------------------------------------------
@@ -23,7 +22,7 @@ export class ItemAddComponent implements OnInit {
   existingItems: Item[];
   searchTerm = new Subject<string>();
   itemAddForm: FormGroup[] = [];
-  groups: Group[];
+  groups: string[];
 
   constructor(
     private router: Router,

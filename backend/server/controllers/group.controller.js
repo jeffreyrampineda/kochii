@@ -4,7 +4,9 @@ const Group = require('../models/group');
 class GroupController {
 
     async getAll(ctx) {
-        ctx.body = await Group.find();
+        const groups = await Group.find();
+
+        ctx.body = groups.map(group => group.name);
     }
 
     /**
@@ -13,10 +15,12 @@ class GroupController {
      * @param ctx - Context
      */
     async create(ctx) {
-        let result = await Group.create({ name: ctx.params.name });
+        const name = ctx.params.name;
+
+        let result = await Group.create({ name });
 
         if(result) {
-            global.io.sockets.emit('group_create', result);
+            global.io.sockets.emit('group_create', name);
         }
 
         ctx.body = result;

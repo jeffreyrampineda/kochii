@@ -5,7 +5,7 @@
       <mat-form-field>
         <mat-select [(ngModel)]="selectedGroup" (ngModelChange)="getItems()">
             <mat-option value="">All items</mat-option>
-            <mat-option *ngFor="let group of groups" [value]="group.name">{{ group.name }}</mat-option>
+            <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
           </mat-select>
       </mat-form-field>
       <div class="k-actions-buttons">
@@ -80,7 +80,7 @@
             <ng-template #editGroup>
               <mat-form-field>
                 <mat-select [formControl]="f(item._id).group">
-                  <mat-option *ngFor="let group of groups" [value]="group.name">{{ group.name }}</mat-option>
+                  <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
                 </mat-select>
                 <mat-error *ngIf="f(item._id).group.errors">
                   <div *ngIf="f(item._id).group.errors.required">Group is required</div>

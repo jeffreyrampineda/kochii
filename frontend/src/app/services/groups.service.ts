@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
-import { Group } from 'src/app/interfaces/group';
 import { SocketioService } from './socketio.service';
 
 // -------------------------------------------------------------
@@ -19,7 +18,7 @@ const httpOptions = {
 export class GroupsService {
 
   private groupsUrl = '/api/groups';
-  private localGroups: Group[] = [];
+  private localGroups: string[] = [];
 
   constructor(
     private http: HttpClient,
@@ -28,7 +27,7 @@ export class GroupsService {
   ) { }
 
   /** Get all groups. */
-  getGroups(): Observable<Group[]> {
+  getGroups(): Observable<string[]> {
     const url = `${this.groupsUrl}`;
 
     return new Observable(obs => {
@@ -36,7 +35,7 @@ export class GroupsService {
         obs.next(this.localGroups);
         return obs.complete();
       }
-      this.http.get<Group[]>(url).pipe(
+      this.http.get<string[]>(url).pipe(
        tap(_ => this.log('fetched groups')),
       ).subscribe({
         next: response => {
@@ -57,11 +56,11 @@ export class GroupsService {
    * Add the specified group.
    * @param group - The group to add.
    */
-  createGroup(name: string): Observable<Group> {
+  createGroup(name: string): Observable<string> {
     this.log('creating group');
     const url = `${this.groupsUrl}/${name}`;
 
-    return this.http.post<Group>(url, null, httpOptions);
+    return this.http.post<string>(url, null, httpOptions);
   }
 
   // TODO - check if group is empty before deleting. move logic from group.component's
@@ -77,8 +76,8 @@ export class GroupsService {
 
   onGroupCreate() {
     return Observable.create(observer => {
-      this.socketioService.getSocket().on('group_create', (group) => {
-        this.log(`created - group /w name=${group.name}`);
+      this.socketioService.getSocket().on('group_create', (group: string) => {
+        this.log(`created - group /w name=${group}`);
         this.localGroups.push(group);
         observer.next(group);
       });
@@ -87,10 +86,10 @@ export class GroupsService {
 
   onGroupDelete() {
     return Observable.create(observer => {
-      this.socketioService.getSocket().on('group_delete', (name) => {
-        this.log(`deleted - group /w name=${name}`);
-        this.localGroups = this.localGroups.filter(g => g.name !== name);
-        observer.next(name);
+      this.socketioService.getSocket().on('group_delete', (group: string) => {
+        this.log(`deleted - group /w name=${group}`);
+        this.localGroups = this.localGroups.filter(g => g !== group);
+        observer.next(group);
       });
     });
   }

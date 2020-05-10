@@ -136,8 +136,8 @@ export class InventoryService {
     return of(undefined);
   }
 
-  getGroupSize(name) {
-    return this.localInv.filter(i => i.group === name).length;
+  getGroupSize(group) {
+    return this.localInv.filter(i => i.group === group).length;
   }
 
 // -------------------------------------------------------------

@@ -10,7 +10,6 @@ import { map, catchError } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { GroupsService } from 'src/app/services/groups.service';
-import { Group } from 'src/app/interfaces/group';
 import { Item } from 'src/app/interfaces/item';
 import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
 import { DashboardComponent } from '../dashboard.component';
@@ -37,7 +36,7 @@ export class InventoryComponent implements OnInit {
     inventory: MatTableDataSource<Item>;
     showSelect: Boolean = false;
     selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
-    groups: Group[];
+    groups: string[];
 
     // Used for closing and opening side menu
     parentComponent: DashboardComponent;
