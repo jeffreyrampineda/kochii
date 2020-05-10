@@ -4,8 +4,8 @@ import { Observable, of } from 'rxjs';
 import { tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
-import { GroupsService } from './groups.service';
 import { Item } from 'src/app/interfaces/item';
+import { SocketioService } from './socketio.service';
 
 // -------------------------------------------------------------
 
@@ -23,27 +23,13 @@ export class InventoryService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private groupsService: GroupsService,
+    private socketioService: SocketioService,
   ) { }
 
 // -------------------------------------------------------------
 
-  /**
-   * Get all items in the specified group.
-   * @param groupName - The name of the specified group.
-   */
-// REMOVING - unused
-/*   getItemsInGroup(groupName: string): Observable<Item[]> {
-    const url = `${this.inventoryUrl}/groups/${groupName}`;
-
-    return this.http.get<Item[]>(url)
-      .pipe(
-        tap(_ => this.log(`fetched items in group ${groupName}`)),
-      );
-  } */
-
   /** Get all items. */
-  getInventory(group: string = ''): Observable<Item[]> {
+  getItems(group: string = ''): Observable<Item[]> {
     return new Observable(obs => {
       if (this.localInv.length !== 0) {
         let filtered = this.localInv;
@@ -98,8 +84,8 @@ export class InventoryService {
    * Add the specified item.
    * @param item - The item to be added.
    */
-  addItem(item: Item): Observable<Item> {
-    this.log('adding item');
+  createItem(item: Item): Observable<Item> {
+    this.log('creating item');
 
     const existing = this.findItemFromLocal(item.name, item.expirationDate);
 
@@ -110,30 +96,7 @@ export class InventoryService {
       return this.updateItem(item, 'inc');
     }
 
-    return new Observable(obs => {
-      this.http.post<Item>(this.inventoryUrl, item, httpOptions).pipe(
-        tap(_ => this.log(`added item w/ id=${item._id}`)),
-      ).subscribe({
-        next: response => {
-          if(response) {
-            this.log('success - item is created');
-  
-            this.localInv.push(response);
-            // TODO - you add-item does not fetch for localInv. if you add items with empty localInv,
-            // only the new items are pushed into the localInv, making the array not have size==0, so
-            // it will not fetch data from backend.
-            this.groupsService.addLocalGroupSize(response.group, 1);
-          }
-          obs.next(response);
-        },
-        error: err => {
-          obs.error(err);
-        },
-        complete: () => {
-          obs.complete();
-        }
-      });
-    });
+    return this.http.post<Item>(this.inventoryUrl, item, httpOptions);
   }
 
   /**
@@ -144,54 +107,9 @@ export class InventoryService {
    */
   updateItem(item: Item, option: string): Observable<any> {
     this.log('updating item');
-    const url = `${this.inventoryUrl}/${option}/${item.name}/${item.expirationDate}`;
+    const url = `${this.inventoryUrl}/${option}`;
 
-    // Returns item if exists, otherwise null.
-    const existing = this.findItemFromLocal(item.name, item.expirationDate);
-  
-    if (existing) {
-      item.prevGroup = existing.group;
-    } else {
-      throw new Error("updating non-existing item");
-    }
-
-    return new Observable(obs => {
-      this.http.put(url, item, httpOptions).pipe(
-        tap(_ => this.log(`updated item name=${item.name}, expirationDate=${item.expirationDate}`)),
-      ).subscribe({
-        next: (response: any) => {
-          if (response) {
-            // If item was returned.
-            if (response._id) {
-  
-              // update old item with new value from response
-              this.log('success - item is updated');
-              
-              existing.name = response.name;
-              existing.quantity = response.quantity;
-              existing.addedDate = response.addedDate;
-              existing.expirationDate = response.expirationDate;
-              existing.group = response.group;
-              this.groupsService.addLocalGroupSize(item.prevGroup, -1);
-              this.groupsService.addLocalGroupSize(response.group, 1);
-            } else if (response.n === 1) {
-  
-              // If item is deleted.
-              this.log('success - item is deleted');
-              this.localInv = this.localInv.filter(i => i._id !== existing._id);
-              this.groupsService.addLocalGroupSize(item.group, -1);
-            }
-          }
-          obs.next(response);
-        },
-        error: err => {
-          obs.error(err);
-        },
-        complete: () => {
-          obs.complete();
-        }
-      });
-    });
+    return this.http.put(url, item, httpOptions);
   }
 
   /**
@@ -216,6 +134,67 @@ export class InventoryService {
       return this.http.get<Item[]>(this.inventoryUrl + this.queryUrl + term);
     }
     return of(undefined);
+  }
+
+  getGroupSize(name) {
+    return this.localInv.filter(i => i.group === name).length;
+  }
+
+// -------------------------------------------------------------
+
+  onItemCreate() {
+    return Observable.create(observer => {
+      this.socketioService.getSocket().on('item_create', (item) => {
+        this.log(`created - item w/ id=${item._id}`);
+        this.localInv.push(item);
+
+        observer.next(item);
+      });
+    });
+  }
+
+  onItemUpdate() {
+    return Observable.create(observer => {
+      this.socketioService.getSocket().on('item_update', (item) => {
+        this.log(`updated - item w/ name=${item.name}, id=${item._id}`);
+        let ite = this.localInv.find(i => i._id === item._id);
+
+        ite.name = item.name;
+        ite.quantity = item.quantity;
+        ite.addedDate = item.addedDate;
+        ite.expirationDate = item.expirationDate;
+        ite.group = item.group;
+
+        observer.next(item);
+      });
+    });
+  }
+
+  onItemUpdateMany() {
+    return Observable.create(observer => {
+      this.socketioService.getSocket().on('item_updateMany', (items: Item[]) => {
+        if(items.length != 0) {
+          this.log('updated - many item');
+          items.forEach(i => {
+            let ite = this.localInv.find(it => it._id === i._id);
+  
+            ite.group = i.group;
+          });
+        }
+        observer.next(items);
+      });
+    });
+  }
+
+  onItemDelete() {
+    return Observable.create(observer => {
+      this.socketioService.getSocket().on('item_delete', (id) => {
+        this.log(`deleted - item /w id=${id}`);
+        this.localInv = this.localInv.filter(i => i._id !== id);
+  
+        observer.next(id);
+      });
+    });
   }
 
 // -------------------------------------------------------------

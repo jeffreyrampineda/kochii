@@ -24,7 +24,7 @@ export class OverviewComponent implements OnInit {
   }
 
   getData(): void {
-    this.inventoryService.getInventory().subscribe({
+    this.inventoryService.getItems().subscribe({
       next: response => {
         this.inventory = response;
         this.numberOfExpired = (this.inventory.filter(i => this.expirationCountdown(i.expirationDate.toString()) < 0)).length;

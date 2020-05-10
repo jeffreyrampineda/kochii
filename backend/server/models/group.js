@@ -6,10 +6,6 @@ const groupSchema = new Schema({
         type: String,
         required: true
     },
-    size: {
-        type: Number,
-        required: true
-    }
 });
 
 module.exports = mongoose.model('Group', groupSchema);

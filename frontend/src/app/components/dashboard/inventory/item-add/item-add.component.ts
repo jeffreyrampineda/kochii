@@ -72,7 +72,7 @@ export class ItemAddComponent implements OnInit {
 
     this.itemAddForm.forEach(
       form => {
-        observablesGroup.push(this.addItem(form.value));
+        observablesGroup.push(this.createItem(form.value));
       }
     );
 
@@ -127,8 +127,8 @@ export class ItemAddComponent implements OnInit {
    * If no item is found, create new item.
    * @param item - The item to be upserted.
    */
-  addItem(newItem: Item): Observable<any> {
-    return this.inventoryService.addItem(newItem).pipe(
+  createItem(newItem: Item): Observable<any> {
+    return this.inventoryService.createItem(newItem).pipe(
       catchError((error: any): Observable<any> => {
         return of(undefined);
       }),

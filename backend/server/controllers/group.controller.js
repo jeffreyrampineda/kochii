@@ -7,44 +7,42 @@ class GroupController {
         ctx.body = await Group.find();
     }
 
-    async getItems(ctx) {
-        ctx.body = await Item.find({ group: ctx.params.groupName }).sort({ expirationDate: -1 });
-    }
-
     /**
      * Creates a new group.
      * TODO: backend validation check - see if group already exists
      * @param ctx - Context
      */
     async create(ctx) {
-        ctx.body = await Group.create(ctx.request.body);
-    }
+        let result = await Group.create({ name: ctx.params.name });
 
-    async update(ctx) {
-        const { name, size, } = ctx.request.body;
-
-        let result = await Group.findOneAndUpdate(
-            { name, },
-            { $inc : { size, }},
-        );
+        if(result) {
+            global.io.sockets.emit('group_create', result);
+        }
 
         ctx.body = result;
     }
 
     async delete(ctx) {
-        ctx.body = await Group.deleteOne({ name: ctx.params.name });
-    }
-
-    async refreshSize(ctx) {
         const name = ctx.params.name;
-        const size = await Item.countDocuments({ group: name }, (err, count) => count);
 
-        await Group.findOneAndUpdate(
-            { name, },
-            { $set: { size, }},
-        );
+        if(name === '' || name === 'Default') {
+            ctx.throw(400, 'Cannot remove group');
+        }
 
-        ctx.body = 'done';
+        let item_result = await Item.updateMany({ group: name }, { $set: { group: 'Default' }});
+        if(item_result.nModified >= 1) {
+            let items = await Item.find({ group: 'Default'});
+
+            global.io.sockets.emit('item_updateMany', items);
+        }
+
+        let result = await Group.deleteOne({ name });
+
+        if(result.ok === 1) {
+            global.io.sockets.emit('group_delete', name);
+        }
+
+        ctx.body = result;
     }
 }
 

@@ -7,13 +7,15 @@ const bodyParser = require('koa-bodyparser');
 const jwt = require('koa-jwt');
 const logger = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
-// const socket = require('socket.io');
+const socket = require('socket.io');
 
 // Create Koa Application
 const app = new Koa();
 const router = new Router();
 const server = http.createServer(app.callback());
-// const io = socket(server);
+const io = socket(server);
+
+global.io = io;
 
 // Debug mode
 if (process.env.NODE_ENV !== 'production') {
@@ -33,8 +35,8 @@ mongoose.connect(process.env.MONGODB_URI_development, { useNewUrlParser: true, u
 mongoose.connection.on('error', console.error);
 mongoose.connection.once('open', () => console.log('Connection to mongodb established'));
 
-// io.on('connection', (socket) => {
-//    console.log('user connected');
-// });
+io.on('connection', (socket) => {
+    console.log('user connected');
+});
 
 module.exports = server;

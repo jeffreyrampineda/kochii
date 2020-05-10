@@ -12,19 +12,9 @@ class InventoryController {
         ctx.body = await Item.find({ name: { $regex: "^" + ctx.params.name } });
     }
 
-    async getByName(ctx) {
-        const name = ctx.params.name;
-
-        ctx.body = await Item.findOne({ name, });
-    }
-
     async getByNames(ctx) {
         let names = ctx.query.names.split(',');
         ctx.body = await Item.find({ name: { $in: names } });
-    }
-
-    async getById(ctx) {
-        ctx.body = await Item.findOne({ _id: ctx.params.id });
     }
 
     async create(ctx) {
@@ -37,12 +27,7 @@ class InventoryController {
         let result = await Item.create(ctx.request.body);
 
         if (result) {
-            GroupController.update(
-                { request: { body: {
-                      name: result.group,
-                      size: 1,
-                  } } }
-            );
+            global.io.sockets.emit('item_create', result);
             HistoryController.create({ date: Date.now(), method: 'Create', target: result.name, description: '' });
         }
 
@@ -51,7 +36,7 @@ class InventoryController {
 
     async update(ctx) {
         console.log("updating item.");
-        const { name, quantity, expirationDate, group, prevGroup } = ctx.request.body;
+        const { _id, name, quantity, expirationDate, group } = ctx.request.body;
 
         if(quantity === 0) {
             ctx.throw(400, 'Quantity cannot be 0');
@@ -67,57 +52,35 @@ class InventoryController {
 
         // Setting or incrementing ?
         if (ctx.params.option === 'inc') {
-            itemData.$inc = { quantity, }
+            itemData.$inc = { quantity, };
         } else if (ctx.params.option === 'set') {
-            itemData.$set.quantity = quantity;
+            itemData.$set = { quantity, };
         } else {
             ctx.throw(400, 'Invalid option');
         }
     
         // Result is the previous value of Item. Null if Item is new.
         let result = await Item.findOneAndUpdate(
-            { name: ctx.params.name, expirationDate: ctx.params.expirationDate },
+            { _id },
             itemData,
-            { upsert: true, new: true }
+            { upsert: true, new: true, useFindAndModify: false }
         );
-
-        // If updating group.
-        if (prevGroup && prevGroup !== result.group) {
-            console.log('updating group.');
-            // Find old group and decrement size by 1
-            GroupController.update(
-                { request: { body: {
-                    name: prevGroup,
-                    size: -1,
-                } } }
-            );
-
-            // Find new group and increment size by 1
-            GroupController.update(
-                { request: { body: {
-                    name: result.group,
-                    size: 1,
-                } } }
-            );
-        }
 
         // If new quantity is less than or equal to 0, delete Item.
         if (result.quantity <= 0) {
-            console.log("removing item.");
+            let del_result = await Item.deleteOne({ _id });
 
-            HistoryController.create({ date: Date.now(), method: 'Remove', target: name, description: '' });
-            await GroupController.update(
-                { request: { body: {
-                    name: group,
-                    size: -1,
-                } } }
-            );
-            result = await Item.deleteOne({ _id: result.id });
+            if(del_result.ok === 1) {
+                global.io.sockets.emit('item_remove', _id);
+                HistoryController.create({ date: Date.now(), method: 'Remove', target: name, description: '' });
+            }
         } else if (ctx.params.option==='inc') {
+            global.io.sockets.emit('item_update', result);
 
             HistoryController.create({ date: Date.now(), method: 'Update', target: name, 
                 description: `${result.quantity} -> ${result.quantity + quantity}` });
         } else if (ctx.params.option==='set') {
+            global.io.sockets.emit('item_update', result);
 
             HistoryController.create({ date: Date.now(), method: 'Update', target: name, 
                 description: `${result.quantity} -> ${quantity}` });

@@ -3,13 +3,13 @@
     <mat-card-title>
       Inventory - {{ groupName }}
       <mat-form-field>
-        <mat-select [(ngModel)]="selectedGroup" (ngModelChange)="onChangeSelectedGroup()">
+        <mat-select [(ngModel)]="selectedGroup" (ngModelChange)="getItems()">
             <mat-option value="">All items</mat-option>
             <mat-option *ngFor="let group of groups" [value]="group.name">{{ group.name }}</mat-option>
           </mat-select>
       </mat-form-field>
       <div class="k-actions-buttons">
-        <button mat-button (click)="addGroup()">Add Group</button>
+        <button mat-button (click)="createGroup()">Add Group</button>
         <button mat-button (click)="deleteGroup()">Remove group</button>
       </div>
     </mat-card-title>
@@ -88,7 +88,7 @@
               </mat-form-field>
             </ng-template>
           </div>
-          <ng-template #viewGroup><span matTooltip="Group">{{ item.group }}</span></ng-template>
+          <ng-template #viewGroup><span matTooltip="Group">{{ item.group }} {{ getGroupSize(item.group) }}</span></ng-template>
         </td>
       </ng-container>
 

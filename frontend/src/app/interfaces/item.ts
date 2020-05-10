@@ -5,5 +5,4 @@ export interface Item {
     addedDate: Date;
     expirationDate: Date;
     group: string;
-    prevGroup: string;              // used for updating group size
 }

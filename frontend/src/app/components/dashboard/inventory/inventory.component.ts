@@ -15,6 +15,7 @@ import { Item } from 'src/app/interfaces/item';
 import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
 import { DashboardComponent } from '../dashboard.component';
 import { MessageService } from 'src/app/services/message.service';
+import { SocketioService } from 'src/app/services/socketio.service';
 
 export interface DialogData {
     groupName: string;
@@ -54,6 +55,7 @@ export class InventoryComponent implements OnInit {
         private groupsService: GroupsService,
         private injector: Injector,
         private formBuilder: FormBuilder,
+        private socketioService: SocketioService,
     ) {
         this.parentComponent = this.injector.get(DashboardComponent);
     }
@@ -61,6 +63,8 @@ export class InventoryComponent implements OnInit {
 // -------------------------------------------------------------
 
     ngOnInit() {
+        this.socketioService.initSocket();
+
         // Set up inventory: MatTableDataSource with empty inital data
         this.inventory = new MatTableDataSource();
         this.inventory.paginator = this.paginator;
@@ -75,8 +79,25 @@ export class InventoryComponent implements OnInit {
         };
 
         // Populate inventory.data with data
-        this.getInventory();
         this.getGroups();
+        this.getItems();
+        
+
+        this.inventoryService.onItemCreate().subscribe(result => {
+            this.getItems();
+        });
+        this.inventoryService.onItemUpdate().subscribe();
+        this.inventoryService.onItemUpdateMany().subscribe();
+        this.inventoryService.onItemDelete().subscribe(result => {
+            this.getItems();
+        });
+
+        this.groupsService.onGroupCreate().subscribe(result => {
+            this.getGroups();
+        });
+        this.groupsService.onGroupDelete().subscribe(result => {
+            this.getGroups();
+        });
     }
 
     getGroups(): void {
@@ -96,8 +117,8 @@ export class InventoryComponent implements OnInit {
     /**
      * Get all items in the inventory with the specified group.
      */
-    getInventory(): void {
-        this.inventoryService.getInventory(this.selectedGroup).subscribe({
+    getItems(): void {
+        this.inventoryService.getItems(this.selectedGroup).subscribe({
             next: response => {
                 this.inventory.data = response;
             },
@@ -128,6 +149,10 @@ export class InventoryComponent implements OnInit {
         );
     }
 
+    getGroupSize(name) {
+        return this.inventoryService.getGroupSize(name);
+    }
+
     /**
      * Loops through newItems and update each item individually.
      * @param newItems - The array of items to be updated.
@@ -155,7 +180,7 @@ export class InventoryComponent implements OnInit {
                 // Error
             },
             complete: () => {
-                this.getInventory();
+                this.getItems();
                 this.selectColumnToggle('');
             }
         });
@@ -223,6 +248,7 @@ export class InventoryComponent implements OnInit {
 
         // Stringify then parse to clone the values instead of reference.
         this.itemUpdateForm[item._id] = this.formBuilder.group({
+            _id: item._id,
             name: [item.name, [
               Validators.maxLength(20),
               Validators.required
@@ -280,46 +306,20 @@ export class InventoryComponent implements OnInit {
 
     // TODO - move updateItem to inventory.service's deleteGroup().
     deleteGroup(): void {
-        if (this.selectedGroup === '' || this.selectedGroup === 'Default') {
-            console.log('cannot remove default group');
-            return;
-        }
+        this.groupsService.deleteGroup(this.selectedGroup).subscribe({  
+            next: response => {
 
-        if (this.inventory.data.length !== 0) {
-            console.log('group is not empty');
-            const rogueItems = JSON.parse(JSON.stringify(this.inventory.data));
-
-            rogueItems.forEach(i => {
-                i.group = 'Default';
-            });
-
-            // TODO - simplify updateManyItems(). remove subscribe in the function
-            // make it return Observable so it can be used in other functions with subscribe
-            const observablesGroup = [];
-
-            rogueItems.forEach(r => {
-                observablesGroup.push(this.inventoryService.updateItem(r, 'set').pipe(
-                    map(results => {
-                        return results;
-                    })
-                ));
-            });
-
-            forkJoin(observablesGroup).subscribe({
-                next: response => {
-                    this.deleteThisGroup();
-                },
-                error: err => {
-                    // Error
-                },
-                complete: () => {
-                    // TODO - stop loading.
-                }
-            });
-
-        } else {
-            this.deleteThisGroup();
-        }
+            },
+            error: err => {
+                this.notify(err.error);
+            },
+            complete: () => {
+                // TODO - stop loading.
+                this.selectedGroup = '';
+                this.getGroups();
+                this.getItems();
+            }
+        });
     }
 
     f(id) {
@@ -339,16 +339,16 @@ export class InventoryComponent implements OnInit {
         return isInvalid;
     }
 
-    addGroup(): void {
+    createGroup(): void {
         const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
             width: '250px',
-            data: { name: '', size: 0 }
+            data: { name: '' }
         });
 
         dialogRef.afterClosed().subscribe({
             next: response => {
                 if (response && response !== '') {
-                    this.groupsService.addGroup(response).subscribe();
+                    this.groupsService.createGroup(response.name).subscribe();
                 }
             },
             error: err => {
@@ -356,30 +356,6 @@ export class InventoryComponent implements OnInit {
             },
             complete: () => {
                 // TODO - stop loading.
-            }
-        });
-    }
-
-    onChangeSelectedGroup() {
-        this.getInventory();
-    }
-
-    private deleteThisGroup(): void {
-        console.log('delete group');
-        this.groupsService.deleteGroup(this.selectedGroup).subscribe({  
-            next: response => {
-                if (response.ok === 1) {
-                    console.log('delete success');
-                }
-            },
-            error: err => {
-                // Error
-            },
-            complete: () => {
-                // TODO - stop loading.
-                this.selectedGroup = '';
-                this.getGroups();
-                this.getInventory();
             }
         });
     }

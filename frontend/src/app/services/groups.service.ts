@@ -5,6 +5,7 @@ import { tap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
 import { Group } from 'src/app/interfaces/group';
+import { SocketioService } from './socketio.service';
 
 // -------------------------------------------------------------
 
@@ -22,7 +23,8 @@ export class GroupsService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private socketioService: SocketioService,
   ) { }
 
   /** Get all groups. */
@@ -55,62 +57,42 @@ export class GroupsService {
    * Add the specified group.
    * @param group - The group to add.
    */
-  addGroup(group: Group): Observable<Group> {
-    const url = `${this.groupsUrl}`;
+  createGroup(name: string): Observable<Group> {
+    this.log('creating group');
+    const url = `${this.groupsUrl}/${name}`;
 
-    return new Observable(obs => {
-      this.http.post<Group>(url, group, httpOptions).pipe(
-        tap(_ => this.log(`added group w/ name=${group.name}`)),
-      ).subscribe({
-        next: response => {
-          this.localGroups.push(response);
-          obs.next(response);
-        },
-        error: err => {
-          obs.error(err);
-        },
-        complete: () => {
-          obs.complete();
-        }
-      });
-    });
+    return this.http.post<Group>(url, null, httpOptions);
   }
 
   // TODO - check if group is empty before deleting. move logic from group.component's
   // deleteGroup here.
   deleteGroup(name: string): Observable<any> {
+    this.log('deleting group');
     const url = `${this.groupsUrl}/${name}`;
 
-    return new Observable(obs => {
-      this.http.delete(url, httpOptions).pipe(
-        tap(_ => this.log(`deleted group name=${name}`)),
-      ).subscribe({
-        next: (response: any) => {
-          if (response) {
-            if (response.ok === 1) {
-              this.localGroups = this.localGroups.filter(g => g.name !== name);
-            }
-          }
-          obs.next(response);
-        },
-        error: err => {
-          obs.error(err);
-        },
-        complete: () => {
-          obs.complete();
-        }
+    return this.http.delete(url, httpOptions);
+  }
+
+// -------------------------------------------------------------
+
+  onGroupCreate() {
+    return Observable.create(observer => {
+      this.socketioService.getSocket().on('group_create', (group) => {
+        this.log(`created - group /w name=${group.name}`);
+        this.localGroups.push(group);
+        observer.next(group);
       });
     });
   }
 
-  addLocalGroupSize(name: string, size: number): void {
-    this.log('updating localGroups')
-
-    this.localGroups.find(g => g.name === name).size += size;
-  }
-
-  getLocalGroups(): Group[] {
-    return this.localGroups;
+  onGroupDelete() {
+    return Observable.create(observer => {
+      this.socketioService.getSocket().on('group_delete', (name) => {
+        this.log(`deleted - group /w name=${name}`);
+        this.localGroups = this.localGroups.filter(g => g.name !== name);
+        observer.next(name);
+      });
+    });
   }
 
 // -------------------------------------------------------------
