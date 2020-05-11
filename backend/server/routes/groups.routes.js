@@ -5,6 +5,6 @@ const router = new Router();
 
 router.get('/', GroupController.getAll);
 router.post('/:name', GroupController.create);
-router.del('/:name', GroupController.delete);
+router.del('/:name', GroupController.del);
 
 module.exports = router.routes();

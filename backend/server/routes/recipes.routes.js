@@ -9,6 +9,6 @@ router.get('/id/:id', RecipesController.getById);
 router.get('/:name', RecipesController.getByName);
 router.post('/', RecipesController.create);
 router.put('/:id', RecipesController.update);
-router.del('/:id', RecipesController.delete);
+router.del('/:id', RecipesController.del);
 
 module.exports = router.routes();

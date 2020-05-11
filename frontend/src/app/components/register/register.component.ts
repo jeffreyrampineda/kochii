@@ -58,7 +58,9 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    this.authenticationService.register(this.registerForm.value).subscribe({
+    const { username, password } = this.registerForm.value;
+
+    this.authenticationService.register({ username, password }).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/dashboard']);

@@ -1,18 +1,19 @@
-const HistoryModel = require('../models/history');
+const History = require('../models/history');
 
-class HistoryController {
-
-    async getAll(ctx) {
-        ctx.body = await HistoryModel.find();
-    }
-
-    async create(history) {
-        await HistoryModel.create(history);
-    }
-
-    async deleteAll(ctx) {
-        ctx.body = await HistoryModel.deleteMany({});
-    }
+async function getAll(ctx) {
+    ctx.body = await History.find();
 }
 
-module.exports = new HistoryController();
+async function create(history) {
+    await History.create(history);
+}
+
+async function deleteAll(ctx) {
+    ctx.body = await History.deleteMany({});
+}
+
+module.exports = {
+    getAll,
+    create,
+    deleteAll
+};
