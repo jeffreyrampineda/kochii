@@ -20,7 +20,7 @@ table {
     overflow: hidden;
 }
 
-/* Used for item-add/inventory/recipes */
+/* Used for item-add/inventory */
 .k-actions-buttons {
     float: right;
 }

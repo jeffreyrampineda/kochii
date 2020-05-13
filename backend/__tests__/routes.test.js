@@ -26,12 +26,6 @@ describe('/api route', () => {
         expect(response.status).toEqual(401);
         expect(response.text).toContain('Authentication Error');
     });
-    test('GET /api/recipes without token should give Authentication Error', async () => {
-        const response = await request(server).get('/api/recipes');
-
-        expect(response.status).toEqual(401);
-        expect(response.text).toContain('Authentication Error');
-    });
     test('GET /api/history without token should give Authentication Error', async () => {
         const response = await request(server).get('/api/history');
 
