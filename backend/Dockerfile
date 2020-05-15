@@ -13,8 +13,5 @@ RUN npm install
 # Bundle app source
 COPY . ./
 
-# Build Typescript
-RUN npm run build
-
 EXPOSE 3001
 CMD [ "npm", "start" ]
