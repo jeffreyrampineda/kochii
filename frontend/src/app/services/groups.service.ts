@@ -56,11 +56,11 @@ export class GroupsService {
    * Add the specified group.
    * @param group - The group to add.
    */
-  createGroup(name: string): Observable<string> {
+  createGroup(name: string): Observable<any> {
     this.log('creating group');
     const url = `${this.groupsUrl}/${name}`;
 
-    return this.http.post<string>(url, null, httpOptions);
+    return this.http.post<any>(url, null, httpOptions);
   }
 
   // TODO - check if group is empty before deleting. move logic from group.component's

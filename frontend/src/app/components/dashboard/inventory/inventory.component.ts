@@ -347,7 +347,14 @@ export class InventoryComponent implements OnInit {
         dialogRef.afterClosed().subscribe({
             next: response => {
                 if (response && response !== '') {
-                    this.groupsService.createGroup(response.name).subscribe();
+                    this.groupsService.createGroup(response.name).subscribe({
+                        next: res => {
+                            if (res.name) {
+                                this.selectedGroup = res.name;
+                                this.getItems();
+                            }
+                        }
+                    });
                 }
             },
             error: err => {
