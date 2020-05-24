@@ -4,8 +4,28 @@ const Schema = mongoose.Schema;
 const groupSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: [true, "Name is required"],
+        validate: {
+            validator: name => GroupModel.doesNotExist({ name }),
+            message: "Name already exists"
+        },
     },
 });
 
-module.exports = mongoose.model('Group', groupSchema);
+groupSchema.pre('deleteOne', function (next) {
+    const { name } = this._conditions;
+
+    if (name === 'Default') {
+        next(new Error("Cannot remove group"));
+    } else {
+        next();
+    }
+});
+
+groupSchema.statics.doesNotExist = async function (field) {
+    return await this.where(field).countDocuments() === 0;
+}
+
+const GroupModel = mongoose.model('Group', groupSchema);
+
+module.exports = GroupModel;

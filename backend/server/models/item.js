@@ -4,11 +4,15 @@ const Schema = mongoose.Schema;
 const itemSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: [true, "Name is required"]
     },
     quantity: {
         type: Number,
-        required: true
+        required: [true, "Quantity is required"],
+        validate: {
+            validator: quantity => ItemModel.isGreaterThanZero({ quantity }),
+            message: "Quantity must be greater than 0"
+        },
     },
     addedDate: {
         type: Date,
@@ -20,7 +24,27 @@ const itemSchema = new Schema({
     },
     group: {
         type: String,
+        default: 'Default'
     },
 });
 
-module.exports = mongoose.model('Item', itemSchema);
+itemSchema.pre('findOneAndUpdate', function (next) {
+    if (this._update.$inc) {
+        if (parseInt(this._update.$inc.quantity) === 0) {
+            next(new Error("Quantity cannot be 0"));
+        }
+    } else {
+        if (parseInt(this._update.$set.quantity) === 0) {
+            next(new Error("Quantity cannot be 0"));
+        }
+    }
+    next();
+});
+
+itemSchema.statics.isGreaterThanZero = function (field) {
+    return parseInt(field.quantity) > 0;
+}
+
+const ItemModel = mongoose.model('Item', itemSchema);
+
+module.exports = ItemModel;

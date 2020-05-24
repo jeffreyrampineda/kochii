@@ -1,50 +1,66 @@
 const Item = require('../models/item');
 const Group = require('../models/group');
 
+/**
+ * Gets all group from the database.
+ * @response { string[], error? } array of strings if successful otherwise, an error.
+ */
 async function getAll(ctx) {
-    const groups = await Group.find();
+    try {
+        const groups = await Group.find();
 
-    ctx.body = groups.map(group => group.name);
+        ctx.body = groups.map(group => group.name);
+    } catch (error) {
+        ctx.throw(500, error);
+    }
 }
 
 /**
  * Creates a new group.
- * TODO: backend validation check - see if group already exists
- * @param ctx - Context
+ * @requires { params } name
+ * @response { string, error? } group's name if successful otherwise, an error.
  */
 async function create(ctx) {
-    const name = ctx.params.name;
+    try {
+        const { name } = ctx.params;
 
-    let result = await Group.create({ name });
+        const group = await Group.create({ name });
 
-    if (result) {
-        global.io.sockets.emit('group_create', name);
+        if (group) {
+            global.io.sockets.emit('group_create', group.name);
+            ctx.body = group.name;
+        }
+    } catch (error) {
+        ctx.throw(400, error);
     }
-
-    ctx.body = result;
 }
 
+/**
+ * Deletes a group. Before deleting, sets all Items' group with the same group name
+ * to 'Default'.
+ * @requires { params } name
+ * @response { string, error? } group's name if successful otherwise, an error.
+ */
 async function del(ctx) {
-    const name = ctx.params.name;
+    try {
+        const { name } = ctx.params;
 
-    if (name === '' || name === 'Default') {
-        ctx.throw(400, 'Cannot remove group');
+        const item_result = await Item.updateMany({ group: name }, { $set: { group: 'Default' } });
+        if (item_result.nModified >= 1) {
+            const items = await Item.find({ group: 'Default' });
+
+            global.io.sockets.emit('item_updateMany', items);
+        }
+
+        const result = await Group.deleteOne({ name });
+
+        if (result.ok === 1) {
+            global.io.sockets.emit('group_delete', name);
+            ctx.body = name;
+        }
+    } catch (error) {
+        ctx.throw(400, error);
     }
-
-    let item_result = await Item.updateMany({ group: name }, { $set: { group: 'Default' } });
-    if (item_result.nModified >= 1) {
-        let items = await Item.find({ group: 'Default' });
-
-        global.io.sockets.emit('item_updateMany', items);
-    }
-
-    let result = await Group.deleteOne({ name });
-
-    if (result.ok === 1) {
-        global.io.sockets.emit('group_delete', name);
-    }
-
-    ctx.body = result;
 }
 
 module.exports = {
