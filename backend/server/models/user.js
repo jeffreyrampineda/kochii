@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const minimumPasswordLength = 6;
 const saltRounds = 10;
 
 const Schema = mongoose.Schema;
@@ -9,27 +8,39 @@ const userSchema = new Schema({
     username: {
         type: String,
         required: [true, "Username is required"],
-        validate: {
-            validator: username => UserModel.doesNotExist({ username }),
-            message: "Username already exists"
-        },
+        minlength: [6, "Username must have a minimum length of 6"],
+        maxlength: [30, "Username must have a maximum length of 30"],
+        validate: [
+            {
+                validator: username => /^[a-zA-Z0-9_-]*$/.test(username),
+                message: "Username must contain an alphanumeric, underscore (_), or dash (-)"
+            },
+            {
+                validator: username => UserModel.doesNotExist({ username }),
+                message: "Username already exists"
+            }
+        ]
     },
     password: {
         type: String,
         required: [true, "Password is required"],
-        validate: {
-            validator: password => UserModel.minimumLength({ password }),
-            message: "Password needs to be 6 characters or more"
-        },
+        minlength: [6, "Password must have a minimum length of 6"],
+        maxlength: [30, "Password must have a maximum length of 30"]
     },
     email: {
         type: String,
         required: [true, "Email is required"],
-        validate: {
-            validator: email => UserModel.doesNotExist({ email }),
-            message: "Email already exists"
-        },
-    },
+        validate: [
+            {
+                validator: email => /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(email),
+                message: "Email is invalid"
+            },
+            {
+                validator: email => UserModel.doesNotExist({ email }),
+                message: "Email already exists"
+            }
+        ]
+    }
 }, { timestamps: true });
 
 userSchema.pre('save', function () {
@@ -40,10 +51,6 @@ userSchema.pre('save', function () {
 
 userSchema.statics.doesNotExist = async function (field) {
     return await this.where(field).countDocuments() === 0;
-}
-
-userSchema.statics.minimumLength = function (field) {
-    return field.password.length >= minimumPasswordLength;
 }
 
 userSchema.methods.comparePasswords = function (password) {

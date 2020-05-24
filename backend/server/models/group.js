@@ -5,11 +5,13 @@ const groupSchema = new Schema({
     name: {
         type: String,
         required: [true, "Name is required"],
+        minlength: [1, "Name must have a minimum length of 1"],
+        maxlength: [30, "Name must have a maximum length of 30"],
         validate: {
             validator: name => GroupModel.doesNotExist({ name }),
             message: "Name already exists"
-        },
-    },
+        }
+    }
 });
 
 groupSchema.pre('deleteOne', function (next) {
