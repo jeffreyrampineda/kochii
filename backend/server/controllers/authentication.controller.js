@@ -1,9 +1,5 @@
 const User = require('../models/user');
-const jsonwebtoken = require('jsonwebtoken');
-
-function generateToken(signature) {
-    return jsonwebtoken.sign(signature, process.env.SECRET_KEY);
-}
+const Helper = require('../util/helpers');
 
 /**
  * Authenticates the user to the database.
@@ -22,7 +18,7 @@ async function login(ctx) {
             // 202 - Accepted.
             ctx.status = 202;
             ctx.body = {
-                token: generateToken(user.toJSON())
+                token: Helper.generateToken(user.toJSON())
             };
         } else {
             ctx.throw(401, 'Authentication failed');
@@ -46,7 +42,7 @@ async function register(ctx) {
         // 202 - Accepted
         ctx.status = 202;
         ctx.body = {
-            token: generateToken(user.toJSON())
+            token: Helper.generateToken(user.toJSON())
         };
     } catch (error) {
         ctx.throw(400, error);
