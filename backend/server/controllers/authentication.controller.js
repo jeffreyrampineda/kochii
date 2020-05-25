@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const Helper = require('../util/helpers');
+const Validate = require('../validators/user');
 
 /**
  * Authenticates the user to the database.
@@ -8,7 +9,12 @@ const Helper = require('../util/helpers');
  */
 async function login(ctx) {
     try {
-        const { username, password } = ctx.request.body;
+        const { username = "", password = "" } = ctx.request.body;
+        const errors = Validate.login({ username, password });
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
 
         const user = await User.findOne({ username });
 
@@ -35,7 +41,12 @@ async function login(ctx) {
  */
 async function register(ctx) {
     try {
-        const { username, password, email } = ctx.request.body;
+        const { username = "", password = "", email = "" } = ctx.request.body;
+        const errors = Validate.register({ username, password, email });
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
 
         const user = await User.create({ username, password, email });
 

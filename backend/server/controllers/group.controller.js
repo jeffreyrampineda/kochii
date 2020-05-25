@@ -1,5 +1,6 @@
 const Item = require('../models/item');
 const Group = require('../models/group');
+const Validate = require('../validators/group');
 
 /**
  * Gets all group from the database.
@@ -22,7 +23,12 @@ async function getAll(ctx) {
  */
 async function create(ctx) {
     try {
-        const { name } = ctx.params;
+        const { name = "" } = ctx.params;
+        const errors = Validate.create({ name });
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
 
         const group = await Group.create({ name });
 
