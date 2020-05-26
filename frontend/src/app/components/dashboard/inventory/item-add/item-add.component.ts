@@ -78,12 +78,14 @@ export class ItemAddComponent implements OnInit {
     forkJoin(observablesGroup).subscribe({
       next: response => {
         const successful = response.reduce((acc: number, curr) => {
+          // Only increment if it's not undefined.
           if (curr) {
             acc += 1;
           }
           return acc;
         }, 0);
-        this.notify(`${successful}/${observablesGroup.length} items were successfully added.`);
+        const total = observablesGroup.length;
+        this.notify(`${successful}/${total} items were successfully added.`);
       },
       error: err => {
         // forkJoin handle error
@@ -129,6 +131,7 @@ export class ItemAddComponent implements OnInit {
   createItem(newItem: Item): Observable<any> {
     return this.inventoryService.createItem(newItem).pipe(
       catchError((error: any): Observable<any> => {
+        // Return undefined to complete forkJoin.
         return of(undefined);
       }),
     );

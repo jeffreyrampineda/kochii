@@ -39,33 +39,40 @@ export class AuthenticationService {
         return this.currentUserSubject.value ? true : false;
     }
 
+    /**
+     * Authenticates the user to the server.
+     * @param user - The user to be authenticated.
+     */
     login(user: User): Observable<User> {
+        this.log("logging in");
+
         return this.http.post<User>(`${this.authenticationUrl}/login`, user)
             .pipe(
                 map(response => {
-
                     this.onAuthenticated(response);
                     return response;
-                }),
-                tap(_ => this.log(`logging in`)),
+                })
             );
     }
 
+    /**
+     * Creates a new user to the server.
+     * @param user - The new user to be created.
+     */
     register(user: User): Observable<User> {
-        return this.http.post<User>(`${this.authenticationUrl}/register`, user).pipe(
+        this.log("registering");
 
-            // Login if successful.
-            map(response => {
-                this.onAuthenticated(response);
-                return response;
-            }),
-            tap(_ => this.log(`registering`)),
-        );
+        return this.http.post<User>(`${this.authenticationUrl}/register`, user)
+            .pipe(
+                map(response => {
+                    // Login if successful.
+                    this.onAuthenticated(response);
+                    return response;
+                })
+            );
     }
 
-    /**
-     * Logs out the current user then reloads the page.
-     */
+    /** Logs out the current user then reloads the page. */
     logout(): void {
 
         // remove user from local storage to log user out

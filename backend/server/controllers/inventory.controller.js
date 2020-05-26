@@ -23,7 +23,7 @@ async function getByNames(ctx) {
 async function create(ctx) {
     try {
         const { name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = ctx.request.body;
-        const errors = Validate.create({ name, quantity, addedDate, expirationDate, group });
+        const errors = await Validate.create({ name, quantity, addedDate, expirationDate, group });
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
@@ -92,13 +92,13 @@ async function update(ctx) {
 /**
  * Deletes an item by _id using the deleteItemById(string) function.
  * @requires { params } _id
- * @response { number, error? } delete's result otherwise, an error.
+ * @response { JSON, error? } delete's ok result otherwise, an error.
  */
 async function del(ctx) {
     try {
         const { _id } = ctx.params;
 
-        ctx.body = await deleteItemById(_id);
+        ctx.body = { ok: await deleteItemById(_id) };
     } catch (error) {
         ctx.throw(400, error);
     }

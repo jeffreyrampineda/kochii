@@ -4,8 +4,12 @@
   <mat-form-field>
     <input matInput [(ngModel)]="data.name">
   </mat-form-field>
+  <span *ngIf="loading">Creating...</span>
+  <mat-error>
+    <div *ngIf="error.name">{{ error.name }}</div>
+  </mat-error>
 </div>
 <div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button mat-button (click)="onSubmit(data)" [disabled]="loading" cdkFocusInitial>Ok</button>
   <button mat-button (click)="onNoClick()">No Thanks</button>
 </div>

@@ -168,12 +168,14 @@ export class InventoryComponent implements OnInit {
         forkJoin(observablesGroup).subscribe({
             next: response => {
                 const successful = response.reduce((acc: number, curr) => {
+                    // Only increment if it's not undefined.
                     if (curr) {
                         acc += 1;
                     }
                     return acc;
                 }, 0);
-                this.notify(`${successful}/${observablesGroup.length} items were successfully updated.`);
+                const total = observablesGroup.length;
+                this.notify(`${successful}/${total} items were successfully updated.`);
             },
             error: err => {
                 // Error
@@ -303,11 +305,13 @@ export class InventoryComponent implements OnInit {
       return numSelected === numRows;
     }
 
-    // TODO - move updateItem to inventory.service's deleteGroup().
+    /** Deletes the selectedGroup from the server. */
     deleteGroup(): void {
         this.groupsService.deleteGroup(this.selectedGroup).subscribe({  
             next: response => {
-
+                if (response.name) {
+                    this.notify(`'${response.name}' deleted`);
+                }
             },
             error: err => {
                 this.notify(err.error);
@@ -346,22 +350,16 @@ export class InventoryComponent implements OnInit {
 
         dialogRef.afterClosed().subscribe({
             next: response => {
-                if (response && response !== '') {
-                    this.groupsService.createGroup(response.name).subscribe({
-                        next: res => {
-                            if (res.name) {
-                                this.selectedGroup = res.name;
-                                this.getItems();
-                            }
-                        }
-                    });
+                if (response.name) {
+                    this.notify(`'${response.name}' created`);
+                    this.selectedGroup = response.name;
                 }
             },
             error: err => {
-                // Error
+                this.notify(err.error);
             },
             complete: () => {
-                // TODO - stop loading.
+                this.getItems();
             }
         });
     }
@@ -377,12 +375,38 @@ export class InventoryComponent implements OnInit {
 })
 export class DialogOverviewExampleDialogComponent {
 
+    loading = false;
+    error = {};
+
     constructor(
+        private groupsService: GroupsService,
         public dialogRef: MatDialogRef<DialogOverviewExampleDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
     ) { }
 
     onNoClick(): void {
       this.dialogRef.close();
+    }
+
+    onSubmit(data) {
+        if (this.loading) {
+            return;
+        }
+        this.loading = true;
+
+        this.groupsService.createGroup(data.name).subscribe({
+            next: response => {
+                if (response.name) {
+                    this.dialogRef.close(response);
+                }
+            },
+            error: err => {
+                this.error = err.error;
+                this.loading = false;
+            },
+            complete: () => {
+                this.loading = false;
+            }
+        });
     }
 }

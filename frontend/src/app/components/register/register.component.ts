@@ -41,7 +41,11 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
-      passwordre: ['']
+      passwordre: [''],
+      email: ['', [
+        Validators.required, 
+        Validators.email
+      ]]
     }, { validator: this.checkPasswords });
   }
 
@@ -58,9 +62,9 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     this.error = '';
 
-    const { username, password } = this.registerForm.value;
+    const { username, password, email } = this.registerForm.value;
 
-    this.authenticationService.register({ username, password }).subscribe({
+    this.authenticationService.register({ username, password, email }).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/dashboard']);
@@ -75,5 +79,4 @@ export class RegisterComponent implements OnInit {
       }
     });
   }
-
 }

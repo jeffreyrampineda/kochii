@@ -29,6 +29,16 @@
                         type="password"
                         placeholder="Re-enter Password" />
             </mat-form-field>
+            <mat-form-field class="k-card-form-field-full">
+                <input  matInput 
+                        formControlName="email"
+                        type="text"
+                        placeholder="Email" />
+                <mat-error *ngIf="f.email.errors">
+                    <div *ngIf="f.email.errors.required">Email is required</div>
+                    <div *ngIf="f.email.errors.email">Email is invalid</div>
+                </mat-error>
+            </mat-form-field>
             <mat-error *ngIf="registerForm.hasError('notSame')">
                 Passwords do not match
             </mat-error>  
@@ -38,7 +48,9 @@
     <div class="k-card-actions">
         <span *ngIf="loading">Loading...</span>
         <mat-error>
-            <div *ngIf="error">{{ error }}</div>
+            <div *ngIf="error.username">{{ error.username }}</div>
+            <div *ngIf="error.password">{{ error.password }}</div>
+            <div *ngIf="error.email">{{ error.email }}</div>
         </mat-error>
         <button mat-button routerLink="/home">Cancel</button>
         <button type="submit" mat-button [disabled]="registerForm.invalid || loading" (click)="onSubmit()">Register</button>

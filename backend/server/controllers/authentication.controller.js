@@ -10,10 +10,10 @@ const Validate = require('../validators/user');
 async function login(ctx) {
     try {
         const { username = "", password = "" } = ctx.request.body;
-        const errors = Validate.login({ username, password });
+        const errors = await Validate.login({ username, password });
 
         if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
+            ctx.throw(401, JSON.stringify(errors));
         }
 
         const user = await User.findOne({ username });
@@ -23,11 +23,9 @@ async function login(ctx) {
 
             // 202 - Accepted.
             ctx.status = 202;
-            ctx.body = {
-                token: Helper.generateToken(user.toJSON())
-            };
+            ctx.body = { token: Helper.generateToken(user.toJSON()) };
         } else {
-            ctx.throw(401, 'Authentication failed');
+            ctx.throw(401, JSON.stringify({ login: "Authentication failed" }));
         }
     } catch (error) {
         ctx.throw(401, error);
@@ -42,7 +40,7 @@ async function login(ctx) {
 async function register(ctx) {
     try {
         const { username = "", password = "", email = "" } = ctx.request.body;
-        const errors = Validate.register({ username, password, email });
+        const errors = await Validate.register({ username, password, email });
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
@@ -52,9 +50,7 @@ async function register(ctx) {
 
         // 202 - Accepted
         ctx.status = 202;
-        ctx.body = {
-            token: Helper.generateToken(user.toJSON())
-        };
+        ctx.body = { token: Helper.generateToken(user.toJSON()) };
     } catch (error) {
         ctx.throw(400, error);
     }

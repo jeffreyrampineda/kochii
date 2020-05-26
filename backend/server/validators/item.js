@@ -1,12 +1,13 @@
 const Validator = require('validator');
 const Item = require('../models/item');
+const Group = require('../models/group');
 
 /**
  * Validates all data required to create an item.
  * @param { JSON } data to be validated.
  * @return { JSON } object containing all errors.
  */
-function create(data) {
+async function create(data) {
     const { name, quantity, addedDate, expirationDate, group } = data;
     let errors = {};
 
@@ -41,6 +42,8 @@ function create(data) {
     // Group validation
     if (group === "") {
         errors.group = "Group cannot be an empty string";
+    } else if (!await Group.exists({ name: group })) {
+        errors.group = "Group does not exist";
     }
     return errors;
 }
@@ -75,6 +78,8 @@ async function update(data) {
         errors.quantity = "Quantity must be a number";
     } else if (quantity === 0) {
         errors.quantity = "Quantity cannot be 0";
+    } else if (option === 'set' && (quantity < 1 || quantity > 999)) {
+        errors.quantity = "Quantity must be between 1 and 999";
     }
 
     // AddedDate validation
@@ -90,6 +95,8 @@ async function update(data) {
     // Group validation
     if (group === "") {
         errors.group = "Group cannot be an empty string";
+    } else if (!await Group.exists({ name: group })) {
+        errors.group = "Group does not exist";
     }
 
     // Option validation

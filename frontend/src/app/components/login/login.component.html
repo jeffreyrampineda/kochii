@@ -30,7 +30,7 @@
         <div class="k-card-actions">
         <span *ngIf="loading">Loading...</span>
         <mat-error>
-            <div *ngIf="error">{{ error }}</div>
+            <div *ngIf="error.login">{{ error.login }}</div>
         </mat-error>
         <button mat-button routerLink="/home">Cancel</button>
         <button mat-button routerLink="/register">Register</button>

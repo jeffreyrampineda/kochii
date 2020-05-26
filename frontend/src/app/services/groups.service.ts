@@ -63,13 +63,15 @@ export class GroupsService {
     return this.http.post<any>(url, null, httpOptions);
   }
 
-  // TODO - check if group is empty before deleting. move logic from group.component's
-  // deleteGroup here.
+  /**
+   * Deletes the group from the server.
+   * @param name - The name of the group to be deleted.
+   */
   deleteGroup(name: string): Observable<any> {
     this.log('deleting group');
     const url = `${this.groupsUrl}/${name}`;
 
-    return this.http.delete(url, httpOptions);
+    return this.http.delete<any>(url, httpOptions);
   }
 
 // -------------------------------------------------------------

@@ -19,12 +19,12 @@ async function getAll(ctx) {
 /**
  * Creates a new group.
  * @requires { params } name
- * @response { string, error? } group's name if successful otherwise, an error.
+ * @response { JSON, error? } group's name if successful otherwise, an error.
  */
 async function create(ctx) {
     try {
         const { name = "" } = ctx.params;
-        const errors = Validate.create({ name });
+        const errors = await Validate.create({ name });
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
@@ -34,7 +34,7 @@ async function create(ctx) {
 
         if (group) {
             global.io.sockets.emit('group_create', group.name);
-            ctx.body = group.name;
+            ctx.body = { name: group.name };
         }
     } catch (error) {
         ctx.throw(400, error);
@@ -45,7 +45,7 @@ async function create(ctx) {
  * Deletes a group. Before deleting, sets all Items' group with the same group name
  * to 'Default'.
  * @requires { params } name
- * @response { string, error? } group's name if successful otherwise, an error.
+ * @response { JSON, error? } group's name if successful otherwise, an error.
  */
 async function del(ctx) {
     try {
@@ -62,7 +62,7 @@ async function del(ctx) {
 
         if (result.ok === 1) {
             global.io.sockets.emit('group_delete', name);
-            ctx.body = name;
+            ctx.body = { name };
         }
     } catch (error) {
         ctx.throw(400, error);

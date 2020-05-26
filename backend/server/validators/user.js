@@ -1,24 +1,27 @@
 const Validator = require('validator');
+const User = require('../models/user');
 
 /**
  * Validates all data required to login.
  * @param { JSON } data to be validated.
  * @return { JSON } object containing all errors.
  */
-function login(data) {
+async function login(data) {
     const { username, password } = data;
     let errors = {};
 
     // Username validation
     if (Validator.isEmpty(username)) {
-        errors.username = "Username is required";
+        errors.login = "Username is required";
     } else if (!/^[a-zA-Z0-9_-]*$/.test(username)) {
-        errors.username = "Username must contain an alphanumeric, underscore (_), or dash (-)";
+        errors.login = "Username must contain an alphanumeric, underscore (_), or dash (-)";
+    } else if (!await User.exists({ username })) {
+        errors.login = "Authentication failed";
     }
 
     // Password validation
     if (Validator.isEmpty(password)) {
-        errors.password = "Password is required";
+        errors.login = "Password is required";
     }
     return errors;
 }
@@ -28,7 +31,7 @@ function login(data) {
  * @param { JSON } data to be validated.
  * @return { JSON } object containing all errors.
  */
-function register(data) {
+async function register(data) {
     const { username, password, email } = data;
     let errors = {};
 
@@ -39,6 +42,8 @@ function register(data) {
         errors.username = "Username must be between 6 to 30 characters";
     } else if (!/^[a-zA-Z0-9_-]*$/.test(username)) {
         errors.username = "Username must contain an alphanumeric, underscore (_), or dash (-)";
+    } else if (await User.exists({ username })) {
+        errors.username = "Username already exists";
     }
 
     // Password validation
@@ -53,6 +58,8 @@ function register(data) {
         errors.email = "Email is required";
     } else if (!Validator.isEmail(email)) {
         errors.email = "Email is invalid";
+    } else if (await User.exists({ email })) {
+        errors.email = "Email already exists";
     }
     return errors;
 }
