@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 const Router = require('koa-router');
 const cors = require('@koa/cors');
 const bodyParser = require('koa-bodyparser');
-const jwt = require('koa-jwt');
 const logger = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 const socket = require('socket.io');
+const { passport, jwt } = require('./passport');
 
 // Create Koa Application
 const app = new Koa();
@@ -24,8 +24,11 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(errorHandler);
 app.use(cors());
-app.use(jwt({ secret: process.env.SECRET_KEY }).unless({ path: [/^\/public/, /^\/dev/] }));
 app.use(bodyParser());
+
+// Authentication
+app.use(passport.initialize());
+app.use(jwt.unless({ path: [/^\/public/, /^\/dev/] }));
 
 // Api routes
 require('./routes')(router);

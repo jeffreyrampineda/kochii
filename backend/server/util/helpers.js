@@ -1,7 +1,10 @@
 const jsonwebtoken = require('jsonwebtoken');
 
-function generateToken(signature) {
-    return jsonwebtoken.sign(signature, process.env.SECRET_KEY);
+function generateToken(user) {
+    const payload = {
+        _id: user._id
+    }
+    return jsonwebtoken.sign(payload, process.env.SECRET_KEY);
 }
 
 module.exports = {
