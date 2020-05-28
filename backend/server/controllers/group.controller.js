@@ -1,16 +1,15 @@
-const Item = require('../models/item');
-const Group = require('../models/group');
+const Inventory = require('../models/inventory');
 const Validate = require('../validators/group');
 
 /**
- * Gets all group from the database.
+ * Get all groups from the database.
  * @response { string[], error? } array of strings if successful otherwise, an error.
  */
 async function getAll(ctx) {
     try {
-        const groups = await Group.find();
+        const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'groups');
 
-        ctx.body = groups.map(group => group.name);
+        ctx.body = i.groups;
     } catch (error) {
         ctx.throw(500, error);
     }
@@ -24,17 +23,21 @@ async function getAll(ctx) {
 async function create(ctx) {
     try {
         const { name = "" } = ctx.params;
-        const errors = await Validate.create({ name });
+        const errors = await Validate.create({ name }, ctx.state.user);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        const group = await Group.create({ name });
+        const result = await Inventory.findOneAndUpdate(
+            { owner: ctx.state.user._id },
+            { $push: { groups: name } },
+            { new: true, useFindAndModify: false, runValidators: true, rawResult: true }
+        );
 
-        if (group) {
-            global.io.sockets.emit('group_create', group.name);
-            ctx.body = { name: group.name };
+        if (result.ok === 1) {
+            global.io.sockets.emit('group_create', name);
+            ctx.body = { name };
         }
     } catch (error) {
         ctx.throw(400, error);
@@ -51,14 +54,32 @@ async function del(ctx) {
     try {
         const { name } = ctx.params;
 
-        const item_result = await Item.updateMany({ group: name }, { $set: { group: 'Default' } });
-        if (item_result.nModified >= 1) {
-            const items = await Item.find({ group: 'Default' });
+        const item_result = await Inventory.findOneAndUpdate(
+            {
+                owner: ctx.state.user._id,
+            },
+            {
+                $set: {
+                    "items.$[i].group": 'Default'
+                }
+            },
+            {
+                arrayFilters: [{ "i.group": name }],
+                new: true, useFindAndModify: false, runValidators: true, rawResult: true
+            }
+        );
 
-            global.io.sockets.emit('item_updateMany', items);
+        if (item_result.ok === 1) {
+            const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
+            const result = i.items.filter(item => item.group === 'Default');
+            global.io.sockets.emit('item_updateMany', result);
         }
 
-        const result = await Group.deleteOne({ name });
+        const result = await Inventory.findOneAndUpdate(
+            { owner: ctx.state.user._id },
+            { $pull: { groups: name } },
+            { new: true, useFindAndModify: false, rawResult: true }
+        );
 
         if (result.ok === 1) {
             global.io.sockets.emit('group_delete', name);

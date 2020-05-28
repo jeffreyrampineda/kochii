@@ -40,6 +40,10 @@ const userSchema = new Schema({
                 message: "Email already exists"
             }
         ]
+    },
+    inventory: {
+        type: Schema.Types.ObjectId,
+        ref: 'Inventory'
     }
 }, { timestamps: true });
 

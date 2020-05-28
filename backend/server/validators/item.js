@@ -1,13 +1,12 @@
 const Validator = require('validator');
-const Item = require('../models/item');
-const Group = require('../models/group');
+const Inventory = require('../models/inventory');
 
 /**
  * Validates all data required to create an item.
  * @param { JSON } data to be validated.
  * @return { JSON } object containing all errors.
  */
-async function create(data) {
+async function create(data, user) {
     const { name, quantity, addedDate, expirationDate, group } = data;
     let errors = {};
 
@@ -42,7 +41,7 @@ async function create(data) {
     // Group validation
     if (group === "") {
         errors.group = "Group cannot be an empty string";
-    } else if (!await Group.exists({ name: group })) {
+    } else if (!await Inventory.exists({ owner: user._id, groups: group })) {
         errors.group = "Group does not exist";
     }
     return errors;
@@ -53,12 +52,12 @@ async function create(data) {
  * @param { JSON } data to be validated.
  * @return { JSON } object containing all errors.
  */
-async function update(data) {
+async function update(data, user) {
     const { _id, name, quantity, addedDate, expirationDate, group, option } = data;
     let errors = {};
 
     // _id validation
-    if (!await Item.exists({ _id })) {
+    if (!await Inventory.exists({ owner: user._id, "items._id": _id })) {
         errors._id = "Id does not exist";
     }
 
@@ -95,7 +94,7 @@ async function update(data) {
     // Group validation
     if (group === "") {
         errors.group = "Group cannot be an empty string";
-    } else if (!await Group.exists({ name: group })) {
+    } else if (!await Inventory.exists({ owner: user._id, groups: group })) {
         errors.group = "Group does not exist";
     }
 

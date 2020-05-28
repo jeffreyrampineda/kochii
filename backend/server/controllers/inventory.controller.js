@@ -1,18 +1,53 @@
-const Item = require('../models/item');
-const HistoryController = require('./history.controller');
+const Inventory = require('../models/inventory');
 const Validate = require('../validators/item');
 
+/**
+ * Get all items from the database.
+ * @response { JSON, error? } array of item objects if successful otherwise, an error.
+ */
 async function getAll(ctx) {
-    ctx.body = await Item.find().sort({ expirationDate: -1 });
+    try {
+        const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items').sort({ expirationDate: -1 });
+
+        ctx.body = i.items;
+    } catch (error) {
+        ctx.throw(500, error);
+    }
 }
 
+/**
+ * Get all items starting with the specified pattern from the database.
+ * @requires { params } name
+ * @response { JSON, error? } array of item objects if successful otherwise, an error.
+ */
 async function searchByName(ctx) {
-    ctx.body = await Item.find({ name: { $regex: "^" + ctx.params.name } });
+    try {
+        const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
+        const re = new RegExp("^" + ctx.params.name);
+        const result = i.items.filter(item => re.test(item.name));
+
+        ctx.body = result;
+    } catch (error) {
+        ctx.throw(500, error);
+    }
 }
 
+/**
+ * Get all items within the specified names list from the database.
+ * @requires { params } names
+ * @response { JSON, error? } array of item objects if successful otherwise, an error.
+ */
 async function getByNames(ctx) {
-    let names = ctx.query.names.split(',');
-    ctx.body = await Item.find({ name: { $in: names } });
+    try {
+        const names = ctx.query.names.split(',');
+        const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
+
+        const result = i.items.filter(item => names.includes(item.name));
+
+        ctx.body = result;
+    } catch (error) {
+        ctx.throw(500, error);
+    }
 }
 
 /**
@@ -23,16 +58,31 @@ async function getByNames(ctx) {
 async function create(ctx) {
     try {
         const { name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = ctx.request.body;
-        const errors = await Validate.create({ name, quantity, addedDate, expirationDate, group });
+        const errors = await Validate.create({ name, quantity, addedDate, expirationDate, group }, ctx.state.user);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        const item = await Item.create({ name, quantity, addedDate, expirationDate, group });
+        const result = await Inventory.findOneAndUpdate(
+            { owner: ctx.state.user._id },
+            {
+                $push: {
+                    items: {
+                        name,
+                        quantity,
+                        addedDate,
+                        expirationDate,
+                        group
+                    }
+                }
+            },
+            { new: true, useFindAndModify: false, runValidators: true, rawResult: true }
+        );
 
-        if (item) {
-            HistoryController.create({ date: Date.now(), method: 'Create', target: item.name, description: '' });
+        if (result.ok === 1) {
+            const item = result.value.items[result.value.items.length - 1];
+
             global.io.sockets.emit('item_create', item);
             ctx.body = item;
         }
@@ -51,7 +101,7 @@ async function update(ctx) {
     try {
         const { _id = "", name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = ctx.request.body;
         const { option = "" } = ctx.params;
-        const errors = await Validate.update({ _id, name, quantity, addedDate, expirationDate, group, option });
+        const errors = await Validate.update({ _id, name, quantity, addedDate, expirationDate, group, option }, ctx.state.user);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
@@ -59,31 +109,37 @@ async function update(ctx) {
 
         let itemData = {
             $set: {
-                name,
-                expirationDate,
-                group,
+                "items.$.name": name,
+                "items.$.addedDate": addedDate,
+                "items.$.expirationDate": expirationDate,
+                "items.$.group": group
             },
             $inc: {}
         }
 
         // Setting or incrementing.
-        itemData["$" + option].quantity = quantity;
+        itemData["$" + option]["items.$.quantity"] = quantity;
 
-        // Const item is the newly updated Item.
-        const item = await Item.findOneAndUpdate(
-            { _id },
+        const result = await Inventory.findOneAndUpdate(
+            {
+                owner: ctx.state.user._id,
+                "items._id": _id
+            },
             itemData,
-            { new: true, useFindAndModify: false, runValidators: true }
+            { new: true, useFindAndModify: false, runValidators: true, rawResult: true }
         );
 
-        // If new quantity is less than or equal to 0, delete Item.
-        if (item.quantity <= 0) {
-            deleteItemById(_id);
-        } else {
-            global.io.sockets.emit('item_update', item);
-        }
+        if (result.ok == 1) {
+            const item = result.value.items.find(i => i._id == _id);
 
-        ctx.body = item;
+            // If new quantity is less than or equal to 0, delete Item.
+            if (item.quantity <= 0) {
+                await deleteItemById(_id, ctx.state.user);
+            } else {
+                global.io.sockets.emit('item_update', item);
+            }
+            ctx.body = item;
+        }
     } catch (error) {
         ctx.throw(400, error);
     }
@@ -98,23 +154,27 @@ async function del(ctx) {
     try {
         const { _id } = ctx.params;
 
-        ctx.body = { ok: await deleteItemById(_id) };
+        ctx.body = { ok: await deleteItemById(_id, ctx.state.user) };
     } catch (error) {
         ctx.throw(400, error);
     }
 }
 
 /**
- * Deletes an item by _id. If successful, emits 'item_remove' to the
+ * Deletes an item by _id. If successful, emits 'item_delete' to the
  * connected socket(s).
  * @param { string } _id 
  * @returns { number } delete's result.
  */
-async function deleteItemById(_id) {
-    const result = await Item.deleteOne({ _id });
+async function deleteItemById(_id, user) {
+    const result = await Inventory.findOneAndUpdate(
+        { owner: user._id },
+        { $pull: { items: { _id } } },
+        { new: true, useFindAndModify: false, rawResult: true }
+    );
 
     if (result.ok === 1) {
-        global.io.sockets.emit('item_remove', _id);
+        global.io.sockets.emit('item_delete', _id);
     }
     return result.ok;
 }
