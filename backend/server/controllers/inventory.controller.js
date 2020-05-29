@@ -77,7 +77,7 @@ async function create(ctx) {
                     }
                 }
             },
-            { new: true, useFindAndModify: false, runValidators: true, rawResult: true }
+            { new: true, runValidators: true, rawResult: true }
         );
 
         if (result.ok === 1) {
@@ -126,7 +126,7 @@ async function update(ctx) {
                 "items._id": _id
             },
             itemData,
-            { new: true, useFindAndModify: false, runValidators: true, rawResult: true }
+            { new: true, runValidators: true, rawResult: true }
         );
 
         if (result.ok == 1) {
@@ -170,7 +170,7 @@ async function deleteItemById(_id, user) {
     const result = await Inventory.findOneAndUpdate(
         { owner: user._id },
         { $pull: { items: { _id } } },
-        { new: true, useFindAndModify: false, rawResult: true }
+        { new: true, rawResult: true }
     );
 
     if (result.ok === 1) {

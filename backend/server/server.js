@@ -34,7 +34,13 @@ app.use(jwt.unless({ path: [/^\/public/, /^\/dev/] }));
 require('./routes')(router);
 app.use(router.routes());
 
-mongoose.connect(process.env.MONGODB_URI_development, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGODB_URI_development, 
+    { 
+        useNewUrlParser: true, 
+        useUnifiedTopology: true,
+        useFindAndModify: false
+    }
+);
 mongoose.connection.on('error', console.error);
 mongoose.connection.once('open', () => console.log('Connection to mongodb established'));
 

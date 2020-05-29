@@ -32,7 +32,7 @@ async function create(ctx) {
         const result = await Inventory.findOneAndUpdate(
             { owner: ctx.state.user._id },
             { $push: { groups: name } },
-            { new: true, useFindAndModify: false, runValidators: true, rawResult: true }
+            { new: true, runValidators: true, rawResult: true }
         );
 
         if (result.ok === 1) {
@@ -65,7 +65,7 @@ async function del(ctx) {
             },
             {
                 arrayFilters: [{ "i.group": name }],
-                new: true, useFindAndModify: false, runValidators: true, rawResult: true
+                new: true, runValidators: true, rawResult: true
             }
         );
 
@@ -78,7 +78,7 @@ async function del(ctx) {
         const result = await Inventory.findOneAndUpdate(
             { owner: ctx.state.user._id },
             { $pull: { groups: name } },
-            { new: true, useFindAndModify: false, rawResult: true }
+            { new: true, rawResult: true }
         );
 
         if (result.ok === 1) {
