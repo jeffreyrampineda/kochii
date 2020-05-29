@@ -1,4 +1,6 @@
+const mongoose = require('mongoose');
 const User = require('../models/user');
+const Inventory = require('../models/inventory');
 const Helper = require('../util/helpers');
 const Validate = require('../validators/user');
 
@@ -46,7 +48,17 @@ async function register(ctx) {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        const user = await User.create({ username, password, email });
+        const inventory_id = mongoose.Types.ObjectId();
+        const user = await User.create({ username, password, email, inventory: inventory_id });
+        const inventory = await Inventory.create({
+            _id: inventory_id,
+            owner: user._id,
+            groups: ["Default"],
+            items: [{
+                name: "Sample",
+                quantity: 1,
+            }]
+        });
 
         // 202 - Accepted
         ctx.status = 202;
