@@ -14,7 +14,6 @@ import { Item } from 'src/app/interfaces/item';
 import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
 import { DashboardComponent } from '../dashboard.component';
 import { MessageService } from 'src/app/services/message.service';
-import { SocketioService } from 'src/app/services/socketio.service';
 
 export interface DialogData {
     groupName: string;
@@ -54,7 +53,6 @@ export class InventoryComponent implements OnInit {
         private groupsService: GroupsService,
         private injector: Injector,
         private formBuilder: FormBuilder,
-        private socketioService: SocketioService,
     ) {
         this.parentComponent = this.injector.get(DashboardComponent);
     }
@@ -62,8 +60,6 @@ export class InventoryComponent implements OnInit {
 // -------------------------------------------------------------
 
     ngOnInit() {
-        this.socketioService.initSocket();
-
         // Set up inventory: MatTableDataSource with empty inital data
         this.inventory = new MatTableDataSource();
         this.inventory.paginator = this.paginator;

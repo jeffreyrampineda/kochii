@@ -7,7 +7,7 @@ const Validate = require('../validators/item');
  */
 async function getAll(ctx) {
     try {
-        const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items').sort({ expirationDate: -1 });
+        const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
 
         ctx.body = i.items;
     } catch (error) {
@@ -83,7 +83,9 @@ async function create(ctx) {
         if (result.ok === 1) {
             const item = result.value.items[result.value.items.length - 1];
 
-            global.io.sockets.emit('item_create', item);
+            for (const socket_id in global.currentConnections[ctx.state.user._id]) {
+                global.currentConnections[ctx.state.user._id][socket_id].socket.emit('item_create', item);
+            }
             ctx.body = item;
         }
     } catch (error) {
@@ -136,7 +138,9 @@ async function update(ctx) {
             if (item.quantity <= 0) {
                 await deleteItemById(_id, ctx.state.user);
             } else {
-                global.io.sockets.emit('item_update', item);
+                for (const socket_id in global.currentConnections[ctx.state.user._id]) {
+                    global.currentConnections[ctx.state.user._id][socket_id].socket.emit('item_update', item);
+                }
             }
             ctx.body = item;
         }
@@ -174,7 +178,9 @@ async function deleteItemById(_id, user) {
     );
 
     if (result.ok === 1) {
-        global.io.sockets.emit('item_delete', _id);
+        for (const socket_id in global.currentConnections[ctx.state.user._id]) {
+            global.currentConnections[ctx.state.user._id][socket_id].socket.emit('item_delete', _id);
+        }
     }
     return result.ok;
 }

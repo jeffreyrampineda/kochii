@@ -8,6 +8,7 @@ import {
 } from '@angular/animations';
 import { MessageService } from 'src/app/services/message.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { SocketioService } from 'src/app/services/socketio.service';
 
 // -------------------------------------------------------------
 
@@ -40,12 +41,14 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private authenticationService: AuthenticationService,
+    private socketioService: SocketioService,
     private messageSevice: MessageService,
   ) { }
 
 // -------------------------------------------------------------
 
   ngOnInit() {
+    this.socketioService.initSocket();
   }
 
   @HostListener('window:online', ['$event'])

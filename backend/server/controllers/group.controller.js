@@ -36,7 +36,9 @@ async function create(ctx) {
         );
 
         if (result.ok === 1) {
-            global.io.sockets.emit('group_create', name);
+            for (const socket_id in global.currentConnections[ctx.state.user._id]) {
+                global.currentConnections[ctx.state.user._id][socket_id].socket.emit('group_create', name);
+            }
             ctx.body = { name };
         }
     } catch (error) {
@@ -72,7 +74,9 @@ async function del(ctx) {
         if (item_result.ok === 1) {
             const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
             const result = i.items.filter(item => item.group === 'Default');
-            global.io.sockets.emit('item_updateMany', result);
+            for (const socket_id in global.currentConnections[ctx.state.user._id]) {
+                global.currentConnections[ctx.state.user._id][socket_id].socket.emit('item_updateMany', result);
+            }
         }
 
         const result = await Inventory.findOneAndUpdate(
@@ -82,7 +86,9 @@ async function del(ctx) {
         );
 
         if (result.ok === 1) {
-            global.io.sockets.emit('group_delete', name);
+            for (const socket_id in global.currentConnections[ctx.state.user._id]) {
+                global.currentConnections[ctx.state.user._id][socket_id].socket.emit('group_delete', name);
+            }
             ctx.body = { name };
         }
     } catch (error) {
