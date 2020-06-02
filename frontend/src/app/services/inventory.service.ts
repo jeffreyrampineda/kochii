@@ -92,8 +92,8 @@ export class InventoryService {
     // Change to updating
     if(existing) {
       this.log('item exists, switching to update');
-
-      return this.updateItem(item, 'inc');
+      existing.quantity += item.quantity;
+      return this.updateItem(existing, 'inc');
     }
 
     return this.http.post<Item>(this.inventoryUrl, item, httpOptions);
@@ -207,13 +207,12 @@ export class InventoryService {
     this.messageService.add(`InventoryService: ${message}`);
   }
 
-  private findItemFromLocal(name: string, expirationDate: Date): Item {
+  private findItemFromLocal(name: string, expirationDate: string): Item {
     const item = this.localInv.find(i => i.name === name);
 
     if (item) {
       // If expiration dates are the same, item is the same.
-      const compareDates = new Date(item.expirationDate).getTime() - new Date(expirationDate).getTime();
-      if (compareDates === 0) {
+      if (item.expirationDate == expirationDate) {
         return item;
       }
     }

@@ -2,7 +2,7 @@ export interface Item {
     _id?: string;
     name: string;
     quantity: number;
-    addedDate: Date;
-    expirationDate: Date;
+    addedDate: string;
+    expirationDate: string;
     group: string;
 }
