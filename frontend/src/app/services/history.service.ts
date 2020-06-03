@@ -30,6 +30,12 @@ export class HistoryService {
       );
   }
 
+  getAllFromPastDays(days: number): Observable<any> {
+    this.log(`fetched history records until ${days} days ago`);
+
+    return this.http.get<any>(`${this.historyUrl}/${days}`);
+  }
+
   /** Delete all history. */
   deleteAllHistory(): Observable<any> {
     return this.http.delete(this.historyUrl)

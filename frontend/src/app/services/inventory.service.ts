@@ -207,12 +207,12 @@ export class InventoryService {
     this.messageService.add(`InventoryService: ${message}`);
   }
 
-  private findItemFromLocal(name: string, expirationDate: string): Item {
+  private findItemFromLocal(name: string, expirationDate: Date): Item {
     const item = this.localInv.find(i => i.name === name);
 
     if (item) {
       // If expiration dates are the same, item is the same.
-      if (item.expirationDate == expirationDate) {
+      if ((new Date(item.expirationDate)).toDateString() == expirationDate.toDateString()) {
         return item;
       }
     }

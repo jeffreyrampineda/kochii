@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
-import { Item } from 'src/app/interfaces/item';
-import { InventoryService } from 'src/app/services/inventory.service';
+import { HistoryService } from 'src/app/services/history.service';
 
 interface chartData {
   x: any,
@@ -17,15 +16,18 @@ export class OverviewComponent implements OnInit {
 
   doghnutChart;
   lineChart;
-  inventory: Item[] = [];
   start: Date = new Date();
   today: Date = new Date();
   numberOfGood: number = 0;
   numberOfOk: number = 0;
   numberOfExpired: number = 0;
+  rawData = {
+    items: [],
+    history: []
+  };
 
   constructor(
-    private inventoryService: InventoryService
+    private historyService: HistoryService
   ) {
     this.start.setDate(this.start.getDate() - 6);
     this.start.setHours(0, 0, 0, 0);
@@ -36,31 +38,31 @@ export class OverviewComponent implements OnInit {
   }
 
   getData(): void {
-    this.inventoryService.getItems().subscribe({
+    this.historyService.getAllFromPastDays(6).subscribe({
       next: response => {
-        this.inventory = response;
-        this.initializeDoughnut();
-        this.initializeLineOne();
+        this.rawData = response;
+        this.numberOfGood = (this.rawData.items.filter(i => this.expirationCountdown(i.expirationDate) > 10)).length;
+        this.numberOfOk = (this.rawData.items.filter(i =>
+          this.expirationCountdown(i.expirationDate) < 10 &&
+          this.expirationCountdown(i.expirationDate) >= 0
+        )).length;
+        this.numberOfExpired = (this.rawData.items.filter(i => this.expirationCountdown(i.expirationDate) < 0)).length;
+
         // TODO - make general config/data/options generator to be used by all charts.
       },
       error: err => {
         // Error
       },
       complete: () => {
-        // TODO - stop loading.
-        this.numberOfGood = (this.inventory.filter(i => this.expirationCountdown(i.expirationDate) > 10)).length;
-        this.numberOfOk = (this.inventory.filter(i =>
-          this.expirationCountdown(i.expirationDate.toString()) < 10 &&
-          this.expirationCountdown(i.expirationDate.toString()) >= 0
-        )).length;
-        this.numberOfExpired = (this.inventory.filter(i => this.expirationCountdown(i.expirationDate) < 0)).length;
+        this.initializeDoughnut();
+        this.initializeLineOne();
       }
     });
   }
 
   initializeDoughnut(): void {
     const data = {
-      labels: ['Good', 'Ok', 'Bad'],
+      labels: ['Good', 'Ok', 'Expired'],
       datasets: [{
         data: [
           this.numberOfGood,
@@ -92,10 +94,6 @@ export class OverviewComponent implements OnInit {
   }
 
   initializeLineOne(): void {
-    const sampleRemovedQuantityPerDay = [
-      { 'x': "Mon Jun 01 2020", 'y': -2 }
-    ]
-
     const data = {
       datasets: [{
         label: 'Added',
@@ -103,7 +101,7 @@ export class OverviewComponent implements OnInit {
         backgroundColor: 'rgba(0, 255, 0, 0.3)'
       }, {
         label: 'Removed',
-        data: sampleRemovedQuantityPerDay,
+        data: this.removedQuantityPerDay(),
         backgroundColor: 'rgba(255, 0, 0, 0.3)'
       }]
     };
@@ -147,24 +145,43 @@ export class OverviewComponent implements OnInit {
   }
 
   addedQuantityPerDay(): chartData[] {
-    const addedQuantityPerDay = this.inventory.reduce((acc, curr) => {
-      if (acc[curr.addedDate] != undefined) {
-        acc[curr.addedDate] += curr.quantity;
+    const addedQuantityPerDay = this.rawData.items.reduce((acc, curr) => {
+      const addedDateString = (new Date(curr.addedDate)).toDateString();
+
+      if (acc[addedDateString] != undefined) {
+        acc[addedDateString] += curr.quantity;
       } else {
-        acc[curr.addedDate] = curr.quantity;
+        acc[addedDateString] = curr.quantity;
       }
       return acc;
     }, {});
 
     return Object.keys(addedQuantityPerDay).map(function (key) {
-      return { 'x': new Date(key).toDateString(), 'y': addedQuantityPerDay[key] };
-    })
+      return { 'x': new Date(key), 'y': addedQuantityPerDay[key] };
+    });
   }
 
-  expirationCountdown(date: string): number {
+  removedQuantityPerDay(): chartData[] {
+    const removedQuantityPerDay = this.rawData.history.reduce((acc, curr) => {
+      const removedDateString = (new Date(curr.date)).toDateString();
+
+      if (acc[removedDateString] != undefined) {
+        acc[removedDateString] += curr.quantityChange;
+      } else {
+        acc[removedDateString] = curr.quantityChange;
+      }
+      return acc;
+    }, {});
+
+    return Object.keys(removedQuantityPerDay).map(function (key) {
+      return { 'x': new Date(key), 'y': removedQuantityPerDay[key] };
+    });
+  }
+
+  expirationCountdown(date: Date): number {
     const expirationDate = new Date(date);
     const timeDiff = expirationDate.getTime() - this.today.getTime();
     const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    return diffDays;
+    return diffDays === -0 ? 0 : diffDays;
   }
 }

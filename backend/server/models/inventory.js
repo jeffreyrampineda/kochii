@@ -31,12 +31,12 @@ const inventorySchema = new Schema({
             max: [999, "Maximum quantity is 999"]
         },
         addedDate: {
-            type: String,
-            default: new Date().toDateString()
+            type: Date,
+            default: Date.now
         },
         expirationDate: {
-            type: String,
-            default: new Date().toDateString()
+            type: Date,
+            default: Date.now
         },
         group: {
             type: String,

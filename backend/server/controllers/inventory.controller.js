@@ -1,4 +1,5 @@
 const Inventory = require('../models/inventory');
+const createHistory = require('./history.controller').create;
 const Validate = require('../validators/item');
 
 /**
@@ -133,6 +134,12 @@ async function update(ctx) {
 
         if (result.ok == 1) {
             const item = result.value.items.find(i => i._id == _id);
+
+            if (quantity <= 0 ) {
+                await createHistory({ method: 'delete', target: 'item', quantityChange: quantity });
+            } else {
+                await createHistory({ method: 'add', target: 'item', quantityChange: quantity });
+            }
 
             // If new quantity is less than or equal to 0, delete Item.
             if (item.quantity <= 0) {

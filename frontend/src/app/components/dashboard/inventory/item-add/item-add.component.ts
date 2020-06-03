@@ -71,9 +71,6 @@ export class ItemAddComponent implements OnInit {
 
     this.itemAddForm.forEach(
       form => {
-        form.value.addedDate = form.value.addedDate.toDateString();
-        form.value.expirationDate = form.value.expirationDate.toDateString();
-
         observablesGroup.push(this.createItem(form.value));
       }
     );

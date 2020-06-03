@@ -14,6 +14,9 @@ const historySchema = new Schema({
         type: String,
         required: true
     },
+    quantityChange: {
+        type: Number
+    },
     description: {
         type: String
     }

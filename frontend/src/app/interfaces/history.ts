@@ -3,5 +3,6 @@ export interface History {
     date: Date;
     method: string;
     target: string;
+    quantityChange: number;
     description: string;
 }
