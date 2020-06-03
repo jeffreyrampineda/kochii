@@ -92,8 +92,8 @@ export class InventoryService {
     // Change to updating
     if(existing) {
       this.log('item exists, switching to update');
-      existing.quantity += item.quantity;
-      return this.updateItem(existing, 'inc');
+      item._id = existing._id;
+      return this.updateItem(item, 'inc');
     }
 
     return this.http.post<Item>(this.inventoryUrl, item, httpOptions);
