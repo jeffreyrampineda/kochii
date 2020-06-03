@@ -136,9 +136,9 @@ async function update(ctx) {
             const item = result.value.items.find(i => i._id == _id);
 
             if (quantity <= 0 ) {
-                await createHistory({ method: 'delete', target: 'item', quantity });
+                await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', quantity });
             } else {
-                await createHistory({ method: 'add', target: 'item', quantity });
+                await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', quantity });
             }
 
             // If new quantity is less than or equal to 0, delete Item.
@@ -185,8 +185,8 @@ async function deleteItemById(_id, user) {
     );
 
     if (result.ok === 1) {
-        for (const socket_id in global.currentConnections[ctx.state.user._id]) {
-            global.currentConnections[ctx.state.user._id][socket_id].socket.emit('item_delete', _id);
+        for (const socket_id in global.currentConnections[user._id]) {
+            global.currentConnections[user._id][socket_id].socket.emit('item_delete', _id);
         }
     }
     return result.ok;

@@ -47,9 +47,9 @@ async function getAllFromPastDays(ctx) {
  */
 async function create(history) {
     try {
-        const { method = "", target = "", quantity = 0, description = "" } = history;
+        const { owner = "", method = "", target = "", quantity = 0, description = "" } = history;
         const result = await History.findOneAndUpdate(
-            { owner: ctx.state.user._id },
+            { owner },
             {
                 $push: {
                     history: {
