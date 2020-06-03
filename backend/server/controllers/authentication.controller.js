@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/user');
 const Inventory = require('../models/inventory');
+const History = require('../models/history');
 const Helper = require('../util/helpers');
 const Validate = require('../validators/user');
 
@@ -49,7 +50,9 @@ async function register(ctx) {
         }
 
         const inventory_id = mongoose.Types.ObjectId();
-        const user = await User.create({ username, password, email, inventory: inventory_id });
+        const history_id = mongoose.Types.ObjectId();
+
+        const user = await User.create({ username, password, email, inventory: inventory_id, history: history_id });
         const inventory = await Inventory.create({
             _id: inventory_id,
             owner: user._id,
@@ -57,6 +60,16 @@ async function register(ctx) {
             items: [{
                 name: "Sample",
                 quantity: 1,
+            }]
+        });
+        const history = await History.create({
+            _id: history_id,
+            owner: user._id,
+            history: [{
+                method: "registered",
+                target: "user",
+                quantity: 0,
+                description: "Account created",
             }]
         });
 

@@ -1,8 +1,18 @@
 const History = require('../models/history');
 const Inventory = require('../models/inventory');
 
+/**
+ * Get all the user's history from the database.
+ * @response { JSON, error? } array of history objects if successful otherwise, an error. 
+ */
 async function getAll(ctx) {
-    ctx.body = await History.find();
+    try {
+        const h = await History.findOne({ owner: ctx.state.user._id }, 'history');
+
+        ctx.body = h.history;
+    } catch (error) {
+        ctx.throw(500, error);
+    }
 }
 
 /**
@@ -14,15 +24,17 @@ async function getAllFromPastDays(ctx) {
     try {
         const { days = 1 } = ctx.params;
         const fromDay = new Date();
-        
+
         fromDay.setDate(fromDay.getDate() - days);
         fromDay.setHours(0, 0, 0, 0);
-    
-        const his = await History.find({ addedDate: { $gte: fromDay }});
-        const inv = await Inventory.findOne({ owner: ctx.state.user }, 'items');
+
+        const his = await History.findOne({ owner: ctx.state.user._id }, 'history');
+        const inv = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
+
+        const rec = his.history.filter(hi => hi.addedDate.getTime() > fromDay.getTime());
         const ite = inv.items.filter(it => it.addedDate.getTime() > fromDay.getTime());
-    
-        ctx.body = { history: his, items: ite };
+
+        ctx.body = { history: rec, items: ite };
     } catch (error) {
         ctx.throw(500, error);
     }
@@ -35,16 +47,40 @@ async function getAllFromPastDays(ctx) {
  */
 async function create(history) {
     try {
-        const result = await History.create(history);
+        const { method = "", target = "", quantity = 0, description = "" } = history;
+        const result = await History.findOneAndUpdate(
+            { owner: ctx.state.user._id },
+            {
+                $push: {
+                    history: {
+                        method,
+                        target,
+                        quantity,
+                        description,
+                    }
+                }
+            },
+            { new: true, runValidators: true, rawResult: true }
+        );
 
         return result;
     } catch (error) {
-        ctx.throw(400, error);
-    } 
+        throw (400, error);
+    }
 }
 
 async function deleteAll(ctx) {
-    ctx.body = await History.deleteMany({});
+    try {
+        const result = await History.findOneAndUpdate(
+            { owner: ctx.state.user._id },
+            { $pull: { history: {} } },
+            { new: true, rawResult: true }
+        );
+
+        ctx.body = result.ok;
+    } catch (error) {
+        ctw.throw(500, error);
+    }
 }
 
 module.exports = {
