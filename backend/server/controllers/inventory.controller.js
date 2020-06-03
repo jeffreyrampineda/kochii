@@ -136,9 +136,9 @@ async function update(ctx) {
             const item = result.value.items.find(i => i._id == _id);
 
             if (quantity <= 0 ) {
-                await createHistory({ method: 'delete', target: 'item', quantityChange: quantity });
+                await createHistory({ method: 'delete', target: 'item', quantity });
             } else {
-                await createHistory({ method: 'add', target: 'item', quantityChange: quantity });
+                await createHistory({ method: 'add', target: 'item', quantity });
             }
 
             // If new quantity is less than or equal to 0, delete Item.

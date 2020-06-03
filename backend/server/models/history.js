@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 const historySchema = new Schema({
-    date: {
+    addedDate: {
         type: Date,
         default: Date.now
     },
@@ -14,7 +14,7 @@ const historySchema = new Schema({
         type: String,
         required: true
     },
-    quantityChange: {
+    quantity: {
         type: Number
     },
     description: {

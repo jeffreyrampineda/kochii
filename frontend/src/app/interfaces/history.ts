@@ -1,8 +1,8 @@
 export interface History {
     _id?: string;
-    date: Date;
+    addedDate: Date;
     method: string;
     target: string;
-    quantityChange: number;
+    quantity: number;
     description: string;
 }

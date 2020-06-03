@@ -18,7 +18,7 @@ async function getAllFromPastDays(ctx) {
         fromDay.setDate(fromDay.getDate() - days);
         fromDay.setHours(0, 0, 0, 0);
     
-        const his = await History.find({ date: { $gte: fromDay }});
+        const his = await History.find({ addedDate: { $gte: fromDay }});
         const inv = await Inventory.findOne({ owner: ctx.state.user }, 'items');
         const ite = inv.items.filter(it => it.addedDate.getTime() > fromDay.getTime());
     

@@ -97,11 +97,11 @@ export class OverviewComponent implements OnInit {
     const data = {
       datasets: [{
         label: 'Added',
-        data: this.addedQuantityPerDay(),
+        data: this.parseRawData(this.rawData.items),
         backgroundColor: 'rgba(0, 255, 0, 0.3)'
       }, {
         label: 'Removed',
-        data: this.removedQuantityPerDay(),
+        data: this.parseRawData(this.rawData.history),
         backgroundColor: 'rgba(255, 0, 0, 0.3)'
       }]
     };
@@ -144,39 +144,23 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  addedQuantityPerDay(): chartData[] {
-    const addedQuantityPerDay = this.rawData.items.reduce((acc, curr) => {
-      const addedDateString = (new Date(curr.addedDate)).toDateString();
+  parseRawData(data: any[]): chartData[] {
+    const quantityPerDay = data.reduce((acc, curr) => {
+      const dateString = (new Date(curr.addedDate)).toDateString();
 
-      if (acc[addedDateString] != undefined) {
-        acc[addedDateString] += curr.quantity;
+      if (acc[dateString] != undefined) {
+        acc[dateString] += curr.quantity;
       } else {
-        acc[addedDateString] = curr.quantity;
+        acc[dateString] = curr.quantity;
       }
       return acc;
+
     }, {});
 
-    return Object.keys(addedQuantityPerDay).map(function (key) {
-      return { 'x': new Date(key), 'y': addedQuantityPerDay[key] };
+    return Object.keys(quantityPerDay).map(function (key) {
+      return { 'x': new Date(key), 'y': quantityPerDay[key] };
     });
-  }
-
-  removedQuantityPerDay(): chartData[] {
-    const removedQuantityPerDay = this.rawData.history.reduce((acc, curr) => {
-      const removedDateString = (new Date(curr.date)).toDateString();
-
-      if (acc[removedDateString] != undefined) {
-        acc[removedDateString] += curr.quantityChange;
-      } else {
-        acc[removedDateString] = curr.quantityChange;
-      }
-      return acc;
-    }, {});
-
-    return Object.keys(removedQuantityPerDay).map(function (key) {
-      return { 'x': new Date(key), 'y': removedQuantityPerDay[key] };
-    });
-  }
+  } 
 
   expirationCountdown(date: Date): number {
     const expirationDate = new Date(date);
