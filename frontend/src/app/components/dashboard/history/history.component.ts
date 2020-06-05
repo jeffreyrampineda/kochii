@@ -23,9 +23,13 @@ export class HistoryComponent implements OnInit {
     private historyService: HistoryService
   ) { }
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
 
   ngOnInit() {
+    // Set up inventory: MatTableDataSource with empty inital data
+    this.history = new MatTableDataSource();
+    this.history.paginator = this.paginator;
+
     this.getHistory();
   }
 
@@ -33,8 +37,7 @@ export class HistoryComponent implements OnInit {
   getHistory(): void {
     this.historyService.getHistory().subscribe({
       next: response => {
-        this.history = new MatTableDataSource(response);
-        this.history.paginator = this.paginator;
+        this.history.data = response;
       },
       error: err => {
         // Error
@@ -49,7 +52,7 @@ export class HistoryComponent implements OnInit {
   clear(): void {
     this.historyService.deleteAllHistory().subscribe({
       next: response => {
-        if (response.n === this.history.data.length) {
+        if (response === 1) {
           this.history.data = [];
         }
       },
