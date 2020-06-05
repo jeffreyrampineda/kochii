@@ -69,6 +69,7 @@ async function register(ctx) {
                 method: "registered",
                 target: "user",
                 quantity: 0,
+                addedDate: new Date(),
                 description: "Account created",
             }]
         });
