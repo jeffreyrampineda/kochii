@@ -1,5 +1,4 @@
 const History = require('../models/history');
-const Inventory = require('../models/inventory');
 
 /**
  * Get all the user's history from the database.
@@ -29,12 +28,10 @@ async function getAllFromPastDays(ctx) {
         fromDay.setHours(0, 0, 0, 0);
 
         const his = await History.findOne({ owner: ctx.state.user._id }, 'history');
-        const inv = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
 
         const rec = his.history.filter(hi => hi.addedDate.getTime() > fromDay.getTime());
-        const ite = inv.items.filter(it => it.addedDate.getTime() > fromDay.getTime());
 
-        ctx.body = { history: rec, items: ite };
+        ctx.body = rec;
     } catch (error) {
         ctx.throw(500, error);
     }
@@ -42,12 +39,12 @@ async function getAllFromPastDays(ctx) {
 
 /**
  * Creates a new history.
- * @param { method, target, quantityChange, description } history 
+ * @param { method, target, addedDate, quantity, description } history 
  * @return { Promise<Document> } create's result.
  */
 async function create(history) {
     try {
-        const { owner = "", method = "", target = "", quantity = 0, description = "" } = history;
+        const { owner = "", method = "", target = "", addedDate, quantity = 0, description = "" } = history;
         const result = await History.findOneAndUpdate(
             { owner },
             {
@@ -55,6 +52,7 @@ async function create(history) {
                     history: {
                         method,
                         target,
+                        addedDate,
                         quantity,
                         description,
                     }

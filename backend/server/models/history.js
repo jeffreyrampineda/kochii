@@ -7,7 +7,7 @@ const historySchema = new Schema({
         ref: 'User'
     },
     history: [{
-        addedDate: {
+        created_at: {
             type: Date,
             default: Date.now
         },
@@ -17,6 +17,10 @@ const historySchema = new Schema({
         },
         target: {
             type: String,
+            required: true
+        },
+        addedDate: {
+            type: Date,
             required: true
         },
         quantity: {

@@ -84,6 +84,8 @@ async function create(ctx) {
         if (result.ok === 1) {
             const item = result.value.items[result.value.items.length - 1];
 
+            await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "item created" });
+
             for (const socket_id in global.currentConnections[ctx.state.user._id]) {
                 global.currentConnections[ctx.state.user._id][socket_id].socket.emit('item_create', item);
             }
@@ -123,6 +125,8 @@ async function update(ctx) {
         // Setting or incrementing.
         itemData["$" + option]["items.$.quantity"] = quantity;
 
+        const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
+        const oldVItem = i.items.find(item => item.name === name);
         const result = await Inventory.findOneAndUpdate(
             {
                 owner: ctx.state.user._id,
@@ -135,10 +139,27 @@ async function update(ctx) {
         if (result.ok == 1) {
             const item = result.value.items.find(i => i._id == _id);
 
-            if (quantity <= 0 ) {
-                await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', quantity });
-            } else {
-                await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', quantity });
+            if (oldVItem.addedDate === item.addedDate) {
+                await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity });
+                await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity });
+            }
+            if (option === 'set') {
+                const newQuantity = item.quantity - oldVItem.quantity;
+
+                if (newQuantity < 0) {
+                    await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: item.addedDate, quantity: newQuantity });
+
+                } else if (newQuantity > 0) {
+                    await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: newQuantity });
+                }
+
+            }
+            if (option === 'inc') {
+                if (quantity <= 0) {
+                    await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: item.addedDate, quantity });
+                } else {
+                    await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity });
+                }
             }
 
             // If new quantity is less than or equal to 0, delete Item.
