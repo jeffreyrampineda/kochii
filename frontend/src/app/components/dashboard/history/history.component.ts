@@ -64,4 +64,9 @@ export class HistoryComponent implements OnInit {
       }
     });
   }
+
+  /** Checks whether history is empty or not */
+  isEmpty(): boolean {
+    return this.history.data.length === 0 ? true : false;
+  }
 }

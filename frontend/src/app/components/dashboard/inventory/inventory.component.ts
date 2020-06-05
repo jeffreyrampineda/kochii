@@ -1,12 +1,12 @@
-import { Component, OnInit, Inject, ViewChild, Injector } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, Injector, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Observable, forkJoin, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { Observable, forkJoin, of, Subject } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { GroupsService } from 'src/app/services/groups.service';
@@ -26,7 +26,10 @@ export interface DialogData {
     templateUrl: './inventory.component.html',
     styleUrls: ['./inventory.component.css']
 })
-export class InventoryComponent implements OnInit {
+export class InventoryComponent implements OnInit, OnDestroy {
+
+    private unsub = new Subject<void>();
+    private parentComponent: DashboardComponent;    // Used for closing and opening side menu
 
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: false }) sort: MatSort;
@@ -36,9 +39,6 @@ export class InventoryComponent implements OnInit {
     showSelect: Boolean = false;
     selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
     groups: string[];
-
-    // Used for closing and opening side menu
-    parentComponent: DashboardComponent;
 
     // Used for updating/removing items.
     itemUpdateForm: Object = {};
@@ -76,23 +76,21 @@ export class InventoryComponent implements OnInit {
         // Populate inventory.data with data
         this.getGroups();
         this.getItems();
-        
 
-        this.inventoryService.onItemCreate().subscribe(result => {
-            this.getItems();
-        });
-        this.inventoryService.onItemUpdate().subscribe();
-        this.inventoryService.onItemUpdateMany().subscribe();
-        this.inventoryService.onItemDelete().subscribe(result => {
-            this.getItems();
+        this.inventoryService.setSocketListeners();
+        this.inventoryService.inventoryUpdate.pipe(takeUntil(this.unsub)).subscribe(()=>{
+            //this.getItems(); //Unnecessary
         });
 
-        this.groupsService.onGroupCreate().subscribe(result => {
-            this.getGroups();
+        this.groupsService.setSocketListeners();
+        this.groupsService.groupsUpdate.pipe(takeUntil(this.unsub)).subscribe(()=>{
+            //this.getGroups(); //Unnecessary
         });
-        this.groupsService.onGroupDelete().subscribe(result => {
-            this.getGroups();
-        });
+    }
+
+    ngOnDestroy() {
+        this.unsub.next();
+        this.unsub.complete();
     }
 
     getGroups(): void {
@@ -358,6 +356,11 @@ export class InventoryComponent implements OnInit {
                 this.getItems();
             }
         });
+    }
+
+    /** Checks whether inventory is empty or not */
+    isEmpty(): boolean {
+        return this.inventory.data.length === 0 ? true : false;
     }
 
     private notify(message: string) {

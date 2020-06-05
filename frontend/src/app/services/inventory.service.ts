@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
@@ -19,6 +19,9 @@ export class InventoryService {
   private inventoryUrl = '/api/inventory';
   private queryUrl = '/search/';
   private localInv: Item[] = [];
+  private isSocketListenerSet = false;
+
+  public inventoryUpdate = new Subject<void>();
 
   constructor(
     private http: HttpClient,
@@ -26,7 +29,19 @@ export class InventoryService {
     private socketioService: SocketioService,
   ) { }
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
+
+  /** Set socket listeners once */
+  setSocketListeners() {
+    if (!this.isSocketListenerSet) {
+      this.log('setting socket listeners');
+      this.onItemCreate();
+      this.onItemUpdate();
+      this.onItemUpdateMany();
+      this.onItemDelete();
+      this.isSocketListenerSet = true;
+    }
+  }
 
   /** Get all items. */
   getItems(group: string = ''): Observable<Item[]> {
@@ -90,7 +105,7 @@ export class InventoryService {
     const existing = this.findItemFromLocal(item.name, item.expirationDate);
 
     // Change to updating
-    if(existing) {
+    if (existing) {
       this.log('item exists, switching to update');
       item._id = existing._id;
       return this.updateItem(item, 'inc');
@@ -140,64 +155,54 @@ export class InventoryService {
     return this.localInv.filter(i => i.group === group).length;
   }
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
 
   onItemCreate() {
-    return Observable.create(observer => {
-      this.socketioService.getSocket().on('item_create', (item) => {
-        this.log(`created - item w/ id=${item._id}`);
-        this.localInv.push(item);
-
-        observer.next(item);
-      });
+    this.socketioService.getSocket().on('item_create', (item) => {
+      this.log(`created - item w/ id=${item._id}`);
+      this.localInv.push(item);
+      this.inventoryUpdate.next();
     });
   }
 
   onItemUpdate() {
-    return Observable.create(observer => {
-      this.socketioService.getSocket().on('item_update', (item) => {
-        this.log(`updated - item w/ name=${item.name}, id=${item._id}`);
-        let ite = this.localInv.find(i => i._id === item._id);
+    this.socketioService.getSocket().on('item_update', (item) => {
+      this.log(`updated - item w/ name=${item.name}, id=${item._id}`);
+      let ite = this.localInv.find(i => i._id === item._id);
 
-        ite.name = item.name;
-        ite.quantity = item.quantity;
-        ite.addedDate = item.addedDate;
-        ite.expirationDate = item.expirationDate;
-        ite.group = item.group;
+      ite.name = item.name;
+      ite.quantity = item.quantity;
+      ite.addedDate = item.addedDate;
+      ite.expirationDate = item.expirationDate;
+      ite.group = item.group;
 
-        observer.next(item);
-      });
+      this.inventoryUpdate.next();
     });
   }
 
   onItemUpdateMany() {
-    return Observable.create(observer => {
-      this.socketioService.getSocket().on('item_updateMany', (items: Item[]) => {
-        if(items.length != 0) {
-          this.log('updated - many item');
-          items.forEach(i => {
-            let ite = this.localInv.find(it => it._id === i._id);
-  
-            ite.group = i.group;
-          });
-        }
-        observer.next(items);
-      });
+    this.socketioService.getSocket().on('item_updateMany', (items: Item[]) => {
+      if (items.length != 0) {
+        this.log('updated - many item');
+        items.forEach(i => {
+          let ite = this.localInv.find(it => it._id === i._id);
+
+          ite.group = i.group;
+        });
+      }
+      this.inventoryUpdate.next();
     });
   }
 
   onItemDelete() {
-    return Observable.create(observer => {
-      this.socketioService.getSocket().on('item_delete', (id) => {
-        this.log(`deleted - item /w id=${id}`);
-        this.localInv = this.localInv.filter(i => i._id !== id);
-  
-        observer.next(id);
-      });
+    this.socketioService.getSocket().on('item_delete', (id) => {
+      this.log(`deleted - item /w id=${id}`);
+      this.localInv = this.localInv.filter(i => i._id !== id);
+      this.inventoryUpdate.next();
     });
   }
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
 
   /**
    * Adds the message to the messageService for logging.
