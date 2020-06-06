@@ -66,11 +66,11 @@ async function register(ctx) {
             _id: history_id,
             owner: user._id,
             history: [{
-                method: "registered",
+                method: "create",
                 target: "user",
                 quantity: 0,
                 addedDate: new Date(),
-                description: "Account created",
+                description: "Account registered",
             }]
         });
 
