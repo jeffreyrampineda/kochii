@@ -139,7 +139,7 @@ async function update(ctx) {
         if (result.ok == 1) {
             const item = result.value.items.find(i => i._id == _id);
 
-            if (oldVItem.addedDate === item.addedDate) {
+            if ((new Date(oldVItem.addedDate)).getTime() != (new Date(item.addedDate)).getTime()) {
                 await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity, description: "Changed dates" });
                 await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Changed dates" });
             }
