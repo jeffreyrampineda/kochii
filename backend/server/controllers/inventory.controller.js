@@ -125,8 +125,8 @@ async function update(ctx) {
         // Setting or incrementing.
         itemData["$" + option]["items.$.quantity"] = quantity;
 
-        const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
-        const oldVItem = i.items.find(item => item.name === name);
+        const i = await Inventory.findOne({ owner: ctx.state.user._id, "items._id": _id }, { 'items.$': 1 });
+        const oldVItem = i.items[0];
         const result = await Inventory.findOneAndUpdate(
             {
                 owner: ctx.state.user._id,
