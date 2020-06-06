@@ -50,11 +50,14 @@ async function create(history) {
             {
                 $push: {
                     history: {
-                        method,
-                        target,
-                        addedDate,
-                        quantity,
-                        description,
+                        "$each": [{
+                            method,
+                            target,
+                            addedDate,
+                            quantity,
+                            description,
+                        }],
+                        "$sort": { "created_at": -1 }
                     }
                 }
             },
