@@ -127,7 +127,21 @@
         <ng-container matColumnDef="addedDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Added</th>
           <td mat-cell *matCellDef="let item">
-            <span matTooltip="{{item.addedDate | date}}">{{ item.addedDate | date }}</span>
+            <div *ngIf="selection.isSelected(item); else viewAddedDate">
+              <div *ngIf="option === 'set'; else viewAddedDate">
+                <mat-form-field>
+                  <input  matInput
+                          [formControl]="f(item._id).addedDate"
+                          [matDatepicker]="picker" />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error *ngIf="f(item._id).addedDate.errors">
+                    <div *ngIf="f(item._id).addedDate.errors.required">Added date is required</div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <ng-template #viewAddedDate><span matTooltip="{{item.addedDate | date}}">{{ item.addedDate | date }}</span></ng-template>
           </td>
         </ng-container>
 
@@ -135,10 +149,28 @@
         <ng-container matColumnDef="expirationDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiration</th>
           <td mat-cell *matCellDef="let item">
-            <span matTooltip="{{item.expirationDate | date}}">
-              {{ item.expirationDate | countdown | expiration }}
-              <span [ngClass]="['label', item.expirationDate | countdown | status]">{{ item.expirationDate | countdown | status | titlecase }}</span>
-            </span>
+
+            <div *ngIf="selection.isSelected(item); else viewExpirationDate">
+              <div *ngIf="option === 'set'; else viewExpirationDate">
+                <mat-form-field>
+                  <input  matInput
+                          [formControl]="f(item._id).expirationDate"
+                          [matDatepicker]="picker2" />
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                  <mat-error *ngIf="f(item._id).expirationDate.errors">
+                    <div *ngIf="f(item._id).expirationDate.errors.required">Expiration date is required</div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <ng-template #viewExpirationDate>
+              <span matTooltip="{{item.expirationDate | date}}">
+                {{ item.expirationDate | countdown | expiration }}
+                <span
+                  [ngClass]="['label', item.expirationDate | countdown | status]">{{ item.expirationDate | countdown | status | titlecase }}</span>
+              </span>
+            </ng-template>
           </td>
         </ng-container>
 
