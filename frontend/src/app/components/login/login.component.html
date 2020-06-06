@@ -1,4 +1,4 @@
-<mat-card class="k-card k-center-isolated">
+<mat-card class="k-center-isolated">
     <mat-card-header>
         <mat-card-title>Login</mat-card-title>
         <mat-card-subtitle>Enter your authentication</mat-card-subtitle>
@@ -26,15 +26,15 @@
             </mat-form-field>
         </form>
     </mat-card-content>
-    <mat-card-actions>
-        <div class="k-card-actions">
-        <span *ngIf="loading">Loading...</span>
-        <mat-error>
-            <div *ngIf="error.login">{{ error.login }}</div>
-        </mat-error>
-        <button mat-button routerLink="/home">Cancel</button>
-        <button mat-button routerLink="/register">Register</button>
-        <button type="submit" mat-button [disabled]="loginForm.invalid || loading" (click)="onSubmit()">Login</button>
+    <mat-card-actions class="k-actions k-text-center">
+        <div class="k-actions-buttons">
+            <span *ngIf="loading">Loading...</span>
+            <mat-error>
+                <div *ngIf="error.login">{{ error.login }}</div>
+            </mat-error>
+            <button mat-button routerLink="/home">Cancel</button>
+            <button mat-button routerLink="/register">Register</button>
+            <button type="submit" mat-button [disabled]="loginForm.invalid || loading" (click)="onSubmit()">Login</button>
         </div>
     </mat-card-actions>
 </mat-card>

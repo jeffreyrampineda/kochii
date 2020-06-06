@@ -23,6 +23,8 @@ export class ItemAddComponent implements OnInit {
   searchTerm = new Subject<string>();
   itemAddForm: FormGroup[] = [];
   groups: string[];
+  placeholderImage = 'assets/image-placeholder.png';
+  selectedGroup = "Default";
 
   constructor(
     private router: Router,
@@ -51,6 +53,7 @@ export class ItemAddComponent implements OnInit {
 // -------------------------------------------------------------
 
   ngOnInit() {
+    this.selectedGroup = this.inventoryService.selectedGroup === "" ? "Default" : this.inventoryService.selectedGroup;
     this.addMoreInput();
     this.getGroups();
   }
@@ -144,13 +147,17 @@ export class ItemAddComponent implements OnInit {
         Validators.maxLength(20),
         Validators.required
       ]],
+      cost: [0, [
+        Validators.min(1),
+        Validators.required
+      ]],
       quantity: [1, [
         Validators.min(1),
         Validators.required
       ]],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required],
-      group: ['Default', Validators.required],
+      group: [this.selectedGroup, Validators.required],
     }));
   }
 
@@ -160,6 +167,11 @@ export class ItemAddComponent implements OnInit {
    */
   removeInput(index: number): void {
     this.itemAddForm.splice(index, 1);
+  }
+
+  /** Navigate the browser back to dashboard/inventory */
+  back(): void {
+    this.router.navigate(['dashboard/inventory']);
   }
 
   /** Convenience getter for easy access to form fields. */

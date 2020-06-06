@@ -9,6 +9,10 @@
   font-size: 10px;
 }
 
+.k-form-field-quantity {
+  width: 50px;
+}
+
 .good {background-color: #4CAF50;} /* Green */
 .warning {background-color: #ff9800;} /* Orange */
 .expired {background-color: #f44336;} /* Red */

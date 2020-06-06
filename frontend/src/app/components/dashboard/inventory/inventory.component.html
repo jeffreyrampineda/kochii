@@ -1,35 +1,51 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>
-      Inventory - {{ groupName }}
+    <mat-card-title>Inventory</mat-card-title>
+    <mat-card-subtitle>
+      Current group:
       <mat-form-field>
         <mat-select [(ngModel)]="selectedGroup" (ngModelChange)="getItems()">
-            <mat-option value="">All items</mat-option>
-            <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
-          </mat-select>
+          <mat-option value="">All items ({{ getGroupSize('') }})</mat-option>
+          <mat-option *ngFor="let group of groups" [value]="group">{{ group }} ({{ getGroupSize(group) }})</mat-option>
+        </mat-select>
       </mat-form-field>
-      <div class="k-actions-buttons">
-        <button mat-button (click)="createGroup()">Add Group</button>
-        <button mat-button (click)="deleteGroup()">Remove group</button>
-      </div>
-    </mat-card-title>
+      <button mat-button (click)="openCreateGroupDialog()">Add Group</button>
+      <button *ngIf="canRemoveGroup()" mat-button (click)="deleteGroup()">Remove group</button>
+    </mat-card-subtitle>
   </mat-card-header>
-  <mat-card-actions>
-    <mat-form-field class="k-search">
-      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
-    </mat-form-field>
-    <div class="k-actions-buttons">
-      <button mat-button routerLink="/dashboard/inventory/add">Add</button>
-      <button mat-button (click)="showSelect ? openConfirmationDialog('Remove', 'Removing items') : selectColumnToggle('inc')">Remove</button>
-      <button mat-button (click)="showSelect ? openConfirmationDialog('Update', 'Setting items') : selectColumnToggle('set')">Update</button>
-      <button mat-button (click)="selectColumnToggle()" *ngIf="showSelect">Cancel</button>
+  <mat-card-actions *ngIf="isEmpty()" class="k-actions">
+    <div class="k-float-right">
+      <button mat-button routerLink="/dashboard/inventory/add"><mat-icon>add</mat-icon></button>
     </div>
   </mat-card-actions>
-  <mat-card-content>
-    <div *ngIf="isEmpty(); else ktable">
-      <span>Inventory is empty!</span>
+  <mat-card-content class="k-card-content-min-height">
+    <div *ngIf="isEmpty(); else viewTable" class="k-center-isolated k-text-center">
+      <h1>(╥︣﹏᷅╥)</h1>
+      <h2>Inventory is empty</h2>
+      <span>Try adding items at the top right now!</span>
     </div>
-    <ng-template #ktable>
+    <ng-template #viewTable>
+      <div class="k-float-right">
+        <div *ngIf="!showSelect">
+          <button mat-button routerLink="/dashboard/inventory/add"><mat-icon>add</mat-icon></button>
+          <button mat-button (click)="selectColumnToggle('inc')"><mat-icon>remove</mat-icon></button>
+          <button mat-button (click)="selectColumnToggle('set')"><mat-icon>create</mat-icon></button>
+        </div>
+        <div *ngIf="showSelect">
+          <span>{{ option === 'set' ? "You are updating " : "You are removing " }} {{ selection.selected.length }} items</span>
+          <button mat-button (click)="
+                    option === 'set' ? openUpdateDialog('Update', 'Summary of the new values for the updated items'):
+                    openUpdateDialog('Remove', 'Removing the following items')
+                    ">
+            <mat-icon>check</mat-icon>
+          </button>
+          <button mat-button (click)="selectColumnToggle()"><mat-icon>close</mat-icon></button>
+        </div>
+      </div>
+      <mat-form-field class="k-search">
+        <mat-label>Search</mat-label>
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. apples">
+      </mat-form-field>
       <table class="mat-elevation-z1" mat-table [dataSource]="inventory" matSort>
 
         <!-- Checkbox Column -->
@@ -51,27 +67,39 @@
         <!-- name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-          <td mat-cell *matCellDef="let item">{{ item.name }}</td>
+          <td mat-cell *matCellDef="let item">
+            <div *ngIf="selection.isSelected(item); else viewName">
+              <div *ngIf="option === 'set'; else viewName">
+                <mat-form-field>
+                  <input  matInput
+                          type="text"
+                          [formControl]="f(item._id).name">
+                  <mat-error *ngIf="f(item._id).name.errors">
+                    <div *ngIf="f(item._id).name.errors.required">Name is required</div>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <ng-template #viewName><span>{{ item.name }}</span></ng-template>
+          </td>
         </ng-container>
   
         <!-- quantity Column -->
         <ng-container matColumnDef="quantity">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
           <td mat-cell *matCellDef="let item">
-            <div *ngIf="selection.isSelected(item)">
-              <mat-form-field>
-                <input 
-                  matInput 
-                  type="number" 
-                  [formControl]="f(item._id).quantity">
+            <div *ngIf="selection.isSelected(item); else viewQuantity">
+              <mat-form-field class="k-form-field-quantity">
+                <input  matInput
+                        type="number"
+                        [formControl]="f(item._id).quantity">
                 <mat-error *ngIf="f(item._id).quantity.errors">
                   <div *ngIf="f(item._id).quantity.errors.min">Minimum quantity is 1</div>
                 </mat-error>
               </mat-form-field>
+              <span>&nbsp; / {{ item.quantity }}</span>
             </div>
-            <span matTooltip="quantity">
-              {{ item.quantity }}
-            </span>
+            <ng-template #viewQuantity><span matTooltip="quantity">{{ item.quantity }}</span></ng-template>
           </td>
         </ng-container>
   
@@ -80,8 +108,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
           <td mat-cell *matCellDef="let item">
             <div *ngIf="selection.isSelected(item); else viewGroup">
-              <div *ngIf="option === 'set'; then editGroup else viewGroup"></div>
-              <ng-template #editGroup>
+              <div *ngIf="option === 'set'; else viewGroup">
                 <mat-form-field>
                   <mat-select [formControl]="f(item._id).group">
                     <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
@@ -90,12 +117,12 @@
                     <div *ngIf="f(item._id).group.errors.required">Group is required</div>
                   </mat-error>
                 </mat-form-field>
-              </ng-template>
+              </div>
             </div>
-            <ng-template #viewGroup><span matTooltip="Group">{{ item.group }} {{ getGroupSize(item.group) }}</span></ng-template>
+            <ng-template #viewGroup><span matTooltip="Group">{{ item.group }}</span></ng-template>
           </td>
         </ng-container>
-  
+
         <!-- addedDate Column -->
         <ng-container matColumnDef="addedDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Added</th>
@@ -103,7 +130,7 @@
             <span matTooltip="{{item.addedDate | date}}">{{ item.addedDate | date }}</span>
           </td>
         </ng-container>
-  
+
         <!-- expirationDate Column -->
         <ng-container matColumnDef="expirationDate">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiration</th>
@@ -114,11 +141,11 @@
             </span>
           </td>
         </ng-container>
-  
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-  
+
       <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
     </ng-template>
   </mat-card-content>

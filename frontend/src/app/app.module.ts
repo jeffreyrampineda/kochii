@@ -28,7 +28,7 @@ import { RegisterComponent } from './components/register/register.component';
 // Components - /dashboard
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
 import { HistoryComponent } from './components/dashboard/history/history.component';
-import { InventoryComponent, DialogOverviewExampleDialogComponent } from './components/dashboard/inventory/inventory.component';
+import { InventoryComponent } from './components/dashboard/inventory/inventory.component';
 import { OverviewComponent } from './components/dashboard/overview/overview.component';
 import { SettingsComponent } from './components/dashboard/settings/settings.component';
 
@@ -36,7 +36,8 @@ import { SettingsComponent } from './components/dashboard/settings/settings.comp
 import { ItemAddComponent } from './components/dashboard/inventory/item-add/item-add.component';
 
 // Components - dialogs
-import { GeneralDialogComponent } from './components/dialogs/general-dialog/general-dialog.component';
+import { UpdateDialogComponent } from './components/dialogs/update-dialog/update-dialog.component';
+import { CreateGroupDialogComponent } from './components/dialogs/create-group-dialog/create-group-dialog.component';
 
 // -------------------------------------------------------------
 
@@ -57,8 +58,8 @@ import { GeneralDialogComponent } from './components/dialogs/general-dialog/gene
     OverviewComponent,
     SettingsComponent,
     ItemAddComponent,
-    GeneralDialogComponent,
-    DialogOverviewExampleDialogComponent,
+    UpdateDialogComponent,
+    CreateGroupDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -75,8 +76,8 @@ import { GeneralDialogComponent } from './components/dialogs/general-dialog/gene
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    GeneralDialogComponent,
-    DialogOverviewExampleDialogComponent,
+    UpdateDialogComponent,
+    CreateGroupDialogComponent,
   ]
 })
 export class AppModule { }

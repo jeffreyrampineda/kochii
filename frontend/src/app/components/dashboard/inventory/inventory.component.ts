@@ -1,23 +1,20 @@
-import { Component, OnInit, Inject, ViewChild, Injector, OnDestroy } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit, ViewChild, Injector, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Observable, forkJoin, of, Subject } from 'rxjs';
-import { catchError, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
-import { GeneralDialogComponent } from 'src/app/components/dialogs/general-dialog/general-dialog.component';
+import { UpdateDialogComponent } from 'src/app/components/dialogs/update-dialog/update-dialog.component';
+import { CreateGroupDialogComponent } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.component';
 import { DashboardComponent } from '../dashboard.component';
 import { MessageService } from 'src/app/services/message.service';
-
-export interface DialogData {
-    groupName: string;
-}
 
 // -------------------------------------------------------------
 
@@ -57,7 +54,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.parentComponent = this.injector.get(DashboardComponent);
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     ngOnInit() {
         // Set up inventory: MatTableDataSource with empty inital data
@@ -78,12 +75,12 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.getItems();
 
         this.inventoryService.setSocketListeners();
-        this.inventoryService.inventoryUpdate.pipe(takeUntil(this.unsub)).subscribe(()=>{
+        this.inventoryService.inventoryUpdate.pipe(takeUntil(this.unsub)).subscribe(() => {
             //this.getItems(); //Unnecessary
         });
 
         this.groupsService.setSocketListeners();
-        this.groupsService.groupsUpdate.pipe(takeUntil(this.unsub)).subscribe(()=>{
+        this.groupsService.groupsUpdate.pipe(takeUntil(this.unsub)).subscribe(() => {
             //this.getGroups(); //Unnecessary
         });
     }
@@ -98,7 +95,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
             next: response => {
                 this.groups = response;
             },
-            error: err => {
+            error: () => {
                 // Error
             },
             complete: () => {
@@ -107,83 +104,28 @@ export class InventoryComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * Get all items in the inventory with the specified group.
-     */
+    /** Get all items in the inventory with the specified group. */
     getItems(): void {
         this.inventoryService.getItems(this.selectedGroup).subscribe({
             next: response => {
                 this.inventory.data = response;
             },
-            error: err => {
+            error: () => {
                 // Error
             },
             complete: () => {
                 // TODO - stop loading.
             }
         });
-    }
-
-    /**
-     * Update the item with the same name and expirationDate.
-     * Option declares whether to set or inc.
-     * @param newItem - The item to be updated.
-     */
-    updateItem(newItem: Item): Observable<any> {
-        if (this.option === 'inc') {
-            console.log('Deducting quantity');
-            newItem.quantity = -newItem.quantity;
-        }
-
-        return this.inventoryService.updateItem(newItem, this.option).pipe(
-            catchError((error: any): Observable<any> => {
-                return of(undefined);
-            }),
-        );
     }
 
     getGroupSize(name) {
         return this.inventoryService.getGroupSize(name);
     }
 
-    /**
-     * Loops through newItems and update each item individually.
-     * @param newItems - The array of items to be updated.
-     */
-    updateManyItem(newItems: Item[]): void {
-        const observablesGroup = [];
-
-        newItems.forEach(
-            newItem => {
-              observablesGroup.push(this.updateItem(newItem));
-            }
-        );
-
-        forkJoin(observablesGroup).subscribe({
-            next: response => {
-                const successful = response.reduce((acc: number, curr) => {
-                    // Only increment if it's not undefined.
-                    if (curr) {
-                        acc += 1;
-                    }
-                    return acc;
-                }, 0);
-                const total = observablesGroup.length;
-                this.notify(`${successful}/${total} items were successfully updated.`);
-            },
-            error: err => {
-                // Error
-            },
-            complete: () => {
-                this.getItems();
-                this.selectColumnToggle('');
-            }
-        });
-    }
-
     /** Selects all rows if they are not all selected; otherwise clear selection. */
     selectMasterToggle() {
-      this.isAllSelected() ? this.selectionClear() : this.inventory.data.forEach(item => this.selectionSelect(item));
+        this.isAllSelected() ? this.selectionClear() : this.inventory.data.forEach(item => this.selectionSelect(item));
     }
 
     /** Toggles when to show the select checkboxes.
@@ -204,35 +146,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
         }
     }
 
-    /** Opens the confirmation dialog. */
-    openConfirmationDialog(title: string, description: string): void {
-        const dialogRef = this.dialog.open(GeneralDialogComponent, {
-            width: '250px',
-            data: {
-                title: 'Confirmation: ' + title,
-                description: description,
-                items: Object.values(this.itemUpdateForm).map<FormGroup[]>((form: FormGroup) => form.value),
-                canConfirm: !this.checkIfInvalid(),
-            }
-        });
-
-        // Confirmed.
-        dialogRef.afterClosed().subscribe({
-            next: (response: Item[]) => {
-                if (response && response.length > 0) {
-                    console.log(`Confirmed... ${this.option}`);
-                    this.updateManyItem(response);
-                }
-            },
-            error: err => {
-                // Error
-            },
-            complete: () => {
-                // TODO - stop loading.
-            }
-        });
-    }
-
     /**
      * Adds extra functionality for SelectionModel.select(Item).
      * Also adds the specified item to itemUpdateForm object.
@@ -245,12 +158,12 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.itemUpdateForm[item._id] = this.formBuilder.group({
             _id: item._id,
             name: [item.name, [
-              Validators.maxLength(20),
-              Validators.required
+                Validators.maxLength(20),
+                Validators.required
             ]],
             quantity: [item.quantity, [
-              Validators.min(1),
-              Validators.required
+                Validators.min(1),
+                Validators.required
             ]],
             addedDate: [item.addedDate, Validators.required],
             expirationDate: [item.expirationDate, Validators.required],
@@ -294,14 +207,14 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
     /** Whether the number of selected elements matches the total number of rows. */
     isAllSelected() {
-      const numSelected = this.selection.selected.length;
-      const numRows = this.inventory.data.length;
-      return numSelected === numRows;
+        const numSelected = this.selection.selected.length;
+        const numRows = this.inventory.data.length;
+        return numSelected === numRows;
     }
 
     /** Deletes the selectedGroup from the server. */
     deleteGroup(): void {
-        this.groupsService.deleteGroup(this.selectedGroup).subscribe({  
+        this.groupsService.deleteGroup(this.selectedGroup).subscribe({
             next: response => {
                 if (response.name) {
                     this.notify(`'${response.name}' deleted`);
@@ -336,15 +249,16 @@ export class InventoryComponent implements OnInit, OnDestroy {
         return isInvalid;
     }
 
-    createGroup(): void {
-        const dialogRef = this.dialog.open(DialogOverviewExampleDialogComponent, {
+    /** Opens the create group dialog. */
+    openCreateGroupDialog(): void {
+        const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
             width: '250px',
             data: { name: '' }
         });
 
         dialogRef.afterClosed().subscribe({
             next: response => {
-                if (response.name) {
+                if (response && response.name) {
                     this.notify(`'${response.name}' created`);
                     this.selectedGroup = response.name;
                 }
@@ -358,54 +272,47 @@ export class InventoryComponent implements OnInit, OnDestroy {
         });
     }
 
+    /** Opens the update dialog. */
+    openUpdateDialog(title: string, description: string): void {
+        const dialogRef = this.dialog.open(UpdateDialogComponent, {
+            width: '400px',
+            data: {
+                title: 'Confirmation: ' + title,
+                description: description,
+                items: Object.values(this.itemUpdateForm).map<FormGroup[]>((form: FormGroup) => form.value),
+                canConfirm: !this.checkIfInvalid(),
+                option: this.option
+            }
+        });
+
+        // Confirmed.
+        dialogRef.afterClosed().subscribe({
+            next: response => {
+                if (response && response.successful) {
+                    this.notify(`${response.successful}/${response.total} items were successfully updated.`);
+                }
+            },
+            error: err => {
+                this.notify(err.error);
+            },
+            complete: () => {
+                this.getItems();
+                this.selectColumnToggle('');
+            }
+        });
+    }
+
     /** Checks whether inventory is empty or not */
     isEmpty(): boolean {
         return this.inventory.data.length === 0 ? true : false;
     }
 
+    /** Checks whether the selectedGroup can be removed or not */
+    canRemoveGroup(): boolean {
+        return this.selectedGroup != "Default" && this.selectedGroup != "";
+    }
+
     private notify(message: string) {
         this.messageService.notify(message);
-    }
-}
-
-@Component({
-    selector: 'kochii-dialog-overview-example-dialog',
-    templateUrl: 'dialog-overview-example-dialog.component.html',
-})
-export class DialogOverviewExampleDialogComponent {
-
-    loading = false;
-    error = {};
-
-    constructor(
-        private groupsService: GroupsService,
-        public dialogRef: MatDialogRef<DialogOverviewExampleDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    ) { }
-
-    onNoClick(): void {
-      this.dialogRef.close();
-    }
-
-    onSubmit(data) {
-        if (this.loading) {
-            return;
-        }
-        this.loading = true;
-
-        this.groupsService.createGroup(data.name).subscribe({
-            next: response => {
-                if (response.name) {
-                    this.dialogRef.close(response);
-                }
-            },
-            error: err => {
-                this.error = err.error;
-                this.loading = false;
-            },
-            complete: () => {
-                this.loading = false;
-            }
-        });
     }
 }

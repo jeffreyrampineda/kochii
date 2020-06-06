@@ -22,6 +22,7 @@ export class InventoryService {
   private isSocketListenerSet = false;
 
   public inventoryUpdate = new Subject<void>();
+  public selectedGroup = "";
 
   constructor(
     private http: HttpClient,
@@ -46,6 +47,7 @@ export class InventoryService {
   /** Get all items. */
   getItems(group: string = ''): Observable<Item[]> {
     return new Observable(obs => {
+      this.selectedGroup = group;
       if (this.localInv.length !== 0) {
         let filtered = this.localInv;
         if (group !== '') {
@@ -151,8 +153,12 @@ export class InventoryService {
     return of(undefined);
   }
 
-  getGroupSize(group) {
-    return this.localInv.filter(i => i.group === group).length;
+  /** Returns the size of the specified group. */
+  getGroupSize(group: string = "") {
+    if (group != "") {
+      return this.localInv.filter(i => i.group === group).length;
+    }
+    return this.localInv.length;
   }
 
   // -------------------------------------------------------------

@@ -3,6 +3,10 @@
     padding: 20px;
 }
 
+.k-card-content-min-height {
+    min-height: 300px;
+}
+
 .k-card-title {
     font-size: 20px;
     font-weight: bold;
@@ -20,8 +24,4 @@
     width: 100%;
 }
 
-.k-card-actions {
-    text-align: center;
-    padding-bottom: 15px;
-}
 /* ----------------------- */

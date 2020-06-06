@@ -15,23 +15,18 @@ table {
     table-layout:fixed;
 }
 
-.mat-card-actions {
-    margin: 0px;
+.k-actions {
     overflow: hidden;
 }
 
-/* Used for item-add/inventory */
 .k-actions-buttons {
-    float: right;
+    padding-bottom: 15px;
 }
 
-.k-actions-buttons * {
-    margin: 0px;
-}
-
+/* Used for item-add/inventory */
 .k-search {
     float: left;
-    width: 50%;
+    width: 100%;
 }
 /* ----------------------------------- */
 
@@ -39,6 +34,11 @@ table {
 .k-float-right {
     float: right;
 }
+
+.k-float-left {
+    float: left;
+}
+
 /* ----------------------- */
 
 .k-center-isolated {

@@ -1,0 +1,15 @@
+<h3>Add group</h3>
+<div>
+  <mat-form-field>
+    <mat-label>Group name</mat-label>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+  <span *ngIf="loading">Creating...</span>
+  <mat-error>
+    <div *ngIf="error.name">{{ error.name }}</div>
+  </mat-error>
+</div>
+<div class="k-float-right">
+  <button mat-button (click)="onSubmit()" [disabled]="loading || data.name === ''">Save</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</div>

@@ -1,19 +1,23 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>Add Items</mat-card-title>
+    <mat-card-subtitle>Fill up the form to add items</mat-card-subtitle>
   </mat-card-header>
-  <mat-card-actions>
-    <div class="k-actions-buttons">
+  <mat-card-actions class="k-actions">
+    <div class="k-float-right">
       <button mat-button (click)="onSubmit()" [disabled]="checkIfInvalid()">Add</button>
+      <button mat-button (click)="back()">Cancel</button>
     </div>
   </mat-card-actions>
   <mat-card-content>
     <mat-tab-group [selectedIndex]="itemAddForm.length - 1">
       <mat-tab *ngFor="let iform of itemAddForm" [label]="iform.value.name">
-        <form class="k-item-add-form" [formGroup]="iform">
+        <div class="k-item-add-form-details-side">
+          <form class="k-item-add-form" [formGroup]="iform">
 
-          <!-- name field -->
-          <mat-form-field class="k-card-form-field-full">
+            <!-- name field -->
+            <mat-form-field class="k-card-form-field-full">
+              <mat-label>Name</mat-label>
               <input  matInput 
                       formControlName="name"
                       type="text"
@@ -28,59 +32,89 @@
                   {{ item.name }}
                 </mat-option>
               </mat-autocomplete>
-          </mat-form-field>
-
-          <!-- quantity field -->
-          <mat-form-field class="k-card-form-field-full">
-              <input  matInput
-                      formControlName="quantity"
-                      type="number"
-                      placeholder="Quantity" />
-              <mat-error *ngIf="f.quantity.errors">
-                <div *ngIf="f.quantity.errors.required">Quantity is required</div>
-                <div *ngIf="f.quantity.errors.min">Minimum quantity is 1</div>
+            </mat-form-field>
+  
+            <table class="example-full-width" cellspacing="0"><tr>
+              <!-- cost field -->
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Cost</mat-label>
+                  <span matPrefix>$ &nbsp;</span>
+                  <input  matInput 
+                          formControlName="cost" 
+                          type="text" 
+                          placeholder="cost" />
+                  <mat-error *ngIf="f.cost.errors">
+                    <div *ngIf="f.cost.errors.required">Cost is required</div>
+                  </mat-error>
+                </mat-form-field>
+              </td>
+  
+              <!-- quantity field -->
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Quantity</mat-label>
+                  <input  matInput 
+                          formControlName="quantity" 
+                          type="number" 
+                          placeholder="Quantity" />
+                  <mat-error *ngIf="f.quantity.errors">
+                    <div *ngIf="f.quantity.errors.required">Quantity is required</div>
+                    <div *ngIf="f.quantity.errors.min">Minimum quantity is 1</div>
+                  </mat-error>
+                </mat-form-field>
+              </td>
+            </tr></table>
+  
+            <!-- group field -->
+            <mat-form-field class="k-card-form-field-full">
+              <mat-label>Select a group</mat-label>
+              <mat-select formControlName="group">
+                <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="f.group.errors">
+                <div *ngIf="f.group.errors.required">Group is required</div>
               </mat-error>
-          </mat-form-field>
-
-          <!-- addedDate field -->
-          <mat-form-field class="k-card-form-field-full">
-              <input  matInput
-                      formControlName="addedDate"
-                      placeholder="Added Date"
-                      [matDatepicker]="picker" />
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-
-          <!-- expiration field -->
-          <mat-form-field class="k-card-form-field-full">
-              <input  matInput
-                      formControlName="expirationDate"
-                      placeholder="Expiration Date"
-                      [matDatepicker]="picker2" />
-              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-              <mat-datepicker #picker2></mat-datepicker>
-          </mat-form-field>
-
-          <!-- group field -->
-          <mat-form-field class="k-card-form-field-full">
-            <mat-label>Select a group</mat-label>
-            <mat-select formControlName="group">
-              <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
-            </mat-select>
-            <mat-error *ngIf="f.group.errors">
-              <div *ngIf="f.group.errors.required">Group is required</div>
-            </mat-error>
-          </mat-form-field>
-        </form>
-        <button mat-icon-button *ngIf="iform != itemAddForm[0]" (click)="removeInput(itemAddForm.indexOf(iform))"><mat-icon>clear</mat-icon></button>
+            </mat-form-field>
+  
+            <table class="example-full-width" cellspacing="0"><tr>
+              <!-- addedDate field -->
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Added date</mat-label>
+                  <input  matInput 
+                          formControlName="addedDate" 
+                          placeholder="Added Date" 
+                          [matDatepicker]="picker" />
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+              </td>
+  
+              <!-- expiration field -->
+              <td>
+                <mat-form-field class="example-full-width">
+                  <mat-label>Expiration date</mat-label>
+                  <input  matInput 
+                          formControlName="expirationDate" 
+                          placeholder="Expiration Date" 
+                          [matDatepicker]="picker2" />
+                  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                  <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+              </td>
+            </tr></table>
+          </form>
+          <button mat-icon-button *ngIf="iform != itemAddForm[0]" (click)="removeInput(itemAddForm.indexOf(iform))"><mat-icon>clear</mat-icon></button>
+        </div>
+        <div class="k-item-add-form-image-side">
+          <img [src]="placeholderImage">
+        </div>
       </mat-tab>
       <mat-tab disabled>
-          <ng-template mat-tab-label>
-              <button mat-icon-button (click)="addMoreInput()">
-                  <mat-icon>add_circle</mat-icon>
-              </button>
-          </ng-template>
+        <ng-template mat-tab-label>
+          <button mat-icon-button (click)="addMoreInput()"><mat-icon>add_circle</mat-icon></button>
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>

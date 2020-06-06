@@ -1,0 +1,16 @@
+<h3>{{ data.title }}</h3>
+<div>
+  <span>{{ data.description }}</span>
+  <mat-list role="list">
+    <mat-list-item *ngFor="let item of data.items" role="listitem">({{ item.quantity }}) {{ item.name }}</mat-list-item>
+  </mat-list>  
+  <span *ngIf="loading">Saving...</span>
+  <mat-error>
+    <div *ngIf="error.name">{{ error.name }}</div>
+  </mat-error>
+</div>
+<hr />
+<div class="k-float-right">
+  <button mat-button (click)="onSubmit()" [disabled]="!data.canConfirm">Save</button>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+</div>

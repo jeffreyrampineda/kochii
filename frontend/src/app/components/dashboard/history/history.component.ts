@@ -16,7 +16,7 @@ export class HistoryComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['date', 'method', 'description', 'target'];
+  displayedColumns: string[] = ['date', 'method', 'target', 'quantity', 'addedDate', 'description', ];
   history: MatTableDataSource<History>;
 
   constructor(

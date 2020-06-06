@@ -1,4 +1,4 @@
-<mat-card class="k-card k-center-isolated">
+<mat-card class="k-center-isolated">
     <mat-card-header>
         <mat-card-title>Register</mat-card-title>
         <mat-card-subtitle>Enter your authentication</mat-card-subtitle>
@@ -44,8 +44,8 @@
             </mat-error>  
         </form>
   </mat-card-content>
-  <mat-card-actions>
-    <div class="k-card-actions">
+  <mat-card-actions class="k-actions k-text-center">
+    <div class="k-actions-buttons">
         <span *ngIf="loading">Loading...</span>
         <mat-error>
             <div *ngIf="error.username">{{ error.username }}</div>
