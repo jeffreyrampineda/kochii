@@ -143,6 +143,9 @@ async function update(ctx) {
                 await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity, description: "Changed dates" });
                 await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Changed dates" });
             }
+            if (oldVItem.group != group) {
+                await createHistory({ owner: ctx.state.user._id, method: 'edit', target: 'item', addedDate, quantity, description: "Changed groups" });
+            }
             if (option === 'set') {
                 const newQuantity = item.quantity - oldVItem.quantity;
 
