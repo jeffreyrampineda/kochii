@@ -26,6 +26,9 @@
                       [matAutocomplete]="auto" />
               <mat-error *ngIf="f.name.errors">
                 <div *ngIf="f.name.errors.required">Name is required</div>
+                <div *ngIf="f.name.errors.minlength">Minimum length is 2</div>
+                <div *ngIf="f.name.errors.maxlength">Maximum length is 30</div>
+                <div *ngIf="f.name.errors.pattern">Must only be an alphanumeric, space ( ), underscore (_), or dash (-)</div>
               </mat-error>
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let item of existingItems | slice:0:9" [value]="item.name">
@@ -43,7 +46,7 @@
                   <input  matInput 
                           formControlName="cost" 
                           type="text" 
-                          placeholder="cost" />
+                          placeholder="Ex. 0.20" />
                   <mat-error *ngIf="f.cost.errors">
                     <div *ngIf="f.cost.errors.required">Cost is required</div>
                   </mat-error>
@@ -57,10 +60,11 @@
                   <input  matInput 
                           formControlName="quantity" 
                           type="number" 
-                          placeholder="Quantity" />
+                          placeholder="Ex. 1" />
                   <mat-error *ngIf="f.quantity.errors">
                     <div *ngIf="f.quantity.errors.required">Quantity is required</div>
                     <div *ngIf="f.quantity.errors.min">Minimum quantity is 1</div>
+                    <div *ngIf="f.quantity.errors.max">Maximum quantity is 999</div>
                   </mat-error>
                 </mat-form-field>
               </td>
@@ -88,6 +92,9 @@
                           [matDatepicker]="picker" />
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
+                  <mat-error *ngIf="f.addedDate.errors">
+                    <div *ngIf="f.addedDate.errors.required">Added date is required</div>
+                  </mat-error>
                 </mat-form-field>
               </td>
   
@@ -101,6 +108,9 @@
                           [matDatepicker]="picker2" />
                   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                   <mat-datepicker #picker2></mat-datepicker>
+                  <mat-error *ngIf="f.expirationDate.errors">
+                    <div *ngIf="f.expirationDate.errors.required">Expiration date is required</div>
+                  </mat-error>
                 </mat-form-field>
               </td>
             </tr></table>

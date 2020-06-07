@@ -34,7 +34,7 @@
         <div *ngIf="showSelect">
           <span>{{ option === 'set' ? "You are updating " : "You are removing " }} {{ selection.selected.length }} items</span>
           <button mat-button (click)="
-                    option === 'set' ? openUpdateDialog('Update', 'Summary of the new values for the updated items'):
+                    option === 'set' ? openUpdateDialog('Update', 'New values for the updated items'):
                     openUpdateDialog('Remove', 'Removing the following items')
                     ">
             <mat-icon>check</mat-icon>
@@ -76,6 +76,9 @@
                           [formControl]="f(item._id).name">
                   <mat-error *ngIf="f(item._id).name.errors">
                     <div *ngIf="f(item._id).name.errors.required">Name is required</div>
+                    <div *ngIf="f(item._id).name.errors.minlength">Minimum length is 2</div>
+                    <div *ngIf="f(item._id).name.errors.maxlength">Maximum length is 30</div>
+                    <div *ngIf="f(item._id).name.errors.pattern">Must only be an alphanumeric, space ( ), underscore (_), or dash (-)</div>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -94,7 +97,9 @@
                         type="number"
                         [formControl]="f(item._id).quantity">
                 <mat-error *ngIf="f(item._id).quantity.errors">
+                  <div *ngIf="f(item._id).quantity.errors.required">Quantity is required</div>
                   <div *ngIf="f(item._id).quantity.errors.min">Minimum quantity is 1</div>
+                  <div *ngIf="f(item._id).quantity.errors.max">Maximum quantity is 999</div>
                 </mat-error>
               </mat-form-field>
               <span>&nbsp; / {{ item.quantity }}</span>

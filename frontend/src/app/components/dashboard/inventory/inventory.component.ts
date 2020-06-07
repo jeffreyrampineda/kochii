@@ -158,11 +158,14 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.itemUpdateForm[item._id] = this.formBuilder.group({
             _id: item._id,
             name: [item.name, [
-                Validators.maxLength(20),
+                Validators.minLength(2),
+                Validators.maxLength(30),
+                Validators.pattern("^[a-zA-Z0-9 _-]*$"),
                 Validators.required
             ]],
             quantity: [item.quantity, [
                 Validators.min(1),
+                Validators.max(999),
                 Validators.required
             ]],
             addedDate: [item.addedDate, Validators.required],

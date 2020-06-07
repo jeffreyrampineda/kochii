@@ -144,15 +144,18 @@ export class ItemAddComponent implements OnInit {
   addMoreInput(): void {
     this.itemAddForm.push(this.formBuilder.group({
       name: ['New Item', [
-        Validators.maxLength(20),
+        Validators.minLength(2),
+        Validators.maxLength(30),
+        Validators.pattern("^[a-zA-Z0-9 _-]*$"),
         Validators.required
       ]],
       cost: [0, [
-        Validators.min(1),
+        Validators.min(0),
         Validators.required
       ]],
       quantity: [1, [
         Validators.min(1),
+        Validators.max(999),
         Validators.required
       ]],
       addedDate: [this.dateToday, Validators.required],
