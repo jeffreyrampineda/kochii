@@ -94,6 +94,10 @@ async function update(data, user) {
     // Group validation
     if (group === "") {
         errors.group = "Group cannot be an empty string";
+    } else if (!Validator.isLength(group, { min: 1, max: 30 })) {
+        errors.group = "Group must be between 1 to 30 characters";
+    } else if (!/^[a-zA-Z0-9 _-]*$/.test(group)) {
+        errors.group = "Group must contain an alphanumeric, space ( ), underscore (_), or dash (-)";
     } else if (!await Inventory.exists({ owner: user._id, groups: group })) {
         errors.group = "Group does not exist";
     }

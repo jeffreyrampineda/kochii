@@ -252,8 +252,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     /** Opens the create group dialog. */
     openCreateGroupDialog(): void {
         const dialogRef = this.dialog.open(CreateGroupDialogComponent, {
-            width: '250px',
-            data: { name: '' }
+            width: '250px'
         });
 
         dialogRef.afterClosed().subscribe({
