@@ -12,6 +12,9 @@
                         placeholder="Username" />
                 <mat-error *ngIf="f.username.errors">
                     <div *ngIf="f.username.errors.required">Username is required</div>
+                    <div *ngIf="f.username.errors.minlength">Minimum length is 6</div>
+                    <div *ngIf="f.username.errors.maxlength">Maximum length is 30</div>
+                    <div *ngIf="f.username.errors.pattern">Must only be an alphanumeric, underscore (_), or dash (-)</div>
                 </mat-error>
             </mat-form-field>
 
@@ -22,6 +25,8 @@
                         placeholder="Password" />
                 <mat-error *ngIf="f.password.errors">
                     <div *ngIf="f.password.errors.required">Password is required</div>
+                    <div *ngIf="f.password.errors.minlength">Minimum length is 6</div>
+                    <div *ngIf="f.password.errors.maxlength">Maximum length is 30</div>
                 </mat-error>
             </mat-form-field>
         </form>

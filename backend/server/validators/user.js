@@ -13,6 +13,8 @@ async function login(data) {
     // Username validation
     if (Validator.isEmpty(username)) {
         errors.login = "Username is required";
+    } else if (!Validator.isLength(username, { min: 6, max: 30 })) {
+        errors.username = "Username must be between 6 to 30 characters";
     } else if (!/^[a-zA-Z0-9_-]*$/.test(username)) {
         errors.login = "Username must contain an alphanumeric, underscore (_), or dash (-)";
     } else if (!await User.exists({ username })) {
@@ -22,6 +24,8 @@ async function login(data) {
     // Password validation
     if (Validator.isEmpty(password)) {
         errors.login = "Password is required";
+    } else if (!Validator.isLength(password, { min: 6, max: 30 })) {
+        errors.login = "Password must be between 6 to 30 characters";
     }
     return errors;
 }
