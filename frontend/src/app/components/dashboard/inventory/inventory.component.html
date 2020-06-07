@@ -19,12 +19,12 @@
     </div>
   </mat-card-actions>
   <mat-card-content class="k-card-content-min-height">
-    <div *ngIf="isEmpty(); else viewTable" class="k-center-isolated k-text-center">
+    <div *ngIf="isEmpty()" class="k-center-isolated k-text-center">
       <h1>(╥︣﹏᷅╥)</h1>
       <h2>Inventory is empty</h2>
       <span>Try adding items at the top right now!</span>
     </div>
-    <ng-template #viewTable>
+    <div [hidden]="isEmpty()">
       <div class="k-float-right">
         <div *ngIf="!showSelect">
           <button mat-button routerLink="/dashboard/inventory/add"><mat-icon>add</mat-icon></button>
@@ -179,6 +179,6 @@
       </table>
 
       <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
-    </ng-template>
+    </div>
   </mat-card-content>
 </mat-card>

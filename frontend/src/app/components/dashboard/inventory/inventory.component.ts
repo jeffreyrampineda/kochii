@@ -28,8 +28,8 @@ export class InventoryComponent implements OnInit, OnDestroy {
     private unsub = new Subject<void>();
     private parentComponent: DashboardComponent;    // Used for closing and opening side menu
 
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    @ViewChild(MatSort, { static: false }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+    @ViewChild(MatSort, { static: true }) sort: MatSort;
 
     displayedColumns: string[] = ['name', 'quantity', 'group', 'addedDate', 'expirationDate'];
     inventory: MatTableDataSource<Item>;
