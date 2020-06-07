@@ -39,3 +39,18 @@ footer {
     padding: 10px;
 }
 /* ----------------------- */
+
+.k-top-nav {
+    min-height: 32px;
+    margin-top: 32px;
+    margin-bottom: 16px;
+}
+
+.k-kochii-logo-container {
+    width: 200px;
+    position: absolute;
+}
+
+.k-kochii-logo-span {
+    font: 400 34px/40px Roboto,"Helvetica Neue",sans-serif;
+}
