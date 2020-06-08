@@ -58,8 +58,7 @@ async function getByNames(ctx) {
  */
 async function create(ctx) {
     try {
-        const { name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = ctx.request.body;
-        const errors = await Validate.create({ name, quantity, addedDate, expirationDate, group }, ctx.state.user);
+        const { errors, name, quantity, addedDate, expirationDate, group } = await Validate.create(ctx.request.body, ctx.state.user);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
@@ -104,9 +103,7 @@ async function create(ctx) {
  */
 async function update(ctx) {
     try {
-        const { _id = "", name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = ctx.request.body;
-        const { option = "" } = ctx.params;
-        const errors = await Validate.update({ _id, name, quantity, addedDate, expirationDate, group, option }, ctx.state.user);
+        const { errors, _id, name, quantity, addedDate, expirationDate, group, option } = await Validate.update(ctx.request.body, ctx.params, ctx.state.user);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));

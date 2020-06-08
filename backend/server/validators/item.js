@@ -2,13 +2,20 @@ const Validator = require('validator');
 const Inventory = require('../models/inventory');
 
 /**
- * Validates all data required to create an item.
- * @param { JSON } data to be validated.
- * @return { JSON } object containing all errors.
+ * Sanitizes and validates all data required to create an item.
+ * @param { JSON } body received from the request.
+ * @param { JSON } user object used to identify the owner.
+ * @return { JSON } object containing all errors and data.
  */
-async function create(data, user) {
-    const { name, quantity, addedDate, expirationDate, group } = data;
+async function create(body, user) {
+    let { name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = body;
     let errors = {};
+
+    name = Validator.escape(name);
+    //quantity = Validator.escape(quantity);
+    addedDate = Validator.escape(addedDate);
+    expirationDate = Validator.escape(expirationDate);
+    group = Validator.escape(group);
 
     // Name validation
     if (Validator.isEmpty(name)) {
@@ -44,17 +51,28 @@ async function create(data, user) {
     } else if (!await Inventory.exists({ owner: user._id, groups: group })) {
         errors.group = "Group does not exist";
     }
-    return errors;
+    return { errors, name, quantity, addedDate, expirationDate, group };
 }
 
 /**
- * Validates all data required to update an item.
- * @param { JSON } data to be validated.
- * @return { JSON } object containing all errors.
+ * Sanitizes and validates all data required to update an item.
+ * @param { JSON } body received from the request.
+ * @param { JSON } params received from the request.
+ * @param { JSON } user object used to identify the owner.
+ * @return { JSON } object containing all errors and data.
  */
-async function update(data, user) {
-    const { _id, name, quantity, addedDate, expirationDate, group, option } = data;
+async function update(body, params, user) {
+    let { _id = "", name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = body;
+    let { option = "" } = params;
     let errors = {};
+
+    _id = Validator.escape(_id);
+    name = Validator.escape(name);
+    //quantity = Validator.escape(quantity);
+    addedDate = Validator.escape(addedDate);
+    expirationDate = Validator.escape(expirationDate);
+    group = Validator.escape(group);
+    option = Validator.escape(option);
 
     // _id validation
     if (!await Inventory.exists({ owner: user._id, "items._id": _id })) {
@@ -106,7 +124,7 @@ async function update(data, user) {
     if (!["inc", "set"].includes(option)) {
         errors.option = "Option is invalid";
     }
-    return errors;
+    return { errors, _id, name, quantity, addedDate, expirationDate, group, option };
 }
 
 module.exports = {

@@ -12,8 +12,7 @@ const Validate = require('../validators/user');
  */
 async function login(ctx) {
     try {
-        const { username = "", password = "" } = ctx.request.body;
-        const errors = await Validate.login({ username, password });
+        const { errors, username, password } = await Validate.login(ctx.request.body);
 
         if (Object.keys(errors).length) {
             ctx.throw(401, JSON.stringify(errors));
@@ -42,8 +41,7 @@ async function login(ctx) {
  */
 async function register(ctx) {
     try {
-        const { username = "", password = "", email = "" } = ctx.request.body;
-        const errors = await Validate.register({ username, password, email });
+        const { errors, username, password, email } = await Validate.register(ctx.request.body);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));

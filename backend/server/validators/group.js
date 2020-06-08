@@ -2,13 +2,16 @@ const Validator = require('validator');
 const Inventory = require('../models/inventory');
 
 /**
- * Validates all data required to create a group.
- * @param { JSON } data to be validated.
- * @return { JSON } object containing all errors.
+ * Sanitizes and validates all data required to create a group.
+ * @param { JSON } params received from the request.
+ * @param { JSON } user object used to identify the owner.
+ * @return { JSON } object containing all errors and data.
  */
-async function create(data, user) {
-    const { name } = data;
+async function create(params, user) {
+    let { name = "" } = params;
     let errors = {};
+
+    name = Validator.escape(name);
 
     // Name validation
     if (Validator.isEmpty(name)) {
@@ -20,7 +23,7 @@ async function create(data, user) {
     } else if (await Inventory.exists({ owner: user._id, groups: name })) {
         errors.name = "Name already exists";
     }
-    return errors;
+    return { errors, name };
 }
 
 module.exports = {

@@ -2,19 +2,22 @@ const Validator = require('validator');
 const User = require('../models/user');
 
 /**
- * Validates all data required to login.
- * @param { JSON } data to be validated.
- * @return { JSON } object containing all errors.
+ * Sanitizes and validates all data required to login.
+ * @param { JSON } body received from the request.
+ * @return { JSON } object containing all errors and data.
  */
-async function login(data) {
-    const { username, password } = data;
+async function login(body) {
+    let { username = "", password = "" } = body;
     let errors = {};
+
+    username = Validator.escape(username);
+    password = Validator.escape(password);
 
     // Username validation
     if (Validator.isEmpty(username)) {
         errors.login = "Username is required";
     } else if (!Validator.isLength(username, { min: 6, max: 30 })) {
-        errors.username = "Username must be between 6 to 30 characters";
+        errors.login = "Username must be between 6 to 30 characters";
     } else if (!/^[a-zA-Z0-9_-]*$/.test(username)) {
         errors.login = "Username must contain an alphanumeric, underscore (_), or dash (-)";
     } else if (!await User.exists({ username })) {
@@ -27,17 +30,21 @@ async function login(data) {
     } else if (!Validator.isLength(password, { min: 6, max: 30 })) {
         errors.login = "Password must be between 6 to 30 characters";
     }
-    return errors;
+    return { errors, username, password };
 }
 
 /**
- * Validates all data required to register.
- * @param { JSON } data to be validated.
- * @return { JSON } object containing all errors.
+ * Sanitizes and validates all data required to register.
+ * @param { JSON } body received from the request.
+ * @return { JSON } object containing all errors and data.
  */
-async function register(data) {
-    const { username, password, email } = data;
+async function register(body) {
+    let { username = "", password = "", email = "" } = body;
     let errors = {};
+
+    username = Validator.escape(username);
+    password = Validator.escape(password);
+    email = Validator.escape(email);
 
     // Username validation
     if (Validator.isEmpty(username)) {
@@ -65,7 +72,7 @@ async function register(data) {
     } else if (await User.exists({ email })) {
         errors.email = "Email already exists";
     }
-    return errors;
+    return { errors, username, password, email };
 }
 
 module.exports = {

@@ -23,8 +23,7 @@ async function getAll(ctx) {
  */
 async function create(ctx) {
     try {
-        const { name = "" } = ctx.params;
-        const errors = await Validate.create({ name }, ctx.state.user);
+        const { errors, name } = await Validate.create(ctx.params, ctx.state.user);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
