@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { HistoryService } from 'src/app/services/history.service';
 import { InventoryService } from 'src/app/services/inventory.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 interface chartData {
   x: any,
@@ -26,6 +27,9 @@ export class OverviewComponent implements OnInit {
   rawHistoryData = [];
   itemTotal = 0;
 
+  displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
+  history: MatTableDataSource<History>;
+
   constructor(
     private historyService: HistoryService,
     private inventoryService: InventoryService
@@ -35,6 +39,8 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.history = new MatTableDataSource();
+
     this.getHistoryData();
     this.getInventory();
   }
@@ -62,6 +68,7 @@ export class OverviewComponent implements OnInit {
   getHistoryData(): void {
     this.historyService.getAllFromPastDays(this.fromDay).subscribe({
       next: response => {
+        this.history.data = response.slice(0, 4);
         this.rawHistoryData = response;
       },
       error: err => {
@@ -83,9 +90,9 @@ export class OverviewComponent implements OnInit {
           this.numberOfExpired,
         ],
         backgroundColor: [
-          'rgba(0, 255, 0, 0.3)',
-          'rgba(255, 255, 0, 0.3)',
-          'rgba(255, 0, 0, 0.3)',
+          'rgba(45, 185, 140, 0.7)',
+          'rgba(90, 155, 255, 0.7)',
+          'rgba(255, 95, 130, 0.7)'
         ],
       }],
     };
@@ -101,7 +108,8 @@ export class OverviewComponent implements OnInit {
         },
         legend: {
           position: 'bottom'
-        }
+        },
+        maintainAspectRatio : false
       }
     });
   }
@@ -119,12 +127,14 @@ export class OverviewComponent implements OnInit {
         type: 'bar',
         label: 'Added',
         data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'add')),
-        backgroundColor: 'rgba(0, 255, 0, 0.3)'
+        backgroundColor: 'rgba(90, 155, 255, 0.7)',
+        borderWidth: 2,
       }, {
         type: 'bar',
         label: 'Removed',
         data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'delete')),
-        backgroundColor: 'rgba(255, 0, 0, 0.3)'
+        backgroundColor: 'rgba(255, 95, 130, 0.7)',
+        borderWidth: 2,
       }]
     };
 

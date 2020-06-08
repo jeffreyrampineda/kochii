@@ -3,15 +3,26 @@
     grid-gap: 16px;
 }
 
-.k-grid-2 {
-    grid-template-columns: 1fr 1fr;
-  }
-
 .k-grid-4 {
     grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 
+.k-grid-column-1 {
+    grid-column: span 1;
+    width: 100%;
+}
+
 .k-grid-column-2 {
     grid-column: span 2;
+    width: 100%;
+}
+
+.k-grid-column-3 {
+    grid-column: span 3;
+    width: 100%;
+}
+
+.k-grid-column-4 {
+    grid-column: span 4;
     width: 100%;
 }
