@@ -76,12 +76,12 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
         this.inventoryService.setSocketListeners();
         this.inventoryService.inventoryUpdate.pipe(takeUntil(this.unsub)).subscribe(() => {
-            //this.getItems(); //Unnecessary
+            this.getItems();
         });
 
         this.groupsService.setSocketListeners();
         this.groupsService.groupsUpdate.pipe(takeUntil(this.unsub)).subscribe(() => {
-            //this.getGroups(); //Unnecessary
+            this.getGroups();
         });
     }
 
@@ -269,6 +269,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
                 this.notify(err.error);
             },
             complete: () => {
+                this.getGroups();
                 this.getItems();
             }
         });
