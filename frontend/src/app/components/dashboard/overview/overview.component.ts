@@ -25,7 +25,11 @@ export class OverviewComponent implements OnInit {
   numberOfOk: number = 0;
   numberOfExpired: number = 0;
   rawHistoryData = [];
+  isHistoryEmpty = true;
   itemTotal = 0;
+  dummy = 0;
+  loadingInventory = false;
+  loadingHistory = false;
 
   displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
   history: MatTableDataSource<History>;
@@ -46,6 +50,7 @@ export class OverviewComponent implements OnInit {
   }
 
   getInventory(): void {
+    this.loadingInventory = true;
     this.inventoryService.getItems().subscribe({
       next: response => {
         this.numberOfGood = (response.filter(i => this.sinceToday(i.expirationDate) > 10)).length;
@@ -58,38 +63,50 @@ export class OverviewComponent implements OnInit {
       },
       error: err => {
         // Error
+        this.loadingInventory = false;
       },
       complete: () => {
+        this.loadingInventory = false;
         this.initializeDoughnut();
       }
     })
   }
 
   getHistoryData(): void {
+    this.loadingHistory = true;
     this.historyService.getAllFromPastDays(this.fromDay).subscribe({
       next: response => {
+        this.isHistoryEmpty = response.length === 0;
         this.history.data = response.slice(0, 4);
         this.rawHistoryData = response;
       },
       error: err => {
         // Error
+        this.loadingHistory = false;
       },
       complete: () => {
+        this.loadingHistory = false;
         this.initializeLineOne();
       }
     });
   }
 
   initializeDoughnut(): void {
+    if (this.itemTotal === 0) {
+      this.dummy = 1;
+    }
+
     const data = {
-      labels: ['Good', 'Ok', 'Expired'],
+      labels: ['', 'Good', 'Ok', 'Expired'],
       datasets: [{
         data: [
+          this.dummy,
           this.numberOfGood,
           this.numberOfOk,
           this.numberOfExpired,
         ],
         backgroundColor: [
+          'rgba(170, 175, 190, 0.7)',
           'rgba(45, 185, 140, 0.7)',
           'rgba(90, 155, 255, 0.7)',
           'rgba(255, 95, 130, 0.7)'
@@ -107,9 +124,22 @@ export class OverviewComponent implements OnInit {
           text: 'Expired items'
         },
         legend: {
-          position: 'bottom'
+          position: 'bottom',
+          labels: {
+            filter: (item) => item.text !== ''
+          }
         },
-        maintainAspectRatio : false
+        tooltips: {
+          filter: (item, chart) => chart.labels[item.index] !== ''
+        },
+        animation: {
+          duration: 0
+        },
+        hover: {
+          animationDuration: 0
+        },
+        responsiveAnimationDuration: 0,
+        maintainAspectRatio: false
       }
     });
   }
@@ -172,6 +202,13 @@ export class OverviewComponent implements OnInit {
             }
           }]
         },
+        animation: {
+          duration: 0
+        },
+        hover: {
+          animationDuration: 0
+        },
+        responsiveAnimationDuration: 0,
       },
     });
   }
@@ -197,7 +234,7 @@ export class OverviewComponent implements OnInit {
 
     const totalQuantityPerDayData = this.objectToChartData(quantityPerDay);
 
-    totalQuantityPerDayData.sort(function(a,b){
+    totalQuantityPerDayData.sort(function (a, b) {
       return (+new Date(a.x)) - (+new Date(b.x));
     });
 
@@ -236,7 +273,7 @@ export class OverviewComponent implements OnInit {
     return Object.keys(data).map(function (key) {
       return { 'x': new Date(key), 'y': data[key] };
     });
-  } 
+  }
 
   /**
    * Parses raw history data to be used for chartjs.

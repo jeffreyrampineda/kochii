@@ -42,6 +42,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     option: string;
 
     selectedGroup: string = '';
+    loading = false;
 
     constructor(
         private dialog: MatDialog,
@@ -106,15 +107,17 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
     /** Get all items in the inventory with the specified group. */
     getItems(): void {
+        this.loading = true;
         this.inventoryService.getItems(this.selectedGroup).subscribe({
             next: response => {
                 this.inventory.data = response;
             },
             error: () => {
                 // Error
+                this.loading = false;
             },
             complete: () => {
-                // TODO - stop loading.
+                this.loading = false;
             }
         });
     }

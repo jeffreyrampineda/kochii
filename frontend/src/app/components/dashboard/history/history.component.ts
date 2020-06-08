@@ -18,6 +18,7 @@ export class HistoryComponent implements OnInit {
 
   displayedColumns: string[] = ['date', 'method', 'target', 'quantity', 'addedDate', 'description', ];
   history: MatTableDataSource<History>;
+  loading = false;
 
   constructor(
     private historyService: HistoryService
@@ -35,21 +36,24 @@ export class HistoryComponent implements OnInit {
 
   /** Get all history and set them for presentation. */
   getHistory(): void {
+    this.loading = true;
     this.historyService.getHistory().subscribe({
       next: response => {
         this.history.data = response;
       },
       error: err => {
         // Error
+        this.loading = false;
       },
       complete: () => {
-        // TODO - stop loading.
+        this.loading = false;
       }
     });
   }
 
   /** Delete all history. */
   clear(): void {
+    this.loading = true;
     this.historyService.deleteAllHistory().subscribe({
       next: response => {
         if (response === 1) {
@@ -58,9 +62,10 @@ export class HistoryComponent implements OnInit {
       },
       error: err => {
         // Error
+        this.loading = false;
       },
       complete: () => {
-        // TODO - stop loading.
+        this.loading = false;
       }
     });
   }

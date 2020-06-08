@@ -19,12 +19,13 @@
     </div>
   </mat-card-actions>
   <mat-card-content class="k-card-content-min-height">
-    <div *ngIf="isEmpty()" class="k-center-isolated k-text-center">
+    <div *ngIf="loading" class="loader k-center k-text-center"></div>
+    <div *ngIf="isEmpty() && loading===false" class="k-center k-text-center">
       <h1>(╥︣﹏᷅╥)</h1>
       <h2>Inventory is empty</h2>
       <span>Try adding items at the top right now!</span>
     </div>
-    <div [hidden]="isEmpty()">
+    <div [hidden]="isEmpty() || loading">
       <div class="k-float-right">
         <div *ngIf="!showSelect">
           <button mat-button routerLink="/dashboard/inventory/add"><mat-icon>add</mat-icon></button>
@@ -173,7 +174,7 @@
               <span matTooltip="{{item.expirationDate | date}}">
                 {{ item.expirationDate | countdown | expiration }}
                 <span
-                  [ngClass]="['label', item.expirationDate | countdown | status]">{{ item.expirationDate | countdown | status | titlecase }}</span>
+                  [ngClass]="['label', 'k-float-right', item.expirationDate | countdown | status]">{{ item.expirationDate | countdown | status | titlecase }}</span>
               </span>
             </ng-template>
           </td>
