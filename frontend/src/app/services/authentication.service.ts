@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 import { User } from '../interfaces/user';
 import { MessageService } from './message.service';
@@ -15,6 +16,7 @@ export class AuthenticationService {
 
     constructor(
         private http: HttpClient,
+        private router: Router,
         private messageService: MessageService
     ) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -79,8 +81,7 @@ export class AuthenticationService {
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
 
-        // TODO: Change this - reason: deprecated.
-        location.reload(true);
+        this.router.navigate(['/home']);
     }
 
 // -------------------------------------------------------------

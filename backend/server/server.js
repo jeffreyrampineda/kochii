@@ -21,6 +21,8 @@ global.currentConnections = {};
 // Debug mode
 if (process.env.NODE_ENV !== 'production') {
     app.use(logger());
+} else if (process.env.NODE_ENV === 'production') {
+    app.use(require('koa-static')(__dirname + '/../../frontend/dist'));
 }
 
 app.use(errorHandler);

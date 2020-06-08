@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "",
+    "start": "cd backend && npm start",
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
     "dev-backend": "cd backend && npm run dev",
     "dev-frontend": "cd frontend && npm run dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "cd backend && npm install && cd ../frontend && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",
