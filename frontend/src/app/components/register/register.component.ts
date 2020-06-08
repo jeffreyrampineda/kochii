@@ -14,15 +14,19 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
-  error = '';
+  error = {
+    username: undefined,
+    password: undefined,
+    email: undefined
+  };
 
   constructor(
-   private router: Router,
-   private authenticationService: AuthenticationService,
-   private formBuilder: FormBuilder
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private formBuilder: FormBuilder
   ) { }
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
 
   /** Validator for comparing password and passwordre */
   checkPasswords(group: FormGroup) {
@@ -52,7 +56,7 @@ export class RegisterComponent implements OnInit {
       ]],
       passwordre: [''],
       email: ['', [
-        Validators.required, 
+        Validators.required,
         Validators.email
       ]]
     }, { validator: this.checkPasswords });
@@ -69,7 +73,11 @@ export class RegisterComponent implements OnInit {
 
     console.log('submitted');
     this.loading = true;
-    this.error = '';
+    this.error = {
+      username: undefined,
+      password: undefined,
+      email: undefined
+    };
 
     const { username, password, email } = this.registerForm.value;
 
@@ -78,7 +86,7 @@ export class RegisterComponent implements OnInit {
         if (response && response.token) {
           this.router.navigate(['/dashboard']);
         }
-      }, 
+      },
       error: err => {
         this.error = err.error;
         this.loading = false;

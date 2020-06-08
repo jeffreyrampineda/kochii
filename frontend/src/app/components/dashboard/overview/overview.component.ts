@@ -17,7 +17,7 @@ interface chartData {
 export class OverviewComponent implements OnInit {
 
   fromDay = 6;
-  doghnutChart;
+  doughnutChart;
   lineChart;
   start: Date = new Date();
   today: Date = new Date();
@@ -97,7 +97,7 @@ export class OverviewComponent implements OnInit {
       }],
     };
 
-    this.doghnutChart = new Chart('chart-doughnut', {
+    this.doughnutChart = new Chart('chart-doughnut', {
       type: 'doughnut',
       data: data,
       options: {

@@ -12,7 +12,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class CreateGroupDialogComponent {
 
     loading = false;
-    error = {};
+    error = {
+        name: undefined
+    };
     form: FormGroup;
 
     constructor(

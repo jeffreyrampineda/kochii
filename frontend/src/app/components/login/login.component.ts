@@ -14,15 +14,17 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
-  error = '';
+  error = {
+    login: undefined
+  };
 
   constructor(
-   private router: Router,
-   private authenticationService: AuthenticationService,
-   private formBuilder: FormBuilder
+    private router: Router,
+    private authenticationService: AuthenticationService,
+    private formBuilder: FormBuilder
   ) { }
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
 
   ngOnInit() {
     // If currently logged in, redirect to dashboard.
@@ -56,7 +58,9 @@ export class LoginComponent implements OnInit {
 
     console.log('submitted');
     this.loading = true;
-    this.error = '';
+    this.error = {
+      login: undefined
+    };
 
     this.authenticationService.login(this.loginForm.value).subscribe({
       next: response => {

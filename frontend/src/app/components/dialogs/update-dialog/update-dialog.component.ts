@@ -14,7 +14,9 @@ import { catchError } from 'rxjs/operators';
 export class UpdateDialogComponent {
 
   loading = false;
-  error = {};
+  error = {
+    name: undefined
+  };
 
   constructor(
     private inventoryService: InventoryService,
