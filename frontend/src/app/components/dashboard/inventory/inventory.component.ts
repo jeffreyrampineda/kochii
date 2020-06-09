@@ -156,6 +156,10 @@ export class InventoryComponent implements OnInit, OnDestroy {
      */
     selectionSelect(item: Item): void {
         this.selection.select(item);
+        let max = 999;
+        if (this.option === 'inc') {
+            max = item.quantity;
+        }
 
         // Stringify then parse to clone the values instead of reference.
         this.itemUpdateForm[item._id] = this.formBuilder.group({
@@ -168,7 +172,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
             ]],
             quantity: [item.quantity, [
                 Validators.min(1),
-                Validators.max(999),
+                Validators.max(max),
                 Validators.required
             ]],
             addedDate: [item.addedDate, Validators.required],

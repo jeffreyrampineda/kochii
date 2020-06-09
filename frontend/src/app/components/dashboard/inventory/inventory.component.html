@@ -100,7 +100,7 @@
                 <mat-error *ngIf="f(item._id).quantity.errors">
                   <div *ngIf="f(item._id).quantity.errors.required">Quantity is required</div>
                   <div *ngIf="f(item._id).quantity.errors.min">Minimum quantity is 1</div>
-                  <div *ngIf="f(item._id).quantity.errors.max">Maximum quantity is 999</div>
+                  <div *ngIf="f(item._id).quantity.errors.max">Maximum quantity is {{ f(item._id).quantity.errors.max.max }}</div>
                 </mat-error>
               </mat-form-field>
               <span>&nbsp; / {{ item.quantity }}</span>
