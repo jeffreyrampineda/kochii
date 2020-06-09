@@ -43,8 +43,8 @@ table {
 
 .k-center-isolated {
     margin: auto;
-    width: 30%;
-    margin-top: 200px;
+    max-width: 400px;
+    margin-top: 20vh;
 }
 
 .k-text-center {

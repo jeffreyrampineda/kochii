@@ -1,9 +1,9 @@
 <nav class="k-fixed-top">
   <div class="k-float-right">
-    <div *ngIf="isLoggedIn; else loggedOut">
+    <div *ngIf="isLoggedIn; else viewLoggedOut">
       <button mat-button (click)="logout()">Logout</button>
     </div>
-    <ng-template #loggedOut>
+    <ng-template #viewLoggedOut>
       <button mat-button routerLink="/register">Register</button>
       <button mat-button routerLink="/login">Login</button>
     </ng-template>
