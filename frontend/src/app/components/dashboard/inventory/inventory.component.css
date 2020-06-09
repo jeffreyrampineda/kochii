@@ -4,9 +4,11 @@
 
 .label {
   color: white;
-  border-radius: 5px;
+  border-radius: 10px;
   padding: 3px;
   font-size: 10px;
+  min-width: 50px;
+  text-align: center;
 }
 
 .k-form-field-quantity {

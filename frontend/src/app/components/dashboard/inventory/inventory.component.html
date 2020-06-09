@@ -171,11 +171,8 @@
               </div>
             </div>
             <ng-template #viewExpirationDate>
-              <span matTooltip="{{item.expirationDate | date}}">
-                {{ item.expirationDate | countdown | expiration }}
-                <span
-                  [ngClass]="['label', 'k-float-right', item.expirationDate | countdown | status]">{{ item.expirationDate | countdown | status | titlecase }}</span>
-              </span>
+              <span matTooltip="{{ item.expirationDate | date }}">{{ item.expirationDate | countdown | expiration }}</span>
+              <span [ngClass]="['label', 'k-float-right', item.expirationDate | countdown | status]">{{ item.expirationDate | countdown | status | titlecase }}</span>
             </ng-template>
           </td>
         </ng-container>
