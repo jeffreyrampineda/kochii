@@ -31,6 +31,9 @@ export class OverviewComponent implements OnInit {
   loadingInventory = false;
   loadingHistory = false;
 
+  curr = new Date();
+  first: number;
+
   displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
   history: MatTableDataSource<History>;
 
@@ -40,6 +43,8 @@ export class OverviewComponent implements OnInit {
   ) {
     this.start.setDate(this.start.getDate() - 6);
     this.start.setHours(0, 0, 0, 0);
+    this.curr.setHours(0, 0, 0, 0);
+    this.first = this.curr.getDate() - this.curr.getDay();
   }
 
   ngOnInit() {
@@ -295,5 +300,29 @@ export class OverviewComponent implements OnInit {
     const timeDiff = expirationDate.getTime() - this.today.getTime();
     const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
     return diffDays === -0 ? 0 : diffDays;
+  }
+
+  quantityRemovedThisWeek(): number {
+    let totalRemoved = 0;
+
+    let firstWeekDay = new Date(this.curr.setDate(this.first));
+    let lastWeekDay = new Date(this.curr.setDate(this.curr.getDate() + 6));
+
+    this.rawHistoryData.forEach(h => {
+      if ((new Date(h.addedDate)) >= firstWeekDay && (new Date(h.addedDate)) <= lastWeekDay) {
+        if (h.quantity < 0) {
+          totalRemoved += h.quantity;
+        }
+      }
+    });
+    return Math.abs(totalRemoved);
+  }
+
+  get firstWeekDayString(): string {
+    return (new Date(this.curr.setDate(this.first))).toDateString();
+  }
+
+  get lastWeekDayString(): string {
+    return (new Date(this.curr.setDate(this.curr.getDate() + 6))).toDateString();
   }
 }

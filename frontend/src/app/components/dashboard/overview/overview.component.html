@@ -1,10 +1,12 @@
 <div class="k-grid k-grid-4">
   <mat-card class="k-card k-text-center">
-    <span class="k-card-title">{{ itemTotal }}</span>
+    <div *ngIf="loadingInventory" class="loader k-center k-text-center"></div>
+    <span [hidden]="loadingInventory" class="k-card-title">{{ itemTotal }}</span>
     <span>Total inventory size</span>
   </mat-card>
   <mat-card class="k-card k-text-center">
-    <span class="k-card-title">{{ numberOfExpired }}</span>
+    <div *ngIf="loadingInventory" class="loader k-center k-text-center"></div>
+    <span [hidden]="loadingInventory" class="k-card-title">{{ numberOfExpired }}</span>
     <span>Expired items</span>
   </mat-card>
   <mat-card class="k-card k-text-center">
@@ -12,8 +14,9 @@
     <span>Weekly $ spent</span>
   </mat-card>
   <mat-card class="k-card k-text-center">
-    <span class="k-card-title">N/A</span>
-    <span>Weekly items removed</span>
+    <div *ngIf="loadingHistory" class="loader k-center k-text-center"></div>
+    <span [hidden]="loadingHistory" class="k-card-title">{{ quantityRemovedThisWeek() }}</span>
+    <span matTooltip="{{ firstWeekDayString }} --- {{ lastWeekDayString }}">Weekly items removed</span>
   </mat-card>
   <div class="k-grid-column-3">
     <mat-card class="k-card">
