@@ -1,5 +1,6 @@
-<div class="container">
+<div class="k-container">
   <nav class="k-top-nav">
+    <button class="k-menu-hamburger" mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
     <div class="k-kochii-logo-container k-text-center">
       <span class="k-kochii-logo-span">Kochii</span>
     </div>
@@ -7,18 +8,14 @@
       <button mat-button (click)="logout()">Logout</button>
     </div>
   </nav>
-  <button class="k-dashboard-menu-toggle" mat-button (click)="sidenav.toggle()" [@openClose]="!opened ? 'open' : 'closed'" >Menu</button>
   <hr>
   <mat-sidenav-container>
-    <mat-sidenav #sidenav mode="side" [(opened)]="opened" class="k-dashboard-menu">
+    <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'" [(opened)]="opened" class="k-dashboard-menu">
       <button mat-button routerLink="overview">Overview</button>
       <button mat-button routerLink="inventory">Inventory</button>
       <button mat-button routerLink="groceries" disabled>Groceries</button>
       <button mat-button routerLink="settings" disabled>Settings</button>
       <button mat-button routerLink="history">History</button>
-      <div class="k-dashboard-menu-bottom">
-        <button style='background-color: #f6f6f6;' mat-button (click)="sidenav.toggle()">close menu</button>
-      </div>
     </mat-sidenav>
     <mat-sidenav-content>
       <router-outlet></router-outlet>

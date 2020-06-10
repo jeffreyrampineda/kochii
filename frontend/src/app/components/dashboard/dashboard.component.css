@@ -5,6 +5,21 @@ footer {
     justify-content: center;
 }
 
+.k-menu-hamburger {
+    position: absolute;
+    float: left;
+    z-index: 1;
+}
+
+.k-container {
+    max-width: 1140px;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;;
+}
+
 /* Used for navigation buttons. */
 .k-dashboard-menu {
     width: 200px;
@@ -22,6 +37,13 @@ footer {
 .k-dashboard-menu-toggle {
     position: absolute;
     background-color: #f6f6f6;
+}
+
+@media only screen and (min-width: 768px) {
+    /* For desktop: */
+    .k-menu-hamburger {
+        display: none;
+    }
 }
 
 /* ---------------------------- */

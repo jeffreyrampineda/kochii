@@ -1,54 +1,43 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import {
-  trigger,
-  state,
-  style,
-  animate,
-  transition,
-} from '@angular/animations';
+import { Component, OnInit, HostListener, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MessageService } from 'src/app/services/message.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { SocketioService } from 'src/app/services/socketio.service';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 // -------------------------------------------------------------
 
 @Component({
   selector: 'kochii-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
-  animations: [
-    trigger('openClose', [
-      state('open', style({
-        '-webkit-transform': 'translate(135%, 260%) rotate(-90deg)',
-        'transform': 'translate(-85%, 162%) rotate(-90deg)',  // Y: 162% to match with content's top
-        'opacity': '1'
-      })),
-      state('closed', style({
-        '-webkit-transform': 'translate(210%, 260%) rotate(-90deg)',
-        'transform': 'translate(-10%, 162%) rotate(-90deg)',  // Y: 162% to match with content's top
-      })),
-      transition('open => closed', [
-        animate('0.1s')
-      ]),
-      transition('closed => open', [
-        animate('0.1s')
-      ]),
-    ]),
-  ],
+  styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  private _mobileQueryListener: () => void;
   opened = true;
+  mobileQuery: MediaQueryList;
 
   constructor(
     private authenticationService: AuthenticationService,
     private socketioService: SocketioService,
     private messageSevice: MessageService,
-  ) { }
+    changeDetectorRef: ChangeDetectorRef, media: MediaMatcher
+  ) {
+    this.mobileQuery = media.matchMedia('(max-width: 768px)');
+    this._mobileQueryListener = () => {
+      changeDetectorRef.detectChanges();
+      this.opened = !this.mobileQuery.matches;
+    };
+    this.mobileQuery.addListener(this._mobileQueryListener);
+  }
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
 
   ngOnInit() {
     this.socketioService.initSocket();
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
   @HostListener('window:online', ['$event'])

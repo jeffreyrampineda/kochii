@@ -13,7 +13,6 @@ import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
 import { UpdateDialogComponent } from 'src/app/components/dialogs/update-dialog/update-dialog.component';
 import { CreateGroupDialogComponent } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.component';
-import { DashboardComponent } from '../dashboard.component';
 import { MessageService } from 'src/app/services/message.service';
 
 // -------------------------------------------------------------
@@ -26,7 +25,6 @@ import { MessageService } from 'src/app/services/message.service';
 export class InventoryComponent implements OnInit, OnDestroy {
 
     private unsub = new Subject<void>();
-    private parentComponent: DashboardComponent;    // Used for closing and opening side menu
 
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -51,9 +49,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
         private groupsService: GroupsService,
         private injector: Injector,
         private formBuilder: FormBuilder,
-    ) {
-        this.parentComponent = this.injector.get(DashboardComponent);
-    }
+    ) { }
 
     // -------------------------------------------------------------
 
@@ -139,13 +135,11 @@ export class InventoryComponent implements OnInit, OnDestroy {
         if (this.showSelect) {
             this.displayedColumns.unshift('select');
             this.option = option;
-            this.parentComponent.opened = false;
         } else {
             this.itemUpdateForm = {};
             this.selection.clear();
             this.displayedColumns.shift();
             this.option = '';
-            this.parentComponent.opened = true;
         }
     }
 
