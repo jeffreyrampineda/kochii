@@ -19,9 +19,9 @@
     <span matTooltip="{{ firstWeekDayString }} --- {{ lastWeekDayString }}">Weekly items removed</span>
   </mat-card>
   <div class="k-grid-column-3">
-    <mat-card class="k-card">
+    <mat-card class="k-card" style="height: 100%">
       <div *ngIf="loadingHistory" class="loader k-center k-text-center"></div>
-      <div class="canvas-container">
+      <div class="canvas-container" style="height: 100%">
         <canvas id="chart-line">{{ lineChart }}</canvas>
       </div>
     </mat-card>
