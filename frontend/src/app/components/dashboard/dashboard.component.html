@@ -5,6 +5,7 @@
       <span class="k-kochii-logo-span">Kochii</span>
     </div>
     <div class="k-float-right">
+      <span *ngIf="!isVerified">Check your email to verify this account</span>
       <button mat-button (click)="logout()">Logout</button>
     </div>
   </nav>

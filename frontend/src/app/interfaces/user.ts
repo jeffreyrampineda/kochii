@@ -3,5 +3,6 @@ export interface User {
     username: string;
     password: string;
     email: string;
+    isVerified?: boolean;
     token?: string;
 }

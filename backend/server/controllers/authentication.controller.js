@@ -4,6 +4,8 @@ const Inventory = require('../models/inventory');
 const History = require('../models/history');
 const Helper = require('../util/helpers');
 const Validate = require('../validators/user');
+const cryptoRandomString = require('crypto-random-string');
+const { sendVerificationEmail } = require('../util/email');
 
 /**
  * Authenticates the user to the database.
@@ -49,8 +51,18 @@ async function register(ctx) {
 
         const inventory_id = mongoose.Types.ObjectId();
         const history_id = mongoose.Types.ObjectId();
+        const verificationToken = cryptoRandomString({ length: 16, type: 'url-safe' });
 
-        const user = await User.create({ username, password, email, inventory: inventory_id, history: history_id });
+        const user = await User.create({
+            username,
+            password,
+            email,
+            isVerified: false,
+            verificationToken,
+            inventory: inventory_id,
+            history: history_id
+        });
+
         const inventory = await Inventory.create({
             _id: inventory_id,
             owner: user._id,
@@ -72,6 +84,8 @@ async function register(ctx) {
             }]
         });
 
+        sendVerificationEmail(email, verificationToken);
+
         // 202 - Accepted
         ctx.status = 202;
         ctx.body = { token: Helper.generateToken(user.toJSON()) };
@@ -80,7 +94,39 @@ async function register(ctx) {
     }
 }
 
+/**
+ * Verifies the token and email.
+ * @requires { query } token, email
+ * @response { JSON, error? } the result.
+ */
+async function verification(ctx) {
+    try {
+        const { token, email } = ctx.request.query;
+        const user = await User.findOne({ email });
+        let response = "";
+
+        if (user && user.isVerified) {
+            response = "User is already verified";
+        } else if (user && user.compareTokens(token)) {
+            await User.findOneAndUpdate(
+                { _id: user._id, email },
+                { isVerified: true },
+                { runValidators: true }
+            );
+            response = "User has been verified"
+        } else {
+            response = "Token is expired";
+        }
+
+        ctx.status = 202;
+        ctx.body = response;
+    } catch (error) {
+        ctx.throw(401, error);
+    }
+}
+
 module.exports = {
     login,
-    register
+    register,
+    verification,
 };

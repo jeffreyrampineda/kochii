@@ -41,6 +41,14 @@ const userSchema = new Schema({
             }
         ]
     },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationToken: {
+        type: String,
+        required: true,
+    },
     inventory: {
         type: Schema.Types.ObjectId,
         ref: 'Inventory'
@@ -63,6 +71,10 @@ userSchema.statics.doesNotExist = async function (field) {
 
 userSchema.methods.comparePasswords = function (password) {
     return bcrypt.compareSync(password, this.password);
+}
+
+userSchema.methods.compareTokens = function (token) {
+    return this.verificationToken = token;
 }
 
 const UserModel = mongoose.model('User', userSchema);

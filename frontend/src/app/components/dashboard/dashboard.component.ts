@@ -53,4 +53,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authenticationService.logout();
   }
+
+  get isVerified(): boolean {
+    return this.authenticationService.currentUserValue.isVerified;
+  }
 }

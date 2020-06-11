@@ -12,7 +12,7 @@ export class AuthenticationService {
 
     private authenticationUrl = '/public';
     private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
+    private currentUser: Observable<User>;
 
     constructor(
         private http: HttpClient,
