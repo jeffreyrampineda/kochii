@@ -74,10 +74,6 @@ import { CreateGroupDialogComponent } from './components/dialogs/create-group-di
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
   ],
-  bootstrap: [AppComponent],
-  entryComponents: [
-    UpdateDialogComponent,
-    CreateGroupDialogComponent,
-  ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
