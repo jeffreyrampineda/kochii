@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Injector, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { FormGroup, FormBuilder, Validators, } from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
@@ -47,7 +47,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
         private inventoryService: InventoryService,
         private messageService: MessageService,
         private groupsService: GroupsService,
-        private injector: Injector,
         private formBuilder: FormBuilder,
     ) { }
 
