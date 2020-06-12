@@ -71,6 +71,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
+    this.socketioService.disconnect();
     this.authenticationService.logout();
   }
 }

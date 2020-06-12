@@ -16,7 +16,7 @@ export class SocketioService {
   ) { }
 
   initSocket(): void {
-    if (this.authenticationService.isLoggedIn()) {
+    if (this.authenticationService.isLoggedIn) {
       this.token = this.authenticationService.currentUserValue.token;
     }
     this.socket = io(environment.socket_endpoint);
@@ -32,5 +32,9 @@ export class SocketioService {
 
   getSocket() {
     return this.socket;
+  }
+
+  disconnect() {
+    this.socket.disconnect();
   }
 }
