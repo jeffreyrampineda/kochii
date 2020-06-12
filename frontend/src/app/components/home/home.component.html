@@ -10,17 +10,17 @@
   </div>
 </nav>
 <div class="k-side-icons" [@scrollAnimation]="state">
-  <button mat-fab (click)="goto('.top')"><mat-icon>keyboard_arrow_up</mat-icon></button>
+  <button mat-fab routerLink='.' fragment="top"><mat-icon>keyboard_arrow_up</mat-icon></button>
 </div>
 <main class="mat-typography">
-  <section class="top">
+  <section id="top">
     <div class="heading">
       <span class="mat-display-4">Kochii</span>
       <nav>
-        <button mat-button (click)="goto('#introduction')">Introduction</button>
+        <button mat-button routerLink='.' fragment="introduction">Introduction</button>
         <button mat-button routerLink="/dashboard">Dashboard</button>
-        <button mat-button (click)="goto('#about')">About</button>
-        <button mat-button (click)="goto('#contact')">Contact</button>
+        <button mat-button routerLink='.' fragment="about">About</button>
+        <button mat-button routerLink='.' fragment="contact">Contact</button>
       </nav>
     </div>
   </section>

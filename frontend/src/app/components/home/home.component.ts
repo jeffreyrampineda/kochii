@@ -62,14 +62,4 @@ export class HomeComponent implements OnInit {
   logout(): void {
     this.authenticationService.logout();
   }
-
-  /**
-   * Scrolls to the specified section.
-   * @param section - The id or class of the section.
-   */
-  goto(section: string): void {
-    const element = document.querySelector(section);
-
-    element.scrollIntoView();
-  }
 }
