@@ -76,3 +76,22 @@ footer {
 .k-kochii-logo-span {
     font: 400 34px/40px Roboto,"Helvetica Neue",sans-serif;
 }
+
+.verification-banner {
+    position: fixed;
+    bottom: 32px;
+    left: 5%;
+    right: 5%;
+    width: 90%;
+    text-align: center;
+    padding: 16px;
+    background-color: #eee;
+    border-radius: 5px;
+    z-index: 1;
+    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+.verification-banner * {
+    display: inline-block;
+    vertical-align: middle;
+}

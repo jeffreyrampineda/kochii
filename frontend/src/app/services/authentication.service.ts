@@ -12,7 +12,7 @@ export class AuthenticationService {
 
     private authenticationUrl = '/public';
     private currentUserSubject: BehaviorSubject<User>;
-    private currentUser: Observable<User>;
+    public currentUser: Observable<User>;
 
     constructor(
         private http: HttpClient,
@@ -37,7 +37,7 @@ export class AuthenticationService {
         return this.currentUserSubject.value;
     }
 
-    isLoggedIn(): boolean {
+    public get isLoggedIn(): boolean {
         return this.currentUserSubject.value ? true : false;
     }
 

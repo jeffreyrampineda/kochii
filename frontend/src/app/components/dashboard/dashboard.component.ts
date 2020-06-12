@@ -3,6 +3,8 @@ import { MessageService } from 'src/app/services/message.service';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { SocketioService } from 'src/app/services/socketio.service';
 import { MediaMatcher } from '@angular/cdk/layout';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 // -------------------------------------------------------------
 
@@ -13,7 +15,10 @@ import { MediaMatcher } from '@angular/cdk/layout';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private _mobileQueryListener: () => void;
+  private unsub = new Subject<void>();
   opened = true;
+  isLoggedIn = false;
+  isVerified = false;
   mobileQuery: MediaQueryList;
 
   constructor(
@@ -34,10 +39,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.socketioService.initSocket();
+
+    this.authenticationService.currentUser.pipe(takeUntil(this.unsub)).subscribe({
+      next: response => {
+        this.isLoggedIn = this.authenticationService.isLoggedIn;
+        this.isVerified = response && response.isVerified;
+      },
+      error: () => {
+
+      },
+      complete: () => {
+
+      }
+    });
   }
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.unsub.next();
+    this.unsub.complete();
   }
 
   @HostListener('window:online', ['$event'])
@@ -52,9 +72,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authenticationService.logout();
-  }
-
-  get isVerified(): boolean {
-    return this.authenticationService.currentUserValue.isVerified;
   }
 }

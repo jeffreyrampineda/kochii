@@ -27,7 +27,10 @@ async function login(ctx) {
 
             // 202 - Accepted.
             ctx.status = 202;
-            ctx.body = { token: Helper.generateToken(user.toJSON()) };
+            ctx.body = {
+                token: Helper.generateToken(user.toJSON()),
+                isVerified: user.isVerified,
+            };
         } else {
             ctx.throw(401, JSON.stringify({ login: "Authentication failed" }));
         }
@@ -88,7 +91,10 @@ async function register(ctx) {
 
         // 202 - Accepted
         ctx.status = 202;
-        ctx.body = { token: Helper.generateToken(user.toJSON()) };
+        ctx.body = {
+            token: Helper.generateToken(user.toJSON()),
+            isVerified: user.isVerified,
+        };
     } catch (error) {
         ctx.throw(400, error);
     }

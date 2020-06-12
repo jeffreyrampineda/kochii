@@ -41,7 +41,7 @@ export class HomeComponent implements OnInit {
 // -------------------------------------------------------------
 
   ngOnInit() {
-    this.isLoggedIn = this.authenticationService.currentUserValue ? true : false;
+    this.isLoggedIn = this.authenticationService.isLoggedIn;
   }
 
   @HostListener('window:scroll', ['$event'])
@@ -61,5 +61,6 @@ export class HomeComponent implements OnInit {
    */
   logout(): void {
     this.authenticationService.logout();
+    this.isLoggedIn = this.authenticationService.isLoggedIn;
   }
 }

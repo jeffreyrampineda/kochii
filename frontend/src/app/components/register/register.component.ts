@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     // If currently logged in, redirect to dashboard.
-    if (this.authenticationService.currentUserValue) {
+    if (this.authenticationService.isLoggedIn) {
       this.router.navigate(['/dashboard']);
     }
 
