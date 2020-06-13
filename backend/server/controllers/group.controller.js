@@ -56,7 +56,11 @@ async function create(ctx) {
  */
 async function del(ctx) {
     try {
-        const { name } = ctx.params;
+        const { errors, name } = await Validate.del(ctx.params, ctx.state.user);
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
 
         const item_result = await Inventory.findOneAndUpdate(
             {
