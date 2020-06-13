@@ -20,9 +20,14 @@ const io = socket(server);
 global.currentConnections = {};
 
 // Security
+const ninetyDaysInSeconds = 90*24*60*60;
+
 app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }));
 app.use(helmet.frameguard({ action: 'deny' }));
 app.use(helmet.xssFilter());
+app.use(helmet.noSniff());
+app.use(helmet.ieNoOpen());
+app.use(helmet.hsts({ maxAge: ninetyDaysInSeconds }));
 
 // Debug mode
 if (process.env.NODE_ENV !== 'production') {
