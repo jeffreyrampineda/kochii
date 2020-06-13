@@ -105,9 +105,14 @@ async function register(ctx) {
  * @requires { query } token, email
  * @response { JSON, error? } the result.
  */
-async function verification(ctx) {
+async function verify(ctx) {
     try {
-        const { token, email } = ctx.request.query;
+        const { errors, token, email } = await Validate.verify(ctx.request.query);
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
+
         const user = await User.findOne({ email });
         let response = "";
 
@@ -134,5 +139,5 @@ async function verification(ctx) {
 module.exports = {
     login,
     register,
-    verification,
+    verify,
 };

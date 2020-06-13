@@ -75,7 +75,38 @@ async function register(body) {
     return { errors, username, password, email };
 }
 
+/**
+ * Sanitizes and validates all data required to verify an email.
+ * @param { JSON } query received from the request.
+ * @return { JSON } object containing all errors and data.
+ */
+async function verify(query) {
+    let { token = "", email = "" } = query;
+    let errors = {};
+
+    token = Validator.escape(token);
+    email = Validator.escape(email);
+
+    // Token validation
+    if (Validator.isEmail(token)) {
+        errors.token = "Token is required";
+    } else if (!Validator.isLength(token, { min: 16, max: 16 })) {
+        errors.token = "Token is invalid";
+    }
+
+    // Email validation
+    if (Validator.isEmpty(email)) {
+        errors.email = "Email is required";
+    } else if (!Validator.isEmail(email)) {
+        errors.email = "Email is invalid";
+    } else if (!await User.exists({ email })) {
+        errors.email = "Email is invalid";
+    }
+    return { errors, token, email };
+}
+
 module.exports = {
     login,
-    register
+    register,
+    verify,
 };
