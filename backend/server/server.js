@@ -9,6 +9,7 @@ const errorHandler = require('./middlewares/errorHandler');
 const socket = require('socket.io');
 const socketioJwt = require('socketio-jwt');
 const { passport, jwt } = require('./passport');
+const helmet = require('koa-helmet');
 
 // Create Koa Application
 const app = new Koa();
@@ -17,6 +18,11 @@ const server = http.createServer(app.callback());
 const io = socket(server);
 
 global.currentConnections = {};
+
+// Security
+app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }));
+app.use(helmet.frameguard({ action: 'deny' }));
+app.use(helmet.xssFilter());
 
 // Debug mode
 if (process.env.NODE_ENV !== 'production') {
