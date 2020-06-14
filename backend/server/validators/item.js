@@ -19,6 +19,22 @@ async function searchByName(params) {
 }
 
 /**
+ * Sanitizes and validates all data required to get items by name.
+ * @param { JSON } query received from the request.
+ * @return { JSON } object containing all errors and data.
+ */
+async function getByNames(query) {
+    let { names = "" } = query;
+    let refined = [];
+    let errors = {};
+
+    names = Validator.escape(name);
+
+    refined = names.split(',');
+    return { errors, refined };
+}
+
+/**
  * Sanitizes and validates all data required to create an item.
  * @param { JSON } body received from the request.
  * @param { JSON } user object used to identify the owner.

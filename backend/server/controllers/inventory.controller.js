@@ -41,15 +41,20 @@ async function searchByName(ctx) {
 
 /**
  * Get all items within the specified names list from the database.
- * @requires { params } names
+ * @requires { query } names
  * @response { JSON, error? } array of item objects if successful otherwise, an error.
  */
 async function getByNames(ctx) {
     try {
-        const names = ctx.query.names.split(',');
+        const { errors, refined } = await Validate.getByNames(ctx.query);
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
+
         const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
 
-        const result = i.items.filter(item => names.includes(item.name));
+        const result = i.items.filter(item => refined.includes(item.name));
 
         ctx.body = result;
     } catch (error) {
