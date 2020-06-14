@@ -2,6 +2,23 @@ const Validator = require('validator');
 const Inventory = require('../models/inventory');
 
 /**
+ * Sanitizes and validates all data required to search an item by name.
+ * @param { JSON } params received from the request.
+ * @return { JSON } object containing all errors and data.
+ */
+async function searchByName(params) {
+    let { name = "" } = params;
+    let errors = {};
+
+    name = Validator.escape(name);
+
+    if (name.length > 30) {
+        name = name.slice(0, 30);
+    } 
+    return { errors, name };
+}
+
+/**
  * Sanitizes and validates all data required to create an item.
  * @param { JSON } body received from the request.
  * @param { JSON } user object used to identify the owner.
@@ -149,6 +166,7 @@ async function del(params, user) {
 }
 
 module.exports = {
+    searchByName,
     create,
     update,
     del,

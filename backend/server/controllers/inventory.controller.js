@@ -23,8 +23,14 @@ async function getAll(ctx) {
  */
 async function searchByName(ctx) {
     try {
+        const { errors, name } = await Validate.searchByName(ctx.params);
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
+
         const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'items');
-        const re = new RegExp("^" + ctx.params.name);
+        const re = new RegExp("^" + name);
         const result = i.items.filter(item => re.test(item.name));
 
         ctx.body = result;
