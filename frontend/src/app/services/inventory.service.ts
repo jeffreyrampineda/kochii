@@ -166,7 +166,7 @@ export class InventoryService {
   onItemCreate() {
     this.socketioService.getSocket().on('item_create', (item) => {
       this.log(`created - item w/ id=${item._id}`);
-      this.localInv.push(item);
+      this.localInv.unshift(item);
       this.inventoryUpdate.next();
     });
   }

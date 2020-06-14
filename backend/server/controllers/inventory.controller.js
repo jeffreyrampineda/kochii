@@ -80,11 +80,14 @@ async function create(ctx) {
             {
                 $push: {
                     items: {
-                        name,
-                        quantity,
-                        addedDate,
-                        expirationDate,
-                        group
+                        $each: [{
+                            name,
+                            quantity,
+                            addedDate,
+                            expirationDate,
+                            group
+                        }],
+                        $position: 0
                     }
                 }
             },
@@ -92,7 +95,7 @@ async function create(ctx) {
         );
 
         if (result.ok === 1) {
-            const item = result.value.items[result.value.items.length - 1];
+            const item = result.value.items[0];
 
             await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Item created" });
 
