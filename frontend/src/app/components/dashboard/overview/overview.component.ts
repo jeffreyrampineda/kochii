@@ -233,7 +233,7 @@ export class OverviewComponent implements OnInit {
       if (quantityPerDay[dateString] != undefined) {
         quantityPerDay[dateString] += i.quantity;
       } else {
-        quantityPerDay[dateString] = 0;
+        quantityPerDay[dateString] = i.quantity;
       }
     });
 

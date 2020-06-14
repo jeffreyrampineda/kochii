@@ -158,7 +158,7 @@ async function update(ctx) {
                 const newQuantity = item.quantity - oldVItem.quantity;
 
                 if (newQuantity < 0) {
-                    await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: item.addedDate, quantity: newQuantity, description: "Updated item" });
+                    await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity: newQuantity, description: "Updated item" });
 
                 } else if (newQuantity > 0) {
                     await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: newQuantity, description: "Updated item" });
@@ -167,7 +167,7 @@ async function update(ctx) {
             }
             if (option === 'inc') {
                 if (quantity <= 0) {
-                    await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: item.addedDate, quantity, description: "Decreased quantities" });
+                    await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity, description: "Decreased quantities" });
                 } else {
                     await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity, description: "Increased quantities" });
                 }
