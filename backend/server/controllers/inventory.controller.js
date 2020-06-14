@@ -184,7 +184,11 @@ async function update(ctx) {
  */
 async function del(ctx) {
     try {
-        const { _id } = ctx.params;
+        const { errors, _id } = Validate.del(ctx.params, ctx.state.user);
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
 
         ctx.body = { ok: await deleteItemById(_id, ctx.state.user) };
     } catch (error) {

@@ -127,7 +127,29 @@ async function update(body, params, user) {
     return { errors, _id, name, quantity, addedDate, expirationDate, group, option };
 }
 
+/**
+ * Sanitizes and validates all data required to delete an item.
+ * @param { JSON } params received from the request.
+ * @param { JSON } user object used to identify the owner.
+ * @return { JSON } object containing all errors and data.
+ */
+async function del(params, user) {
+    let { _id = "" } = params;
+    let errors = {};
+
+    _id = Validator.escape(_id);
+
+    // _id validation
+    if (Validator.isEmpty(_id)) {
+        errors._id = "Id is required";
+    } else if (!await Inventory.exists({ owner: user._id, "items._id": _id })) {
+        errors._id = "Id does not exist";
+    }
+    return { errors, _id };
+}
+
 module.exports = {
     create,
-    update
+    update,
+    del,
 };
