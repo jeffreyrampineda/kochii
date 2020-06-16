@@ -8,12 +8,13 @@ const logger = require('./middlewares/logger');
 const errorHandler = require('./middlewares/errorHandler');
 const socket = require('socket.io');
 const socketioJwt = require('socketio-jwt');
-const { passport, jwt } = require('./passport');
+const { passport } = require('./passport');
 const helmet = require('koa-helmet');
 
 // Create Koa Application
 const app = new Koa();
-const router = new Router();
+const routerProtected = new Router();
+const routerPublic = new Router();
 const server = http.createServer(app.callback());
 const io = socket(server);
 
@@ -42,11 +43,12 @@ app.use(bodyParser());
 
 // Authentication
 app.use(passport.initialize());
-app.use(jwt.unless({ path: [/^\/public/, /^\/dev/] }));
 
 // Api routes
-require('./routes')(router);
-app.use(router.routes());
+require('./routes').protected(routerProtected, passport);
+require('./routes').public(routerPublic);
+app.use(routerProtected.routes());
+app.use(routerPublic.routes());
 
 mongoose.connect(process.env.MONGODB_URI_development,
     {

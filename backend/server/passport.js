@@ -1,5 +1,4 @@
-const unless = require('koa-unless'),
-      passport = require("koa-passport"),
+const passport = require("koa-passport"),
       User = require('./models/user'),
       JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt;
@@ -22,10 +21,6 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     });
 }));
 
-const jwt = passport.authenticate("jwt", { session: false });
-      jwt.unless = unless;
-
 module.exports = {
     passport,
-    jwt
 };
