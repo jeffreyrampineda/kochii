@@ -50,7 +50,7 @@ export class ItemAddComponent implements OnInit {
     });
   }
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
 
   ngOnInit() {
     this.selectedGroup = this.inventoryService.selectedGroup === "" ? "Default" : this.inventoryService.selectedGroup;
@@ -66,17 +66,29 @@ export class ItemAddComponent implements OnInit {
 
     // Stop here if any form is invalid.
     if (this.checkIfInvalid()) {
-        console.log('rejected');
-        return;
+      console.log('rejected');
+      return;
     }
 
     const observablesGroup = [];
 
+    let duplicates = {};
+    let hasDuplicate = false;
+
     this.itemAddForm.forEach(
       form => {
+        if (duplicates[form.value.name + form.value.expirationDate.toDateString()]) {
+          hasDuplicate = true;
+        }
+        duplicates[form.value.name + form.value.expirationDate.toDateString()] = true;
+
         observablesGroup.push(this.createItem(form.value));
       }
     );
+
+    if (hasDuplicate) {
+      return;
+    }
 
     forkJoin(observablesGroup).subscribe({
       next: response => {

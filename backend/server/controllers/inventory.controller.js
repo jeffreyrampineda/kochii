@@ -75,8 +75,50 @@ async function create(ctx) {
             ctx.throw(400, JSON.stringify(errors));
         }
 
+        ctx.body = await createItem(ctx.state.user, name, quantity, addedDate, expirationDate, group);
+    } catch (error) {
+        ctx.throw(400, error);
+    }
+}
+
+/**
+ * Updates an existing item. If the updated item's quantity is less than or 
+ * equal to 0, delete the item.
+ * @requires { body, params } _id, name, quantity, addedDate, expirationDate, group, option
+ * @response { JSON, error? } updated item if successful otherwise, an error.
+ */
+async function update(ctx) {
+    try {
+        const { errors, _id, name, quantity, addedDate, expirationDate, group, option } = await Validate.update(ctx.request.body, ctx.params, ctx.state.user);
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
+
+        ctx.body = await updateItem(ctx.state.user, _id, name, quantity, addedDate, expirationDate, group, option);
+
+    } catch (error) {
+        ctx.throw(400, error);
+    }
+}
+
+async function createItem(user, name, quantity, addedDate, expirationDate, group) {
+    try {
+        const g = await Inventory.findOne({ 
+            owner: user._id,
+            "items.name": name,
+        }, 'items');
+
+        if (g && g.items) {
+            const h = g.items.find(it => (new Date(it.expirationDate)).toDateString() == (new Date(expirationDate).toDateString()))
+
+            if (h) {
+                return await updateItem(user, String(h._id), name, quantity, (new Date(addedDate).toDateString()), (new Date(expirationDate).toDateString()), group, 'inc');
+            }
+        }
+
         const result = await Inventory.findOneAndUpdate(
-            { owner: ctx.state.user._id },
+            { owner: user._id },
             {
                 $push: {
                     items: {
@@ -97,32 +139,22 @@ async function create(ctx) {
         if (result.ok === 1) {
             const item = result.value.items[0];
 
-            await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Item created" });
+            await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Item created" });
 
-            for (const socket_id in global.currentConnections[ctx.state.user._id]) {
-                global.currentConnections[ctx.state.user._id][socket_id].socket.emit('item_create', item);
+            for (const socket_id in global.currentConnections[user._id]) {
+                global.currentConnections[user._id][socket_id].socket.emit('item_create', item);
             }
-            ctx.body = item;
+            return item;
+        } else {
+            return result.ok;
         }
     } catch (error) {
-        ctx.throw(400, error);
+        throw(error);
     }
 }
 
-/**
- * Updates an existing item. If the updated item's quantity is less than or 
- * equal to 0, delete the item.
- * @requires { body, params } _id, name, quantity, addedDate, expirationDate, group, option
- * @response { JSON, error? } updated item if successful otherwise, an error.
- */
-async function update(ctx) {
+async function updateItem(user, _id, name, quantity, addedDate, expirationDate, group, option) {
     try {
-        const { errors, _id, name, quantity, addedDate, expirationDate, group, option } = await Validate.update(ctx.request.body, ctx.params, ctx.state.user);
-
-        if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
-        }
-
         let itemData = {
             $set: {
                 "items.$.name": name,
@@ -136,58 +168,60 @@ async function update(ctx) {
         // Setting or incrementing.
         itemData["$" + option]["items.$.quantity"] = quantity;
 
-        const i = await Inventory.findOne({ owner: ctx.state.user._id, "items._id": _id }, { 'items.$': 1 });
+        const i = await Inventory.findOne({ owner: user._id, "items._id": _id }, { 'items.$': 1 });
         const oldVItem = i.items[0];
         const result = await Inventory.findOneAndUpdate(
             {
-                owner: ctx.state.user._id,
+                owner: user._id,
                 "items._id": _id
             },
             itemData,
             { new: true, runValidators: true, rawResult: true }
         );
 
-        if (result.ok == 1) {
+        if (result.ok === 1) {
             const item = result.value.items.find(i => i._id == _id);
 
             if ((new Date(oldVItem.addedDate)).getTime() != (new Date(item.addedDate)).getTime()) {
-                await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity, description: "Changed dates" });
-                await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Changed dates" });
+                await createHistory({ owner: user._id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity, description: "Changed dates" });
+                await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Changed dates" });
             }
             if (oldVItem.group != group) {
-                await createHistory({ owner: ctx.state.user._id, method: 'edit', target: 'item', addedDate, quantity, description: "Changed groups" });
+                await createHistory({ owner: user._id, method: 'edit', target: 'item', addedDate, quantity, description: "Changed groups" });
             }
             if (option === 'set') {
                 const newQuantity = item.quantity - oldVItem.quantity;
 
                 if (newQuantity < 0) {
-                    await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity: newQuantity, description: "Updated item" });
+                    await createHistory({ owner: user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity: newQuantity, description: "Updated item" });
 
                 } else if (newQuantity > 0) {
-                    await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: newQuantity, description: "Updated item" });
+                    await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: newQuantity, description: "Updated item" });
                 }
 
             }
             if (option === 'inc') {
                 if (quantity <= 0) {
-                    await createHistory({ owner: ctx.state.user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity, description: "Decreased quantities" });
+                    await createHistory({ owner: user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity, description: "Decreased quantities" });
                 } else {
-                    await createHistory({ owner: ctx.state.user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity, description: "Increased quantities" });
+                    await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity, description: "Increased quantities" });
                 }
             }
 
             // If new quantity is less than or equal to 0, delete Item.
             if (item.quantity <= 0) {
-                await deleteItemById(_id, ctx.state.user);
+                await deleteItemById(_id, user);
             } else {
-                for (const socket_id in global.currentConnections[ctx.state.user._id]) {
-                    global.currentConnections[ctx.state.user._id][socket_id].socket.emit('item_update', item);
+                for (const socket_id in global.currentConnections[user._id]) {
+                    global.currentConnections[user._id][socket_id].socket.emit('item_update', item);
                 }
             }
-            ctx.body = item;
+            return item;
+        } else {
+            return result.ok;
         }
     } catch (error) {
-        ctx.throw(400, error);
+        throw(error);
     }
 }
 

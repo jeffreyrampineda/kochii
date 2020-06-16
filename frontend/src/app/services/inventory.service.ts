@@ -104,15 +104,6 @@ export class InventoryService {
   createItem(item: Item): Observable<Item> {
     this.log('creating item');
 
-    const existing = this.findItemFromLocal(item.name, item.expirationDate);
-
-    // Change to updating
-    if (existing) {
-      this.log('item exists, switching to update');
-      item._id = existing._id;
-      return this.updateItem(item, 'inc');
-    }
-
     return this.http.post<Item>(this.inventoryUrl, item, httpOptions);
   }
 
@@ -216,17 +207,5 @@ export class InventoryService {
    */
   private log(message: string) {
     this.messageService.add(`InventoryService: ${message}`);
-  }
-
-  private findItemFromLocal(name: string, expirationDate: Date): Item {
-    const item = this.localInv.find(i => i.name === name);
-
-    if (item) {
-      // If expiration dates are the same, item is the same.
-      if ((new Date(item.expirationDate)).toDateString() == expirationDate.toDateString()) {
-        return item;
-      }
-    }
-    return null;
   }
 }
