@@ -45,8 +45,8 @@ app.use(bodyParser());
 app.use(passport.initialize());
 
 // Api routes
-require('./routes').protected(routerProtected, passport);
-require('./routes').public(routerPublic);
+require('./controllers').protected(routerProtected, passport);
+require('./controllers').public(routerPublic);
 app.use(routerProtected.routes());
 app.use(routerPublic.routes());
 

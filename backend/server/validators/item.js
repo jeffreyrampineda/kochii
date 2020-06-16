@@ -183,6 +183,7 @@ async function del(params, user) {
 
 module.exports = {
     searchByName,
+    getByNames,
     create,
     update,
     del,

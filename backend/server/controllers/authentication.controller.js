@@ -1,3 +1,4 @@
+const Router = require('koa-router');
 const mongoose = require('mongoose');
 const User = require('../models/user');
 const Inventory = require('../models/inventory');
@@ -7,12 +8,15 @@ const Validate = require('../validators/user');
 const cryptoRandomString = require('crypto-random-string');
 const { sendVerificationEmail } = require('../util/email');
 
+const router = new Router();
+
 /**
+ * POST /public/login
  * Authenticates the user to the database.
  * @requires { body } username, password
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
-async function login(ctx) {
+router.post('/login', async (ctx) => {
     try {
         const { errors, username, password } = await Validate.login(ctx.request.body);
 
@@ -37,14 +41,15 @@ async function login(ctx) {
     } catch (error) {
         ctx.throw(401, error);
     }
-}
+});
 
 /**
+ * POST /public/register
  * Registers the user to the database.
  * @requires { body } username, password, email
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
-async function register(ctx) {
+router.post('/register', async (ctx) => {
     try {
         const { errors, username, password, email } = await Validate.register(ctx.request.body);
 
@@ -98,14 +103,15 @@ async function register(ctx) {
     } catch (error) {
         ctx.throw(400, error);
     }
-}
+});
 
 /**
+ * GET /public/verification?token=token&email=email
  * Verifies the token and email.
  * @requires { query } token, email
  * @response { JSON, error? } the result.
  */
-async function verify(ctx) {
+router.get('/verification', async (ctx) => {
     try {
         const { errors, token, email } = await Validate.verify(ctx.request.query);
 
@@ -134,10 +140,6 @@ async function verify(ctx) {
     } catch (error) {
         ctx.throw(401, error);
     }
-}
+});
 
-module.exports = {
-    login,
-    register,
-    verify,
-};
+module.exports = router.routes();

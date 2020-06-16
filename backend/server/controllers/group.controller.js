@@ -1,12 +1,16 @@
+const Router = require('koa-router');
 const Inventory = require('../models/inventory');
-const createHistory = require('./history.controller').create;
+const createHistory = require('../services/history.service').create;
 const Validate = require('../validators/group');
 
+const router = new Router();
+
 /**
+ * GET /api/groups
  * Get all groups from the database.
  * @response { string[], error? } array of strings if successful otherwise, an error.
  */
-async function getAll(ctx) {
+router.get('/', async (ctx) => {
     try {
         const i = await Inventory.findOne({ owner: ctx.state.user._id }, 'groups');
 
@@ -14,14 +18,15 @@ async function getAll(ctx) {
     } catch (error) {
         ctx.throw(500, error);
     }
-}
+});
 
 /**
+ * POST /api/groups/:name
  * Creates a new group.
  * @requires { params } name
  * @response { JSON, error? } group's name if successful otherwise, an error.
  */
-async function create(ctx) {
+router.post('/:name', async (ctx) => {
     try {
         const { errors, name } = await Validate.create(ctx.params, ctx.state.user);
 
@@ -46,15 +51,16 @@ async function create(ctx) {
     } catch (error) {
         ctx.throw(400, error);
     }
-}
+});
 
 /**
+ * DEL /api/groups/:name
  * Deletes a group. Before deleting, sets all Items' group with the same group name
  * to 'Default'.
  * @requires { params } name
  * @response { JSON, error? } group's name if successful otherwise, an error.
  */
-async function del(ctx) {
+router.del('/:name', async (ctx) => {
     try {
         const { errors, name } = await Validate.del(ctx.params, ctx.state.user);
 
@@ -102,10 +108,6 @@ async function del(ctx) {
     } catch (error) {
         ctx.throw(400, error);
     }
-}
+});
 
-module.exports = {
-    getAll,
-    create,
-    del
-};
+module.exports = router.routes();
