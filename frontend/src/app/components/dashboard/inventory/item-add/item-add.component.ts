@@ -66,7 +66,7 @@ export class ItemAddComponent implements OnInit {
 
     // Stop here if any form is invalid.
     if (this.checkIfInvalid()) {
-      console.log('rejected');
+      this.notify('Forms are invalid');
       return;
     }
 
@@ -87,6 +87,7 @@ export class ItemAddComponent implements OnInit {
     );
 
     if (hasDuplicate) {
+      this.notify('Duplicates found');
       return;
     }
 
