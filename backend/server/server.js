@@ -33,9 +33,9 @@ app.use(helmet.hsts({ maxAge: ninetyDaysInSeconds }));
 // Debug mode
 if (process.env.NODE_ENV !== 'production') {
     app.use(logger());
-} else if (process.env.NODE_ENV === 'production') {
-    app.use(require('koa-static')(__dirname + '/../../frontend/dist'));
 }
+
+app.use(require('koa-static')(__dirname + '/../client/dist'));
 
 app.use(errorHandler);
 app.use(cors());
