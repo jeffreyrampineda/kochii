@@ -1,12 +1,12 @@
 {
-  "name": "backend",
+  "name": "kochii",
   "version": "1.0.0",
-  "description": "",
+  "description": "Assists and encourages individuals for a manageable meal preparation lifestyle",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "concurrently \"node index.js\" \"cd client && npm run dev\"",
-    "dev-backend": "node index.js",
+    "dev-server": "node index.js",
     "dev-client": "cd client && npm run dev",
     "test": "jest --watchAll --silent",
     "postinstall": "cd client && npm install && npm run build"
