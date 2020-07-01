@@ -1,19 +1,47 @@
 {
-  "name": "kochii",
+  "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd backend && npm start",
-    "dev": "concurrently \"cd backend && npm run dev\" \"cd backend/client && npm run dev\"",
-    "dev-backend": "cd backend && npm run dev",
-    "dev-frontend": "cd frontend && npm run dev",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "cd backend && npm install && cd ../frontend && npm install && npm run build"
+    "start": "node index.js",
+    "dev": "concurrently \"node index.js\" \"cd client && npm run dev\"",
+    "dev-backend": "node index.js",
+    "dev-client": "cd client && npm run dev",
+    "test": "jest --watchAll --silent",
+    "postinstall": "cd client && npm install && npm run build"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^4.1.0"
+    "@koa/cors": "^2.2.3",
+    "@sendgrid/mail": "^7.2.0",
+    "bcrypt": "^4.0.1",
+    "concurrently": "^5.2.0",
+    "crypto-random-string": "^3.2.0",
+    "dotenv": "^8.1.0",
+    "jsonwebtoken": "^8.4.0",
+    "koa": "^2.6.2",
+    "koa-bodyparser": "^4.2.1",
+    "koa-helmet": "^5.2.0",
+    "koa-jwt": "^3.5.1",
+    "koa-passport": "^4.1.3",
+    "koa-router": "^7.4.0",
+    "koa-sendfile": "^2.0.1",
+    "koa-static": "^5.0.0",
+    "mongoose": "^5.3.12",
+    "passport-jwt": "^4.0.0",
+    "socket.io": "^2.3.0",
+    "socketio-jwt": "^4.6.0",
+    "validator": "^13.0.0"
+  },
+  "devDependencies": {
+    "jest": "^26.0.1",
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
+  },
+  "jest": {
+    "testEnvironment": "node"
   }
 }

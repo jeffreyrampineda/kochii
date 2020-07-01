@@ -35,7 +35,7 @@ if (process.env.NODE_ENV !== 'production') {
     app.use(logger());
 }
 
-app.use(require('koa-static')(__dirname + '/../client/dist'));
+app.use(require('koa-static')(__dirname + '/client/dist'));
 
 app.use(errorHandler);
 app.use(cors());

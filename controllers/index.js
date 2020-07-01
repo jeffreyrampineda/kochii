@@ -10,7 +10,7 @@ module.exports = {
     public: (router) => {
         router.use('/public', require('./authentication.controller'));
         router.get('*', async (ctx) => {
-            await sendfile(ctx, __dirname + '/../../client/dist/index.html');
+            await sendfile(ctx, __dirname + '/../client/dist/index.html');
         });
     }
 }
