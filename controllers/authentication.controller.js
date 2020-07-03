@@ -6,7 +6,7 @@ const History = require('../models/history');
 const Helper = require('../util/helpers');
 const Validate = require('../validators/user');
 const cryptoRandomString = require('crypto-random-string');
-const { sendVerificationEmail } = require('../util/email');
+const sendVerificationEmail = require('../services/email.service').sendVerificationEmail;
 
 const router = new Router();
 
