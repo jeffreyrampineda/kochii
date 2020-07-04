@@ -1,6 +1,26 @@
 const Inventory = require('../models/inventory');
 const createHistory = require('../services/history.service').create;
 
+async function init(user, inventory_id) {
+    try {
+        await Inventory.create({
+            _id: inventory_id,
+            owner: user._id,
+            groups: ["Default"],
+            items: [{
+                name: "Sample",
+                quantity: 1,
+            }]
+        });
+
+        await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: new Date(), quantity: 1, description: "Item created" });
+
+        return true;
+    } catch (error) {
+        throw (error);
+    }
+}
+
 /**
  * Get all items belonging to user.
  * @param { JSON } user
@@ -189,6 +209,7 @@ async function deleteItemById(_id, user) {
 }
 
 module.exports = {
+    init,
     getItems,
     getItemsByNames,
     searchItemByName,

@@ -1,13 +1,7 @@
 const Router = require('koa-router');
-const mongoose = require('mongoose');
-const User = require('../models/user');
-const Inventory = require('../models/inventory');
-const History = require('../models/history');
+const UserService = require('../services/user.service');
 const Helper = require('../util/helpers');
 const Validate = require('../validators/user');
-const cryptoRandomString = require('crypto-random-string');
-const sendVerificationEmail = require('../services/email.service').sendVerificationEmail;
-
 const router = new Router();
 
 /**
@@ -24,7 +18,7 @@ router.post('/login', async (ctx) => {
             ctx.throw(401, JSON.stringify(errors));
         }
 
-        const user = await User.findOne({ username });
+        const user = await UserService.getUserByName(username);
 
         // User should exist and should have matching passwords.
         if (user && user.comparePasswords(password)) {
@@ -57,42 +51,11 @@ router.post('/register', async (ctx) => {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        const inventory_id = mongoose.Types.ObjectId();
-        const history_id = mongoose.Types.ObjectId();
-        const verificationToken = cryptoRandomString({ length: 16, type: 'url-safe' });
-
-        const user = await User.create({
+        const user = await UserService.init(
             username,
             password,
             email,
-            isVerified: false,
-            verificationToken,
-            inventory: inventory_id,
-            history: history_id
-        });
-
-        const inventory = await Inventory.create({
-            _id: inventory_id,
-            owner: user._id,
-            groups: ["Default"],
-            items: [{
-                name: "Sample",
-                quantity: 1,
-            }]
-        });
-        const history = await History.create({
-            _id: history_id,
-            owner: user._id,
-            history: [{
-                method: "create",
-                target: "user",
-                quantity: 0,
-                addedDate: new Date(),
-                description: "Account registered",
-            }]
-        });
-
-        sendVerificationEmail(email, verificationToken);
+        );
 
         // 202 - Accepted
         ctx.status = 202;
@@ -119,18 +82,14 @@ router.get('/verification', async (ctx) => {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        const user = await User.findOne({ email });
-        let response = "";
+        const user = await UserService.getUserByEmail(email);
+        let response = "loading...";
 
         if (user && user.isVerified) {
             response = "User is already verified";
         } else if (user && user.compareTokens(token)) {
-            await User.findOneAndUpdate(
-                { _id: user._id, email },
-                { isVerified: true },
-                { runValidators: true }
-            );
-            response = "User has been verified"
+            const verifyResult = await UserService.verify(user, email);
+            response = verifyResult ? "User has been verified" : "an error has occured";
         } else {
             response = "Token is expired";
         }

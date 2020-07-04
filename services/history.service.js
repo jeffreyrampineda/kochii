@@ -1,5 +1,25 @@
 const History = require('../models/history');
 
+async function init(user, history_id) {
+    try {
+        await History.create({
+            _id: history_id,
+            owner: user._id,
+            history: [{
+                method: "create",
+                target: "user",
+                quantity: 0,
+                addedDate: new Date(),
+                description: "Account registered",
+            }]
+        });
+
+        return true;
+    } catch (error) {
+        throw (error);
+    }
+}
+
 /**
  * Creates a new history.
  * @param { method, target, addedDate, quantity, description } history 
@@ -34,5 +54,6 @@ async function create(history) {
 }
 
 module.exports = {
+    init,
     create,
 };
