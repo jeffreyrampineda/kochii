@@ -71,7 +71,7 @@
           <td mat-cell *matCellDef="let item">
             <div *ngIf="selection.isSelected(item); else viewName">
               <div *ngIf="option === 'set'; else viewName">
-                <mat-form-field>
+                <mat-form-field style="width: 98%">
                   <input  matInput
                           type="text"
                           [formControl]="f(item._id).name">
@@ -115,7 +115,7 @@
           <td mat-cell *matCellDef="let item">
             <div *ngIf="selection.isSelected(item); else viewGroup">
               <div *ngIf="option === 'set'; else viewGroup">
-                <mat-form-field>
+                <mat-form-field style="width: 98%">
                   <mat-select [formControl]="f(item._id).group">
                     <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
                   </mat-select>
@@ -135,7 +135,7 @@
           <td mat-cell *matCellDef="let item">
             <div *ngIf="selection.isSelected(item); else viewAddedDate">
               <div *ngIf="option === 'set'; else viewAddedDate">
-                <mat-form-field>
+                <mat-form-field style="width: 98%">
                   <input  matInput
                           [formControl]="f(item._id).addedDate"
                           [matDatepicker]="picker" />
@@ -158,7 +158,7 @@
 
             <div *ngIf="selection.isSelected(item); else viewExpirationDate">
               <div *ngIf="option === 'set'; else viewExpirationDate">
-                <mat-form-field>
+                <mat-form-field style="width: 98%">
                   <input  matInput
                           [formControl]="f(item._id).expirationDate"
                           [matDatepicker]="picker2" />
