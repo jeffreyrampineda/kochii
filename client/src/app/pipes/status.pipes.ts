@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class StatusPipe implements PipeTransform {
 
   transform(value: number): string {
-    if (value > 10) {
+    if (value >= 10) {
         return 'good';
     } else if (value < 10 && value >= 0) {
         return 'warning';
