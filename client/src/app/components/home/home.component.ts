@@ -56,6 +56,10 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  sendMessage(): void {
+    alert("This is a prototype. You can contact me directly by email: jeffreyrampineda@gmail.com");
+  }
+
   /**
    * Logs out the current user.
    */

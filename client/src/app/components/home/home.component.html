@@ -10,10 +10,13 @@
   </div>
 </nav>
 <div class="k-side-icons" [@scrollAnimation]="state">
-  <button mat-fab routerLink='.' fragment="top"><mat-icon>keyboard_arrow_up</mat-icon></button>
+  <button mat-fab routerLink='.' fragment="top" color="primary">
+    <mat-icon>keyboard_arrow_up</mat-icon>
+  </button>
 </div>
 <main class="mat-typography">
-  <section id="top">
+  <div id="top"></div>
+  <section>
     <div class="heading">
       <span class="mat-display-4">Kochii</span>
       <nav>
@@ -24,50 +27,62 @@
       </nav>
     </div>
   </section>
-  <section id="introduction">
+  <div id="introduction"></div>
+  <section>
     <div class="k-content">
       <h1>Introduction</h1>
       <p>
-        Kochii is an inventory management web application intended to keep track and
-        organize ingredients.
+        Kochii is a real-time inventory management web application intended to keep track and
+        organize ingredients. It allows the user to categorize each item by group as well as
+        receive warnings regarding the status of each item whether expired, almost expired, or good. 
+        The actions of adding and removing items are tracked by the user's history component 
+        which can be cleared whenever the user wants. The history is used to populate the 
+        overview component with data to summarize the user's weekly activities to provide useful 
+        insights.
       </p>
+      <img src="assets/update-preview.png" alt="Inventory preview">
     </div>
   </section>
-  <section id="about">
+  <div id="about"></div>
+  <section>
     <div class="k-content">
       <h1>About</h1>
       <p>
-        Lorem Ipsum is simply dummy text of the printing and
-        typesetting industry. Lorem Ipsum has been the industry's
-        standard dummy text ever since the 1500s, when an unknown
-        printer took a galley of type and scrambled it to make a
-        type specimen book. It has survived not only five centuries,
-        but also the leap into electronic typesetting, remaining
-        essentially unchanged. It was popularised in the 1960s with
-        the release of Letraset sheets containing Lorem Ipsum passages,
-        and more recently with desktop publishing software like Aldus
-        PageMaker including versions of Lorem Ipsum.
+        Kochii is a personal project created by Jeffrey Ram Pineda as a hobby. It is created with
+        Angular as a frontend framework, Koa.js for the backend server, and MongoDB as its database. 
+        Still an ongoing hobby, Kochii is updated from time to time with no specific schedules in mind.
+        The project is open-sourced and is hosted on <a href="https://github.com/jeffreyrampineda">github.com/jeffreyrampineda</a>.
       </p>
     </div>
   </section>
-  <section id="contact">
+  <div id="contact"></div>
+  <section>
     <div class="k-content">
       <h1>Contact</h1>
-      <p>
-        Lorem Ipsum is simply dummy text of the printing and
-        typesetting industry. Lorem Ipsum has been the industry's
-        standard dummy text ever since the 1500s, when an unknown
-        printer took a galley of type and scrambled it to make a
-        type specimen book. It has survived not only five centuries,
-        but also the leap into electronic typesetting, remaining
-        essentially unchanged. It was popularised in the 1960s with
-        the release of Letraset sheets containing Lorem Ipsum passages,
-        and more recently with desktop publishing software like Aldus
-        PageMaker including versions of Lorem Ipsum.
-      </p>
+      <h2>Get a hold of us. We’re always happy to talk!</h2>
+      <div class="contact-form">
+        <form>
+          <mat-form-field style="width: 100%;">
+            <mat-label>Name</mat-label>
+            <input matInput>
+          </mat-form-field>
+
+          <mat-form-field style="width: 100%;">
+            <mat-label>Email</mat-label>
+            <input matInput>
+          </mat-form-field>
+
+          <mat-form-field style="width: 100%;">
+            <mat-label>How can we help you?</mat-label>
+            <textarea matInput placeholder="Message" rows="10"></textarea>
+          </mat-form-field>
+
+        </form>
+        <button mat-raised-button color="primary" style="float: right;" (click)="sendMessage()">Send Message</button>
+      </div>
     </div>
   </section>
 </main>
 <footer>
-  jeffreyrampineda &copy; 2020
+  Kochii - jeffreyrampineda &copy; 2020
 </footer>

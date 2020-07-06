@@ -43,3 +43,22 @@ footer {
     display: flex;
     justify-content: center;
 }
+
+.contact-form {
+    min-width: 150px;
+    max-width: 600px;
+    width: 100%;
+}
+
+img {
+    max-width: 100%;
+}
+
+.preview-grid {
+    display: grid;
+    grid-gap: 16px;
+}
+
+.preview-grid-2 {
+    grid-template-columns: 1fr 1fr;
+}
