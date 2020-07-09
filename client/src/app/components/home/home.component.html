@@ -61,24 +61,39 @@
       <h1>Contact</h1>
       <h2>Get a hold of us. We’re always happy to talk!</h2>
       <div class="contact-form">
-        <form>
+        <form [formGroup]="feedbackForm">
           <mat-form-field style="width: 100%;">
             <mat-label>Name</mat-label>
-            <input matInput>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="f.name.errors">
+              <div *ngIf="f.name.errors.required">Name is required</div>
+              <div *ngIf="f.name.errors.minlength">Name minimum length is 2 characters</div>
+              <div *ngIf="f.name.errors.maxlength">Name maximum length is 50 characters</div>
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field style="width: 100%;">
             <mat-label>Email</mat-label>
-            <input matInput>
+            <input matInput formControlName="email">
+            <mat-error *ngIf="f.email.errors">
+              <div *ngIf="f.email.errors.required">Email is required</div>
+              <div *ngIf="f.email.errors.email">Invalid email</div>
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field style="width: 100%;">
             <mat-label>How can we help you?</mat-label>
-            <textarea matInput placeholder="Message" rows="10"></textarea>
+            <textarea matInput placeholder="Message" rows="10" formControlName="message"></textarea>
+            <mat-error *ngIf="f.message.errors">
+              <div *ngIf="f.message.errors.required">Message is required</div>
+              <div *ngIf="f.message.errors.minlength">Message minimum length is 10 characters</div>
+              <div *ngIf="f.message.errors.maxlength">Message maximum length is 700 characters</div>
+            </mat-error>
           </mat-form-field>
 
         </form>
-        <button mat-raised-button color="primary" style="float: right;" (click)="sendMessage()">Send Message</button>
+        <a mat-raised-button color="primary" style="float: right; text-decoration: none;" [disabled]="isMessageInvalid()"
+          href="mailto:kochii.inventory.app@gmail.com?subject={{ getSubject }}&body={{ getMessage }}">Send Message</a>
       </div>
     </div>
   </section>
