@@ -37,13 +37,6 @@ section {
     margin-left: 80vw;
 }
 
-footer {
-    height: 100px;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-
 .contact-form {
     min-width: 150px;
     max-width: 600px;
