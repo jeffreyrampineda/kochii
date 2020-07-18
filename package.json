@@ -8,6 +8,7 @@
     "dev": "concurrently \"nodemon index.js\" \"cd client && npm run dev\"",
     "dev-server": "nodemon index.js",
     "dev-client": "cd client && npm run dev",
+    "build-client": "cd client && npm run build",
     "test": "jest --watchAll --silent",
     "postinstall": "cd client && npm install && npm run build"
   },
