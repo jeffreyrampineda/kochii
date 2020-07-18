@@ -22,7 +22,6 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FooterComponent } from './components/footer/footer.component';
 
@@ -51,7 +50,6 @@ import { CreateGroupDialogComponent } from './components/dialogs/create-group-di
     DashboardComponent,
     HomeComponent,
     LoginComponent,
-    PagenotfoundComponent,
     RegisterComponent,
     GroceriesComponent,
     HistoryComponent,

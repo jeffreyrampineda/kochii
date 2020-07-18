@@ -10,6 +10,8 @@ const socket = require('socket.io');
 const socketioJwt = require('socketio-jwt');
 const { passport } = require('./passport');
 const helmet = require('koa-helmet');
+const path = require('path');
+const render = require('koa-ejs');
 
 // Create Koa Application
 const app = new Koa();
@@ -21,7 +23,7 @@ const io = socket(server);
 global.currentConnections = {};
 
 // Security
-const ninetyDaysInSeconds = 90*24*60*60;
+const ninetyDaysInSeconds = 90 * 24 * 60 * 60;
 
 app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }));
 app.use(helmet.frameguard({ action: 'deny' }));
@@ -35,6 +37,14 @@ if (process.env.NODE_ENV !== 'production') {
     app.use(logger());
 }
 
+render(app, {
+    root: path.join(__dirname, 'views'),
+    layout: 'template',
+    viewExt: 'html',
+    cache: false,
+    debug: true
+});
+
 app.use(require('koa-static')(__dirname + '/client/dist'));
 
 app.use(errorHandler);
@@ -44,7 +54,7 @@ app.use(bodyParser());
 // Authentication
 app.use(passport.initialize());
 
-// Api routes
+// Routes
 require('./controllers').protected(routerProtected, passport);
 require('./controllers').public(routerPublic);
 app.use(routerProtected.routes());

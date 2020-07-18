@@ -7,7 +7,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
-import { PagenotfoundComponent } from './components/pagenotfound/pagenotfound.component';
 import { RegisterComponent } from './components/register/register.component';
 
 // Components - /dashboard
@@ -38,7 +37,7 @@ const routes: Routes = [
     ]},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', component: PagenotfoundComponent }
+  { path: '**', redirectTo: 'home' }
 ];
 
 @NgModule({
