@@ -13,7 +13,7 @@ module.exports = {
             await sendfile(ctx, __dirname + '/../client/dist/index.html');
         });
         router.get('/', async (ctx) => {
-            ctx.body = "home";
+            await ctx.render('home');
         });
     }
 }

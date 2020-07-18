@@ -23,7 +23,7 @@ export class ItemAddComponent implements OnInit {
   searchTerm = new Subject<string>();
   itemAddForm: FormGroup[] = [];
   groups: string[];
-  placeholderImage = 'assets/image-placeholder.png';
+  placeholderImage = 'app/assets/image-placeholder.png';
   selectedGroup = "Default";
 
   constructor(

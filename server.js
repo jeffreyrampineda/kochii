@@ -54,6 +54,7 @@ app.use(bodyParser());
 app.use(passport.initialize());
 
 // Routes
+app.use(require('koa-static')(__dirname + '/public'));
 app.use(mount('/app', require('koa-static')(__dirname + '/client/dist')));
 
 require('./controllers').protected(routerProtected, passport);
