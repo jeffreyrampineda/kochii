@@ -12,6 +12,7 @@ const { passport } = require('./passport');
 const helmet = require('koa-helmet');
 const path = require('path');
 const render = require('koa-ejs');
+const mount = require('koa-mount');
 
 // Create Koa Application
 const app = new Koa();
@@ -45,8 +46,6 @@ render(app, {
     debug: true
 });
 
-app.use(require('koa-static')(__dirname + '/client/dist'));
-
 app.use(errorHandler);
 app.use(cors());
 app.use(bodyParser());
@@ -55,6 +54,8 @@ app.use(bodyParser());
 app.use(passport.initialize());
 
 // Routes
+app.use(mount('/app', require('koa-static')(__dirname + '/client/dist')));
+
 require('./controllers').protected(routerProtected, passport);
 require('./controllers').public(routerPublic);
 app.use(routerProtected.routes());

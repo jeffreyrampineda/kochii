@@ -9,8 +9,11 @@ module.exports = {
     },
     public: (router) => {
         router.use('/public', require('./authentication.controller'));
-        router.get('*', async (ctx) => {
+        router.get(['/login', '/register', '/app/*'], async (ctx) => {
             await sendfile(ctx, __dirname + '/../client/dist/index.html');
+        });
+        router.get('/', async (ctx) => {
+            ctx.body = "home";
         });
     }
 }
