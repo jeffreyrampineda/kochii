@@ -37,7 +37,7 @@
             <mat-error>
                 <div *ngIf="error.login">{{ error.login }}</div>
             </mat-error>
-            <button mat-button routerLink="/home">Cancel</button>
+            <a mat-button href="/">Cancel</a>
             <button mat-button routerLink="/register">Register</button>
             <button type="submit" mat-button [disabled]="loginForm.invalid || loading" (click)="onSubmit()">Login</button>
         </div>

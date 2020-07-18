@@ -5,7 +5,6 @@ import { AuthGuard } from './guards/auth.guard';
 
 // Components
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 
@@ -22,9 +21,8 @@ import { ItemAddComponent } from './components/dashboard/inventory/item-add/item
 // -------------------------------------------------------------
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', component: HomeComponent },
-  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard],
+  { path: '', redirectTo: 'app', pathMatch: 'full' },
+  { path: 'app', component: DashboardComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: OverviewComponent },
@@ -37,7 +35,7 @@ const routes: Routes = [
     ]},
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '**', redirectTo: 'home' }
+  { path: '**', redirectTo: 'app' }
 ];
 
 @NgModule({

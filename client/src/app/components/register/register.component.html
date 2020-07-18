@@ -57,7 +57,7 @@
             <div *ngIf="error.password">{{ error.password }}</div>
             <div *ngIf="error.email">{{ error.email }}</div>
         </mat-error>
-        <button mat-button routerLink="/home">Cancel</button>
+        <a mat-button href="/">Cancel</a>
         <button type="submit" mat-button [disabled]="registerForm.invalid || loading" (click)="onSubmit()">Register</button>
     </div>
   </mat-card-actions>

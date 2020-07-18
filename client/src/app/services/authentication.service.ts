@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -16,7 +15,6 @@ export class AuthenticationService {
 
     constructor(
         private http: HttpClient,
-        private router: Router,
         private messageService: MessageService
     ) {
         this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
@@ -81,7 +79,7 @@ export class AuthenticationService {
         localStorage.removeItem('currentUser');
         this.currentUserSubject.next(null);
 
-        this.router.navigate(['/home']);
+        window.location.href = '/';
     }
 
 // -------------------------------------------------------------
