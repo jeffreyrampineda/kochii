@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {
     // If currently logged in, redirect to dashboard.
     if (this.authenticationService.isLoggedIn) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/app']);
     }
 
     this.registerForm = this.formBuilder.group({
@@ -84,7 +84,7 @@ export class RegisterComponent implements OnInit {
     this.authenticationService.register({ username, password, email }).subscribe({
       next: response => {
         if (response && response.token) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/app']);
         }
       },
       error: err => {

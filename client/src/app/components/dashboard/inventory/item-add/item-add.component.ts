@@ -107,7 +107,7 @@ export class ItemAddComponent implements OnInit {
         // forkJoin handle error
       },
       complete: () => {
-        this.router.navigate(['dashboard/inventory']);
+        this.router.navigate(['app/inventory']);
       }
     });
   }
@@ -187,7 +187,7 @@ export class ItemAddComponent implements OnInit {
 
   /** Navigate the browser back to dashboard/inventory */
   back(): void {
-    this.router.navigate(['dashboard/inventory']);
+    this.router.navigate(['app/inventory']);
   }
 
   /** Convenience getter for easy access to form fields. */

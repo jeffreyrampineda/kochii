@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // If currently logged in, redirect to dashboard.
     if (this.authenticationService.isLoggedIn) {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/app']);
     }
 
     this.loginForm = this.formBuilder.group({
@@ -65,7 +65,7 @@ export class LoginComponent implements OnInit {
     this.authenticationService.login(this.loginForm.value).subscribe({
       next: response => {
         if (response && response.token) {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/app']);
         }
       },
       error: err => {

@@ -15,7 +15,7 @@
   </mat-card-header>
   <mat-card-actions *ngIf="isEmpty()" class="k-actions">
     <div class="k-float-right">
-      <button mat-button routerLink="/dashboard/inventory/add"><mat-icon>add</mat-icon></button>
+      <button mat-button routerLink="/app/inventory/add"><mat-icon>add</mat-icon></button>
     </div>
   </mat-card-actions>
   <mat-card-content class="k-card-content-min-height">
@@ -28,7 +28,7 @@
     <div [hidden]="isEmpty() || loading">
       <div class="k-float-right">
         <div *ngIf="!showSelect">
-          <button mat-button routerLink="/dashboard/inventory/add"><mat-icon>add</mat-icon></button>
+          <button mat-button routerLink="/app/inventory/add"><mat-icon>add</mat-icon></button>
           <button mat-button (click)="selectColumnToggle('inc')"><mat-icon>remove</mat-icon></button>
           <button mat-button (click)="selectColumnToggle('set')"><mat-icon>create</mat-icon></button>
         </div>
