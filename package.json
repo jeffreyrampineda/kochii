@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "concurrently \"nodemon index.js\" \"cd client && npm run dev\"",
-    "dev-server": "node index.js",
+    "dev-server": "nodemon index.js",
     "dev-client": "cd client && npm run dev",
     "test": "jest --watchAll --silent",
     "postinstall": "cd client && npm install && npm run build"
