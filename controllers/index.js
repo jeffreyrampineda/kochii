@@ -15,5 +15,11 @@ module.exports = {
         router.get('/', async (ctx) => {
             await ctx.render('home');
         });
+        router.get('/legal/terms-of-service', async (ctx) => {
+            await ctx.render('legal/termsofservice');
+        });
+        router.get('/legal/privacy-policy', async (ctx) => {
+            await ctx.render('legal/privacypolicy');
+        });
     }
 }
