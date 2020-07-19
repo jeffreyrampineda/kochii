@@ -186,8 +186,8 @@ export class OverviewComponent implements OnInit {
           xAxes: [{
             type: "time",
             time: {
-              min: this.start,
-              max: this.today,
+              min: this.start.toDateString(),
+              max: this.today.toDateString(),
               unit: "day",
               unitStepSize: 1,
               displayFormats: {
@@ -202,7 +202,7 @@ export class OverviewComponent implements OnInit {
               labelString: 'Quantity'
             },
             ticks: {
-              precision: 0,
+              /* precision: 0, // type error */
               beginAtZero: true
             }
           }]

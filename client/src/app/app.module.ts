@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MDBBootstrapModule } from 'angular-bootstrap-md';
 
 // Interceptors
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
@@ -66,7 +67,8 @@ import { CreateGroupDialogComponent } from './components/dialogs/create-group-di
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    AppMaterialModule
+    AppMaterialModule,
+    MDBBootstrapModule.forRoot()
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
