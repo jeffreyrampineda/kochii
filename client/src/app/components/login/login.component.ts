@@ -50,7 +50,7 @@ export class LoginComponent implements OnInit {
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
-  onSubmit() {
+  onSubmit(loginData) {
     if (this.loginForm.invalid || this.loading) {
       console.log('cannot submit');
       return;
@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
       login: undefined
     };
 
-    this.authenticationService.login(this.loginForm.value).subscribe({
+    this.authenticationService.login(loginData).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/app']);

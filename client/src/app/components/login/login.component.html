@@ -1,45 +1,56 @@
-<mat-card class="k-center-isolated">
-    <mat-card-header>
-        <mat-card-title>Login</mat-card-title>
-        <mat-card-subtitle>Enter your authentication</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <form class="k-card-form" [formGroup]="loginForm">
-            <mat-form-field class="k-card-form-field-full">
-                <input  matInput 
-                        formControlName="username"
-                        type="text"
-                        placeholder="Username" />
-                <mat-error *ngIf="f.username.errors">
-                    <div *ngIf="f.username.errors.required">Username is required</div>
-                    <div *ngIf="f.username.errors.minlength">Minimum length is 6</div>
-                    <div *ngIf="f.username.errors.maxlength">Maximum length is 30</div>
-                    <div *ngIf="f.username.errors.pattern">Must only be an alphanumeric, underscore (_), or dash (-)</div>
-                </mat-error>
-            </mat-form-field>
+<!-- Form -->
+<form class="border border-light z-depth-1 p-5 k-center-isolated" [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
+    <p class="h4 mb-4 text-center">Login</p>
 
-            <mat-form-field class="k-card-form-field-full">
-                <input  matInput 
-                        formControlName="password"
-                        type="password"
-                        placeholder="Password" />
-                <mat-error *ngIf="f.password.errors">
-                    <div *ngIf="f.password.errors.required">Password is required</div>
-                    <div *ngIf="f.password.errors.minlength">Minimum length is 6</div>
-                    <div *ngIf="f.password.errors.maxlength">Maximum length is 30</div>
-                </mat-error>
-            </mat-form-field>
-        </form>
-    </mat-card-content>
-    <mat-card-actions class="k-actions k-text-center">
-        <div class="k-actions-buttons">
-            <span *ngIf="loading">Loading...</span>
-            <mat-error>
-                <div *ngIf="error.login">{{ error.login }}</div>
-            </mat-error>
-            <a mat-button href="/">Cancel</a>
-            <button mat-button routerLink="/register">Register</button>
-            <button type="submit" mat-button [disabled]="loginForm.invalid || loading" (click)="onSubmit()">Login</button>
+    <!-- Username -->
+    <div class="md-form mt-3">
+        <input mdbInput mdbValidate type="text" id="username" class="form-control" formControlName="username">
+        <label for="username">Username</label>
+        <mdb-error *ngIf="f.username.invalid && (f.username.dirty || f.username.touched)">
+            <div *ngIf="f.username.errors.required">Username is required</div>
+            <div *ngIf="f.username.errors.minlength">Minimum length is 6</div>
+            <div *ngIf="f.username.errors.maxlength">Maximum length is 30</div>
+            <div *ngIf="f.username.errors.pattern">Must only be an alphanumeric, underscore (_), or dash (-)</div>
+        </mdb-error>
+    </div>
+
+    <!-- Password -->
+    <div class="md-form">
+        <input mdbInput mdbValidate type="text" id="password" class="form-control" formControlName="password">
+        <label for="password">Password</label>
+        <mdb-error *ngIf="f.password.invalid && (f.password.dirty || f.password.touched)">
+            <div *ngIf="f.password.errors.required">Password is required</div>
+            <div *ngIf="f.password.errors.minlength">Minimum length is 6</div>
+            <div *ngIf="f.password.errors.maxlength">Maximum length is 30</div>
+        </mdb-error>
+    </div>
+
+    <!-- Extra -->
+    <div class="d-flex justify-content-between">
+        <div>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
+                <label class="custom-control-label" for="defaultLoginFormRemember">Remember me</label>
+            </div>
         </div>
-    </mat-card-actions>
-</mat-card>
+        <div>
+            <a href="">Forgot password?</a>
+        </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="text-center pt-4">
+        <p *ngIf="loading">Loading...</p>
+        <p *ngIf="error.login" class="text-danger">{{ error.login }}</p>
+    </div>
+
+    <!-- Login button -->
+    <button mdbBtn type="button" gradient="blue" mdbWavesEffect type="submit" class="btn-block my-4"
+        style="border-radius: 10em;">Login</button>
+
+    <!-- Register link -->
+    <div class="text-center">
+        <p>Not a member? <a routerLink="/register">Register</a></p>
+    </div>
+</form>
+<!-- Form -->
