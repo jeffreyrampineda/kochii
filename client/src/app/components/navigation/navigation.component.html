@@ -1,0 +1,82 @@
+<!--Main Navigation-->
+<header>
+
+    <!-- Sidebar -->
+    <div class="sidebar-fixed position-fixed">
+        <a class="logo-wrapper waves-effect text-center" style="width: 100%;">
+            <span>Kochii</span>
+        </a>
+        <div class="list-group list-group-flush">
+            <a routerLink="overview" routerLinkActive="active"
+                class="list-group-item list-group-item-action waves-effect">
+                Overview
+            </a>
+            <a routerLink="inventory" routerLinkActive="active"
+                class="list-group-item list-group-item-action waves-effect">
+                Inventory
+            </a>
+            <a routerLink="groceries" routerLinkActive="active"
+                class="list-group-item list-group-item-action waves-effect">
+                Groceries
+            </a>
+            <a routerLink="settings" routerLinkActive="active"
+                class="list-group-item list-group-item-action waves-effect">
+                Settings
+            </a>
+            <a routerLink="history" routerLinkActive="active"
+                class="list-group-item list-group-item-action waves-effect">
+                History
+            </a>
+        </div>
+    </div>
+    <!-- Sidebar -->
+
+    <!--Navbar-->
+    <mdb-navbar [containerInside]="false" SideClass="navbar navbar-expand-lg navbar-light white">
+
+        <!-- Navbar brand -->
+        <logo class="ml-3">
+            <a class="navbar-brand" href="https://mdbootstrap.com/angular/angular-bootstrap-getting-started/">
+                <strong class="blue-text">Kochii</strong>
+            </a>
+        </logo>
+
+        <!-- Collapsible content -->
+        <links>
+
+            <!-- Left -->
+            <ul class="navbar-nav mr-auto">
+
+            </ul>
+            <!-- Left -->
+
+            <!-- Right -->
+            <ul class="navbar-nav nav-flex-icons">
+                <li class="nav-item" mdbDropdown>
+                    <a mdbDropdownToggle class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
+                        <span class="badge badge-danger ml-2">{{ notifications.length }}</span>
+                        <i class="fas fa-bell"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <span class="dropdown-item" *ngFor="let notify of notifications">{{ notify }}</span>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link" mdbWavesEffect>
+                        <mdb-icon fas icon="envelope"></mdb-icon>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <button mdbBtn type="button" size="sm" mdbWavesEffect style="border-radius: 10em;"
+                        (click)="logout()">Logout</button>
+                </li>
+            </ul>
+            <!-- Right -->
+        </links>
+        <!-- Collapsible content -->
+
+    </mdb-navbar>
+    <!--/.Navbar-->
+
+</header>
+<!--Main Navigation-->

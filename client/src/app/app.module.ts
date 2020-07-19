@@ -24,6 +24,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 // Components - /dashboard
 import { GroceriesComponent } from './components/dashboard/groceries/groceries.component';
@@ -59,6 +60,7 @@ import { CreateGroupDialogComponent } from './components/dialogs/create-group-di
     UpdateDialogComponent,
     CreateGroupDialogComponent,
     FooterComponent,
+    NavigationComponent,
   ],
   imports: [
     BrowserModule,

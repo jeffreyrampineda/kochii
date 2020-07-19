@@ -1,28 +1,7 @@
-<div class="k-container">
-  <nav class="k-top-nav">
-    <button class="k-menu-hamburger" mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
-    <div class="k-kochii-logo-container k-text-center">
-      <span class="k-kochii-logo-span">Kochii</span>
-    </div>
-    <div class="k-float-right">
-      <button mat-button (click)="logout()">Logout</button>
-    </div>
-  </nav>
-  <hr>
-  <mat-sidenav-container>
-    <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'" [(opened)]="opened" class="k-dashboard-menu">
-      <button mat-button routerLink="overview">Overview</button>
-      <button mat-button routerLink="inventory">Inventory</button>
-      <button mat-button routerLink="groceries" disabled>Groceries</button>
-      <button mat-button routerLink="settings" disabled>Settings</button>
-      <button mat-button routerLink="history">History</button>
-    </mat-sidenav>
-    <mat-sidenav-content>
-      <router-outlet></router-outlet>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-  <hr>
-</div>
-<div *ngIf="isLoggedIn && !isVerified" class="verification-banner">
-  <span>Check your email to verify this account</span>
-</div>
+<kochii-navigation></kochii-navigation>
+
+<main class="mx-lg-5">
+  <div class="mt-5">
+    <router-outlet></router-outlet>
+  </div>
+</main>
