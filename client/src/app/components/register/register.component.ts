@@ -65,7 +65,7 @@ export class RegisterComponent implements OnInit {
   /** convenience getter for easy access to form fields */
   get f() { return this.registerForm.controls; }
 
-  onSubmit() {
+  onSubmit(registerData) {
     if (this.registerForm.invalid || this.loading) {
       console.log('cannot submit');
       return;
@@ -79,7 +79,7 @@ export class RegisterComponent implements OnInit {
       email: undefined
     };
 
-    const { username, password, email } = this.registerForm.value;
+    const { username, password, email } = registerData;
 
     this.authenticationService.register({ username, password, email }).subscribe({
       next: response => {
