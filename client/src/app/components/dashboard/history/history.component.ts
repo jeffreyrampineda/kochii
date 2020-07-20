@@ -1,7 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-
 import { History } from 'src/app/interfaces/history';
 import { HistoryService } from 'src/app/services/history.service';
 
@@ -14,10 +11,9 @@ import { HistoryService } from 'src/app/services/history.service';
 })
 export class HistoryComponent implements OnInit {
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  displayedColumns: string[] = ['date', 'method', 'target', 'quantity', 'addedDate', 'description', ];
-  history: MatTableDataSource<History>;
+  displayedColumns: string[] = ['#', 'recorded at', 'method', 'target', 'quantity', 'addedDate', 'description', ];
+  histories: History[] = [];
   loading = false;
 
   constructor(
@@ -27,10 +23,6 @@ export class HistoryComponent implements OnInit {
   // -------------------------------------------------------------
 
   ngOnInit() {
-    // Set up inventory: MatTableDataSource with empty inital data
-    this.history = new MatTableDataSource();
-    this.history.paginator = this.paginator;
-
     this.getHistory();
   }
 
@@ -39,7 +31,7 @@ export class HistoryComponent implements OnInit {
     this.loading = true;
     this.historyService.getHistory().subscribe({
       next: response => {
-        this.history.data = response;
+        this.histories = response;
       },
       error: err => {
         // Error
@@ -57,7 +49,7 @@ export class HistoryComponent implements OnInit {
     this.historyService.deleteAllHistory().subscribe({
       next: response => {
         if (response === 1) {
-          this.history.data = [];
+          this.histories = [];
         }
       },
       error: err => {
@@ -72,6 +64,6 @@ export class HistoryComponent implements OnInit {
 
   /** Checks whether history is empty or not */
   isEmpty(): boolean {
-    return this.history.data.length === 0 ? true : false;
+    return this.histories.length === 0 ? true : false;
   }
 }
