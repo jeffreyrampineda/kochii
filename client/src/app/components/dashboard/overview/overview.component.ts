@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { HistoryService } from 'src/app/services/history.service';
 import { InventoryService } from 'src/app/services/inventory.service';
-import { MatTableDataSource } from '@angular/material/table';
 
 interface chartData {
   x: any,
@@ -21,21 +20,18 @@ export class OverviewComponent implements OnInit {
   lineChart;
   start: Date = new Date();
   today: Date = new Date();
-  numberOfGood: number = 0;
-  numberOfOk: number = 0;
   numberOfExpired: number = 0;
   rawHistoryData = [];
   isHistoryEmpty = true;
   itemTotal = 0;
-  dummy = 0;
   loadingInventory = false;
   loadingHistory = false;
 
   curr = new Date();
   first: number;
 
-  displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
-  history: MatTableDataSource<History>;
+  displayedColumns: string[] = ['#', 'method', 'target', 'quantity', 'addedDate', 'description'];
+  histories: [];
 
   constructor(
     private historyService: HistoryService,
@@ -48,8 +44,6 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.history = new MatTableDataSource();
-
     this.getHistoryData();
     this.getInventory();
   }
@@ -58,13 +52,14 @@ export class OverviewComponent implements OnInit {
     this.loadingInventory = true;
     this.inventoryService.getItems().subscribe({
       next: response => {
-        this.numberOfGood = (response.filter(i => this.sinceToday(i.expirationDate) > 10)).length;
-        this.numberOfOk = (response.filter(i =>
+        const numberOfGood = (response.filter(i => this.sinceToday(i.expirationDate) > 10)).length;
+        const numberOfOk = (response.filter(i =>
           this.sinceToday(i.expirationDate) < 10 &&
           this.sinceToday(i.expirationDate) >= 0
         )).length;
         this.numberOfExpired = (response.filter(i => this.sinceToday(i.expirationDate) < 0)).length;
-        this.itemTotal = this.numberOfGood + this.numberOfOk + this.numberOfExpired;
+        this.itemTotal = numberOfGood + numberOfOk + this.numberOfExpired;
+        this.initializeDoughnut(this.itemTotal, numberOfGood, numberOfOk, this.numberOfExpired);
       },
       error: err => {
         // Error
@@ -72,7 +67,7 @@ export class OverviewComponent implements OnInit {
       },
       complete: () => {
         this.loadingInventory = false;
-        this.initializeDoughnut();
+        
       }
     })
   }
@@ -82,7 +77,7 @@ export class OverviewComponent implements OnInit {
     this.historyService.getAllFromPastDays(this.fromDay).subscribe({
       next: response => {
         this.isHistoryEmpty = response.length === 0;
-        this.history.data = response.slice(0, 4);
+        this.histories = response.slice(0, 4);
         this.rawHistoryData = response;
       },
       error: err => {
@@ -96,19 +91,15 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  initializeDoughnut(): void {
-    if (this.itemTotal === 0) {
-      this.dummy = 1;
-    }
-
+  initializeDoughnut(itemsCount, good, ok, expired): void {
     const data = {
       labels: ['', 'Good', 'Ok', 'Expired'],
       datasets: [{
         data: [
-          this.dummy,
-          this.numberOfGood,
-          this.numberOfOk,
-          this.numberOfExpired,
+          itemsCount === 0 ? 1 : 0,
+          good,
+          ok,
+          expired,
         ],
         backgroundColor: [
           'rgba(170, 175, 190, 0.7)',
@@ -124,10 +115,6 @@ export class OverviewComponent implements OnInit {
       data: data,
       options: {
         responsive: true,
-        title: {
-          display: true,
-          text: 'Expired items'
-        },
         legend: {
           position: 'bottom',
           labels: {
@@ -178,16 +165,14 @@ export class OverviewComponent implements OnInit {
       data: data,
       options: {
         responsive: true,
-        title: {
-          display: true,
-          text: 'Inventory size'
-        },
         scales: {
           xAxes: [{
             type: "time",
-            time: {
+            ticks: {
               min: this.start.toDateString(),
               max: this.today.toDateString(),
+            },
+            time: {
               unit: "day",
               unitStepSize: 1,
               displayFormats: {
