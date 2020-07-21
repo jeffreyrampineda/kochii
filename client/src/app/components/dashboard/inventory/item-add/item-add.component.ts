@@ -25,6 +25,7 @@ export class ItemAddComponent implements OnInit {
   groups: string[];
   placeholderImage = 'app/assets/image-placeholder.png';
   selectedGroup = "Default";
+  selectedFormIdx = 0;
 
   constructor(
     private router: Router,
@@ -162,11 +163,11 @@ export class ItemAddComponent implements OnInit {
         Validators.pattern("^[a-zA-Z0-9 _-]*$"),
         Validators.required
       ]],
-      cost: [0, [
+      cost: ['0.00', [
         Validators.min(0),
         Validators.required
       ]],
-      quantity: [1, [
+      quantity: ['1', [
         Validators.min(1),
         Validators.max(999),
         Validators.required
@@ -175,6 +176,11 @@ export class ItemAddComponent implements OnInit {
       expirationDate: [this.dateToday, Validators.required],
       group: [this.selectedGroup, Validators.required],
     }));
+    this.selectForm(this.itemAddForm.length - 1);
+  }
+
+  selectForm(idx: number): void {
+    this.selectedFormIdx = idx;
   }
 
   /**
@@ -182,6 +188,7 @@ export class ItemAddComponent implements OnInit {
    * @param index - the index to be removed.
    */
   removeInput(index: number): void {
+    this.selectForm(index - 1);
     this.itemAddForm.splice(index, 1);
   }
 
@@ -191,8 +198,12 @@ export class ItemAddComponent implements OnInit {
   }
 
   /** Convenience getter for easy access to form fields. */
-  // TODO - Review if and why this works: only gets itemAddForm[0] but what if theres more.
-  get f() { return this.itemAddForm[0].controls; }
+  get f() { return this.itemAddForm[this.selectedFormIdx].controls; }
+
+  /** Getter for the selected form's name */
+  get selectedFormName(): string {
+    return this.itemAddForm[this.selectedFormIdx].value.name;
+  }
 
   private notify(message: string) {
     this.messageService.notify(message);

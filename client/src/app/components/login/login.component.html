@@ -16,7 +16,7 @@
 
     <!-- Password -->
     <div class="md-form">
-        <input mdbInput mdbValidate type="text" id="password" class="form-control" formControlName="password">
+        <input mdbInput mdbValidate type="password" id="password" class="form-control" formControlName="password">
         <label for="password">Password</label>
         <mdb-error *ngIf="f.password.invalid && (f.password.dirty || f.password.touched)">
             <div *ngIf="f.password.errors.required">Password is required</div>

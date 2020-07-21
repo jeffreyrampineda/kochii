@@ -1,21 +1,3 @@
 .k-item-add-form {
     margin: 16px;
 }
-
-.k-item-add-form-details-side {
-    float: left;
-    width: 50%;
-}
-
-.k-item-add-form-image-side {
-    float: right;
-    width: 50%;
-}
-
-.k-item-add-form-image-side img {
-    width: 100%;
-}
-
-td {
-    padding-right: 8px;
-}
