@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
 import { HistoryService } from 'src/app/services/history.service';
 import { InventoryService } from 'src/app/services/inventory.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 interface chartData {
   x: any,
@@ -30,8 +31,8 @@ export class OverviewComponent implements OnInit {
   curr = new Date();
   first: number;
 
-  displayedColumns: string[] = ['#', 'method', 'target', 'quantity', 'addedDate', 'description'];
-  histories: [];
+  displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
+  history: MatTableDataSource<History>;
 
   constructor(
     private historyService: HistoryService,
@@ -44,6 +45,8 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.history = new MatTableDataSource();
+
     this.getHistoryData();
     this.getInventory();
   }
@@ -77,7 +80,7 @@ export class OverviewComponent implements OnInit {
     this.historyService.getAllFromPastDays(this.fromDay).subscribe({
       next: response => {
         this.isHistoryEmpty = response.length === 0;
-        this.histories = response.slice(0, 4);
+        this.history.data = response.slice(0, 4);
         this.rawHistoryData = response;
       },
       error: err => {
