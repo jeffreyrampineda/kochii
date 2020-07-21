@@ -24,7 +24,6 @@ import {
   NavbarModule,
   InputsModule,
   InputUtilitiesModule,
-  TableModule,
 } from 'angular-bootstrap-md'
 
 // -------------------------------------------------------------
@@ -54,7 +53,6 @@ const matModules = [
   NavbarModule,
   InputsModule,
   InputUtilitiesModule,
-  TableModule,
 ];
 
 @NgModule({
