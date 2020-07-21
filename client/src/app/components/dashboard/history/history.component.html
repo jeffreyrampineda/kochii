@@ -20,24 +20,51 @@
         <!--Card content-->
         <mdb-card-body>
           <button mat-button (click)="clear()">Clear</button>
-          <table mdbTable>
-            <thead>
-              <tr>
-                <th *ngFor="let head of displayedColumns" scope="col">{{ head }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr mdbTableCol *ngFor="let history of histories">
-                <td scope="row">{{ history.id }}</td>
-                <td>{{ history.created_at | date }}</td>
-                <td>{{ history.method }}</td>
-                <td>{{ history.target }}</td>
-                <td>{{ history.quantity }}</td>
-                <td>{{ history.addedDate | date }}</td>
-                <td>{{ history.description }}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div [hidden]="isEmpty() || loading">
+            <table mat-table [dataSource]="history">
+
+              <!-- Date Column -->
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Recorded at</th>
+                <td mat-cell *matCellDef="let row">{{ row.created_at | date }}</td>
+              </ng-container>
+
+              <!-- method Column -->
+              <ng-container matColumnDef="method">
+                <th mat-header-cell *matHeaderCellDef>Method</th>
+                <td mat-cell *matCellDef="let row">{{ row.method }}</td>
+              </ng-container>
+
+              <!-- target Column -->
+              <ng-container matColumnDef="target">
+                <th mat-header-cell *matHeaderCellDef>Target</th>
+                <td mat-cell *matCellDef="let row">{{ row.target }}</td>
+              </ng-container>
+
+              <!-- quantity Column -->
+              <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                <td mat-cell *matCellDef="let row">{{ row.quantity }}</td>
+              </ng-container>
+
+              <!-- addedDate Column -->
+              <ng-container matColumnDef="addedDate">
+                <th mat-header-cell *matHeaderCellDef>Added</th>
+                <td mat-cell *matCellDef="let row">{{ row.addedDate | date }}</td>
+              </ng-container>
+
+              <!-- description Column -->
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Description</th>
+                <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+          </div>
         </mdb-card-body>
 
         <!--/.Card content-->
