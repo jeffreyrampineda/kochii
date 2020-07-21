@@ -49,13 +49,13 @@
             <div>
               <div *ngIf="!showSelect">
                 <button mat-button routerLink="/app/inventory/add">
-                  <mat-icon>add</mat-icon>
+                  <mdb-icon fas icon="plus"></mdb-icon>
                 </button>
                 <button mat-button (click)="selectColumnToggle('inc')">
-                  <mat-icon>remove</mat-icon>
+                  <mdb-icon fas icon="minus"></mdb-icon>
                 </button>
                 <button mat-button (click)="selectColumnToggle('set')">
-                  <mat-icon>create</mat-icon>
+                  <mdb-icon fas icon="pen"></mdb-icon>
                 </button>
               </div>
               <div *ngIf="showSelect">
@@ -65,10 +65,10 @@
                                   option === 'set' ? openUpdateDialog('Update', 'New values for the updated items'):
                                   openUpdateDialog('Remove', 'Removing the following items')
                                   ">
-                  <mat-icon>check</mat-icon>
+                  <mdb-icon fas icon="check"></mdb-icon>
                 </button>
                 <button mat-button (click)="selectColumnToggle()">
-                  <mat-icon>close</mat-icon>
+                  <mdb-icon fas icon="times"></mdb-icon>
                 </button>
               </div>
             </div>
@@ -87,7 +87,7 @@
               <div class="k-float-right">
               </div>
               <table class="mat-elevation-z1" mat-table [dataSource]="inventory" matSort>
-  
+
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select" *ngIf="showSelect">
                   <th mat-header-cell *matHeaderCellDef>
@@ -102,50 +102,52 @@
                     </mat-checkbox>
                   </td>
                 </ng-container>
-  
+
                 <!-- name Column -->
                 <ng-container matColumnDef="name">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
                   <td mat-cell *matCellDef="let item">
                     <div *ngIf="selection.isSelected(item); else viewName">
                       <div *ngIf="option === 'set'; else viewName">
-                        <mat-form-field style="width: 98%">
-                          <input matInput type="text" [formControl]="f(item._id).name">
-                          <mat-error *ngIf="f(item._id).name.errors">
+                        <div class="md-form input-group mt-3">
+                          <input mdbInput mdbValidate type="text" id="name" class="form-control" [formControl]="f(item._id).name">
+                          <mdb-error *ngIf="f(item._id).name.invalid && (f(item._id).name.dirty || f(item._id).name.touched)">
                             <div *ngIf="f(item._id).name.errors.required">Name is required</div>
                             <div *ngIf="f(item._id).name.errors.minlength">Minimum length is 2</div>
                             <div *ngIf="f(item._id).name.errors.maxlength">Maximum length is 30</div>
                             <div *ngIf="f(item._id).name.errors.pattern">Must only be an alphanumeric, space ( ),
                               underscore
                               (_), or dash (-)</div>
-                          </mat-error>
-                        </mat-form-field>
+                          </mdb-error>
+                        </div>
                       </div>
                     </div>
                     <ng-template #viewName><span>{{ item.name }}</span></ng-template>
                   </td>
                 </ng-container>
-  
+
                 <!-- quantity Column -->
                 <ng-container matColumnDef="quantity">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
                   <td mat-cell *matCellDef="let item">
                     <div *ngIf="selection.isSelected(item); else viewQuantity">
-                      <mat-form-field class="k-form-field-quantity">
-                        <input matInput type="number" [formControl]="f(item._id).quantity">
-                        <mat-error *ngIf="f(item._id).quantity.errors">
+                      <div class="md-form input-group mt-3">
+                        <input mdbInput mdbValidate type="text" id="quantity" class="form-control" [formControl]="f(item._id).quantity">
+                        <div class="input-group-append">
+                          <span class="input-group-text md-addon">/ {{ item.quantity }}</span>
+                        </div>
+                        <mdb-error *ngIf="f(item._id).quantity.invalid && (f(item._id).quantity.dirty || f(item._id).quantity.touched)">
                           <div *ngIf="f(item._id).quantity.errors.required">Quantity is required</div>
                           <div *ngIf="f(item._id).quantity.errors.min">Minimum quantity is 1</div>
                           <div *ngIf="f(item._id).quantity.errors.max">Maximum quantity is
                             {{ f(item._id).quantity.errors.max.max }}</div>
-                        </mat-error>
-                      </mat-form-field>
-                      <span>&nbsp; / {{ item.quantity }}</span>
+                        </mdb-error>
+                      </div>
                     </div>
                     <ng-template #viewQuantity><span matTooltip="quantity">{{ item.quantity }}</span></ng-template>
                   </td>
                 </ng-container>
-  
+
                 <!-- group Column -->
                 <ng-container matColumnDef="group">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Group</th>
@@ -165,7 +167,7 @@
                     <ng-template #viewGroup><span matTooltip="Group">{{ item.group }}</span></ng-template>
                   </td>
                 </ng-container>
-  
+
                 <!-- addedDate Column -->
                 <ng-container matColumnDef="addedDate">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Added</th>
@@ -187,12 +189,12 @@
                     </ng-template>
                   </td>
                 </ng-container>
-  
+
                 <!-- expirationDate Column -->
                 <ng-container matColumnDef="expirationDate">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header>Expiration</th>
                   <td mat-cell *matCellDef="let item">
-  
+
                     <div *ngIf="selection.isSelected(item); else viewExpirationDate">
                       <div *ngIf="option === 'set'; else viewExpirationDate">
                         <mat-form-field style="width: 98%">
@@ -213,11 +215,11 @@
                     </ng-template>
                   </td>
                 </ng-container>
-  
+
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
               </table>
-  
+
               <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
             </div>
           </div>

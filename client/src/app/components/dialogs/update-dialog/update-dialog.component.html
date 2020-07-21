@@ -1,16 +1,15 @@
 <h3>{{ data.title }}</h3>
 <div>
   <span>{{ data.description }}</span>
-  <mat-list role="list">
-    <mat-list-item *ngFor="let item of data.items" role="listitem">({{ item.quantity }}) {{ item.name }}</mat-list-item>
-  </mat-list>  
+  <ul class="list-group list-group-flush mt-4">
+    <li class="list-group-item" *ngFor="let item of data.items">({{ item.quantity }}) {{ item.name }}</li>
+  </ul>
   <span *ngIf="loading">Saving...</span>
   <mat-error>
     <div *ngIf="error.name">{{ error.name }}</div>
   </mat-error>
 </div>
-<hr />
-<div class="k-float-right">
+<div class="k-float-right mt-4">
   <button mat-button (click)="onSubmit()" [disabled]="!data.canConfirm">Save</button>
   <button mat-button (click)="onNoClick()">Cancel</button>
 </div>

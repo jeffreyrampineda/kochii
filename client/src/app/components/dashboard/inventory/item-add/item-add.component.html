@@ -60,11 +60,16 @@
                   <!-- Grid column -->
                   <div class="col-md-6">
                     <!-- Cost -->
-                    <div class="md-form mt-3">
-                      <span class="prefix">$</span>
+                    <div class="md-form input-group mt-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text md-addon">$</span>
+                      </div>
                       <input mdbInput mdbValidate type="text" id="cost" class="form-control" formControlName="cost"
                         placeholder="Ex. 0.20">
                       <label for="cost">Cost</label>
+                      <div class="input-group-append">
+                        <span class="input-group-text md-addon">/ ea</span>
+                      </div>
                       <mdb-error *ngIf="f.cost.invalid && (f.cost.dirty || f.cost.touched)">
                         <div *ngIf="f.cost.errors.required">Cost is required</div>
                       </mdb-error>
@@ -74,7 +79,10 @@
                   <!-- Grid column -->
                   <div class="col-md-6">
                     <!-- Quantity -->
-                    <div class="md-form mt-3">
+                    <div class="md-form input-group mt-3">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text md-addon">x</span>
+                      </div>
                       <input mdbInput mdbValidate type="text" id="quantity" class="form-control"
                         formControlName="quantity" placeholder="Ex. 1">
                       <label for="quantity">Quantity</label>
