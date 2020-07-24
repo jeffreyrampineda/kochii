@@ -11,8 +11,8 @@ import { takeUntil } from 'rxjs/operators';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
-import { UpdateDialogComponent } from 'src/app/components/dialogs/update-dialog/update-dialog.component';
-import { CreateGroupDialogComponent } from 'src/app/components/dialogs/create-group-dialog/create-group-dialog.component';
+import { UpdateDialogComponent } from 'src/app/components/shared/update-dialog/update-dialog.component';
+import { CreateGroupDialogComponent } from 'src/app/components/shared/create-group-dialog/create-group-dialog.component';
 import { MessageService } from 'src/app/services/message.service';
 
 // -------------------------------------------------------------
