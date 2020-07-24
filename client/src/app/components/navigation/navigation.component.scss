@@ -1,40 +1,35 @@
-.sidebar-fixed {
-  height: 100vh;
-  width: 270px;
-  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  z-index: 1050;
-  background-color: #fff;
-  padding: 1.5rem;
-  padding-top: 0;
+.list-group-item {
+  background: transparent;
+  border-color: transparent;
+  color: #fff;
+  padding: 1.15rem 1.15rem 1.15rem 2rem;
 }
 
-.sidebar-fixed .list-group .active {
-  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
+.list-group-item mdb-icon {
+  margin-right: 1rem;
+}
+
+.list-group-item:hover {
+  background-color: #252a35;
 }
 
 .sidebar-fixed .logo-wrapper {
-  padding: 2.5rem;
+  width: 100%;
+  padding: 0.5rem 1.6rem 1.6rem;
+  font-size: 2rem;
+  font-weight: lighter;
 }
 
 .sidebar-fixed .logo-wrapper img {
   max-height: 50px;
 }
 
-@media (min-width: 1200px) {
-
-  .navbar,
-  .page-footer,
-  main {
-    padding-left: 270px;
-  }
+.k-dark-text {
+  color: #1C2331;
 }
 
-@media (max-width: 1199.98px) {
-  .sidebar-fixed {
-    display: none;
-  }
+.k-navigation-bottom {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
 }

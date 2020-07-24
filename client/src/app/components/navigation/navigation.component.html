@@ -3,30 +3,37 @@
 
     <!-- Sidebar -->
     <div class="sidebar-fixed position-fixed">
-        <a class="logo-wrapper waves-effect text-center" style="width: 100%;">
+        <a class="logo-wrapper waves-effect text-center text-white">
             <span>Kochii</span>
         </a>
         <div class="list-group list-group-flush">
             <a routerLink="overview" routerLinkActive="active"
                 class="list-group-item list-group-item-action waves-effect">
+                <mdb-icon fas icon="chart-pie"></mdb-icon>
                 Overview
             </a>
             <a routerLink="inventory" routerLinkActive="active"
                 class="list-group-item list-group-item-action waves-effect">
+                <mdb-icon fas icon="box"></mdb-icon>
                 Inventory
             </a>
             <a routerLink="groceries" routerLinkActive="active"
                 class="list-group-item list-group-item-action waves-effect">
+                <mdb-icon fas icon="shopping-basket"></mdb-icon>
                 Groceries
-            </a>
-            <a routerLink="settings" routerLinkActive="active"
-                class="list-group-item list-group-item-action waves-effect">
-                Settings
             </a>
             <a routerLink="history" routerLinkActive="active"
                 class="list-group-item list-group-item-action waves-effect">
+                <mdb-icon fas icon="history"></mdb-icon>
                 History
             </a>
+            <div class="k-navigation-bottom">
+                <a routerLink="settings" routerLinkActive="active"
+                    class="list-group-item list-group-item-action waves-effect">
+                    <mdb-icon fas icon="cog"></mdb-icon>
+                    Settings
+                </a>
+            </div>
         </div>
     </div>
     <!-- Sidebar -->
@@ -35,10 +42,8 @@
     <mdb-navbar [containerInside]="false" SideClass="navbar navbar-expand-lg navbar-light white">
 
         <!-- Navbar brand -->
-        <logo class="ml-3">
-            <a class="navbar-brand" href="https://mdbootstrap.com/angular/angular-bootstrap-getting-started/">
-                <strong class="blue-text">Kochii</strong>
-            </a>
+        <logo class="k-logo">
+            <!-- <a class="navbar-brand" href="/">Kochii</a> -->
         </logo>
 
         <!-- Collapsible content -->
@@ -51,11 +56,11 @@
             <!-- Left -->
 
             <!-- Right -->
-            <ul class="navbar-nav nav-flex-icons">
+            <ul class="navbar-nav nav-flex-icons k-nav-bar-actions">
                 <li class="nav-item" mdbDropdown>
                     <a mdbDropdownToggle class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
                         <span class="badge badge-danger ml-2">{{ notifications.length }}</span>
-                        <i class="fas fa-bell"></i>
+                        <mdb-icon fas icon="bell" class="k-dark-text"></mdb-icon>
                     </a>
                     <div class="dropdown-menu">
                         <span class="dropdown-item" *ngFor="let notify of notifications">{{ notify }}</span>
@@ -63,12 +68,11 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link" mdbWavesEffect>
-                        <mdb-icon fas icon="envelope"></mdb-icon>
+                        <mdb-icon fas icon="envelope" class="k-dark-text"></mdb-icon>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <button mdbBtn type="button" size="sm" mdbWavesEffect style="border-radius: 10em;"
-                        (click)="logout()">Logout</button>
+                    <button mat-button (click)="logout()">Logout</button>
                 </li>
             </ul>
             <!-- Right -->

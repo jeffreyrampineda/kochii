@@ -1,17 +1,7 @@
-<!-- Header -->
-<mdb-card class="mt-5">
-
-  <!--Card content-->
-  <mdb-card-body class="d-sm-flex justify-content-between">
-    <h4 class="mb-sm-0">
-      <span>Overview</span>
-    </h4>
-  </mdb-card-body>
-
-</mdb-card>
+<h5><strong>Overview</strong></h5>
 
 <!-- Gauges -->
-<section class="mt-lg-5">
+<section class="mt-4">
 
   <!--Grid row-->
   <div class="row">
@@ -163,19 +153,12 @@
     <div class="col-md-8 mb-r">
 
       <!--Card-->
-      <mdb-card class="cascading-admin-card">
-
-        <!--Card title-->
-        <div class="admin-up">
-          <div class="admin-title blue-gradient">
-            <h4 class="my-1 text-white text-center">Inventory size</h4>
-          </div>
-        </div>
-        <!--/.Card title-->
+      <mdb-card>
 
         <!--Card content-->
-        <mdb-card-body color="primary">
-          <div style="display: block">
+        <mdb-card-body>
+          <h5><strong>Inventory</strong></h5>
+          <div class="mt-3" style="display: block">
             <canvas id="chart-line">{{ lineChart }}</canvas>
           </div>
         </mdb-card-body>
@@ -190,19 +173,12 @@
     <div class="col-md-4 mb-r">
 
       <!--Card-->
-      <mdb-card class="cascading-admin-card">
-
-        <!--Card title-->
-        <div class="admin-up">
-          <div class="admin-title blue-gradient">
-            <h4 class="my-1 text-white text-center">Item status</h4>
-          </div>
-        </div>
-        <!--/.Card title-->
+      <mdb-card>
 
         <!--Card content-->
         <mdb-card-body>
-          <div style="display: block;">
+          <h5><strong>Status</strong></h5>
+          <div class="mt-3" style="display: block;">
             <canvas id="chart-doughnut">{{ doughnutChart }}</canvas>
           </div>
         </mdb-card-body>
@@ -227,18 +203,11 @@
     <!--History grid column-->
     <div class="col-md-12 mb-4">
 
-      <mdb-card class="cascading-admin-card">
-
-        <!--Card title-->
-        <div class="admin-up">
-          <div class="admin-title blue-gradient">
-            <h4 class="my-1 text-white text-center">history</h4>
-          </div>
-        </div>
-        <!--/.Card title-->
+      <mdb-card>
 
         <!--Card content-->
         <mdb-card-body>
+          <h5><strong>History</strong></h5>
           <div [hidden]="isHistoryEmpty || loadingHistory">
             <table mat-table [dataSource]="history">
 

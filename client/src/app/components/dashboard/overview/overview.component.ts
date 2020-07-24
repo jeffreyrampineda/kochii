@@ -182,7 +182,10 @@ export class OverviewComponent implements OnInit {
                 'day': 'dd'
               }
             },
-            stacked: true
+            stacked: true,
+            gridLines : {
+                display : false
+            }
           }],
           yAxes: [{
             scaleLabel: {

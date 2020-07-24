@@ -11,14 +11,6 @@ table {
     table-layout: fixed;
 }
 
-.k-actions {
-    overflow: hidden;
-}
-
-.k-actions-buttons {
-    padding-bottom: 15px;
-}
-
 /* Used for item-add/inventory */
 .k-search {
     float: left;
@@ -32,24 +24,13 @@ table {
     float: right;
 }
 
-.k-float-left {
-    float: left;
-}
-
 /* ----------------------- */
 
 .k-center-isolated {
     margin: auto;
     max-width: 400px;
-    margin-top: 20vh;
-}
-
-.k-text-center {
-    text-align: center;
-}
-
-.k-center {
-    margin: auto;
+    margin-top: 5vh;
+    background-color: #fff;
 }
 
 /* ----------------------- */
@@ -104,23 +85,19 @@ body {
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
     z-index: 1050;
-    background-color: #fff;
-    padding: 0 1.5rem 1.5rem
+    background-color: #1c2331;
+    padding: 0;
 }
 
 .sidebar-fixed .list-group .active {
-    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-    -webkit-border-radius: 5px;
-    border-radius: 5px
-}
-
-.sidebar-fixed .logo-wrapper {
-    padding: 2.5rem
-}
-
-.sidebar-fixed .logo-wrapper img {
-    max-height: 50px
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .25);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .25);
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+    background: linear-gradient(40deg, #45cafc, #303f9f);
+    margin-top: 0px;
+    border-top-width: 0px;
+    width: calc(100% + 10px);
 }
 
 @media (min-width: 1200px) {
@@ -128,13 +105,40 @@ body {
     .navbar,
     .page-footer,
     main {
-        padding-left: 270px
+        padding-left: 270px;
+    }
+
+    .k-logo {
+        padding-left: 48px;
+    }
+
+    .k-nav-bar-actions {
+        padding-right: 32px;
     }
 }
 
 @media (max-width: 1199.98px) {
     .sidebar-fixed {
-        display: none
+        display: none;
+    }
+
+    .k-logo {
+        padding-left: 32px;
+    }
+
+    .k-nav-bar-actions {
+        padding-right: 32px;
+    }
+}
+
+// Medium devices (tablets, 768px and up)
+@media (max-width: 992px) {
+    .k-logo {
+        padding-left: 0px;
+    }
+
+    .k-nav-bar-actions {
+        padding-right: 0px;
     }
 }
 

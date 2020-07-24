@@ -1,181 +1,168 @@
-<!-- History -->
-<section class="mt-5">
+<h5><a routerLink="/app/inventory" style="text-decoration: none;">Inventory </a> / <strong> Add item</strong></h5>
 
-  <!--Grid row-->
-  <div class="row">
+<!--Item add-->
+<mdb-card class="mt-4">
 
-    <!--Item add grid column-->
-    <div class="col-md-12 mb-4">
+  <!--Card title-->
+  <div class="admin-up">
+    <div class="admin-title blue-gradient d-sm-flex justify-content-between" style="padding: 1.5rem;">
+      <div class="btn-group" mdbDropdown>
+        <h4 mdbDropdownToggle class="my-1 text-white dropdown-toggle waves-light" mdbWavesEffect>
+          {{ selectedFormName }}</h4>
+        <div class="dropdown-menu dropdown-primary">
+          <a class="dropdown-item" *ngFor="let iform of itemAddForm; let idx = index" [attr.data-index]="idx"
+            (click)="selectForm(idx)">{{ iform.value.name }}</a>
+          <div class="divider dropdown-divider"></div>
+          <a class="dropdown-item" (click)="addMoreInput()">Add Item</a>
+        </div>
+      </div>
+      <button type="button" size="sm" color="light" mdbBtn mdbWavesEffect (click)="onSubmit()"
+        [disabled]="checkIfInvalid()" style="position: absolute; right: 60px;">Save all</button>
+    </div>
+  </div>
+  <!--/.Card title-->
 
-      <mdb-card class="cascading-admin-card">
+  <!--Card content-->
+  <mdb-card-body>
 
-        <!--Card title-->
-        <div class="admin-up">
-          <div class="admin-title blue-gradient d-sm-flex justify-content-between" style="padding: 1.5rem;">
-            <div class="btn-group" mdbDropdown>
-              <h4 mdbDropdownToggle class="my-1 text-white dropdown-toggle waves-light" mdbWavesEffect>
-                {{ selectedFormName }}</h4>
-              <div class="dropdown-menu dropdown-primary">
-                <a class="dropdown-item" *ngFor="let iform of itemAddForm; let idx = index" [attr.data-index]="idx"
-                  (click)="selectForm(idx)">{{ iform.value.name }}</a>
-                <div class="divider dropdown-divider"></div>
-                <a class="dropdown-item" (click)="addMoreInput()">Add Item</a>
+    <!--Grid row-->
+    <div class="row">
+
+      <!--Form grid column-->
+      <div class="col-md-6 mb-4">
+        <form class="k-item-add-form" [formGroup]="itemAddForm[selectedFormIdx]">
+          <!-- Grid row -->
+          <div class="form-row">
+
+            <!-- Grid column -->
+            <div class="col-md-12">
+              <!-- Name -->
+              <div class="md-form mt-3">
+                <input mdbInput mdbValidate type="text" id="name" class="form-control" formControlName="name">
+                <label for="name">Name</label>
+                <mdb-error *ngIf="f.name.invalid && (f.name.dirty || f.name.touched)">
+                  <div *ngIf="f.name.errors.required">Name is required</div>
+                  <div *ngIf="f.name.errors.minlength">Minimum length is 2</div>
+                  <div *ngIf="f.name.errors.maxlength">Maximum length is 30</div>
+                  <div *ngIf="f.name.errors.pattern">Must only be an alphanumeric, space ( ), underscore (_), or
+                    dash
+                    (-)</div>
+                </mdb-error>
               </div>
             </div>
-            <button type="button" size="sm" color="light" mdbBtn mdbWavesEffect (click)="onSubmit()"
-              [disabled]="checkIfInvalid()" style="position: absolute; right: 60px;">Save all</button>
-          </div>
-        </div>
-        <!--/.Card title-->
 
-        <!--Card content-->
-        <mdb-card-body>
-
-          <!--Grid row-->
-          <div class="row">
-
-            <!--Form grid column-->
-            <div class="col-md-6 mb-4">
-              <form class="k-item-add-form" [formGroup]="itemAddForm[selectedFormIdx]">
-                <!-- Grid row -->
-                <div class="form-row">
-
-                  <!-- Grid column -->
-                  <div class="col-md-12">
-                    <!-- Name -->
-                    <div class="md-form mt-3">
-                      <input mdbInput mdbValidate type="text" id="name" class="form-control" formControlName="name">
-                      <label for="name">Name</label>
-                      <mdb-error *ngIf="f.name.invalid && (f.name.dirty || f.name.touched)">
-                        <div *ngIf="f.name.errors.required">Name is required</div>
-                        <div *ngIf="f.name.errors.minlength">Minimum length is 2</div>
-                        <div *ngIf="f.name.errors.maxlength">Maximum length is 30</div>
-                        <div *ngIf="f.name.errors.pattern">Must only be an alphanumeric, space ( ), underscore (_), or
-                          dash
-                          (-)</div>
-                      </mdb-error>
-                    </div>
-                  </div>
-
-                  <!-- Grid column -->
-                  <div class="col-md-6">
-                    <!-- Cost -->
-                    <div class="md-form input-group mt-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text md-addon">$</span>
-                      </div>
-                      <input mdbInput mdbValidate type="text" id="cost" class="form-control" formControlName="cost"
-                        placeholder="Ex. 0.20">
-                      <label for="cost">Cost</label>
-                      <div class="input-group-append">
-                        <span class="input-group-text md-addon">/ ea</span>
-                      </div>
-                      <mdb-error *ngIf="f.cost.invalid && (f.cost.dirty || f.cost.touched)">
-                        <div *ngIf="f.cost.errors.required">Cost is required</div>
-                      </mdb-error>
-                    </div>
-                  </div>
-
-                  <!-- Grid column -->
-                  <div class="col-md-6">
-                    <!-- Quantity -->
-                    <div class="md-form input-group mt-3">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text md-addon">x</span>
-                      </div>
-                      <input mdbInput mdbValidate type="text" id="quantity" class="form-control"
-                        formControlName="quantity" placeholder="Ex. 1">
-                      <label for="quantity">Quantity</label>
-                      <mdb-error *ngIf="f.quantity.invalid && (f.quantity.dirty || f.quantity.touched)">
-                        <div *ngIf="f.quantity.errors.required">Quantity is required</div>
-                        <div *ngIf="f.quantity.errors.min">Minimum quantity is 1</div>
-                        <div *ngIf="f.quantity.errors.max">Maximum quantity is 999</div>
-                      </mdb-error>
-                    </div>
-                  </div>
-
-                  <!-- Grid column -->
-                  <div class="col-md-12">
-                    <!-- Group -->
-                    <mat-form-field style="width: 100%;">
-                      <mat-label>Select a group</mat-label>
-                      <mat-select formControlName="group">
-                        <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="f.group.errors">
-                        <div *ngIf="f.group.errors.required">Group is required</div>
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-
-                  <!-- Grid column -->
-                  <div class="col-md-6">
-                    <!-- AddedDate field -->
-                    <mat-form-field style="width: 100%;">
-                      <mat-label>Added date</mat-label>
-                      <input matInput formControlName="addedDate" placeholder="Added Date" [matDatepicker]="picker" />
-                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-datepicker #picker></mat-datepicker>
-                      <mat-error *ngIf="f.addedDate.errors">
-                        <div *ngIf="f.addedDate.errors.required">Added date is required</div>
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-
-                  <!-- Grid column -->
-                  <div class="col-md-6">
-                    <!-- ExpirationDate -->
-                    <mat-form-field style="width: 100%;">
-                      <mat-label>Expiration date</mat-label>
-                      <input matInput formControlName="expirationDate" placeholder="Expiration Date"
-                        [matDatepicker]="picker2" />
-                      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-                      <mat-datepicker #picker2></mat-datepicker>
-                      <mat-error *ngIf="f.expirationDate.errors">
-                        <div *ngIf="f.expirationDate.errors.required">Expiration date is required</div>
-                      </mat-error>
-                    </mat-form-field>
-                  </div>
-
-                  <!-- Grid column -->
-                  <div class="col-md-12">
-                    <button type="button" size="sm" color="warning" mdbBtn mdbWavesEffect *ngIf="selectedFormIdx != 0"
-                      (click)="removeInput(selectedFormIdx)">Remove</button>
-                  </div>
+            <!-- Grid column -->
+            <div class="col-md-6">
+              <!-- Cost -->
+              <div class="md-form input-group mt-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text md-addon">$</span>
                 </div>
-              </form>
+                <input mdbInput mdbValidate type="text" id="cost" class="form-control" formControlName="cost"
+                  placeholder="Ex. 0.20">
+                <label for="cost">Cost</label>
+                <div class="input-group-append">
+                  <span class="input-group-text md-addon">/ ea</span>
+                </div>
+                <mdb-error *ngIf="f.cost.invalid && (f.cost.dirty || f.cost.touched)">
+                  <div *ngIf="f.cost.errors.required">Cost is required</div>
+                </mdb-error>
+              </div>
             </div>
-            <!--Grid column-->
 
-            <!--Image grid column-->
-            <div class="col-md-6 mb-4">
-
-              <mdb-card>
-
-                <!--Card content-->
-                <mdb-card-body>
-                  <img [src]="placeholderImage">
-                </mdb-card-body>
-
-                <!--/.Card content-->
-              </mdb-card>
-              <!--/.Card-->
-
+            <!-- Grid column -->
+            <div class="col-md-6">
+              <!-- Quantity -->
+              <div class="md-form input-group mt-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text md-addon">x</span>
+                </div>
+                <input mdbInput mdbValidate type="text" id="quantity" class="form-control" formControlName="quantity"
+                  placeholder="Ex. 1">
+                <label for="quantity">Quantity</label>
+                <mdb-error *ngIf="f.quantity.invalid && (f.quantity.dirty || f.quantity.touched)">
+                  <div *ngIf="f.quantity.errors.required">Quantity is required</div>
+                  <div *ngIf="f.quantity.errors.min">Minimum quantity is 1</div>
+                  <div *ngIf="f.quantity.errors.max">Maximum quantity is 999</div>
+                </mdb-error>
+              </div>
             </div>
-            <!--Grid column-->
 
+            <!-- Grid column -->
+            <div class="col-md-12">
+              <!-- Group -->
+              <mat-form-field style="width: 100%;">
+                <mat-label>Select a group</mat-label>
+                <mat-select formControlName="group">
+                  <mat-option *ngFor="let group of groups" [value]="group">{{ group }}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="f.group.errors">
+                  <div *ngIf="f.group.errors.required">Group is required</div>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Grid column -->
+            <div class="col-md-6">
+              <!-- AddedDate field -->
+              <mat-form-field style="width: 100%;">
+                <mat-label>Added date</mat-label>
+                <input matInput formControlName="addedDate" placeholder="Added Date" [matDatepicker]="picker" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="f.addedDate.errors">
+                  <div *ngIf="f.addedDate.errors.required">Added date is required</div>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Grid column -->
+            <div class="col-md-6">
+              <!-- ExpirationDate -->
+              <mat-form-field style="width: 100%;">
+                <mat-label>Expiration date</mat-label>
+                <input matInput formControlName="expirationDate" placeholder="Expiration Date"
+                  [matDatepicker]="picker2" />
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+                <mat-error *ngIf="f.expirationDate.errors">
+                  <div *ngIf="f.expirationDate.errors.required">Expiration date is required</div>
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Grid column -->
+            <div class="col-md-12">
+              <button type="button" size="sm" color="warning" mdbBtn mdbWavesEffect *ngIf="selectedFormIdx != 0"
+                (click)="removeInput(selectedFormIdx)">Remove</button>
+            </div>
           </div>
-          <!--Grid row-->
-        </mdb-card-body>
+        </form>
+      </div>
+      <!--Grid column-->
 
-        <!--/.Card content-->
-      </mdb-card>
-      <!--/.Card-->
+      <!--Image grid column-->
+      <div class="col-md-6 mb-4">
+
+        <mdb-card>
+
+          <!--Card content-->
+          <mdb-card-body>
+            <img [src]="placeholderImage">
+          </mdb-card-body>
+
+          <!--/.Card content-->
+        </mdb-card>
+        <!--/.Card-->
+
+      </div>
+      <!--Grid column-->
 
     </div>
-    <!--Grid column-->
+    <!--Grid row-->
 
-  </div>
-  <!--Grid row-->
+  </mdb-card-body>
+  <!--/.Card content-->
 
-</section>
+</mdb-card>
+<!--/.Item add-->
