@@ -1,0 +1,27 @@
+@import '~@angular/material/theming';
+
+@include mat-core();
+
+$kochii-blue: (
+  700: #3e485d,
+  800: #2e3748,
+  900: #1c2331,
+  contrast: (
+    700: white,
+    800: white,
+    900: white,
+  )
+);
+
+$kochii-primary: mat-palette($kochii-blue, 900);
+$kochii-accent: mat-palette($kochii-blue, 700);
+$kochii-warn:    mat-palette($mat-red);
+
+$kochii-theme: mat-light-theme($kochii-primary,
+    $kochii-accent,
+    $kochii-warn,
+);
+
+@include angular-material-theme($kochii-theme);
+
+$kochii-primary-color: mat-color($kochii-primary);
