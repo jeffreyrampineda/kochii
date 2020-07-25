@@ -1,7 +1,7 @@
 <h5><strong>Overview</strong></h5>
 
 <!-- Gauges -->
-<section class="mt-4">
+<section>
 
   <!--Grid row-->
   <div class="row">
@@ -10,26 +10,8 @@
     <div class="col-xl-3 col-md-6 mb-r">
 
       <!--Card-->
-      <div class="mat-elevation-z2 p-3" style="background-color: white;">
-        <div class="row no-gutters">
-          <div class="col-4">
-            <button mat-fab aria-label="pie_chart">
-              <mat-icon>pie_chart</mat-icon>
-            </button>
-          </div>
-          <div class="col-8 k-data">
-            <p>INVENTORY SIZE</p>
-            <h4><strong>{{ itemTotal }}</strong></h4>
-          </div>
-          <div class="col-12 pt-3">
-            <div class="progress-bar blue-gradient" role="progressbar" style="width: 25%" aria-valuenow="25"
-              aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <div class="col-12 pt-3">
-            <p class="k-progress-description">Better than last week (25%)</p>
-          </div>
-        </div>
-      </div>
+      <kochii-gauge-card icon="pie_chart" title="INVENTORY SIZE" [value]="itemTotal"
+        description="Better than last week (25%)"></kochii-gauge-card>
       <!--/.Card-->
 
     </div>
@@ -39,26 +21,8 @@
     <div class="col-xl-3 col-md-6 mb-r">
 
       <!--Card-->
-      <div class="mat-elevation-z2 p-3" style="background-color: white;">
-        <div class="row no-gutters">
-          <div class="col-4">
-            <button mat-fab color="warn" aria-label="delete_sweep">
-              <mat-icon>delete_sweep</mat-icon>
-            </button>
-          </div>
-          <div class="col-8 k-data">
-            <p>EXPIRED ITEMS</p>
-            <h4><strong>{{ numberOfExpired }}</strong></h4>
-          </div>
-          <div class="col-12 pt-3">
-            <div class="progress-bar blue-gradient" role="progressbar" style="width: 25%" aria-valuenow="25"
-              aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <div class="col-12 pt-3">
-            <p class="k-progress-description">Worse than last week (25%)</p>
-          </div>
-        </div>
-      </div>
+      <kochii-gauge-card icon="delete_sweep" color="warn" title="EXPIRED ITEMS" [value]="numberOfExpired"
+        description="Worse than last week (25%)"></kochii-gauge-card>
       <!--/.Card-->
 
     </div>
@@ -68,26 +32,8 @@
     <div class="col-xl-3 col-md-6 mb-r">
 
       <!--Card-->
-      <div class="mat-elevation-z2 p-3" style="background-color: white;">
-        <div class="row no-gutters">
-          <div class="col-4">
-            <button mat-fab aria-label="payment">
-              <mat-icon>payment</mat-icon>
-            </button>
-          </div>
-          <div class="col-8 k-data">
-            <p>WEEKLY $ SPENT</p>
-            <h4><strong>N/A</strong></h4>
-          </div>
-          <div class="col-12 pt-3">
-            <div class="progress-bar blue-gradient" role="progressbar" style="width: 75%" aria-valuenow="25"
-              aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <div class="col-12 pt-3">
-            <p class="k-progress-description">Worse than last week (75%)</p>
-          </div>
-        </div>
-      </div>
+      <kochii-gauge-card icon="payment" title="WEEKLY $ SPENT" description="Worse than last week (75%)">
+      </kochii-gauge-card>
       <!--/.Card-->
 
     </div>
@@ -97,26 +43,8 @@
     <div class="col-xl-3 col-md-6 mb-r">
 
       <!--Card-->
-      <div class="mat-elevation-z2 p-3" style="background-color: white;">
-        <div class="row no-gutters">
-          <div class="col-4">
-            <button mat-fab aria-label="show_chart">
-              <mat-icon>show_chart</mat-icon>
-            </button>
-          </div>
-          <div class="col-8 k-data">
-            <p>ITEMS REMOVED</p>
-            <h4><strong>{{ quantityRemovedThisWeek() }}</strong></h4>
-          </div>
-          <div class="col-12 pt-3">
-            <div class="progress-bar blue-gradient" role="progressbar" style="width: 25%" aria-valuenow="25"
-              aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <div class="col-12 pt-3">
-            <p class="k-progress-description">Better than last week (25%)</p>
-          </div>
-        </div>
-      </div>
+      <kochii-gauge-card icon="show_chart" title="ITEMS REMOVED" [value]="quantityRemovedThisWeek()"
+        description="Better than last week (25%)"></kochii-gauge-card>
       <!--/.Card-->
 
     </div>
@@ -137,7 +65,7 @@
     <div class="col-md-8 mb-r">
 
       <!--Card-->
-      <div class="mat-elevation-z2 p-3" style="background-color: white;">
+      <div class="mat-elevation-z2 p-3">
 
         <!--Card content-->
         <h5><strong>Inventory</strong></h5>
@@ -155,7 +83,7 @@
     <div class="col-md-4 mb-r">
 
       <!--Card-->
-      <div class="mat-elevation-z2 p-3" style="background-color: white;">
+      <div class="mat-elevation-z2 p-3">
 
         <!--Card content-->
         <h5><strong>Status</strong></h5>
@@ -184,7 +112,7 @@
     <div class="col-md-12 mb-4">
 
       <!--Card-->
-      <div class="mat-elevation-z2 p-3" style="background-color: white;">
+      <div class="mat-elevation-z2 p-3">
 
         <!--Card content-->
         <h5><strong>History</strong></h5>

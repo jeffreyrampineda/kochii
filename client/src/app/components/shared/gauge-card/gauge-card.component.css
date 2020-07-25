@@ -1,0 +1,14 @@
+.k-data {
+    text-align: right;
+}
+
+.k-data p {
+    color: #999999;
+    font-size: 12px;
+}
+
+.k-progress-description {
+    color: #747373;
+    font-size: .9rem;
+    font-weight: 400;
+}

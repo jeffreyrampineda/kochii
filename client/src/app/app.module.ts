@@ -37,6 +37,7 @@ import { ItemAddComponent } from './components/views/item-add/item-add.component
 import { UpdateDialogComponent } from './components/shared/update-dialog/update-dialog.component';
 import { CreateGroupDialogComponent } from './components/shared/create-group-dialog/create-group-dialog.component';
 import { PresentationContainerComponent } from './components/shared/presentation-container/presentation-container.component';
+import { GaugeCardComponent } from './components/shared/gauge-card/gauge-card.component';
 
 // -------------------------------------------------------------
 
@@ -60,6 +61,7 @@ import { PresentationContainerComponent } from './components/shared/presentation
     FooterComponent,
     NavigationComponent,
     PresentationContainerComponent,
+    GaugeCardComponent,
   ],
   imports: [
     BrowserModule,

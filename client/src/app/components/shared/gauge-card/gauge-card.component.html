@@ -1,0 +1,20 @@
+<div class="mat-elevation-z2 p-3 mt-4">
+    <div class="row no-gutters">
+        <div class="col-4">
+            <button mat-fab [color]="color" aria-label="icon">
+                <mat-icon>{{ icon }}</mat-icon>
+            </button>
+        </div>
+        <div class="col-8 k-data">
+            <p>{{ title }}</p>
+            <h4><strong>{{ value }}</strong></h4>
+        </div>
+        <div class="col-12 pt-3">
+            <div class="progress-bar blue-gradient" role="progressbar" style="width: 25%" aria-valuenow="25"
+                aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="col-12 pt-3">
+            <p class="k-progress-description">{{ description }}</p>
+        </div>
+    </div>
+</div>
