@@ -58,12 +58,17 @@
             <!-- Right -->
             <ul class="navbar-nav nav-flex-icons k-nav-bar-actions">
                 <li class="nav-item" mdbDropdown>
-                    <a mdbDropdownToggle class="nav-link dropdown-toggle waves-light" mdbWavesEffect>
-                        <span class="badge badge-danger ml-2">{{ notifications.length }}</span>
-                        <mdb-icon fas icon="bell" class="k-dark-text"></mdb-icon>
-                    </a>
-                    <div class="dropdown-menu">
-                        <span class="dropdown-item" *ngFor="let notify of notifications">{{ notify }}</span>
+                    <div class="notification-wrapper">
+                        <div class="notification-btn" (click)="openNotification(!showNotification)">
+                            <span class="badge badge-danger ml-2">{{ notifications.length }}</span>
+                            <mdb-icon fas icon="bell" class="k-dark-text"></mdb-icon>
+                        </div>
+                        <div *ngIf="showNotification" class="notification-content mat-elevation-z1">
+                            <div class="notification-header">
+                                <span class="label">Notifications</span>
+                            </div>
+                            <span *ngFor="let notify of notifications">{{ notify }}</span>
+                        </div>
                     </div>
                 </li>
                 <li class="nav-item">

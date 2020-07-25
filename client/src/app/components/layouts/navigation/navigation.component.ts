@@ -14,14 +14,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   private unsub = new Subject<void>();
 
-  clicked: boolean;
+  showNotification: boolean;
   notifications: string[] = [];
 
   constructor(
     private authenticationService: AuthenticationService,
     private socketioService: SocketioService
   ) {
-    this.clicked = this.clicked === undefined ? false : true;
+
   }
 
   ngOnInit() {
@@ -47,8 +47,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.unsub.complete();
   }
 
-  setClicked(val: boolean): void {
-    this.clicked = val;
+  openNotification(state: boolean) {
+    this.showNotification = state;
   }
 
   logout(): void {

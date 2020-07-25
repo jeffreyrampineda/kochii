@@ -6,16 +6,12 @@
 
   <!--Actions-->
   <div actions class="d-sm-flex justify-content-between">
-    <div class="btn-group" mdbDropdown>
-      <h4 mdbDropdownToggle class="my-1 dropdown-toggle waves-light" mdbWavesEffect>
-        {{ selectedFormName }}</h4>
-      <div class="dropdown-menu dropdown-primary">
-        <a class="dropdown-item" *ngFor="let iform of itemAddForm; let idx = index" [attr.data-index]="idx"
-          (click)="selectForm(idx)">{{ iform.value.name }}</a>
-        <div class="divider dropdown-divider"></div>
-        <a class="dropdown-item" (click)="addMoreInput()">Add Item</a>
-      </div>
-    </div>
+    <mat-form-field>
+      <mat-select [value]="selectedFormIdx" (selectionChange)="selectForm($event)">
+        <mat-option *ngFor="let iform of itemAddForm; let idx = index" [value]="idx">{{ iform.value.name }}</mat-option>
+        <mat-option value="-1">Add more</mat-option>
+      </mat-select>
+    </mat-form-field>
     <button mat-button (click)="onSubmit()" [disabled]="checkIfInvalid()">Save all</button>
   </div>
   <!--/.Actions-->

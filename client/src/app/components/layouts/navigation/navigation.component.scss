@@ -33,3 +33,35 @@
   position: absolute;
   bottom: 0;
 }
+
+.notification-wrapper {
+  padding: 8px 15px;
+  float: right;
+  border-radius: 5px;
+}
+
+.notification-wrapper .notification-btn {
+  cursor: pointer;
+}
+
+.notification-wrapper .notification-content {
+  position: absolute;
+  top: 40px;
+  right: 5px;
+  width: 350px;
+  height: 200px;
+  background-color: whitesmoke;
+  z-index: 300;
+}
+
+.notification-wrapper .notification-header {
+  padding: 10px;
+  color: #ffffff;
+  background-color: #1C2331;
+}
+
+.notification-wrapper .notification-header .label {
+  display: inline-block;
+  width: 100%;
+  font-weight: 500;
+}

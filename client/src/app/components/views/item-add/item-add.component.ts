@@ -176,20 +176,24 @@ export class ItemAddComponent implements OnInit {
       expirationDate: [this.dateToday, Validators.required],
       group: [this.selectedGroup, Validators.required],
     }));
-    this.selectForm(this.itemAddForm.length - 1);
+    this.selectedFormIdx = this.itemAddForm.length - 1;
   }
 
-  selectForm(idx: number): void {
-    this.selectedFormIdx = idx;
+  selectForm($event): void {
+    if ($event.value == -1) {
+      this.addMoreInput();
+    } else {
+      this.selectedFormIdx = $event.value;
+    }
   }
 
   /**
    * Remove one of the form from the array specified by its index.
-   * @param index - the index to be removed.
+   * @param idx - the index to be removed.
    */
-  removeInput(index: number): void {
-    this.selectForm(index - 1);
-    this.itemAddForm.splice(index, 1);
+  removeInput(idx: number): void {
+    this.selectedFormIdx = idx - 1;
+    this.itemAddForm.splice(idx, 1);
   }
 
   /** Navigate the browser back to dashboard/inventory */
