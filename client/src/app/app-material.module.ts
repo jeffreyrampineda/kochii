@@ -14,17 +14,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-
-// MDB
-import {
-  ButtonsModule,
-  WavesModule,
-  CardsModule,
-  IconsModule,
-  NavbarModule,
-  InputsModule,
-  InputUtilitiesModule,
-} from 'angular-bootstrap-md'
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatIconModule } from '@angular/material/icon';
 
 // -------------------------------------------------------------
 
@@ -44,15 +35,8 @@ const matModules = [
   MatSortModule,
   MatSnackBarModule,
   MatSelectModule,
-
-  // MDB
-  ButtonsModule,
-  WavesModule,
-  CardsModule,
-  IconsModule,
-  NavbarModule,
-  InputsModule,
-  InputUtilitiesModule,
+  MatAutocompleteModule,
+  MatIconModule,
 ];
 
 @NgModule({

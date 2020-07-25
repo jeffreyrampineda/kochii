@@ -1,10 +1,7 @@
 <h5><ng-content select="[prepend]"></ng-content><strong>{{ title }}</strong></h5>
 
 <!--Container-->
-<mdb-card class="mt-4">
-
-  <!--Card content-->
-  <mdb-card-body>
+<div class="mat-elevation-z2 p-3 mt-4" style="background-color: white;">
 
     <!--Actions-->
     <ng-content select="[actions]"></ng-content>
@@ -26,8 +23,5 @@
     </div>
     <!--/.Content-->
 
-  </mdb-card-body>
-  <!--/.Card content-->
-
-</mdb-card>
+  </div>
 <!--/.Container-->

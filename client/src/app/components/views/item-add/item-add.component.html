@@ -29,55 +29,52 @@
           <!-- Grid column -->
           <div class="col-md-12">
             <!-- Name -->
-            <div class="md-form mt-3">
-              <input mdbInput mdbValidate type="text" id="name" class="form-control" formControlName="name">
-              <label for="name">Name</label>
-              <mdb-error *ngIf="f.name.invalid && (f.name.dirty || f.name.touched)">
+            <mat-form-field class="mt-3" style="width: 100%;">
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" type="text" placeholder="Name"
+                (keyup)="searchTerm.next($event.target.value)" [matAutocomplete]="auto" />
+              <mat-error *ngIf="f.name.errors">
                 <div *ngIf="f.name.errors.required">Name is required</div>
                 <div *ngIf="f.name.errors.minlength">Minimum length is 2</div>
                 <div *ngIf="f.name.errors.maxlength">Maximum length is 30</div>
                 <div *ngIf="f.name.errors.pattern">Must only be an alphanumeric, space ( ), underscore (_), or
                   dash
                   (-)</div>
-              </mdb-error>
-            </div>
+              </mat-error>
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let item of existingItems | slice:0:9" [value]="item.name">
+                  {{ item.name }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
           </div>
 
           <!-- Grid column -->
           <div class="col-md-6">
             <!-- Cost -->
-            <div class="md-form input-group mt-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text md-addon">$</span>
-              </div>
-              <input mdbInput mdbValidate type="text" id="cost" class="form-control" formControlName="cost"
-                placeholder="Ex. 0.20">
-              <label for="cost">Cost</label>
-              <div class="input-group-append">
-                <span class="input-group-text md-addon">/ ea</span>
-              </div>
-              <mdb-error *ngIf="f.cost.invalid && (f.cost.dirty || f.cost.touched)">
+            <mat-form-field class="mt-3" style="width: 100%;">
+              <mat-label>Cost</mat-label>
+              <span matPrefix>$ &nbsp;</span>
+              <input matInput formControlName="cost" type="text" placeholder="Ex. 0.20" />
+              <mat-error *ngIf="f.cost.errors">
                 <div *ngIf="f.cost.errors.required">Cost is required</div>
-              </mdb-error>
-            </div>
+              </mat-error>
+            </mat-form-field>
           </div>
 
           <!-- Grid column -->
           <div class="col-md-6">
             <!-- Quantity -->
-            <div class="md-form input-group mt-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text md-addon">x</span>
-              </div>
-              <input mdbInput mdbValidate type="text" id="quantity" class="form-control" formControlName="quantity"
-                placeholder="Ex. 1">
-              <label for="quantity">Quantity</label>
-              <mdb-error *ngIf="f.quantity.invalid && (f.quantity.dirty || f.quantity.touched)">
+            <mat-form-field class="mt-3" style="width: 100%;">
+              <mat-label>Quantity</mat-label>
+              <span matPrefix>x &nbsp;</span>
+              <input matInput formControlName="quantity" type="text" placeholder="Ex. 1" />
+              <mat-error *ngIf="f.quantity.errors">
                 <div *ngIf="f.quantity.errors.required">Quantity is required</div>
                 <div *ngIf="f.quantity.errors.min">Minimum quantity is 1</div>
                 <div *ngIf="f.quantity.errors.max">Maximum quantity is 999</div>
-              </mdb-error>
-            </div>
+              </mat-error>
+            </mat-form-field>
           </div>
 
           <!-- Grid column -->
@@ -125,8 +122,7 @@
 
           <!-- Grid column -->
           <div class="col-md-12">
-            <button type="button" size="sm" color="warning" mdbBtn mdbWavesEffect *ngIf="selectedFormIdx != 0"
-              (click)="removeInput(selectedFormIdx)">Remove</button>
+            <button mat-button *ngIf="selectedFormIdx != 0" (click)="removeInput(selectedFormIdx)">Remove</button>
           </div>
         </div>
       </form>
@@ -136,17 +132,11 @@
     <!--Image grid column-->
     <div class="col-md-6 mb-4">
 
-      <!--Card-->
-      <mdb-card>
-
-        <!--Card content-->
-        <mdb-card-body>
-          <img [src]="placeholderImage">
-        </mdb-card-body>
-        <!--/.Card content-->
-
-      </mdb-card>
-      <!--/.Card-->
+      <!--Image-->
+      <div class="mat-elevation-z2">
+        <img [src]="placeholderImage">
+      </div>
+      <!--/.Image-->
 
     </div>
     <!--Image grid column-->

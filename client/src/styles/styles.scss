@@ -11,6 +11,18 @@ table {
     table-layout: fixed;
 }
 
+.k-spacer {
+    flex: 1 1 auto;
+}
+
+.k-button-blue {
+    background: linear-gradient(40deg, #45cafc, #303f9f) !important;
+    font-weight: 400;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+}
+
 /* Used for item-add/inventory */
 .k-search {
     float: left;
@@ -85,19 +97,8 @@ body {
     -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
     z-index: 1050;
-    background-color: #1c2331;
+    background-color: $kochii-primary-color;
     padding: 0;
-}
-
-.sidebar-fixed .list-group .active {
-    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .25);
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .25);
-    -webkit-border-radius: 0px;
-    border-radius: 0px;
-    background: linear-gradient(40deg, #45cafc, #303f9f);
-    margin-top: 0px;
-    border-top-width: 0px;
-    width: calc(100% + 10px);
 }
 
 @media (min-width: 1200px) {
@@ -108,13 +109,6 @@ body {
         padding-left: 270px;
     }
 
-    .k-logo {
-        padding-left: 48px;
-    }
-
-    .k-nav-bar-actions {
-        padding-right: 32px;
-    }
 }
 
 @media (max-width: 1199.98px) {
@@ -122,64 +116,22 @@ body {
         display: none;
     }
 
-    .k-logo {
-        padding-left: 32px;
-    }
-
-    .k-nav-bar-actions {
-        padding-right: 32px;
-    }
 }
 
 // Medium devices (tablets, 768px and up)
-@media (max-width: 992px) {
-    .k-logo {
-        padding-left: 0px;
-    }
+@media (max-width: 992px) {}
 
-    .k-nav-bar-actions {
-        padding-right: 0px;
-    }
-}
-
-.cascading-admin-card {
-    margin-top: 20px;
-}
-
-.cascading-admin-card .admin-up {
-    margin-left: 4%;
-    margin-right: 4%;
-    margin-top: -20px;
-}
-
-.cascading-admin-card .admin-up mdb-icon {
-    padding: 1.7rem;
-    font-size: 2rem;
-    color: #fff;
-    text-align: left;
-    margin-right: 1rem;
-    border-radius: 3px;
-    box-shadow: 0 2px 9px 0 rgba(0, 0, 0, .2), 0 2px 13px 0 rgba(0, 0, 0, .19);
-}
-
-.cascading-admin-card .admin-up .data {
-    float: right;
-    margin-top: 2rem;
+.k-data {
     text-align: right;
 }
 
-.cascading-admin-card .admin-up .data p {
+.k-data p {
     color: #999999;
     font-size: 12px;
 }
 
-.cascading-admin-card .admin-up .fa {
-    -webkit-box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.2), 0 2px 13px 0 rgba(0, 0, 0, 0.19);
-    box-shadow: 0 2px 9px 0 rgba(0, 0, 0, 0.2), 0 2px 13px 0 rgba(0, 0, 0, 0.19);
-}
-
-.cascading-admin-card .admin-up .admin-title {
-    padding: 0.5rem;
-    border-radius: 3px;
-    box-shadow: 0 2px 9px 0 rgba(0, 0, 0, .2), 0 2px 13px 0 rgba(0, 0, 0, .19);
+.k-progress-description {
+    color: #747373;
+    font-size: .9rem;
+    font-weight: 400;
 }

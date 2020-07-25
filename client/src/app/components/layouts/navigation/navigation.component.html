@@ -3,88 +3,59 @@
 
     <!-- Sidebar -->
     <div class="sidebar-fixed position-fixed">
-        <a class="logo-wrapper waves-effect text-center text-white">
-            <span>Kochii</span>
-        </a>
-        <div class="list-group list-group-flush">
-            <a routerLink="overview" routerLinkActive="active"
-                class="list-group-item list-group-item-action waves-effect">
-                <mdb-icon fas icon="chart-pie"></mdb-icon>
+        <div class="logo-wrapper">
+            <p class="text-center text-white">Kochii</p>
+        </div>
+        <div class="k-sidebar-items">
+            <button mat-button class="k-item" routerLink="overview" routerLinkActive="active">
+                <mat-icon aria-hidden="false" aria-label="dashboard">dashboard</mat-icon>
                 Overview
-            </a>
-            <a routerLink="inventory" routerLinkActive="active"
-                class="list-group-item list-group-item-action waves-effect">
-                <mdb-icon fas icon="box"></mdb-icon>
+            </button>
+            <button mat-button class="k-item" routerLink="inventory" routerLinkActive="active">
+                <mat-icon aria-hidden="false" aria-label="list_alt">list_alt</mat-icon>
                 Inventory
-            </a>
-            <a routerLink="groceries" routerLinkActive="active"
-                class="list-group-item list-group-item-action waves-effect">
-                <mdb-icon fas icon="shopping-basket"></mdb-icon>
+            </button>
+            <button mat-button class="k-item" routerLink="groceries" routerLinkActive="active">
+                <mat-icon aria-hidden="false" aria-label="shopping_basket">shopping_basket</mat-icon>
                 Groceries
-            </a>
-            <a routerLink="history" routerLinkActive="active"
-                class="list-group-item list-group-item-action waves-effect">
-                <mdb-icon fas icon="history"></mdb-icon>
+            </button>
+            <button mat-button class="k-item" routerLink="history" routerLinkActive="active">
+                <mat-icon aria-hidden="false" aria-label="restore">restore</mat-icon>
                 History
-            </a>
+            </button>
             <div class="k-navigation-bottom">
-                <a routerLink="settings" routerLinkActive="active"
-                    class="list-group-item list-group-item-action waves-effect">
-                    <mdb-icon fas icon="cog"></mdb-icon>
+                <button mat-button class="k-item" routerLink="settings" routerLinkActive="active">
+                    <mat-icon aria-hidden="false" aria-label="settings">settings</mat-icon>
                     Settings
-                </a>
+                </button>
             </div>
         </div>
     </div>
     <!-- Sidebar -->
 
     <!--Navbar-->
-    <mdb-navbar [containerInside]="false" SideClass="navbar navbar-expand-lg navbar-light white">
-
-        <!-- Navbar brand -->
-        <logo class="k-logo">
-            <!-- <a class="navbar-brand" href="/">Kochii</a> -->
-        </logo>
-
-        <!-- Collapsible content -->
-        <links>
-
-            <!-- Left -->
-            <ul class="navbar-nav mr-auto">
-
-            </ul>
-            <!-- Left -->
-
-            <!-- Right -->
-            <ul class="navbar-nav nav-flex-icons k-nav-bar-actions">
-                <li class="nav-item" mdbDropdown>
-                    <div class="notification-wrapper">
-                        <div class="notification-btn" (click)="openNotification(!showNotification)">
-                            <span class="badge badge-danger ml-2">{{ notifications.length }}</span>
-                            <mdb-icon fas icon="bell" class="k-dark-text"></mdb-icon>
-                        </div>
-                        <div *ngIf="showNotification" class="notification-content mat-elevation-z1">
-                            <div class="notification-header">
-                                <span class="label">Notifications</span>
-                            </div>
-                            <span *ngFor="let notify of notifications">{{ notify }}</span>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" mdbWavesEffect>
-                        <mdb-icon fas icon="envelope" class="k-dark-text"></mdb-icon>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <button mat-button (click)="logout()">Logout</button>
-                </li>
-            </ul>
-            <!-- Right -->
-        </links>
-        <!-- Collapsible content -->
-
-    </mdb-navbar>
+    <mat-toolbar class="mat-elevation-z1" style="background-color: white;">
+        <button mat-icon-button class="mr-3" aria-label="Example icon-button with menu icon">
+            <mat-icon>menu</mat-icon>
+        </button>
+        <span>Kochii</span>
+        <span class="k-spacer"></span>
+        <div class="notification-wrapper">
+            <button mat-icon-button aria-label="notifications" (click)="openNotification(!showNotification)">
+                <mat-icon>notifications</mat-icon>
+            </button>
+            <div *ngIf="showNotification" class="notification-content mat-elevation-z1">
+                <div class="notification-header">
+                    <span class="label">Notifications</span>
+                </div>
+                <span *ngFor="let notify of notifications">{{ notify }}</span>
+            </div>
+        </div>
+        <button mat-icon-button aria-label="mail">
+            <mat-icon>mail</mat-icon>
+        </button>
+        <button mat-button (click)="logout()">Logout</button>
+    </mat-toolbar>
     <!--/.Navbar-->
 
 </header>

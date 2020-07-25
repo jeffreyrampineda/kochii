@@ -1,29 +1,28 @@
 <!-- Form -->
-<form class="border border-light z-depth-1 p-5 k-center-isolated" [formGroup]="loginForm" (ngSubmit)="onSubmit(loginForm.value)">
-    <p class="h4 mb-4 text-center">Login</p>
+<form class="mat-elevation-z2 p-5 k-center-isolated" [formGroup]="loginForm"
+    (ngSubmit)="onSubmit(loginForm.value)">
+    <h4 class="mb-4 text-center">Login</h4>
 
     <!-- Username -->
-    <div class="md-form mt-3">
-        <input mdbInput mdbValidate type="text" id="username" class="form-control" formControlName="username">
-        <label for="username">Username</label>
-        <mdb-error *ngIf="f.username.invalid && (f.username.dirty || f.username.touched)">
+    <mat-form-field style="width: 100%;">
+        <input matInput formControlName="username" type="text" placeholder="Username" />
+        <mat-error *ngIf="f.username.errors">
             <div *ngIf="f.username.errors.required">Username is required</div>
             <div *ngIf="f.username.errors.minlength">Minimum length is 6</div>
             <div *ngIf="f.username.errors.maxlength">Maximum length is 30</div>
             <div *ngIf="f.username.errors.pattern">Must only be an alphanumeric, underscore (_), or dash (-)</div>
-        </mdb-error>
-    </div>
+        </mat-error>
+    </mat-form-field>
 
     <!-- Password -->
-    <div class="md-form">
-        <input mdbInput mdbValidate type="password" id="password" class="form-control" formControlName="password">
-        <label for="password">Password</label>
-        <mdb-error *ngIf="f.password.invalid && (f.password.dirty || f.password.touched)">
+    <mat-form-field style="width: 100%;">
+        <input matInput formControlName="password" type="password" placeholder="Password" />
+        <mat-error *ngIf="f.password.errors">
             <div *ngIf="f.password.errors.required">Password is required</div>
             <div *ngIf="f.password.errors.minlength">Minimum length is 6</div>
             <div *ngIf="f.password.errors.maxlength">Maximum length is 30</div>
-        </mdb-error>
-    </div>
+        </mat-error>
+    </mat-form-field>
 
     <!-- Extra -->
     <div class="d-flex justify-content-between">
@@ -45,8 +44,7 @@
     </div>
 
     <!-- Login button -->
-    <button mdbBtn type="button" gradient="blue" mdbWavesEffect type="submit" class="btn-block my-4"
-        style="border-radius: 10em;">Login</button>
+    <button mat-button type="submit" class="btn-block my-4 k-button-blue mat-elevation-z2">Login</button>
 
     <!-- Register link -->
     <div class="text-center">
