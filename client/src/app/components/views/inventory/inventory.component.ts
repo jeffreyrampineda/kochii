@@ -305,11 +305,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
         });
     }
 
-    /** Checks whether inventory is empty or not */
-    isEmpty(): boolean {
-        return this.inventory.data.length === 0 ? true : false;
-    }
-
     /** Checks whether the selectedGroup can be removed or not */
     canRemoveGroup(): boolean {
         return this.selectedGroup != "Default" && this.selectedGroup != "";

@@ -1,0 +1,33 @@
+<h5><ng-content select="[prepend]"></ng-content><strong>{{ title }}</strong></h5>
+
+<!--Container-->
+<mdb-card class="mt-4">
+
+  <!--Card content-->
+  <mdb-card-body>
+
+    <!--Actions-->
+    <ng-content select="[actions]"></ng-content>
+    <!--/.Actions-->
+
+    <!--Content-->
+    <div class="mt-3">
+      <div *ngIf="loading; else viewEmpty" class="loader text-center" style="margin: auto;"></div>
+      <ng-template #viewEmpty>
+        <ng-container *ngIf="isEmpty; else viewContent">
+          <h2 class="text-center">{{ title }} is empty</h2>
+        </ng-container>
+      </ng-template>
+      <ng-template #viewContent>
+        <div [hidden]="isEmpty || loading">
+          <ng-content></ng-content>
+        </div>
+      </ng-template>
+    </div>
+    <!--/.Content-->
+
+  </mdb-card-body>
+  <!--/.Card content-->
+
+</mdb-card>
+<!--/.Container-->

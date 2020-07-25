@@ -36,6 +36,7 @@ import { ItemAddComponent } from './components/views/item-add/item-add.component
 // Components - shared
 import { UpdateDialogComponent } from './components/shared/update-dialog/update-dialog.component';
 import { CreateGroupDialogComponent } from './components/shared/create-group-dialog/create-group-dialog.component';
+import { PresentationContainerComponent } from './components/shared/presentation-container/presentation-container.component';
 
 // -------------------------------------------------------------
 
@@ -58,6 +59,7 @@ import { CreateGroupDialogComponent } from './components/shared/create-group-dia
     CreateGroupDialogComponent,
     FooterComponent,
     NavigationComponent,
+    PresentationContainerComponent,
   ],
   imports: [
     BrowserModule,
