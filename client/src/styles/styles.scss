@@ -1,6 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
 @import './kochii-theme.scss';
 
+.mat-elevation-z2 {
+    background-color: white;
+}
+
 /* Removes the dotted lines around button. Bootstrap causes this.*/
 button:focus {
     outline: none !important;
@@ -16,7 +20,7 @@ table {
 }
 
 .k-button-blue {
-    background: linear-gradient(40deg, #45cafc, #303f9f) !important;
+    background: linear-gradient(40deg, #45cafc, #303f9f);
     font-weight: 400;
     color: white;
     text-align: center;
@@ -42,7 +46,6 @@ table {
     margin: auto;
     max-width: 400px;
     margin-top: 5vh;
-    background-color: #fff;
 }
 
 /* ----------------------- */
