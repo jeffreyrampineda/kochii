@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { GroupsService } from 'src/app/services/groups.service';
+import { InventoryService } from 'src/app/services/inventory.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 // -------------------------------------------------------------
@@ -18,7 +18,7 @@ export class CreateGroupDialogComponent {
     form: FormGroup;
 
     constructor(
-        private groupsService: GroupsService,
+        private inventoryService: InventoryService,
         private formBuilder: FormBuilder,
         public dialogRef: MatDialogRef<CreateGroupDialogComponent>,
     ) {
@@ -46,7 +46,7 @@ export class CreateGroupDialogComponent {
         }
         this.loading = true;
 
-        this.groupsService.createGroup(this.form.value.name).subscribe({
+        this.inventoryService.createGroup(this.form.value.name).subscribe({
             next: response => {
                 if (response.name) {
                     this.dialogRef.close(response);

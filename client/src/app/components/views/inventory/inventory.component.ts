@@ -9,7 +9,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
-import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
 import { UpdateDialogComponent } from 'src/app/components/shared/update-dialog/update-dialog.component';
 import { CreateGroupDialogComponent } from 'src/app/components/shared/create-group-dialog/create-group-dialog.component';
@@ -46,7 +45,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
         private dialog: MatDialog,
         private inventoryService: InventoryService,
         private messageService: MessageService,
-        private groupsService: GroupsService,
         private formBuilder: FormBuilder,
     ) { }
 
@@ -74,11 +72,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.inventoryService.inventoryUpdate.pipe(takeUntil(this.unsub)).subscribe(() => {
             this.getItems();
         });
-
-        this.groupsService.setSocketListeners();
-        this.groupsService.groupsUpdate.pipe(takeUntil(this.unsub)).subscribe(() => {
-            this.getGroups();
-        });
     }
 
     ngOnDestroy() {
@@ -87,7 +80,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     }
 
     getGroups(): void {
-        this.groupsService.getGroups().subscribe({
+        this.inventoryService.getGroups().subscribe({
             next: response => {
                 this.groups = response;
             },
@@ -217,14 +210,14 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
     /** Deletes the selectedGroup from the server. */
     deleteGroup(): void {
-        this.groupsService.deleteGroup(this.selectedGroup).subscribe({
+        this.inventoryService.deleteGroup(this.selectedGroup).subscribe({
             next: response => {
                 if (response.name) {
-                    this.notify(`'${response.name}' deleted`);
+                    this.messageService.notify(`'${response.name}' deleted`);
                 }
             },
             error: err => {
-                this.notify(err.error);
+                this.messageService.notify(err.error);
             },
             complete: () => {
                 // TODO - stop loading.
@@ -261,12 +254,12 @@ export class InventoryComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe({
             next: response => {
                 if (response && response.name) {
-                    this.notify(`'${response.name}' created`);
+                    this.messageService.notify(`'${response.name}' created`);
                     this.selectedGroup = response.name;
                 }
             },
             error: err => {
-                this.notify(err.error);
+                this.messageService.notify(err.error);
             },
             complete: () => {
                 this.getGroups();
@@ -292,11 +285,11 @@ export class InventoryComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe({
             next: response => {
                 if (response && response.successful) {
-                    this.notify(`${response.successful}/${response.total} items were successfully updated.`);
+                    this.messageService.notify(`${response.successful}/${response.total} items were successfully updated.`);
                 }
             },
             error: err => {
-                this.notify(err.error);
+                this.messageService.notify(err.error);
             },
             complete: () => {
                 this.getItems();
@@ -308,9 +301,5 @@ export class InventoryComponent implements OnInit, OnDestroy {
     /** Checks whether the selectedGroup can be removed or not */
     canRemoveGroup(): boolean {
         return this.selectedGroup != "Default" && this.selectedGroup != "";
-    }
-
-    private notify(message: string) {
-        this.messageService.notify(message);
     }
 }

@@ -17,11 +17,14 @@ const httpOptions = {
 export class InventoryService {
 
   private inventoryUrl = '/api/inventory';
+  private groupsUrl = '/api/groups';
   private queryUrl = '/search/';
   private localInv: Item[] = [];
+  private localGroups: string[] = [];
   private isSocketListenerSet = false;
 
   public inventoryUpdate = new Subject<void>();
+  public groupsUpdate = new Subject<void>();
   public selectedGroup = "";
 
   constructor(
@@ -40,6 +43,10 @@ export class InventoryService {
       this.onItemUpdate();
       this.onItemUpdateMany();
       this.onItemDelete();
+
+      this.onGroupCreate();
+      this.onGroupDelete();
+
       this.isSocketListenerSet = true;
     }
   }
@@ -152,6 +159,54 @@ export class InventoryService {
     return this.localInv.length;
   }
 
+  /** Get all groups. */
+  getGroups(): Observable<string[]> {
+    const url = `${this.groupsUrl}`;
+
+    return new Observable(obs => {
+      if (this.localGroups.length !== 0) {
+        obs.next(this.localGroups);
+        return obs.complete();
+      }
+      this.http.get<string[]>(url).pipe(
+        tap(_ => this.log('fetched groups')),
+      ).subscribe({
+        next: response => {
+          this.localGroups = response;
+          obs.next(this.localGroups);
+        },
+        error: err => {
+          obs.error(err);
+        },
+        complete: () => {
+          obs.complete();
+        }
+      });
+    });
+  }
+
+  /**
+   * Add the specified group.
+   * @param group - The group to add.
+   */
+  createGroup(name: string): Observable<any> {
+    this.log('creating group');
+    const url = `${this.groupsUrl}/${name}`;
+
+    return this.http.post<any>(url, null, httpOptions);
+  }
+
+  /**
+   * Deletes the group from the server.
+   * @param name - The name of the group to be deleted.
+   */
+  deleteGroup(name: string): Observable<any> {
+    this.log('deleting group');
+    const url = `${this.groupsUrl}/${name}`;
+
+    return this.http.delete<any>(url, httpOptions);
+  }
+
   // -------------------------------------------------------------
 
   onItemCreate() {
@@ -196,6 +251,22 @@ export class InventoryService {
       this.log(`deleted - item /w id=${id}`);
       this.localInv = this.localInv.filter(i => i._id !== id);
       this.inventoryUpdate.next();
+    });
+  }
+
+  onGroupCreate() {
+    this.socketioService.getSocket().on('group_create', (group: string) => {
+      this.log(`created - group /w name=${group}`);
+      this.localGroups.push(group);
+      this.groupsUpdate.next();
+    });
+  }
+
+  onGroupDelete() {
+    this.socketioService.getSocket().on('group_delete', (group: string) => {
+      this.log(`deleted - group /w name=${group}`);
+      this.localGroups = this.localGroups.filter(g => g !== group);
+      this.groupsUpdate.next();
     });
   }
 

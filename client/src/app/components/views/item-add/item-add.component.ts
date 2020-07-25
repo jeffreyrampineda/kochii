@@ -5,7 +5,6 @@ import { catchError } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators, } from '@angular/forms';
 
 import { InventoryService } from 'src/app/services/inventory.service';
-import { GroupsService } from 'src/app/services/groups.service';
 import { Item } from 'src/app/interfaces/item';
 import { MessageService } from 'src/app/services/message.service';
 
@@ -31,7 +30,6 @@ export class ItemAddComponent implements OnInit {
     private router: Router,
     private inventoryService: InventoryService,
     private messageService: MessageService,
-    private groupsService: GroupsService,
     private formBuilder: FormBuilder
   ) {
 
@@ -67,7 +65,7 @@ export class ItemAddComponent implements OnInit {
 
     // Stop here if any form is invalid.
     if (this.checkIfInvalid()) {
-      this.notify('Forms are invalid');
+      this.messageService.notify('Forms are invalid');
       return;
     }
 
@@ -88,7 +86,7 @@ export class ItemAddComponent implements OnInit {
     );
 
     if (hasDuplicate) {
-      this.notify('Duplicates found');
+      this.messageService.notify('Duplicates found');
       return;
     }
 
@@ -102,7 +100,7 @@ export class ItemAddComponent implements OnInit {
           return acc;
         }, 0);
         const total = observablesGroup.length;
-        this.notify(`${successful}/${total} items were successfully added.`);
+        this.messageService.notify(`${successful}/${total} items were successfully added.`);
       },
       error: err => {
         // forkJoin handle error
@@ -114,7 +112,7 @@ export class ItemAddComponent implements OnInit {
   }
 
   getGroups(): void {
-    this.groupsService.getGroups().subscribe({
+    this.inventoryService.getGroups().subscribe({
       next: response => {
         this.groups = response;
       },
@@ -207,9 +205,5 @@ export class ItemAddComponent implements OnInit {
   /** Getter for the selected form's name */
   get selectedFormName(): string {
     return this.itemAddForm[this.selectedFormIdx].value.name;
-  }
-
-  private notify(message: string) {
-    this.messageService.notify(message);
   }
 }
