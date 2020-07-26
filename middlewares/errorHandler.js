@@ -12,7 +12,7 @@ module.exports = async (ctx, next) => {
             switch (ctx.accepts('html', 'json')) {
                 case 'html':
                     ctx.type = 'html';
-                    await ctx.render('pagenotfound');
+                    await ctx.render('pages/pagenotfound');
                     break;
                 case 'json':
                     ctx.body = {

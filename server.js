@@ -40,7 +40,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 render(app, {
     root: path.join(__dirname, 'views'),
-    layout: 'template',
+    layout: 'layouts/template',
     viewExt: 'html',
     cache: false,
     debug: true
