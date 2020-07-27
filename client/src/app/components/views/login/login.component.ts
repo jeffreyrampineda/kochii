@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { environment } from 'src/environments/environment';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 
 // -------------------------------------------------------------
@@ -12,6 +12,8 @@ import { AuthenticationService } from 'src/app/services/authentication.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  imgLogo = `${environment.assets_endpoint}assets/kochii-logo.png`;
   loginForm: FormGroup;
   loading = false;
   error = {

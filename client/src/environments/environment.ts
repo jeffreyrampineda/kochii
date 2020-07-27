@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   socket_endpoint: 'http://localhost:3001',
+  assets_endpoint: 'http://localhost:3001/',
 };
 
 /*

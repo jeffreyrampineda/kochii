@@ -3,6 +3,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { SocketioService } from 'src/app/services/socketio.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'kochii-navigation',
@@ -14,6 +15,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   private unsub = new Subject<void>();
 
+  imgBanner = `${environment.assets_endpoint}assets/kochii-banner.png`;
   showNotification: boolean;
   notifications: string[] = [];
 
