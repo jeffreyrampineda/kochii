@@ -251,29 +251,26 @@
 
             <!--Heading-->
             <h2 class="mb-5 font-weight-bold text-center">Contact</h2>
-            <h2 class="mb-5 font-weight-bold text-center">Get a hold of us. We’re always happy to talk!</h2>
+            <h3 class="mb-5 text-center">Get a hold of us. We’re always happy to talk!</h3>
 
             <!--Form contact-->
-            <form class="p-5 grey-text">
+            <form class="p-5 grey-text" action="mailto:kochii.inventory.app@gmail.com?subject=Kochii Contact"
+                method="post" enctype="text/plain">
                 <div class="md-form form-sm"> <i class="fas fa-user prefix"></i>
-                    <input type="text" id="form3" class="form-control form-control-sm">
-                    <label for="form3">Your name</label>
+                    <input type="text" name="name" id="name" class="form-control form-control-sm">
+                    <label for="name">Name</label>
                 </div>
                 <div class="md-form form-sm"> <i class="fas fa-envelope prefix"></i>
-                    <input type="text" id="form2" class="form-control form-control-sm">
-                    <label for="form2">Your email</label>
-                </div>
-                <div class="md-form form-sm"> <i class="fas fa-tag prefix"></i>
-                    <input type="text" id="form32" class="form-control form-control-sm">
-                    <label for="form34">Subject</label>
+                    <input type="text" name="email" id="email" class="form-control form-control-sm">
+                    <label for="email">Email</label>
                 </div>
                 <div class="md-form form-sm"> <i class="fas fa-pencil-alt prefix"></i>
-                    <textarea type="text" id="form8" class="md-textarea form-control form-control-sm"
-                        rows="10"></textarea>
-                    <label for="form8">Your message</label>
+                    <textarea type="text" name="message" id="message" class="md-textarea form-control form-control-sm"
+                        rows="10" style="resize: none;"></textarea>
+                    <label for="message">Message</label>
                 </div>
                 <div class="text-center mt-4">
-                    <button class="btn blue-gradient" style="border-radius: 10em;">Send <i
+                    <button type="submit" class="btn blue-gradient" style="border-radius: 10em;">Send<i
                             class="far fa-paper-planeml-1"></i></button>
                 </div>
             </form>
