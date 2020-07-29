@@ -10,6 +10,7 @@ async function init(user, inventory_id) {
             items: [{
                 name: "Sample",
                 quantity: 1,
+                cost: 0,
             }]
         });
 
@@ -58,7 +59,7 @@ async function searchItemByName(user, name) {
     }
 }
 
-async function createItem(user, name, quantity, addedDate, expirationDate, group) {
+async function createItem(user, name, quantity, cost, addedDate, expirationDate, group) {
     try {
         const g = await Inventory.findOne({
             owner: user._id,
@@ -69,7 +70,7 @@ async function createItem(user, name, quantity, addedDate, expirationDate, group
             const h = g.items.find(it => (new Date(it.expirationDate)).toDateString() == (new Date(expirationDate).toDateString()))
 
             if (h) {
-                return await updateItem(user, String(h._id), name, quantity, (new Date(addedDate).toDateString()), (new Date(expirationDate).toDateString()), group, 'inc');
+                return await updateItem(user, String(h._id), name, quantity, cost, (new Date(addedDate).toDateString()), (new Date(expirationDate).toDateString()), group, 'inc');
             }
         }
 
@@ -81,6 +82,7 @@ async function createItem(user, name, quantity, addedDate, expirationDate, group
                         $each: [{
                             name,
                             quantity,
+                            cost,
                             addedDate,
                             expirationDate,
                             group
@@ -109,11 +111,12 @@ async function createItem(user, name, quantity, addedDate, expirationDate, group
     }
 }
 
-async function updateItem(user, _id, name, quantity, addedDate, expirationDate, group, option) {
+async function updateItem(user, _id, name, quantity, cost, addedDate, expirationDate, group, option) {
     try {
         let itemData = {
             $set: {
                 "items.$.name": name,
+                "items.$.cost": cost,
                 "items.$.addedDate": addedDate,
                 "items.$.expirationDate": expirationDate,
                 "items.$.group": group

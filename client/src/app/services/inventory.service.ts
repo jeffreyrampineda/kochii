@@ -224,6 +224,7 @@ export class InventoryService {
 
       ite.name = item.name;
       ite.quantity = item.quantity;
+      ite.cost = item.cost;
       ite.addedDate = item.addedDate;
       ite.expirationDate = item.expirationDate;
       ite.group = item.group;

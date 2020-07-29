@@ -163,6 +163,7 @@ export class ItemAddComponent implements OnInit {
       ]],
       cost: ['0.00', [
         Validators.min(0),
+        Validators.max(999),
         Validators.required
       ]],
       quantity: ['1', [

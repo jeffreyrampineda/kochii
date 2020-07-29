@@ -58,6 +58,8 @@
               <input matInput formControlName="cost" type="text" placeholder="Ex. 0.20" />
               <mat-error *ngIf="f.cost.errors">
                 <div *ngIf="f.cost.errors.required">Cost is required</div>
+                <div *ngIf="f.cost.errors.min">Minimum cost is 0</div>
+                <div *ngIf="f.cost.errors.max">Maximum cost is 999</div>
               </mat-error>
             </mat-form-field>
           </div>
