@@ -9,7 +9,7 @@
     "dev-server": "nodemon index.js",
     "dev-client": "cd client && npm run dev",
     "build-client": "cd client && npm run build",
-    "test": "jest --watchAll --silent",
+    "test": "jest --silent --forceExit --detectOpenHandles --maxWorkers=10",
     "postinstall": "cd client && npm install && npm run build"
   },
   "keywords": [],
