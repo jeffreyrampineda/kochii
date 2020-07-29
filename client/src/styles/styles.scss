@@ -19,12 +19,9 @@ table {
     flex: 1 1 auto;
 }
 
-.k-button-blue {
+.k-button-primary {
     background-color: $kochii-primary-color;
-    font-weight: 400;
     color: white;
-    text-align: center;
-    text-transform: uppercase;
 }
 
 /* Used for item-add/inventory */
