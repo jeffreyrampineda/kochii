@@ -42,11 +42,16 @@
     "validator": "^13.0.0"
   },
   "devDependencies": {
+    "@shelf/jest-mongodb": "^1.2.1",
     "jest": "^26.0.1",
     "nodemon": "^2.0.3",
     "supertest": "^4.0.2"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "modulePathIgnorePatterns": [
+      "client"
+    ],
+    "preset": "@shelf/jest-mongodb"
   }
 }
