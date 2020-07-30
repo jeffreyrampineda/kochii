@@ -49,6 +49,20 @@ export class UpdateDialogComponent {
     );
   }
 
+  /**
+   * Update the item with the same name and expirationDate,
+   * If no item is found, create new item.
+   * @param item - The item to be upserted.
+   */
+  createItem(newItem: Item): Observable<any> {
+    return this.inventoryService.createItem(newItem).pipe(
+      catchError((error: any): Observable<any> => {
+        // Return undefined to complete forkJoin.
+        return of(undefined);
+      }),
+    );
+  }
+
   /** Loops through data.items and update each item individually. */
   onSubmit() {
     if (this.loading) {
@@ -58,11 +72,19 @@ export class UpdateDialogComponent {
 
     const observablesGroup = [];
 
-    this.data.items.forEach(
-      item => {
-        observablesGroup.push(this.updateItem(item));
-      }
-    );
+    if (this.data.isAdding) {
+      this.data.items.forEach(
+        item => {
+          observablesGroup.push(this.createItem(item));
+        }
+      );
+    } else {
+      this.data.items.forEach(
+        item => {
+          observablesGroup.push(this.updateItem(item));
+        }
+      );
+    }
 
     forkJoin(observablesGroup).subscribe({
       next: response => {

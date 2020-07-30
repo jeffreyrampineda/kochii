@@ -270,13 +270,19 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
     /** Opens the update dialog. */
     openUpdateDialog(title: string, description: string): void {
+        // Stop here if any form is invalid.
+        if (this.checkIfInvalid()) {
+            this.messageService.notify('Forms are invalid');
+            return;
+        }
+
         const dialogRef = this.dialog.open(UpdateDialogComponent, {
             width: '400px',
             data: {
                 title: 'Confirmation: ' + title,
                 description: description,
                 items: Object.values(this.itemUpdateForm).map<FormGroup[]>((form: FormGroup) => form.value),
-                canConfirm: !this.checkIfInvalid(),
+                isAdding: false,
                 option: this.option
             }
         });
