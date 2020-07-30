@@ -36,6 +36,23 @@ async function getItems(user) {
     }
 }
 
+/**
+ * Get all items added between the given date belonging to the specified user.
+ * @param { object } user 
+ * @param { date } startDate 
+ * @param { date } endDate 
+ */
+async function getItemsAddedBetween(user, startDate, endDate) {
+    try {
+        startDate = new Date(startDate).setHours(0, 0, 0);
+        endDate = new Date(endDate).setHours(23, 59, 59)
+        const itemsDoc = await Inventory.findOne({ owner: user._id }, 'items');
+        return itemsDoc.items.filter(item => item.addedDate >= startDate && item.addedDate <= endDate);
+    } catch (error) {
+        throw (error);
+    }
+}
+
 async function getItemsByNames(user, refined) {
     try {
         const i = await Inventory.findOne({ owner: user._id }, 'items');
@@ -214,6 +231,7 @@ async function deleteItemById(_id, user) {
 module.exports = {
     init,
     getItems,
+    getItemsAddedBetween,
     getItemsByNames,
     searchItemByName,
     createItem,

@@ -32,7 +32,7 @@
     <div class="col-xl-3 col-md-6 mb-r">
 
       <!--Card-->
-      <kochii-gauge-card icon="payment" title="WEEKLY $ SPENT" description="Worse than last week (75%)">
+      <kochii-gauge-card icon="payment" title="WEEKLY $ SPENT" [value]="weeklySpent | currency" description="Worse than last week (75%)">
       </kochii-gauge-card>
       <!--/.Card-->
 
@@ -116,7 +116,7 @@
 
         <!--Card content-->
         <h5><strong>History</strong></h5>
-        <div [hidden]="isHistoryEmpty || loadingHistory">
+        <div [hidden]="history.data.length === 0 || loadingHistory">
           <table mat-table [dataSource]="history">
 
             <!-- Date Column -->

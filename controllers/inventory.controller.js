@@ -37,6 +37,20 @@ router.get('/search/:name', async (ctx) => {
     }
 });
 
+router.get('/between', async (ctx) => {
+    try {
+        const { errors, startDate, endDate } = Validate.getAddedBetween(ctx.query);
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
+
+        ctx.body = await InventoryService.getItemsAddedBetween(ctx.state.user, startDate, endDate);
+    } catch (error) {
+        ctx.throw(500, error);
+    }
+})
+
 /**
  * GET /api/inventory/names?names=names
  * Get all items within the specified names list from the database.

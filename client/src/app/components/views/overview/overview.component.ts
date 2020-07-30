@@ -23,13 +23,13 @@ export class OverviewComponent implements OnInit {
   today: Date = new Date();
   numberOfExpired: number = 0;
   rawHistoryData = [];
-  isHistoryEmpty = true;
   itemTotal = 0;
   loadingInventory = false;
   loadingHistory = false;
+  weeklySpent = 0;
 
-  curr = new Date();
-  first: number;
+  firstWeekDay;
+  lastWeekDay;
 
   displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
   history: MatTableDataSource<History>;
@@ -38,10 +38,14 @@ export class OverviewComponent implements OnInit {
     private historyService: HistoryService,
     private inventoryService: InventoryService
   ) {
+    const curr = new Date();
+    curr.setHours(0, 0, 0, 0);
+    const first = curr.getDate() - curr.getDay();
+
     this.start.setDate(this.start.getDate() - 6);
     this.start.setHours(0, 0, 0, 0);
-    this.curr.setHours(0, 0, 0, 0);
-    this.first = this.curr.getDate() - this.curr.getDay();
+    this.firstWeekDay = new Date(curr.setDate(first));
+    this.lastWeekDay = new Date(curr.setDate(curr.getDate() + 6));
   }
 
   ngOnInit() {
@@ -49,6 +53,8 @@ export class OverviewComponent implements OnInit {
 
     this.getHistoryData();
     this.getInventory();
+
+    this.getItemsAddedThisWeek();
   }
 
   getInventory(): void {
@@ -70,7 +76,6 @@ export class OverviewComponent implements OnInit {
       },
       complete: () => {
         this.loadingInventory = false;
-        
       }
     })
   }
@@ -79,7 +84,6 @@ export class OverviewComponent implements OnInit {
     this.loadingHistory = true;
     this.historyService.getAllFromPastDays(this.fromDay).subscribe({
       next: response => {
-        this.isHistoryEmpty = response.length === 0;
         this.history.data = response.slice(0, 4);
         this.rawHistoryData = response;
       },
@@ -183,8 +187,8 @@ export class OverviewComponent implements OnInit {
               }
             },
             stacked: true,
-            gridLines : {
-                display : false
+            gridLines: {
+              display: false
             }
           }],
           yAxes: [{
@@ -296,11 +300,8 @@ export class OverviewComponent implements OnInit {
   quantityRemovedThisWeek(): number {
     let totalRemoved = 0;
 
-    let firstWeekDay = new Date(this.curr.setDate(this.first));
-    let lastWeekDay = new Date(this.curr.setDate(this.curr.getDate() + 6));
-
     this.rawHistoryData.forEach(h => {
-      if ((new Date(h.addedDate)) >= firstWeekDay && (new Date(h.addedDate)) <= lastWeekDay) {
+      if ((new Date(h.addedDate)) >= this.firstWeekDay && (new Date(h.addedDate)) <= this.lastWeekDay) {
         if (h.quantity < 0) {
           totalRemoved += h.quantity;
         }
@@ -309,11 +310,11 @@ export class OverviewComponent implements OnInit {
     return Math.abs(totalRemoved);
   }
 
-  get firstWeekDayString(): string {
-    return (new Date(this.curr.setDate(this.first))).toDateString();
-  }
-
-  get lastWeekDayString(): string {
-    return (new Date(this.curr.setDate(this.curr.getDate() + 6))).toDateString();
+  getItemsAddedThisWeek() {
+    this.inventoryService.getItemsAddedBetween(this.firstWeekDay, this.lastWeekDay).subscribe(
+      result => {
+        this.weeklySpent = result.reduce((acc, curr) => acc += (curr.cost * curr.quantity ), 0);
+      }
+    );
   }
 }

@@ -197,10 +197,28 @@ async function del(params, user) {
     return { errors, _id };
 }
 
+function getAddedBetween(query) { 
+    let { startDate = "", endDate = "" } = query;
+    let errors = {};
+
+    // startDate validation
+    if (Validator.toDate(startDate) === null) {
+        errors.startDate = "Start date is invalid";
+    }
+
+    // endDate validation
+    if (Validator.toDate(endDate) === null) {
+        errors.endDate = "End date is invalid";
+    }
+
+    return { errors, startDate, endDate };
+}
+
 module.exports = {
     searchByName,
     getByNames,
     create,
     update,
     del,
+    getAddedBetween,
 };

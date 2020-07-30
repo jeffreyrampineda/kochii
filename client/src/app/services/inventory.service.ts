@@ -104,6 +104,20 @@ export class InventoryService {
       );
   }
 
+  getItemsAddedBetween(startDate, endDate): Observable<Item[]> {
+    this.log(`fetched items added between=${startDate}, ${endDate}`)
+    const url = `${this.inventoryUrl}/between`;
+    const options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      params: {
+        startDate,
+        endDate
+      }
+    };
+
+    return this.http.get<Item[]>(url, options);
+  }
+
   /**
    * Add the specified item.
    * @param item - The item to be added.
