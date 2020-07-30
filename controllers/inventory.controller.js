@@ -72,6 +72,21 @@ router.get('/names', async (ctx) => {
 });
 
 /**
+ * GET /api/inventory/:_id
+ * Get all item from the database by _id.
+ * @response { JSON, error? } Item objects if successful otherwise, an error.
+ */
+router.get('/:_id', async (ctx) => {
+    try {
+        const { _id } = ctx.params;
+
+        ctx.body = await InventoryService.getItemById(ctx.state.user, _id);
+    } catch (error) {
+        ctx.throw(500, error);
+    }
+});
+
+/**
  * POST /api/inventory
  * Creates a new item.
  * @requires { body } name, quantity, cost, addedDate, expirationDate, group

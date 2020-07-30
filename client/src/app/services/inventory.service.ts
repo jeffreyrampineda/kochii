@@ -84,6 +84,13 @@ export class InventoryService {
     });
   }
 
+  getItemById(id: string): Observable<Item> {
+    this.log(`fetched item /w id=${id}`);
+    const url = `${this.inventoryUrl}/${id}`;
+
+    return this.http.get<Item>(url);
+  }
+
   /**
    * Get all items with the name in the specified array.
    * @param names - The array of names to get.

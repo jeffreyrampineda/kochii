@@ -36,6 +36,16 @@ async function getItems(user) {
     }
 }
 
+async function getItemById(user, _id) {
+    try {
+        const i = await Inventory.findOne({ owner: user._id }, 'items');
+
+        return i.items.find(item => item._id == _id);
+    } catch (error) {
+        throw (error);
+    }
+}
+
 /**
  * Get all items added between the given date belonging to the specified user.
  * @param { object } user 
@@ -231,6 +241,7 @@ async function deleteItemById(_id, user) {
 module.exports = {
     init,
     getItems,
+    getItemById,
     getItemsAddedBetween,
     getItemsByNames,
     searchItemByName,
