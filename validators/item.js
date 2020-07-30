@@ -72,8 +72,8 @@ async function create(body, user) {
         errors.cost = "Cost is required";
     } else if (isNaN(cost)) {
         errors.cost = "Cost must be a number";
-    } else if (cost < 1 || cost > 999) {
-        errors.cost = "Cost must be between 1 and 999";
+    } else if (cost < 0 || cost > 999) {
+        errors.cost = "Cost must be between 0 and 999";
     }
 
     // AddedDate validation
@@ -144,8 +144,8 @@ async function update(body, params, user) {
         errors.cost = "Cost is required";
     } else if (isNaN(cost)) {
         errors.cost = "Cost must be a number";
-    } else if (cost < 1 || cost > 999) {
-        errors.cost = "Cost must be between 1 and 999";
+    } else if (cost < 0 || cost > 999) {
+        errors.cost = "Cost must be between 0 and 999";
     }
 
     // AddedDate validation
