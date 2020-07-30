@@ -126,7 +126,7 @@ export class ItemEditComponent implements OnInit {
         Validators.max(999),
         Validators.required
       ]],
-      quantity: [item.quantity || 0, [
+      quantity: [item.quantity || 1, [
         Validators.min(1),
         Validators.max(999),
         Validators.required

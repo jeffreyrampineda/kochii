@@ -32,6 +32,7 @@ import { InventoryComponent } from './components/views/inventory/inventory.compo
 import { OverviewComponent } from './components/views/overview/overview.component';
 import { SettingsComponent } from './components/views/settings/settings.component';
 import { ItemAddComponent } from './components/views/item-add/item-add.component';
+import { ItemUpdateComponent } from './components/views/item-update/item-update.component';
 
 // Components - shared
 import { UpdateDialogComponent } from './components/shared/update-dialog/update-dialog.component';
@@ -64,6 +65,7 @@ import { ItemEditComponent } from './components/shared/item-edit/item-edit.compo
     PresentationContainerComponent,
     GaugeCardComponent,
     ItemEditComponent,
+    ItemUpdateComponent,
   ],
   imports: [
     BrowserModule,
