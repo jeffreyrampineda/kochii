@@ -14,8 +14,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs'; 
 
 // -------------------------------------------------------------
 
@@ -35,8 +35,8 @@ const matModules = [
   MatSortModule,
   MatSnackBarModule,
   MatSelectModule,
-  MatAutocompleteModule,
   MatIconModule,
+  MatTabsModule,
 ];
 
 @NgModule({

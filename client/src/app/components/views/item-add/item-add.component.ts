@@ -18,13 +18,9 @@ import { MessageService } from 'src/app/services/message.service';
 export class ItemAddComponent implements OnInit {
 
   dateToday = new Date();
-  existingItems: Item[];
-  searchTerm = new Subject<string>();
   itemAddForm: FormGroup[] = [];
   groups: string[];
   placeholderImage = 'app/assets/image-placeholder.png';
-  selectedGroup = "Default";
-  selectedFormIdx = 0;
 
   constructor(
     private router: Router,
@@ -32,27 +28,13 @@ export class ItemAddComponent implements OnInit {
     private messageService: MessageService,
     private formBuilder: FormBuilder
   ) {
-
     // Time is removed.
     this.dateToday.setHours(0, 0, 0, 0);
-
-    this.inventoryService.search(this.searchTerm).subscribe({
-      next: response => {
-        this.existingItems = response;
-      },
-      error: err => {
-        // Error
-      },
-      complete: () => {
-        // TODO - stop loading.
-      }
-    });
   }
 
   // -------------------------------------------------------------
 
   ngOnInit() {
-    this.selectedGroup = this.inventoryService.selectedGroup === "" ? "Default" : this.inventoryService.selectedGroup;
     this.addMoreInput();
     this.getGroups();
   }
@@ -173,17 +155,8 @@ export class ItemAddComponent implements OnInit {
       ]],
       addedDate: [this.dateToday, Validators.required],
       expirationDate: [this.dateToday, Validators.required],
-      group: [this.selectedGroup, Validators.required],
+      group: [this.inventoryService.selectedGroup === "" ? "Default" : this.inventoryService.selectedGroup, Validators.required],
     }));
-    this.selectedFormIdx = this.itemAddForm.length - 1;
-  }
-
-  selectForm($event): void {
-    if ($event.value == -1) {
-      this.addMoreInput();
-    } else {
-      this.selectedFormIdx = $event.value;
-    }
   }
 
   /**
@@ -191,20 +164,9 @@ export class ItemAddComponent implements OnInit {
    * @param idx - the index to be removed.
    */
   removeInput(idx: number): void {
-    this.selectedFormIdx = idx - 1;
     this.itemAddForm.splice(idx, 1);
   }
 
-  /** Navigate the browser back to dashboard/inventory */
-  back(): void {
-    this.router.navigate(['app/inventory']);
-  }
-
   /** Convenience getter for easy access to form fields. */
-  get f() { return this.itemAddForm[this.selectedFormIdx].controls; }
-
-  /** Getter for the selected form's name */
-  get selectedFormName(): string {
-    return this.itemAddForm[this.selectedFormIdx].value.name;
-  }
+  get f() { return this.itemAddForm[0].controls; }
 }
