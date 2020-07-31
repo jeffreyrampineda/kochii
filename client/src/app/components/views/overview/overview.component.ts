@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'chart.js';
+import { LinearTickOptions } from 'chart.js';
 import { HistoryService } from 'src/app/services/history.service';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { MatTableDataSource } from '@angular/material/table';
@@ -111,8 +112,8 @@ export class OverviewComponent implements OnInit {
         backgroundColor: [
           'rgba(170, 175, 190, 0.7)',
           'rgba(45, 185, 140, 0.7)',
-          'rgba(90, 155, 255, 0.7)',
-          'rgba(255, 95, 130, 0.7)'
+          'rgba(139, 184, 255)',
+          'rgba(255, 142, 167)'
         ],
       }],
     };
@@ -125,20 +126,19 @@ export class OverviewComponent implements OnInit {
         legend: {
           position: 'bottom',
           labels: {
-            filter: (item) => item.text !== ''
+            usePointStyle: true,
+            filter: (item) => item.text !== '',
           }
         },
+        cutoutPercentage: 75,
         tooltips: {
           filter: (item, chart) => chart.labels[item.index] !== ''
         },
         animation: {
           duration: 0
         },
-        hover: {
-          animationDuration: 0
-        },
         responsiveAnimationDuration: 0,
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
       }
     });
   }
@@ -154,16 +154,14 @@ export class OverviewComponent implements OnInit {
         fill: false
       }, {
         type: 'bar',
-        label: 'Added',
-        data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'add')),
-        backgroundColor: 'rgba(90, 155, 255, 0.7)',
-        borderWidth: 2,
-      }, {
-        type: 'bar',
         label: 'Removed',
         data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'delete')),
-        backgroundColor: 'rgba(255, 95, 130, 0.7)',
-        borderWidth: 2,
+        backgroundColor: 'rgba(255, 142, 167)',
+      }, {
+        type: 'bar',
+        label: 'Added',
+        data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'add')),
+        backgroundColor: 'rgba(139, 184, 255)',
       }]
     };
 
@@ -172,6 +170,10 @@ export class OverviewComponent implements OnInit {
       data: data,
       options: {
         responsive: true,
+        tooltips: {
+          mode: 'index',
+          intersect: false
+        },
         scales: {
           xAxes: [{
             type: "time",
@@ -197,18 +199,16 @@ export class OverviewComponent implements OnInit {
               labelString: 'Quantity'
             },
             ticks: {
-              /* precision: 0, // type error */
+              precision: 0,
               beginAtZero: true
-            }
+            } as LinearTickOptions
           }]
         },
         animation: {
           duration: 0
         },
-        hover: {
-          animationDuration: 0
-        },
         responsiveAnimationDuration: 0,
+        maintainAspectRatio: false,
       },
     });
   }
@@ -256,9 +256,9 @@ export class OverviewComponent implements OnInit {
       const dateString = (new Date(curr.addedDate)).toDateString();
 
       if (acc[dateString] != undefined) {
-        acc[dateString] += curr.quantity;
+        acc[dateString] += Math.abs(curr.quantity);
       } else {
-        acc[dateString] = curr.quantity;
+        acc[dateString] = Math.abs(curr.quantity);
       }
       return acc;
     }, {});
