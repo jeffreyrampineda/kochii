@@ -1,5 +1,16 @@
 const Inventory = require('../models/inventory');
+const ObjectId = require('mongoose').Types.ObjectId;
 const createHistory = require('../services/history.service').create;
+
+const itemProject = {
+    '_id': '$items._id',
+    'name': '$items.name',
+    'cost': '$items.cost',
+    'quantity': '$items.quantity',
+    'addedDate': '$items.addedDate',
+    'expirationDate': '$items.expirationDate',
+    'group': '$items.group'
+};
 
 async function init(user, inventory_id) {
     try {
@@ -28,9 +39,13 @@ async function init(user, inventory_id) {
  */
 async function getItems(user) {
     try {
-        const i = await Inventory.findOne({ owner: user._id }, 'items');
+        const items = await Inventory.aggregate([
+            { $match: { owner: user._id } },
+            { $unwind: '$items' },
+            { $project: itemProject }
+        ]);
 
-        return i.items;
+        return items;
     } catch (error) {
         throw (error);
     }
@@ -38,9 +53,14 @@ async function getItems(user) {
 
 async function getItemById(user, _id) {
     try {
-        const i = await Inventory.findOne({ owner: user._id }, 'items');
+        const item = await Inventory.aggregate([
+            { $match: { owner: user._id } },
+            { $unwind: '$items' },
+            { $match: { 'items._id': ObjectId(_id) }},
+            { $project: itemProject }
+        ]);
 
-        return i.items.find(item => item._id == _id);
+        return item[0];
     } catch (error) {
         throw (error);
     }
@@ -54,10 +74,19 @@ async function getItemById(user, _id) {
  */
 async function getItemsAddedBetween(user, startDate, endDate) {
     try {
-        startDate = new Date(startDate).setHours(0, 0, 0);
-        endDate = new Date(endDate).setHours(23, 59, 59)
-        const itemsDoc = await Inventory.findOne({ owner: user._id }, 'items');
-        return itemsDoc.items.filter(item => item.addedDate >= startDate && item.addedDate <= endDate);
+        startDate = new Date(startDate);
+        startDate.setHours(0, 0, 0);
+        endDate = new Date(endDate);
+        endDate.setHours(23, 59, 59);
+
+        const items = await Inventory.aggregate([
+            { $match: { owner: user._id } },
+            { $unwind: '$items' },
+            { $match: { 'items.addedDate': { $gte: startDate, $lte: endDate }}},
+            { $project: itemProject }
+        ]);
+
+        return items;
     } catch (error) {
         throw (error);
     }
