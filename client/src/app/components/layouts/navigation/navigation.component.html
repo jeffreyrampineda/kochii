@@ -42,7 +42,7 @@
         <span class="k-spacer"></span>
         <div class="notification-wrapper">
             <button mat-icon-button aria-label="notifications" (click)="openNotification(!showNotification)">
-                <mat-icon>notifications</mat-icon>
+                <mat-icon [matBadge]="notifications.length" matBadgeColor="warn">notifications</mat-icon>
             </button>
             <div *ngIf="showNotification" class="notification-content mat-elevation-z1">
                 <div class="notification-header">
