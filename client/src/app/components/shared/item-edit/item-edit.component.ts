@@ -58,23 +58,6 @@ export class ItemEditComponent implements OnInit {
     }
 
     if (this.isAdding) {
-      let duplicates = {};
-      let hasDuplicate = false;
-
-      this.itemEditForms.forEach(
-        form => {
-          if (duplicates[form.value.name + form.value.expirationDate.toDateString()]) {
-            hasDuplicate = true;
-          }
-          duplicates[form.value.name + form.value.expirationDate.toDateString()] = true;
-        }
-      );
-
-      if (hasDuplicate) {
-        this.messageService.notify('Duplicates found');
-        return;
-      }
-
       this.openEditDialog('Adding', 'Adding new items');
     } else {
       this.openEditDialog('Update', 'New values for the updated items');

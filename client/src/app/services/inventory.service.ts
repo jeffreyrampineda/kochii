@@ -115,7 +115,7 @@ export class InventoryService {
     this.log(`fetched items added between=${startDate}, ${endDate}`)
     const url = `${this.inventoryUrl}/between`;
     const options = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      headers: httpOptions.headers,
       params: {
         startDate,
         endDate
@@ -173,7 +173,7 @@ export class InventoryService {
   }
 
   /** Returns the size of the specified group. */
-  getGroupSize(group: string = "") {
+  getGroupSize(group: string = ""): number {
     if (group != "") {
       return this.localInv.filter(i => i.group === group).length;
     }

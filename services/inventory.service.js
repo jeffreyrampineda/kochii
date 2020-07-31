@@ -117,19 +117,6 @@ async function searchItemByName(user, name) {
 
 async function createItem(user, name, quantity, cost, addedDate, expirationDate, group) {
     try {
-        const g = await Inventory.findOne({
-            owner: user._id,
-            "items.name": name,
-        }, 'items');
-
-        if (g && g.items) {
-            const h = g.items.find(it => (new Date(it.expirationDate)).toDateString() == (new Date(expirationDate).toDateString()))
-
-            if (h) {
-                return await updateItem(user, String(h._id), name, quantity, cost, (new Date(addedDate).toDateString()), (new Date(expirationDate).toDateString()), group, 'inc');
-            }
-        }
-
         const result = await Inventory.findOneAndUpdate(
             { owner: user._id },
             {
