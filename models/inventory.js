@@ -34,6 +34,12 @@ const inventorySchema = new Schema({
             min: [1, "Minimum quantity is 1"],
             max: [999, "Maximum quantity is 999"]
         },
+        cost: {
+            type: Number,
+            required: [true, "Cost is requred"],
+            min: [0, "Minimum cost is 0"],
+            max: [999, "Maximum cost is 999"]
+        },
         addedDate: {
             type: Date,
             default: Date.now

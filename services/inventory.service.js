@@ -1,5 +1,16 @@
 const Inventory = require('../models/inventory');
+const ObjectId = require('mongoose').Types.ObjectId;
 const createHistory = require('../services/history.service').create;
+
+const itemProject = {
+    '_id': '$items._id',
+    'name': '$items.name',
+    'cost': '$items.cost',
+    'quantity': '$items.quantity',
+    'addedDate': '$items.addedDate',
+    'expirationDate': '$items.expirationDate',
+    'group': '$items.group'
+};
 
 async function init(user, inventory_id) {
     try {
@@ -10,6 +21,7 @@ async function init(user, inventory_id) {
             items: [{
                 name: "Sample",
                 quantity: 1,
+                cost: 0,
             }]
         });
 
@@ -27,9 +39,54 @@ async function init(user, inventory_id) {
  */
 async function getItems(user) {
     try {
-        const i = await Inventory.findOne({ owner: user._id }, 'items');
+        const items = await Inventory.aggregate([
+            { $match: { owner: user._id } },
+            { $unwind: '$items' },
+            { $project: itemProject }
+        ]);
 
-        return i.items;
+        return items;
+    } catch (error) {
+        throw (error);
+    }
+}
+
+async function getItemById(user, _id) {
+    try {
+        const item = await Inventory.aggregate([
+            { $match: { owner: user._id } },
+            { $unwind: '$items' },
+            { $match: { 'items._id': ObjectId(_id) }},
+            { $project: itemProject }
+        ]);
+
+        return item[0];
+    } catch (error) {
+        throw (error);
+    }
+}
+
+/**
+ * Get all items added between the given date belonging to the specified user.
+ * @param { object } user 
+ * @param { date } startDate 
+ * @param { date } endDate 
+ */
+async function getItemsAddedBetween(user, startDate, endDate) {
+    try {
+        startDate = new Date(startDate);
+        startDate.setHours(0, 0, 0);
+        endDate = new Date(endDate);
+        endDate.setHours(23, 59, 59);
+
+        const items = await Inventory.aggregate([
+            { $match: { owner: user._id } },
+            { $unwind: '$items' },
+            { $match: { 'items.addedDate': { $gte: startDate, $lte: endDate }}},
+            { $project: itemProject }
+        ]);
+
+        return items;
     } catch (error) {
         throw (error);
     }
@@ -58,21 +115,8 @@ async function searchItemByName(user, name) {
     }
 }
 
-async function createItem(user, name, quantity, addedDate, expirationDate, group) {
+async function createItem(user, name, quantity, cost, addedDate, expirationDate, group) {
     try {
-        const g = await Inventory.findOne({
-            owner: user._id,
-            "items.name": name,
-        }, 'items');
-
-        if (g && g.items) {
-            const h = g.items.find(it => (new Date(it.expirationDate)).toDateString() == (new Date(expirationDate).toDateString()))
-
-            if (h) {
-                return await updateItem(user, String(h._id), name, quantity, (new Date(addedDate).toDateString()), (new Date(expirationDate).toDateString()), group, 'inc');
-            }
-        }
-
         const result = await Inventory.findOneAndUpdate(
             { owner: user._id },
             {
@@ -81,6 +125,7 @@ async function createItem(user, name, quantity, addedDate, expirationDate, group
                         $each: [{
                             name,
                             quantity,
+                            cost,
                             addedDate,
                             expirationDate,
                             group
@@ -109,11 +154,12 @@ async function createItem(user, name, quantity, addedDate, expirationDate, group
     }
 }
 
-async function updateItem(user, _id, name, quantity, addedDate, expirationDate, group, option) {
+async function updateItem(user, _id, name, quantity, cost, addedDate, expirationDate, group, option) {
     try {
         let itemData = {
             $set: {
                 "items.$.name": name,
+                "items.$.cost": cost,
                 "items.$.addedDate": addedDate,
                 "items.$.expirationDate": expirationDate,
                 "items.$.group": group
@@ -211,6 +257,8 @@ async function deleteItemById(_id, user) {
 module.exports = {
     init,
     getItems,
+    getItemById,
+    getItemsAddedBetween,
     getItemsByNames,
     searchItemByName,
     createItem,

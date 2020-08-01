@@ -1,5 +1,9 @@
 .mat-column-select {
-    width: 100px;
+    width: 75px;
+}
+
+.mat-column-edit {
+  width: 50px;
 }
 
 .label {

@@ -37,6 +37,20 @@ router.get('/search/:name', async (ctx) => {
     }
 });
 
+router.get('/between', async (ctx) => {
+    try {
+        const { errors, startDate, endDate } = Validate.getAddedBetween(ctx.query);
+
+        if (Object.keys(errors).length) {
+            ctx.throw(400, JSON.stringify(errors));
+        }
+
+        ctx.body = await InventoryService.getItemsAddedBetween(ctx.state.user, startDate, endDate);
+    } catch (error) {
+        ctx.throw(500, error);
+    }
+})
+
 /**
  * GET /api/inventory/names?names=names
  * Get all items within the specified names list from the database.
@@ -58,20 +72,35 @@ router.get('/names', async (ctx) => {
 });
 
 /**
+ * GET /api/inventory/:_id
+ * Get all item from the database by _id.
+ * @response { JSON, error? } Item objects if successful otherwise, an error.
+ */
+router.get('/:_id', async (ctx) => {
+    try {
+        const { _id } = ctx.params;
+
+        ctx.body = await InventoryService.getItemById(ctx.state.user, _id);
+    } catch (error) {
+        ctx.throw(500, error);
+    }
+});
+
+/**
  * POST /api/inventory
  * Creates a new item.
- * @requires { body } name, quantity, addedDate, expirationDate, group
+ * @requires { body } name, quantity, cost, addedDate, expirationDate, group
  * @response { JSON, error? } new item if successful otherwise, an error.
  */
 router.post('/', async (ctx) => {
     try {
-        const { errors, name, quantity, addedDate, expirationDate, group } = await Validate.create(ctx.request.body, ctx.state.user);
+        const { errors, name, quantity, cost, addedDate, expirationDate, group } = await Validate.create(ctx.request.body, ctx.state.user);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        ctx.body = await InventoryService.createItem(ctx.state.user, name, quantity, addedDate, expirationDate, group);
+        ctx.body = await InventoryService.createItem(ctx.state.user, name, quantity, cost, addedDate, expirationDate, group);
     } catch (error) {
         ctx.throw(400, error);
     }
@@ -81,18 +110,18 @@ router.post('/', async (ctx) => {
  * PUT /api/inventory/:option
  * Updates an existing item. If the updated item's quantity is less than or 
  * equal to 0, delete the item.
- * @requires { body, params } _id, name, quantity, addedDate, expirationDate, group, option
+ * @requires { body, params } _id, name, quantity, cost, addedDate, expirationDate, group, option
  * @response { JSON, error? } updated item if successful otherwise, an error.
  */
 router.put('/:option', async (ctx) => {
     try {
-        const { errors, _id, name, quantity, addedDate, expirationDate, group, option } = await Validate.update(ctx.request.body, ctx.params, ctx.state.user);
+        const { errors, _id, name, quantity, cost, addedDate, expirationDate, group, option } = await Validate.update(ctx.request.body, ctx.params, ctx.state.user);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        ctx.body = await InventoryService.updateItem(ctx.state.user, _id, name, quantity, addedDate, expirationDate, group, option);
+        ctx.body = await InventoryService.updateItem(ctx.state.user, _id, name, quantity, cost, addedDate, expirationDate, group, option);
 
     } catch (error) {
         ctx.throw(400, error);

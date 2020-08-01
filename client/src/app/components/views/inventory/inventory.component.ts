@@ -28,7 +28,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    displayedColumns: string[] = ['name', 'quantity', 'group', 'addedDate', 'expirationDate'];
+    displayedColumns: string[] = ['name', 'quantity', 'group', 'addedDate', 'expirationDate', 'edit'];
     inventory: MatTableDataSource<Item>;
     showSelect: Boolean = false;
     selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
@@ -126,11 +126,13 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.showSelect = !this.showSelect;
         if (this.showSelect) {
             this.displayedColumns.unshift('select');
+            this.displayedColumns.pop();
             this.option = option;
         } else {
             this.itemUpdateForm = {};
             this.selection.clear();
             this.displayedColumns.shift();
+            this.displayedColumns.push('edit');
             this.option = '';
         }
     }
@@ -156,6 +158,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
                 Validators.pattern("^[a-zA-Z0-9 _-]*$"),
                 Validators.required
             ]],
+            cost: item.cost,
             quantity: [item.quantity, [
                 Validators.min(1),
                 Validators.max(max),
@@ -270,13 +273,19 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
     /** Opens the update dialog. */
     openUpdateDialog(title: string, description: string): void {
+        // Stop here if any form is invalid.
+        if (this.checkIfInvalid()) {
+            this.messageService.notify('Forms are invalid');
+            return;
+        }
+
         const dialogRef = this.dialog.open(UpdateDialogComponent, {
             width: '400px',
             data: {
                 title: 'Confirmation: ' + title,
                 description: description,
                 items: Object.values(this.itemUpdateForm).map<FormGroup[]>((form: FormGroup) => form.value),
-                canConfirm: !this.checkIfInvalid(),
+                isAdding: false,
                 option: this.option
             }
         });

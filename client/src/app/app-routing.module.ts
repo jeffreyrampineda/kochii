@@ -13,6 +13,7 @@ import { InventoryComponent } from './components/views/inventory/inventory.compo
 import { OverviewComponent } from './components/views/overview/overview.component';
 import { SettingsComponent } from './components/views/settings/settings.component';
 import { ItemAddComponent } from './components/views/item-add/item-add.component';
+import { ItemUpdateComponent } from './components/views/item-update/item-update.component';
 
 // -------------------------------------------------------------
 
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'overview', component: OverviewComponent },
       { path: 'inventory', component: InventoryComponent },
       { path: 'inventory/add', component: ItemAddComponent },
+      { path: 'inventory/:id', component: ItemUpdateComponent },
       { path: 'groceries', component: GroceriesComponent },
       { path: 'settings', component: SettingsComponent },
       { path: 'history', component: HistoryComponent },

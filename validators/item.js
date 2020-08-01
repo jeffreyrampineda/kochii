@@ -41,11 +41,10 @@ async function getByNames(query) {
  * @return { JSON } object containing all errors and data.
  */
 async function create(body, user) {
-    let { name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = body;
+    let { name = "", quantity = 0, cost = 0, addedDate = "", expirationDate = "", group = "" } = body;
     let errors = {};
 
     name = Validator.escape(name);
-    //quantity = Validator.escape(quantity);
     addedDate = Validator.escape(addedDate);
     expirationDate = Validator.escape(expirationDate);
     group = Validator.escape(group);
@@ -68,6 +67,15 @@ async function create(body, user) {
         errors.quantity = "Quantity must be between 1 and 999";
     }
 
+    // Cost validation
+    if (cost === undefined) {
+        errors.cost = "Cost is required";
+    } else if (isNaN(cost)) {
+        errors.cost = "Cost must be a number";
+    } else if (cost < 0 || cost > 999) {
+        errors.cost = "Cost must be between 0 and 999";
+    }
+
     // AddedDate validation
     if (Validator.toDate(addedDate) === null) {
         errors.addedDate = "Added date is invalid";
@@ -84,7 +92,7 @@ async function create(body, user) {
     } else if (!await Inventory.exists({ owner: user._id, groups: group })) {
         errors.group = "Group does not exist";
     }
-    return { errors, name, quantity, addedDate, expirationDate, group };
+    return { errors, name, quantity, cost, addedDate, expirationDate, group };
 }
 
 /**
@@ -95,13 +103,12 @@ async function create(body, user) {
  * @return { JSON } object containing all errors and data.
  */
 async function update(body, params, user) {
-    let { _id = "", name = "", quantity = 0, addedDate = "", expirationDate = "", group = "" } = body;
+    let { _id = "", name = "", quantity = 0, cost = 0, addedDate = "", expirationDate = "", group = "" } = body;
     let { option = "" } = params;
     let errors = {};
 
     _id = Validator.escape(_id);
     name = Validator.escape(name);
-    //quantity = Validator.escape(quantity);
     addedDate = Validator.escape(addedDate);
     expirationDate = Validator.escape(expirationDate);
     group = Validator.escape(group);
@@ -132,6 +139,15 @@ async function update(body, params, user) {
         errors.quantity = "Quantity must be between 1 and 999";
     }
 
+    // Cost validation
+    if (cost === undefined) {
+        errors.cost = "Cost is required";
+    } else if (isNaN(cost)) {
+        errors.cost = "Cost must be a number";
+    } else if (cost < 0 || cost > 999) {
+        errors.cost = "Cost must be between 0 and 999";
+    }
+
     // AddedDate validation
     if (Validator.toDate(addedDate) === null) {
         errors.addedDate = "Added date is invalid";
@@ -157,7 +173,7 @@ async function update(body, params, user) {
     if (!["inc", "set"].includes(option)) {
         errors.option = "Option is invalid";
     }
-    return { errors, _id, name, quantity, addedDate, expirationDate, group, option };
+    return { errors, _id, name, quantity, cost, addedDate, expirationDate, group, option };
 }
 
 /**
@@ -181,10 +197,28 @@ async function del(params, user) {
     return { errors, _id };
 }
 
+function getAddedBetween(query) { 
+    let { startDate = "", endDate = "" } = query;
+    let errors = {};
+
+    // startDate validation
+    if (Validator.toDate(startDate) === null) {
+        errors.startDate = "Start date is invalid";
+    }
+
+    // endDate validation
+    if (Validator.toDate(endDate) === null) {
+        errors.endDate = "End date is invalid";
+    }
+
+    return { errors, startDate, endDate };
+}
+
 module.exports = {
     searchByName,
     getByNames,
     create,
     update,
     del,
+    getAddedBetween,
 };

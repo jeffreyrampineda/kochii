@@ -84,6 +84,13 @@ export class InventoryService {
     });
   }
 
+  getItemById(id: string): Observable<Item> {
+    this.log(`fetched item /w id=${id}`);
+    const url = `${this.inventoryUrl}/${id}`;
+
+    return this.http.get<Item>(url);
+  }
+
   /**
    * Get all items with the name in the specified array.
    * @param names - The array of names to get.
@@ -102,6 +109,20 @@ export class InventoryService {
       .pipe(
         tap(_ => this.log(`fetched items names=${names}`)),
       );
+  }
+
+  getItemsAddedBetween(startDate, endDate): Observable<Item[]> {
+    this.log(`fetched items added between=${startDate}, ${endDate}`)
+    const url = `${this.inventoryUrl}/between`;
+    const options = {
+      headers: httpOptions.headers,
+      params: {
+        startDate,
+        endDate
+      }
+    };
+
+    return this.http.get<Item[]>(url, options);
   }
 
   /**
@@ -152,7 +173,7 @@ export class InventoryService {
   }
 
   /** Returns the size of the specified group. */
-  getGroupSize(group: string = "") {
+  getGroupSize(group: string = ""): number {
     if (group != "") {
       return this.localInv.filter(i => i.group === group).length;
     }
@@ -224,6 +245,7 @@ export class InventoryService {
 
       ite.name = item.name;
       ite.quantity = item.quantity;
+      ite.cost = item.cost;
       ite.addedDate = item.addedDate;
       ite.expirationDate = item.expirationDate;
       ite.group = item.group;

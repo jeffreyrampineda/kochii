@@ -1,175 +1,159 @@
 <h5><strong>Overview</strong></h5>
 
-<!-- Gauges -->
-<section>
+<!--Gauges-->
+<div class="row">
 
-  <!--Grid row-->
-  <div class="row">
+  <!--Inventory size grid column-->
+  <div class="col-xl-3 col-md-6 mb-r">
 
-    <!--Inventory size grid column-->
-    <div class="col-xl-3 col-md-6 mb-r">
-
-      <!--Card-->
-      <kochii-gauge-card icon="pie_chart" title="INVENTORY SIZE" [value]="itemTotal"
-        description="Better than last week (25%)"></kochii-gauge-card>
-      <!--/.Card-->
-
-    </div>
-    <!--Grid column-->
-
-    <!--Expired items grid column-->
-    <div class="col-xl-3 col-md-6 mb-r">
-
-      <!--Card-->
-      <kochii-gauge-card icon="delete_sweep" color="warn" title="EXPIRED ITEMS" [value]="numberOfExpired"
-        description="Worse than last week (25%)"></kochii-gauge-card>
-      <!--/.Card-->
-
-    </div>
-    <!--Grid column-->
-
-    <!--Weekly spent grid column-->
-    <div class="col-xl-3 col-md-6 mb-r">
-
-      <!--Card-->
-      <kochii-gauge-card icon="payment" title="WEEKLY $ SPENT" description="Worse than last week (75%)">
-      </kochii-gauge-card>
-      <!--/.Card-->
-
-    </div>
-    <!--Grid column-->
-
-    <!--Weekly removed grid column-->
-    <div class="col-xl-3 col-md-6 mb-r">
-
-      <!--Card-->
-      <kochii-gauge-card icon="show_chart" title="ITEMS REMOVED" [value]="quantityRemovedThisWeek()"
-        description="Better than last week (25%)"></kochii-gauge-card>
-      <!--/.Card-->
-
-    </div>
-    <!--Grid column-->
+    <!--Card-->
+    <kochii-gauge-card icon="pie_chart" title="INVENTORY SIZE" [value]="itemTotal"></kochii-gauge-card>
+    <!--/.Card-->
 
   </div>
-  <!--Grid row-->
+  <!--/.Inventory size grid column-->
 
-</section>
+  <!--Expired items grid column-->
+  <div class="col-xl-3 col-md-6 mb-r">
 
-<!-- Charts -->
-<section class="mt-5">
-
-  <!--Grid row-->
-  <div class="row">
-
-    <!--Bar chart grid column-->
-    <div class="col-md-8 mb-r">
-
-      <!--Card-->
-      <div class="mat-elevation-z2 p-3">
-
-        <!--Card content-->
-        <h5><strong>Inventory</strong></h5>
-        <div class="mt-3" style="display: block">
-          <canvas id="chart-line">{{ lineChart }}</canvas>
-        </div>
-
-      </div>
-      <!--/.Card-->
-
-    </div>
-    <!--Grid column-->
-
-    <!--Doughnut chart grid column-->
-    <div class="col-md-4 mb-r">
-
-      <!--Card-->
-      <div class="mat-elevation-z2 p-3">
-
-        <!--Card content-->
-        <h5><strong>Status</strong></h5>
-        <div class="mt-3" style="display: block;">
-          <canvas id="chart-doughnut">{{ doughnutChart }}</canvas>
-        </div>
-
-      </div>
-      <!--/.Card-->
-
-    </div>
-    <!--Grid column-->
+    <!--Card-->
+    <kochii-gauge-card icon="delete_sweep" color="warn" title="EXPIRED ITEMS" [value]="numberOfExpired">
+    </kochii-gauge-card>
+    <!--/.Card-->
 
   </div>
-  <!--Grid row-->
+  <!--/.Expired items grid column-->
 
-</section>
+  <!--Weekly spent grid column-->
+  <div class="col-xl-3 col-md-6 mb-r">
 
-<!-- History -->
-<section class="mt-5">
-
-  <!--Grid row-->
-  <div class="row">
-
-    <!--History grid column-->
-    <div class="col-md-12 mb-4">
-
-      <!--Card-->
-      <div class="mat-elevation-z2 p-3">
-
-        <!--Card content-->
-        <h5><strong>History</strong></h5>
-        <div [hidden]="isHistoryEmpty || loadingHistory">
-          <table mat-table [dataSource]="history">
-
-            <!-- Date Column -->
-            <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef>Recorded at</th>
-              <td mat-cell *matCellDef="let row">{{ row.created_at | date }}</td>
-            </ng-container>
-
-            <!-- method Column -->
-            <ng-container matColumnDef="method">
-              <th mat-header-cell *matHeaderCellDef>Method</th>
-              <td mat-cell *matCellDef="let row">{{ row.method }}</td>
-            </ng-container>
-
-            <!-- target Column -->
-            <ng-container matColumnDef="target">
-              <th mat-header-cell *matHeaderCellDef>Target</th>
-              <td mat-cell *matCellDef="let row">{{ row.target }}</td>
-            </ng-container>
-
-            <!-- quantity Column -->
-            <ng-container matColumnDef="quantity">
-              <th mat-header-cell *matHeaderCellDef>Quantity</th>
-              <td mat-cell *matCellDef="let row">{{ row.quantity }}</td>
-            </ng-container>
-
-            <!-- addedDate Column -->
-            <ng-container matColumnDef="addedDate">
-              <th mat-header-cell *matHeaderCellDef>Added</th>
-              <td mat-cell *matCellDef="let row">{{ row.addedDate | date }}</td>
-            </ng-container>
-
-            <!-- description Column -->
-            <ng-container matColumnDef="description">
-              <th mat-header-cell *matHeaderCellDef>Description</th>
-              <td mat-cell *matCellDef="let row">{{ row.description }}</td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-
-          <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
-        </div>
-        <!--/.Card content-->
-
-      </div>
-      <!--/.Card-->
-
-    </div>
-    <!--Grid column-->
+    <!--Card-->
+    <kochii-gauge-card icon="payment" title="WEEKLY $ SPENT" [value]="weeklySpent | currency">
+    </kochii-gauge-card>
+    <!--/.Card-->
 
   </div>
-  <!--Grid row-->
+  <!--/.Weekly spent grid column-->
 
-</section>
+  <!--Weekly removed grid column-->
+  <div class="col-xl-3 col-md-6 mb-r">
+
+    <!--Card-->
+    <kochii-gauge-card icon="show_chart" title="ITEMS REMOVED" [value]="quantityRemovedThisWeek()">
+    </kochii-gauge-card>
+    <!--/.Card-->
+
+  </div>
+  <!--/.Weekly removed grid column-->
+
+</div>
+<!--/.Gauges-->
+
+<!--Charts-->
+<div class="row">
+
+  <!--Bar chart grid column-->
+  <div class="col-md-8 mb-r">
+
+    <!--Card-->
+    <div class="mat-elevation-z2 p-3 mt-4">
+
+      <!--Card content-->
+      <h5><strong>Inventory</strong></h5>
+      <div class="mt-3 pb-3 px-2" style="display: block; height: 40vh;">
+        <canvas id="chart-line">{{ lineChart }}</canvas>
+      </div>
+
+    </div>
+    <!--/.Card-->
+
+  </div>
+  <!--/.Bar chart grid column-->
+
+  <!--Doughnut chart grid column-->
+  <div class="col-md-4 mb-r">
+
+    <!--Card-->
+    <div class="mat-elevation-z2 p-3 mt-4">
+
+      <!--Card content-->
+      <h5><strong>Status</strong></h5>
+      <div class="mt-3 pb-3 px-2" style="display: block; height: 40vh;">
+        <canvas id="chart-doughnut">{{ doughnutChart }}</canvas>
+      </div>
+
+    </div>
+    <!--/.Card-->
+
+  </div>
+  <!--/.Doughnut chart grid column-->
+
+</div>
+<!--/.Charts-->
+
+<!--History-->
+<div class="row mt-4">
+
+  <!--History grid column-->
+  <div class="col-md-12 mb-4">
+
+    <!--Card-->
+    <div class="mat-elevation-z2 p-3">
+
+      <!--Card content-->
+      <h5><strong>History</strong></h5>
+      <div [hidden]="history.data.length === 0 || loadingHistory">
+        <table mat-table [dataSource]="history">
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Recorded at</th>
+            <td mat-cell *matCellDef="let row">{{ row.created_at | date }}</td>
+          </ng-container>
+
+          <!-- method Column -->
+          <ng-container matColumnDef="method">
+            <th mat-header-cell *matHeaderCellDef>Method</th>
+            <td mat-cell *matCellDef="let row">{{ row.method }}</td>
+          </ng-container>
+
+          <!-- target Column -->
+          <ng-container matColumnDef="target">
+            <th mat-header-cell *matHeaderCellDef>Target</th>
+            <td mat-cell *matCellDef="let row">{{ row.target }}</td>
+          </ng-container>
+
+          <!-- quantity Column -->
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef>Quantity</th>
+            <td mat-cell *matCellDef="let row">{{ row.quantity }}</td>
+          </ng-container>
+
+          <!-- addedDate Column -->
+          <ng-container matColumnDef="addedDate">
+            <th mat-header-cell *matHeaderCellDef>Added</th>
+            <td mat-cell *matCellDef="let row">{{ row.addedDate | date }}</td>
+          </ng-container>
+
+          <!-- description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let row">{{ row.description }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+      <!--/.Card content-->
+
+    </div>
+    <!--/.Card-->
+
+  </div>
+  <!--/.History grid column-->
+
+</div>
+<!--/.History-->
