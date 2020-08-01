@@ -71,3 +71,20 @@ describe('/public route', () => {
         expect(response.text).toContain('Authentication failed');
     });
 });
+
+describe('/ route', () => {
+    test('GET / should have title, meta description, meta og', async () => {
+        const response = await request(server).get('/');
+
+        expect(response.status).toEqual(200);
+        expect(response.text).toContain('<title>Personal Inventory | Kochii</title>');
+        expect(response.text).toContain('<meta name="description" content="');
+        expect(response.text).toContain('<meta property="og:title" content="');
+        expect(response.text).toContain('<meta property="og:type" content="');
+        expect(response.text).toContain('<meta property="og:url" content="');
+        expect(response.text).toContain('<meta property="og:image" content="');
+        expect(response.text).toContain('<meta property="og:image:width" content="');
+        expect(response.text).toContain('<meta property="og:image:height" content="');
+        expect(response.text).toContain('<meta property="og:description" content="');
+    });
+});

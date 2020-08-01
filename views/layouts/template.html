@@ -1,11 +1,26 @@
 <!doctype html>
 <html lang="en">
+
 <head>
+  <title><%= title %></title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="<%= description %>" />
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Kochii</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+  <!-- Open Graph data -->
+  <meta property="og:title" content="<%= title %>" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.kochii.app/" />
+  <meta property="og:image" content="https://i.ibb.co/tBGVzKG/kochii-mockup.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:description" content="<%= description %>" />
+  <meta property="og:site_name" content="Kochii" />
+
   <base href="/">
+
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
@@ -18,11 +33,12 @@
   <!-- Your custom styles (optional) -->
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
 
   <%- include('navbar.html') %>
 
-  <!-- Start your project here-->  
+  <!-- Start your project here-->
   <%- body %>
   <!-- End your project here-->
 
@@ -37,4 +53,5 @@
   <!-- MDB core JavaScript -->
   <script type="text/javascript" src="js/mdb.min.js"></script>
 </body>
+
 </html>

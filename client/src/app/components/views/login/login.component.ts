@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
 import { AuthenticationService } from 'src/app/services/authentication.service';
+import { Title } from '@angular/platform-browser';
 
 // -------------------------------------------------------------
 
@@ -23,12 +24,15 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private authenticationService: AuthenticationService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private titleService: Title,
   ) { }
 
   // -------------------------------------------------------------
 
   ngOnInit() {
+    this.titleService.setTitle('Login | Kochii');
+
     // If currently logged in, redirect to dashboard.
     if (this.authenticationService.isLoggedIn) {
       this.router.navigate(['/app']);
