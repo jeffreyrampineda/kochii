@@ -4,6 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { SocketioService } from 'src/app/services/socketio.service';
 import { environment } from 'src/environments/environment';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'kochii-navigation',
@@ -21,12 +22,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private socketioService: SocketioService
+    private socketioService: SocketioService,
+    private titleService: Title,
   ) {
 
   }
 
   ngOnInit() {
+    this.setTitle('Overview');
     this.socketioService.initSocket();
 
     this.authenticationService.currentUser.pipe(takeUntil(this.unsub)).subscribe({
@@ -56,5 +59,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
   logout(): void {
     this.socketioService.disconnect();
     this.authenticationService.logout();
+  }
+
+  setTitle(title: string): void {
+    this.titleService.setTitle(title + ' | Kochii');
   }
 }

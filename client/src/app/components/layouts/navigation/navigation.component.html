@@ -7,24 +7,24 @@
             <a href="/"><img alt="kochii-banner" [src]="imgBanner"></a>
         </div>
         <div class="k-sidebar-items">
-            <button mat-button class="k-item" routerLink="overview" routerLinkActive="active">
+            <button mat-button class="k-item" routerLink="overview" routerLinkActive="active" (click)="setTitle('Overview')">
                 <mat-icon aria-hidden="false" aria-label="dashboard">dashboard</mat-icon>
                 Overview
             </button>
-            <button mat-button class="k-item" routerLink="inventory" routerLinkActive="active">
+            <button mat-button class="k-item" routerLink="inventory" routerLinkActive="active" (click)="setTitle('Inventory')">
                 <mat-icon aria-hidden="false" aria-label="list_alt">list_alt</mat-icon>
                 Inventory
             </button>
-            <button mat-button class="k-item" routerLink="groceries" routerLinkActive="active">
+            <button mat-button class="k-item" routerLink="groceries" routerLinkActive="active" (click)="setTitle('Grocery')">
                 <mat-icon aria-hidden="false" aria-label="shopping_basket">shopping_basket</mat-icon>
                 Groceries
             </button>
-            <button mat-button class="k-item" routerLink="history" routerLinkActive="active">
+            <button mat-button class="k-item" routerLink="history" routerLinkActive="active" (click)="setTitle('History')">
                 <mat-icon aria-hidden="false" aria-label="restore">restore</mat-icon>
                 History
             </button>
             <div class="k-navigation-bottom">
-                <button mat-button class="k-item" routerLink="settings" routerLinkActive="active">
+                <button mat-button class="k-item" routerLink="settings" routerLinkActive="active" (click)="setTitle('Settings')">
                     <mat-icon aria-hidden="false" aria-label="settings">settings</mat-icon>
                     Settings
                 </button>
