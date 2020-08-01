@@ -1,6 +1,8 @@
 {
-  "name": "client",
-  "version": "0.0.0",
+  "name": "kochii-client",
+  "description": "Kochii's frontend",
+  "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "dev": "ng serve",

@@ -1,9 +1,14 @@
 # Kochii
 
-Assists and encourages individuals for a manageable meal preparation lifestyle.
-Project link: https://kochii.herokuapp.com/
+[![Build Status](https://travis-ci.com/jeffreyrampineda/kochii.svg?branch=master)](https://travis-ci.com/jeffreyrampineda/kochii)
 
-![Kochii preview](https://i.ibb.co/yRy1265/kochii-overview.png)
+Assists and encourages individuals for a manageable meal preparation lifestyle
+
+<p align="center">
+    <a href="https://kochii.app">
+        <img width="600" height="400" src="https://i.ibb.co/tBGVzKG/kochii-mockup.jpg" alt="Kochii preview">
+    </a>
+</p>
 
 ## Installation
 
