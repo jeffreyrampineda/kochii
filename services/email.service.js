@@ -15,7 +15,7 @@ function sendVerificationEmail(to, verificationToken) {
         const msg = {
             to,
             from: {
-                email: 'kochii.inventory.app@gmail.com',
+                email: 'no-reply@kochii.app',
                 name: "Kochii"
             },
             subject: 'Confirm your email',
@@ -37,9 +37,9 @@ function sendContactEmail(from_email, from_name, body) {
     const clean_body = Validator.escape(body);
 
     const msg = {
-        to: 'kochii.inventory.app@gmail.com',
+        to: 'contact@kochii.app',
         from: {
-            email: 'kochii.inventory.app@gmail.com',
+            email: 'contact@kochii.app',
             name: "Kochii"
         },
         subject: `Contact from: ${clean_email} `,
