@@ -1,5 +1,6 @@
 const Router = require('koa-router');
 const sendfile = require('koa-sendfile');
+const sendContactEmail = require('../services/email.service').sendContactEmail;
 
 const router = new Router();
 
@@ -26,6 +27,20 @@ router.get('legal/privacy-policy', async (ctx) => {
         title: 'Privacy | Kochii',
         description: 'Read about what Kochii does to respect and protect your privacy.'
     });
+});
+
+router.post('contact', async (ctx) => {
+    try {
+        const { from_email, from_name, body } = ctx.request.body;
+        sendContactEmail(from_email, from_name, body);
+
+        await ctx.render('pages/contactsuccess', {
+            title: 'Contact successful | Kochii',
+            description: 'Your message was sent successfully.'
+        });
+    } catch (error) {
+        ctx.throw(400, error);
+    }
 });
 
 module.exports = router.routes();

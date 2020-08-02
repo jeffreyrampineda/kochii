@@ -2,12 +2,13 @@ const sgMail = require('@sendgrid/mail');
 const ejs = require('ejs');
 const path = require('path');
 const HOST_URL = process.env.HOST_URL;
+const Validator = require('validator');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 function sendVerificationEmail(to, verificationToken) {
     const confirmationUrl = `${HOST_URL}/api/verification?token=${verificationToken}&email=${to}`;
-    
+
     ejs.renderFile(path.join(__dirname, 'email_template.html'), { confirmationUrl: confirmationUrl }, (err, html) => {
         if (err) throw err;
 
@@ -29,6 +30,29 @@ function sendVerificationEmail(to, verificationToken) {
     });
 }
 
+function sendContactEmail(from_email, from_name, body) {
+
+    const clean_email = Validator.escape(from_email);
+    const clean_name = Validator.escape(from_name);
+    const clean_body = Validator.escape(body);
+
+    const msg = {
+        to: 'kochii.inventory.app@gmail.com',
+        from: {
+            email: 'kochii.inventory.app@gmail.com',
+            name: "Kochii"
+        },
+        subject: `Contact from: ${clean_email} `,
+        text: `from: ${clean_name} <${clean_email}>\n\n${clean_body}`,
+    };
+    sgMail.send(msg, false, (error, result) => {
+        if (error) {
+            console.log(error);
+        }
+    });
+}
+
 module.exports = {
     sendVerificationEmail,
+    sendContactEmail,
 }
