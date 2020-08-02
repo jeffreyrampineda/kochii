@@ -34,37 +34,37 @@ describe('/api route', () => {
     });
 });
 
-describe('/public route', () => {
+describe('/api authentication route', () => {
     const correct_user = {
         username: "correct_username",
         password: "correct_password",
         email: "correct_email@correct.com"
     }
 
-    test('POST /public/register with correct data should give 202 status /w token', async () => {
+    test('POST /api/register with correct data should give 202 status /w token', async () => {
         const response = await request(server)
-            .post('/public/register')
+            .post('/api/register')
             .send(correct_user);
 
         expect(response.status).toEqual(202);
         expect(response.text).toContain('token');
     });
-    test('POST /public/login with correct data should give 202 status /w token', async () => {
+    test('POST /api/login with correct data should give 202 status /w token', async () => {
         const response = await request(server)
-            .post('/public/login')
+            .post('/api/login')
             .send(correct_user);
 
         expect(response.status).toEqual(202);
         expect(response.text).toContain('token');
     });
-    test('POST /public/login with incorrect auth should give 401 status', async () => {
+    test('POST /api/login with incorrect auth should give 401 status', async () => {
         const incorrect_user = {
             username: "incorrect_usename",
             password: "incorrect_password"
         }
 
         const response = await request(server)
-            .post('/public/login')
+            .post('/api/login')
             .send(incorrect_user);
 
         expect(response.status).toEqual(401);
