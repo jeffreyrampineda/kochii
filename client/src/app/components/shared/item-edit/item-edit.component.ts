@@ -129,7 +129,7 @@ export class ItemEditComponent implements OnInit {
   }
 
   /** Convenience getter for easy access to form fields. */
-  get f() { return this.itemEditForms[0].controls; }
+  f(idx: number) { return this.itemEditForms[idx].controls; }
 
   /** Opens the update dialog. */
   openEditDialog(title: string, description: string): void {
