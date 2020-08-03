@@ -9,7 +9,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 function sendVerificationEmail(to, verificationToken) {
     const confirmationUrl = `${HOST_URL}/api/verification?token=${verificationToken}&email=${to}`;
 
-    ejs.renderFile(path.join(__dirname, 'email_template.html'), { confirmationUrl: confirmationUrl }, (err, html) => {
+    ejs.renderFile(path.join(__dirname, '../views/layouts/email_template.html'), { confirmationUrl: confirmationUrl }, (err, html) => {
         if (err) throw err;
 
         const msg = {
