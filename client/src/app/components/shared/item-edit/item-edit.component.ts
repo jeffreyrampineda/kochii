@@ -19,6 +19,7 @@ export class ItemEditComponent implements OnInit {
   private dateToday = new Date();
   itemEditForms: FormGroup[] = [];
   groups: string[] = [];
+  firstFood = {};
 
   constructor(
     private dialog: MatDialog,
@@ -130,6 +131,12 @@ export class ItemEditComponent implements OnInit {
 
   /** Convenience getter for easy access to form fields. */
   f(idx: number) { return this.itemEditForms[idx].controls; }
+
+  checkNutrients(name: string): void {
+    this.inventoryService.getNutrients(name).subscribe(result => {
+      this.firstFood = result;
+    });
+  }
 
   /** Opens the update dialog. */
   openEditDialog(title: string, description: string): void {

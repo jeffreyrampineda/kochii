@@ -1,6 +1,7 @@
 const Router = require('koa-router');
 const InventoryService = require('../services/inventory.service');
 const Validate = require('../validators/item');
+const searchRawFood = require('../services/external_api.service').searchRawFood;
 
 const router = new Router();
 
@@ -66,6 +67,16 @@ router.get('/names', async (ctx) => {
         }
 
         ctx.body = InventoryService.getItemsByNames(ctx.state.user, refined);
+    } catch (error) {
+        ctx.throw(500, error);
+    }
+});
+
+router.get('/nutrition', async (ctx) => {
+    try {
+        const { query } = ctx.request.query;
+
+        ctx.body = await searchRawFood(query);
     } catch (error) {
         ctx.throw(500, error);
     }
