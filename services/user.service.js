@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const initInventory = require('./inventory.service').init;
 const initHistory = require('./history.service').init;
 const cryptoRandomString = require('crypto-random-string');
-const sendVerificationEmail = require('./email.service').sendVerificationEmail;
+const sendVerificationEmail = require('./external_api.service').sendVerificationEmail;
 
 async function init(username, password, email) {
     try {

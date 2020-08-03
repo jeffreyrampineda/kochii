@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const sendfile = require('koa-sendfile');
-const sendContactEmail = require('../services/email.service').sendContactEmail;
+const sendContactEmail = require('../services/external_api.service').sendContactEmail;
 
 const router = new Router();
 
