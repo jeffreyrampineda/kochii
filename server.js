@@ -64,7 +64,7 @@ require('./controllers').public(routerPublic);
 app.use(routerProtected.routes());
 app.use(routerPublic.routes());
 
-mongoose.connect(process.env.MONGODB_URI_development,
+mongoose.connect(process.env.MONGODB_URI,
     {
         useNewUrlParser: true,
         useUnifiedTopology: true,

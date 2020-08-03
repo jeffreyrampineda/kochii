@@ -18,15 +18,24 @@ Assists and encourages individuals for a manageable meal preparation lifestyle
 $ npm install
 ```
 
+## APIs Required
+
+You need the follow API keys:
+
+* Sendgrid - https://sendgrid.com/
+* FoodData Central (FDC) - https://fdc.nal.usda.gov/api-guide.html/
+
 ## Development
 
 Create .env file with the following:
 
-* MONGODB_URI_development=your_uri_string
+* MONGODB_URI=your_uri_string
 
 * SECRET_KEY=your_secret_key
 
 * SENDGRID_API_KEY=your_api_key
+
+* FDC_API_KEY=your_api_key
 
 * HOST_URL=http://localhost:3001
 
@@ -40,11 +49,13 @@ $ npm run dev
 
 Set the following environment variables:
 
-* MONGODB_URI_development=your_uri_string
+* MONGODB_URI=your_uri_string
 
 * SECRET_KEY=your_secret_key
 
 * SENDGRID_API_KEY=your_api_key
+
+* FDC_API_KEY=your_api_key
 
 * HOST_URL=your_host_url
 
