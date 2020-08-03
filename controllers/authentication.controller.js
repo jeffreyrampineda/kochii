@@ -5,7 +5,7 @@ const Validate = require('../validators/user');
 const router = new Router();
 
 /**
- * POST /public/login
+ * POST /api/login
  * Authenticates the user to the database.
  * @requires { body } username, password
  * @response { JSON, error? } jwt if successful otherwise, an error.
@@ -38,7 +38,7 @@ router.post('/login', async (ctx) => {
 });
 
 /**
- * POST /public/register
+ * POST /api/register
  * Registers the user to the database.
  * @requires { body } username, password, email
  * @response { JSON, error? } jwt if successful otherwise, an error.
@@ -69,7 +69,7 @@ router.post('/register', async (ctx) => {
 });
 
 /**
- * GET /public/verification?token=token&email=email
+ * GET /api/verification?token=token&email=email
  * Verifies the token and email.
  * @requires { query } token, email
  * @response { JSON, error? } the result.

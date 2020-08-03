@@ -9,7 +9,7 @@ import { MessageService } from './message.service';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
 
-    private authenticationUrl = '/public';
+    private authenticationUrl = '/api';
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 

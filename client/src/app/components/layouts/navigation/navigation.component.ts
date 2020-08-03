@@ -15,6 +15,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav', { static: true }) sidenav: ElementRef;
 
   private unsub = new Subject<void>();
+  mobileDisplaySidebar = false;
 
   imgBanner = `${environment.assets_endpoint}assets/kochii-banner.png`;
   showNotification: boolean;
@@ -63,5 +64,9 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   setTitle(title: string): void {
     this.titleService.setTitle(title + ' | Kochii');
+  }
+
+  toggleMobileDisplaySidebar(): void {
+    this.mobileDisplaySidebar = !this.mobileDisplaySidebar;
   }
 }

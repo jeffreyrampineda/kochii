@@ -105,7 +105,7 @@
                 <div class="col-lg-4 col-md-12 mb-4">
 
                     <div class="view overlay z-depth-1-half">
-                        <img src="assets/annie-spratt-f4gQ-dJ0yo8-unsplash.jpg" class="img-fluid">
+                        <img src="assets/annie-spratt-f4gQ-dJ0yo8-unsplash.jpg" class="img-fluid" loading="lazy">
                         <a href="#!">
                             <div class="mask rgba-white-slight"></div>
                         </a>
@@ -123,7 +123,8 @@
                 <div class="col-lg-4 col-md-6 mb-4">
 
                     <div class="view overlay z-depth-1-half">
-                        <img src="assets/boxed-water-is-better-6WrKKQcEnXk-unsplash.jpg" class="img-fluid">
+                        <img src="assets/boxed-water-is-better-6WrKKQcEnXk-unsplash.jpg" class="img-fluid"
+                            loading="lazy">
                         <a href="#!">
                             <div class="mask rgba-white-slight"></div>
                         </a>
@@ -140,7 +141,7 @@
                 <div class="col-lg-4 col-md-6 mb-4">
 
                     <div class="view overlay z-depth-1-half">
-                        <img src="assets/micheile-henderson-SoT4-mZhyhE-unsplash.jpg" class="img-fluid">
+                        <img src="assets/micheile-henderson-SoT4-mZhyhE-unsplash.jpg" class="img-fluid" loading="lazy">
                         <a href="#!">
                             <div class="mask rgba-white-slight"></div>
                         </a>
@@ -186,13 +187,13 @@
                             <!--First slide-->
                             <div class="carousel-item active">
                                 <img class="d-block w-100" src="assets/lyfe-fuel-4wtxPhvQZds-unsplash.jpg"
-                                    alt="First slide">
+                                    alt="First slide" loading="lazy">
                             </div>
                             <!--/.First slide-->
                             <!--Second slide-->
                             <div class="carousel-item">
                                 <img class="d-block w-100" src="assets/viacheslav-bublyk-6WXbPWhT8c8-unsplash.jpg"
-                                    alt="Second slide">
+                                    alt="Second slide" loading="lazy">
                             </div>
                             <!--/.Second slide-->
 
@@ -254,20 +255,19 @@
             <h3 class="mb-5 text-center">Get a hold of us. We’re always happy to talk!</h3>
 
             <!--Form contact-->
-            <form class="p-5 grey-text" action="mailto:kochii.inventory.app@gmail.com?subject=Kochii Contact"
-                method="post" enctype="text/plain">
+            <form class="p-5 grey-text" action="/contact" method="post">
                 <div class="md-form form-sm"> <i class="fas fa-user prefix"></i>
-                    <input type="text" name="name" id="name" class="form-control form-control-sm">
+                    <input type="text" name="from_name" id="name" class="form-control form-control-sm">
                     <label for="name">Name</label>
                 </div>
                 <div class="md-form form-sm"> <i class="fas fa-envelope prefix"></i>
-                    <input type="text" name="email" id="email" class="form-control form-control-sm">
+                    <input type="text" name="from_email" id="email" class="form-control form-control-sm">
                     <label for="email">Email</label>
                 </div>
                 <div class="md-form form-sm"> <i class="fas fa-pencil-alt prefix"></i>
-                    <textarea type="text" name="message" id="message" class="md-textarea form-control form-control-sm"
+                    <textarea type="text" name="body" id="body" class="md-textarea form-control form-control-sm"
                         rows="10" style="resize: none;"></textarea>
-                    <label for="message">Message</label>
+                    <label for="body">Message</label>
                 </div>
                 <div class="text-center mt-4">
                     <button type="submit" class="btn blue-gradient" style="border-radius: 10em;">Send<i

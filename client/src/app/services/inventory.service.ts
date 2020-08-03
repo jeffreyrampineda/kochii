@@ -172,6 +172,13 @@ export class InventoryService {
     return of(undefined);
   }
 
+  getNutrients(query: string): Observable<any[]>{
+    this.log('getting nutrients for: ' + query);
+    const url = `${this.inventoryUrl}/nutrition?query=${query}`;
+
+    return this.http.get<any[]>(url);
+  }
+
   /** Returns the size of the specified group. */
   getGroupSize(group: string = ""): number {
     if (group != "") {
