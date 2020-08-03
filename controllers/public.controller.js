@@ -15,6 +15,13 @@ router.get('/', async (ctx) => {
     });
 });
 
+router.get('about-us', async (ctx) => {
+    await ctx.render('pages/aboutus', {
+        title: 'About Us | Kochii',
+        description: 'About Us'
+    });
+});
+
 router.get('legal/terms-of-service', async (ctx) => {
     await ctx.render('pages/legal/termsofservice', {
         title: 'Legal Information | Kochii',

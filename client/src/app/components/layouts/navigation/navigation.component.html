@@ -4,7 +4,7 @@
     <!-- Sidebar -->
     <div class="sidebar-fixed position-fixed" [class.k-sidebar-display]="mobileDisplaySidebar">
         <div class="logo-wrapper">
-            <a *ngIf="!mobileDisplaySidebar; else viewCloseSidebar;" href="/"><img alt="kochii-banner" [src]="imgBanner"></a>
+            <a *ngIf="!mobileDisplaySidebar; else viewCloseSidebar;" href="/"><img alt="Kochii banner" [src]="imgBanner"></a>
             <ng-template #viewCloseSidebar>
                 <button mat-button (click)="toggleMobileDisplaySidebar()" style="color: white;">Close</button>
             </ng-template>
