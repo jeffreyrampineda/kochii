@@ -1,0 +1,20 @@
+html,
+body,
+header,
+#___gatsby,
+#gatsby-focus-wrapper,
+#intro {
+    height: 100%;
+}
+
+#intro {
+    background: url("../../static/jason-briscoe-GliaHAJ3_5A-unsplash.jpg")no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.navbar-brand img {
+    max-height: 24px;
+}

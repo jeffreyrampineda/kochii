@@ -9,6 +9,7 @@
     "dev:server": "nodemon index.js",
     "dev:client": "cd client && npm run dev",
     "build:client": "cd client && npm run build",
+    "build:site": "cd kochii-site && npm run build",
     "test": "jest --silent --forceExit --detectOpenHandles --maxWorkers=10",
     "postinstall": "cd client && npm install && npm run build"
   },
