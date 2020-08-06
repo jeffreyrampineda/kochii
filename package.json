@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "concurrently \"nodemon index.js\" \"cd client && npm run dev\"",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:app\"",
     "dev:server": "nodemon index.js",
-    "dev:client": "cd client && npm run dev",
-    "build:client": "cd client && npm run build",
+    "dev:app": "cd kochii-app && npm run dev",
+    "build:app": "cd kochii-app && npm run build",
     "build:site": "cd kochii-site && npm run build",
     "test": "jest --silent --forceExit --detectOpenHandles --maxWorkers=10",
-    "postinstall": "cd client && npm install && npm run build"
+    "postinstall": "cd kochii-site && npm install && npm run build && cd ../kochii-app && npm install && npm run build"
   },
   "keywords": [],
   "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",
@@ -52,7 +52,10 @@
   "jest": {
     "testEnvironment": "node",
     "modulePathIgnorePatterns": [
-      "client"
+      "kochii-app",
+      "kochii-site",
+      "public",
+      "node_modules"
     ],
     "preset": "@shelf/jest-mongodb"
   }

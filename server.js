@@ -57,7 +57,7 @@ app.use(passport.initialize());
 app.use(require('koa-static')(__dirname + '/public', {
     maxage: 365 * 24 * 60 * 60
 }));
-app.use(mount('/app', require('koa-static')(__dirname + '/client/dist')));
+app.use(mount('/app', require('koa-static')(__dirname + '/kochii-app/dist')));
 
 require('./controllers').protected(routerProtected, passport);
 require('./controllers').public(routerPublic);

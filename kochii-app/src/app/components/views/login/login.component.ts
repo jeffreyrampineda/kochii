@@ -8,19 +8,17 @@ import { Title } from '@angular/platform-browser';
 // -------------------------------------------------------------
 
 @Component({
-  selector: 'kochii-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  selector: 'kochii-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class RegisterComponent implements OnInit {
+export class LoginComponent implements OnInit {
 
-  imgLogo = `${environment.assets_endpoint}assets/kochii-logo.png`;
-  registerForm: FormGroup;
+  imgLogo = `${environment.assets_endpoint}kochii-logo.png`;
+  loginForm: FormGroup;
   loading = false;
   error = {
-    username: undefined,
-    password: undefined,
-    email: undefined
+    login: undefined
   };
 
   constructor(
@@ -32,23 +30,15 @@ export class RegisterComponent implements OnInit {
 
   // -------------------------------------------------------------
 
-  /** Validator for comparing password and passwordre */
-  checkPasswords(group: FormGroup) {
-    const password = group.controls.password.value;
-    const passwordre = group.controls.passwordre.value;
-
-    return password === passwordre ? null : { notSame: true };
-  }
-
   ngOnInit() {
-    this.titleService.setTitle('Register | Kochii');
+    this.titleService.setTitle('Login | Kochii');
 
     // If currently logged in, redirect to dashboard.
     if (this.authenticationService.isLoggedIn) {
       this.router.navigate(['/app']);
     }
 
-    this.registerForm = this.formBuilder.group({
+    this.loginForm = this.formBuilder.group({
       username: ['', [
         Validators.required,
         Validators.minLength(6),
@@ -60,19 +50,14 @@ export class RegisterComponent implements OnInit {
         Validators.minLength(6),
         Validators.maxLength(30),
       ]],
-      passwordre: [''],
-      email: ['', [
-        Validators.required,
-        Validators.email
-      ]]
-    }, { validator: this.checkPasswords });
+    });
   }
 
-  /** convenience getter for easy access to form fields */
-  get f() { return this.registerForm.controls; }
+  // convenience getter for easy access to form fields
+  get f() { return this.loginForm.controls; }
 
-  onSubmit(registerData) {
-    if (this.registerForm.invalid || this.loading) {
+  onSubmit(loginData) {
+    if (this.loginForm.invalid || this.loading) {
       console.log('cannot submit');
       return;
     }
@@ -80,14 +65,10 @@ export class RegisterComponent implements OnInit {
     console.log('submitted');
     this.loading = true;
     this.error = {
-      username: undefined,
-      password: undefined,
-      email: undefined
+      login: undefined
     };
 
-    const { username, password, email } = registerData;
-
-    this.authenticationService.register({ username, password, email }).subscribe({
+    this.authenticationService.login(loginData).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/app']);

@@ -1,6 +1,6 @@
 {
-  "name": "kochii-client",
-  "description": "Kochii's frontend",
+  "name": "kochii-app",
+  "description": "Kochii's core app",
   "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",
   "version": "0.0.1",
   "scripts": {

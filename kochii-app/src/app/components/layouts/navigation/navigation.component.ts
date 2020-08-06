@@ -17,7 +17,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private unsub = new Subject<void>();
   mobileDisplaySidebar = false;
 
-  imgBanner = `${environment.assets_endpoint}assets/kochii-banner.png`;
+  imgBanner = `${environment.assets_endpoint}kochii-banner.png`;
   showNotification: boolean;
   notifications: string[] = [];
 

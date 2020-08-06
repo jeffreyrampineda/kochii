@@ -5,7 +5,7 @@ const sendContactEmail = require('../services/external_api.service').sendContact
 const router = new Router();
 
 router.get(['login', 'register', 'app/*'], async (ctx) => {
-    await sendfile(ctx, __dirname + '/../client/dist/index.html');
+    await sendfile(ctx, __dirname + '/../kochii-app/dist/index.html');
 });
 
 router.get('/*', async (ctx) => {
