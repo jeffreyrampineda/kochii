@@ -1,6 +1,6 @@
 {
   "name": "kochii",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Assists and encourages individuals for a manageable meal preparation lifestyle",
   "main": "index.js",
   "scripts": {
