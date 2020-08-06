@@ -1,3 +1,5 @@
+const sendfile = require('koa-sendfile');
+
 module.exports = async (ctx, next) => {
     try {
         await next();
@@ -12,10 +14,7 @@ module.exports = async (ctx, next) => {
             switch (ctx.accepts('html', 'json')) {
                 case 'html':
                     ctx.type = 'html';
-                    await ctx.render('pages/pagenotfound', {
-                        title: 'Page Not Found | Kochii',
-                        description: 'Page Not Found'
-                    });
+                    await sendfile(ctx, __dirname + '/../public/404.html');
                     break;
                 case 'json':
                     ctx.body = {
