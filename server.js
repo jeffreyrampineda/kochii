@@ -10,9 +10,8 @@ const socket = require('socket.io');
 const socketioJwt = require('socketio-jwt');
 const { passport } = require('./passport');
 const helmet = require('koa-helmet');
-const path = require('path');
-const render = require('koa-ejs');
 const mount = require('koa-mount');
+/* require('kochii-website').generateStaticSite(); */
 
 // Create Koa Application
 const app = new Koa();
@@ -37,14 +36,6 @@ app.use(helmet.hsts({ maxAge: ninetyDaysInSeconds }));
 if (process.env.NODE_ENV !== 'production') {
     app.use(logger());
 }
-
-render(app, {
-    root: path.join(__dirname, 'views'),
-    layout: 'layouts/template',
-    viewExt: 'html',
-    cache: false,
-    debug: true
-});
 
 app.use(errorHandler);
 app.use(cors());

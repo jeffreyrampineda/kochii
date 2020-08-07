@@ -2,4 +2,13 @@
 /node_modules
 /*.env
 /dist
+
+# Optional npm cache directory
+.npm
+
+# gatsby files
+.cache/
+/public
+
+# jest-mongodb
 globalConfig.json
