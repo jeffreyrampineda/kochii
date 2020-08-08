@@ -1,8 +1,8 @@
-import React from "react"
+import React from "react";
 
-import Layout from "../components/Layout"
-import SEO from "../components/SEO"
-import Intro from "../components/Intro"
+import Layout from "../components/Layout";
+import SEO from "../components/SEO";
+import Intro from "../components/Intro";
 
 const IndexPage = () => (
   <Layout>
@@ -12,6 +12,6 @@ const IndexPage = () => (
     />
     <Intro />
   </Layout>
-)
+);
 
-export default IndexPage
+export default IndexPage;

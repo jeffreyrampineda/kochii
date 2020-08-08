@@ -1,8 +1,8 @@
-import React from "react"
+import React from "react";
 
-import Layout from "../components/Layout"
-import SEO from "../components/SEO"
-import AboutUs from "../components/AboutUs"
+import Layout from "../components/Layout";
+import SEO from "../components/SEO";
+import AboutUs from "../components/AboutUs";
 
 const AboutUsPage = () => (
   <Layout>
@@ -12,6 +12,6 @@ const AboutUsPage = () => (
     />
     <AboutUs />
   </Layout>
-)
+);
 
-export default AboutUsPage
+export default AboutUsPage;

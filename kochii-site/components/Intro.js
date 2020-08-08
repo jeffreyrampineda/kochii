@@ -1,7 +1,7 @@
-import React from "react"
+import React from "react";
 import ContactForm from "./ContactForm";
 
-const Intro = props => {
+const Intro = (props) => {
   return (
     <React.Fragment>
       <header>
@@ -261,7 +261,7 @@ const Intro = props => {
         </section>
       </main>
     </React.Fragment>
-  )
-}
+  );
+};
 
-export default Intro
+export default Intro;

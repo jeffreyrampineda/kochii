@@ -1,5 +1,5 @@
-import { Link } from "gatsby"
-import React from "react"
+import { Link } from "gatsby";
+import React from "react";
 
 const Footer = ({ siteTitle }) => {
   return (
@@ -132,7 +132,7 @@ const Footer = ({ siteTitle }) => {
         Kochii &copy; 2020 All Rights Reserved
       </div>
     </footer>
-  )
-}
+  );
+};
 
-export default Footer
+export default Footer;

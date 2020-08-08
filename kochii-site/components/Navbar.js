@@ -1,6 +1,6 @@
-import { Link } from "gatsby"
-import PropTypes from "prop-types"
-import React from "react"
+import { Link } from "gatsby";
+import PropTypes from "prop-types";
+import React from "react";
 
 const Navbar = ({ siteTitle }) => {
   return (
@@ -79,15 +79,15 @@ const Navbar = ({ siteTitle }) => {
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
 Navbar.propTypes = {
   siteTitle: PropTypes.string,
-}
+};
 
 Navbar.defaultProps = {
   siteTitle: ``,
-}
+};
 
-export default Navbar
+export default Navbar;

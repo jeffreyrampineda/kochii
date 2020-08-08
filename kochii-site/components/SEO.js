@@ -1,11 +1,12 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { Helmet } from "react-helmet"
+import React from "react";
+import PropTypes from "prop-types";
+import { Helmet } from "react-helmet";
 
 function SEO({ description, lang, meta, title }) {
   const siteTitle = "Kochii";
   const siteAuthor = "@kochiiapp";
-  const siteDescription = "Kochii assists and encourages individuals for a manageable meal preparation lifestyle.";
+  const siteDescription =
+    "Kochii assists and encourages individuals for a manageable meal preparation lifestyle.";
 
   const metaDescription = description || siteDescription;
 
@@ -51,20 +52,20 @@ function SEO({ description, lang, meta, title }) {
         },
       ].concat(meta)}
     />
-  )
+  );
 }
 
 SEO.defaultProps = {
   lang: `en`,
   meta: [],
   description: ``,
-}
+};
 
 SEO.propTypes = {
   description: PropTypes.string,
   lang: PropTypes.string,
   meta: PropTypes.arrayOf(PropTypes.object),
   title: PropTypes.string.isRequired,
-}
+};
 
-export default SEO
+export default SEO;
