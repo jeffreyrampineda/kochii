@@ -18,11 +18,23 @@ const AboutUs = (props) => {
         <div class="container mb-5">
           <div class="row">
             <div class="col-md-6 mb-4">
-              <h2>About Us</h2>
+              <h2>Who created Kochii?</h2>
+              <p>
+                This is a personal open-source project created by{" "}
+                <strong>Jeffrey Ram Pineda</strong> as a hobby. It is created
+                with Angular as a frontend framework, Koa.js for the backend
+                server, and MongoDB as its database.
+              </p>
+              <p>
+                Have any questions? Got any suggestions? Fill the form on your
+                right or use kochii's primary email{" "}
+                <strong>contact@kochii.app</strong>
+              </p>
+              <h2>What is Kochii?</h2>
               <p>
                 Knowing how to prepare your meals in advance will help you save
                 money. Kochii is designed to keep track of busy people's cooking
-                ingredients with the intentions of assisting and promoting
+                ingredients with the intention of assisting and promoting
                 home-cooked meals.
               </p>
               <p>
@@ -30,17 +42,6 @@ const AboutUs = (props) => {
                 can be archived for later use and will reveal to the user which
                 recipes he/she can and cannot make in relation to his/her
                 recorded inventory.
-              </p>
-              <p>
-                This is a personal open source project created by{" "}
-                <strong>Jeffrey Ram Pineda</strong> as a hobby. It is created
-                with Angular as a frontend framework, Koa.js for the backend
-                server, and MongoDB as its database.
-              </p>
-              <p>
-                Have any questions? Got any suggestions? Fill the form on your
-                right or use kochii's primary email
-                <strong>contact@kochii.app</strong>
               </p>
             </div>
             <div class="col-md-6">
