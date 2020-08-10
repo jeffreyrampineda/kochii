@@ -1,7 +1,5 @@
 const axios = require('axios');
 const sgMail = require('@sendgrid/mail');
-const ejs = require('ejs');
-const path = require('path');
 const Validator = require('validator');
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -29,26 +27,23 @@ async function searchRawFood(query) {
 
 function sendVerificationEmail(to, verificationToken) {
     const hostUrl = process.env.HOST_URL;
-    const confirmationUrl = `${hostUrl}/api/verification?token=${verificationToken}&email=${to}`;
-
-    ejs.renderFile(path.join(__dirname, '../views/layouts/email_template.html'), { confirmationUrl: confirmationUrl }, (err, html) => {
-        if (err) throw err;
-
-        const msg = {
-            to,
-            from: {
-                email: 'no-reply@kochii.app',
-                name: "Kochii"
-            },
-            subject: 'Confirm your email',
-            text: 'Click on this link to verify your email',
-            html: html,
-        };
-        sgMail.send(msg, false, (error, result) => {
-            if (error) {
-                console.log(error);
-            }
-        });
+    const template_id = process.env.SENDGRID_TEMPLATE_ID;
+    const confirmation_url = `${hostUrl}/api/verification?token=${verificationToken}&email=${to}`;
+    const msg = {
+        to,
+        from: {
+            email: 'no-reply@kochii.app',
+            name: "Kochii"
+        },
+        dynamic_template_data: {
+            confirmation_url: confirmation_url
+        },
+        template_id: template_id
+    };
+    sgMail.send(msg, false, (error, result) => {
+        if (error) {
+            console.log(error);
+        }
     });
 }
 
