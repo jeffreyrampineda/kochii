@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { environment } from 'src/environments/environment';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Title } from '@angular/platform-browser';
 
@@ -14,7 +13,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class LoginComponent implements OnInit {
 
-  imgLogo = `${environment.assets_endpoint}kochii-logo.png`;
+  imgLogo = "https://kochii.app/kochii-logo.png";
   loginForm: FormGroup;
   loading = false;
   error = {
