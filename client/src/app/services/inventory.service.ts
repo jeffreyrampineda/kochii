@@ -25,7 +25,7 @@ export class InventoryService {
 
   public inventoryUpdate = new Subject<void>();
   public groupsUpdate = new Subject<void>();
-  public selectedGroup = "";
+  public selectedGroup = '';
 
   constructor(
     private http: HttpClient,
@@ -112,7 +112,7 @@ export class InventoryService {
   }
 
   getItemsAddedBetween(startDate, endDate): Observable<Item[]> {
-    this.log(`fetched items added between=${startDate}, ${endDate}`)
+    this.log(`fetched items added between=${startDate}, ${endDate}`);
     const url = `${this.inventoryUrl}/between`;
     const options = {
       headers: httpOptions.headers,
@@ -172,7 +172,7 @@ export class InventoryService {
     return of(undefined);
   }
 
-  getNutrients(query: string): Observable<any[]>{
+  getNutrients(query: string): Observable<any[]> {
     this.log('getting nutrients for: ' + query);
     const url = `${this.inventoryUrl}/nutrition?query=${query}`;
 
@@ -180,8 +180,8 @@ export class InventoryService {
   }
 
   /** Returns the size of the specified group. */
-  getGroupSize(group: string = ""): number {
-    if (group != "") {
+  getGroupSize(group: string = ''): number {
+    if (group !== '') {
       return this.localInv.filter(i => i.group === group).length;
     }
     return this.localInv.length;
@@ -248,7 +248,7 @@ export class InventoryService {
   onItemUpdate() {
     this.socketioService.getSocket().on('item_update', (item) => {
       this.log(`updated - item w/ name=${item.name}, id=${item._id}`);
-      let ite = this.localInv.find(i => i._id === item._id);
+      const ite = this.localInv.find(i => i._id === item._id);
 
       ite.name = item.name;
       ite.quantity = item.quantity;
@@ -263,10 +263,10 @@ export class InventoryService {
 
   onItemUpdateMany() {
     this.socketioService.getSocket().on('item_updateMany', (items: Item[]) => {
-      if (items.length != 0) {
+      if (items.length !== 0) {
         this.log('updated - many item');
         items.forEach(i => {
-          let ite = this.localInv.find(it => it._id === i._id);
+          const ite = this.localInv.find(it => it._id === i._id);
 
           ite.group = i.group;
         });

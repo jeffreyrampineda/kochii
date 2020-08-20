@@ -5,9 +5,9 @@ import { HistoryService } from 'src/app/services/history.service';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { MatTableDataSource } from '@angular/material/table';
 
-interface chartData {
-  x: any,
-  y: any
+interface ChartData {
+  x: any;
+  y: any;
 }
 
 @Component({
@@ -22,7 +22,7 @@ export class OverviewComponent implements OnInit {
   lineChart;
   start: Date = new Date();
   today: Date = new Date();
-  numberOfExpired: number = 0;
+  numberOfExpired = 0;
   rawHistoryData = [];
   itemTotal = 0;
   loadingInventory = false;
@@ -78,7 +78,7 @@ export class OverviewComponent implements OnInit {
       complete: () => {
         this.loadingInventory = false;
       }
-    })
+    });
   }
 
   getHistoryData(): void {
@@ -148,9 +148,9 @@ export class OverviewComponent implements OnInit {
 
           ctx.restore();
           ctx.font = `${(height / 110).toFixed(2)}em sans-serif`;
-          ctx.textBaseline = "alphabetic";
+          ctx.textBaseline = 'alphabetic';
 
-          const text = Math.round((good + ok) * 1.0 / itemsCount * 100).toString() + "%",
+          const text = Math.round((good + ok) * 1.0 / itemsCount * 100).toString() + '%',
             textX = Math.round((width - ctx.measureText(text).width) / 2),
             textY = height / 2;
 
@@ -166,7 +166,10 @@ export class OverviewComponent implements OnInit {
       datasets: [{
         type: 'line',
         label: 'Total quantity',
-        data: this.totalQuantityPerDay(this.rawHistoryData.filter(h => h.method === 'add'), this.rawHistoryData.filter(h => h.method === 'delete')),
+        data: this.totalQuantityPerDay(
+          this.rawHistoryData.filter(h => h.method === 'add'),
+          this.rawHistoryData.filter(h => h.method === 'delete')
+        ),
         borderColor: 'rgba(0, 0, 255, 0.3)',
         borderWidth: 2,
         fill: false
@@ -194,13 +197,13 @@ export class OverviewComponent implements OnInit {
         },
         scales: {
           xAxes: [{
-            type: "time",
+            type: 'time',
             ticks: {
               min: this.start.toDateString(),
               max: this.today.toDateString(),
             },
             time: {
-              unit: "day",
+              unit: 'day',
               unitStepSize: 1,
               displayFormats: {
                 'day': 'dd'
@@ -233,17 +236,17 @@ export class OverviewComponent implements OnInit {
 
   /**
    * Combines the 'add' and 'delete' rawHistoryData to form the total quantity per day.
-   * @param { data } - raw history data 
-   * @param { data2 } - raw history data
-   * @returns { chartData[] } - array that can be used for chartjs. 
+   * @param data - raw history data.
+   * @param data2 - raw history data.
+   * @returns An array that can be used for chartjs.
    */
-  totalQuantityPerDay(data: any[], data2: any[]): chartData[] {
+  totalQuantityPerDay(data: any[], data2: any[]): ChartData[] {
     const quantityPerDay = this.mergeSameDates(data);
 
     data2.forEach(i => {
       const dateString = (new Date(i.addedDate)).toDateString();
 
-      if (quantityPerDay[dateString] != undefined) {
+      if (quantityPerDay[dateString] !== undefined) {
         quantityPerDay[dateString] += i.quantity;
       } else {
         quantityPerDay[dateString] = i.quantity;
@@ -257,7 +260,7 @@ export class OverviewComponent implements OnInit {
     });
 
     for (let i = 0; i < totalQuantityPerDayData.length; i++) {
-      if (i != 0) {
+      if (i !== 0) {
         totalQuantityPerDayData[i].y += totalQuantityPerDayData[i - 1].y;
       }
     }
@@ -266,14 +269,14 @@ export class OverviewComponent implements OnInit {
 
   /**
    * Sums up the quantities of all histories with similar dates.
-   * @param { data } - raw history data
-   * @returns { object } - object of simplified histories.
+   * @param data - raw history data.
+   * @returns An object of simplified histories.
    */
-  mergeSameDates(data: any[]) {
+  mergeSameDates(data: any[]): any {
     return data.reduce((acc, curr) => {
       const dateString = (new Date(curr.addedDate)).toDateString();
 
-      if (acc[dateString] != undefined) {
+      if (acc[dateString] !== undefined) {
         acc[dateString] += Math.abs(curr.quantity);
       } else {
         acc[dateString] = Math.abs(curr.quantity);
@@ -284,10 +287,10 @@ export class OverviewComponent implements OnInit {
 
   /**
    * Converts an object into a chartData[] array.
-   * @param { data } - object
-   * @returns { chartData[] } - array that can be used for chartjs.
+   * @param data - object.
+   * @returns An array that can be used for chartjs.
    */
-  objectToChartData(data: {}): chartData[] {
+  objectToChartData(data: {}): ChartData[] {
     return Object.keys(data).map(function (key) {
       return { 'x': new Date(key), 'y': data[key] };
     });
@@ -295,18 +298,18 @@ export class OverviewComponent implements OnInit {
 
   /**
    * Parses raw history data to be used for chartjs.
-   * @param { data } - raw history data
-   * @returns { chartData[] } - array that can be used for chartjs.
+   * @param data - raw history data.
+   * @returns An array that can be used for chartjs.
    */
-  parseRawData(data: any[]): chartData[] {
+  parseRawData(data: any[]): ChartData[] {
     const quantityPerDay = this.mergeSameDates(data);
     return this.objectToChartData(quantityPerDay);
   }
 
   /**
    * Calculate the difference between the given date and today.
-   * @param { date } - date object
-   * @returns { number } - number of days different.
+   * @param date - date object.
+   * @returns A number of days different.
    */
   sinceToday(date: Date): number {
     const expirationDate = new Date(date);

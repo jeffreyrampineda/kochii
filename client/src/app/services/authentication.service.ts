@@ -44,7 +44,7 @@ export class AuthenticationService {
      * @param user - The user to be authenticated.
      */
     login(user: User): Observable<User> {
-        this.log("logging in");
+        this.log('logging in');
 
         return this.http.post<User>(`${this.authenticationUrl}/login`, user)
             .pipe(
@@ -60,7 +60,7 @@ export class AuthenticationService {
      * @param user - The new user to be created.
      */
     register(user: User): Observable<User> {
-        this.log("registering");
+        this.log('registering');
 
         return this.http.post<User>(`${this.authenticationUrl}/register`, user)
             .pipe(

@@ -38,7 +38,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     itemUpdateForm: Object = {};
     option: string;
 
-    selectedGroup: string = '';
+    selectedGroup = '';
     loading = false;
 
     constructor(
@@ -155,7 +155,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
             name: [item.name, [
                 Validators.minLength(2),
                 Validators.maxLength(30),
-                Validators.pattern("^[a-zA-Z0-9 _-]*$"),
+                Validators.pattern('^[a-zA-Z0-9 _-]*$'),
                 Validators.required
             ]],
             cost: item.cost,
@@ -309,6 +309,6 @@ export class InventoryComponent implements OnInit, OnDestroy {
 
     /** Checks whether the selectedGroup can be removed or not */
     canRemoveGroup(): boolean {
-        return this.selectedGroup != "Default" && this.selectedGroup != "";
+        return this.selectedGroup !== 'Default' && this.selectedGroup !== '';
     }
 }

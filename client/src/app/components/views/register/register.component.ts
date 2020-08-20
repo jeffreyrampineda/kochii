@@ -13,7 +13,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class RegisterComponent implements OnInit {
 
-  imgLogo = "https://www.kochii.app/kochii-logo.png";
+  imgLogo = 'https://www.kochii.app/kochii-logo.png';
   registerForm: FormGroup;
   loading = false;
   error = {
@@ -52,7 +52,7 @@ export class RegisterComponent implements OnInit {
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(30),
-        Validators.pattern("^[a-zA-Z0-9_-]*$")
+        Validators.pattern('^[a-zA-Z0-9_-]*$')
       ]],
       password: ['', [
         Validators.required,

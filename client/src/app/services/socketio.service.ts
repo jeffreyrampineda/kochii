@@ -9,7 +9,7 @@ import io from 'socket.io-client';
 export class SocketioService {
 
   private socket;
-  private token = "";
+  private token = '';
 
   constructor(
     private authenticationService: AuthenticationService

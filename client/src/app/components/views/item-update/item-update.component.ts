@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { InventoryService } from 'src/app/services/inventory.service';
 
 @Component({
-  selector: 'app-item-update',
+  selector: 'kochii-item-update',
   templateUrl: './item-update.component.html',
   styleUrls: ['./item-update.component.css']
 })
@@ -27,5 +27,5 @@ export class ItemUpdateComponent implements OnInit {
     this.inventoryService.getItemById(id).subscribe(result => {
       this.item = result;
     });
-  } 
+  }
 }

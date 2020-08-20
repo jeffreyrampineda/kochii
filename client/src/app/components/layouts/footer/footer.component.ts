@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./footer.component.css']
 })
 export class FooterComponent implements OnInit {
-  @Input() className: string = '';
+  @Input() className = '';
 
   constructor() { }
 

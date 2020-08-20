@@ -10,8 +10,6 @@ const socket = require('socket.io');
 const socketioJwt = require('socketio-jwt');
 const { passport } = require('./passport');
 const helmet = require('koa-helmet');
-const mount = require('koa-mount');
-/* require('kochii-website').generateStaticSite(); */
 
 // Create Koa Application
 const app = new Koa();

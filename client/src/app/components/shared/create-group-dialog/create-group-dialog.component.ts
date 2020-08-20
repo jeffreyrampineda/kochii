@@ -27,7 +27,7 @@ export class CreateGroupDialogComponent {
                 Validators.required,
                 Validators.minLength(1),
                 Validators.maxLength(30),
-                Validators.pattern("^[a-zA-Z0-9 _-]*$")
+                Validators.pattern('^[a-zA-Z0-9 _-]*$')
             ]],
         });
     }

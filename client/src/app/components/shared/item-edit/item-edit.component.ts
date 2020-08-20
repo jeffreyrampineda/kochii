@@ -43,7 +43,7 @@ export class ItemEditComponent implements OnInit {
 
   @Input()
   set item(val: Item) {
-    if (val) this.addMoreForms(val);
+    if (val) { this.addMoreForms(val); }
   }
 
   /**
@@ -102,7 +102,7 @@ export class ItemEditComponent implements OnInit {
       name: [item.name || 'New Item', [
         Validators.minLength(2),
         Validators.maxLength(30),
-        Validators.pattern("^[a-zA-Z0-9 _-]*$"),
+        Validators.pattern('^[a-zA-Z0-9 _-]*$'),
         Validators.required
       ]],
       cost: [item.cost || '0.00', [
@@ -117,7 +117,12 @@ export class ItemEditComponent implements OnInit {
       ]],
       addedDate: [item.addedDate || this.dateToday, Validators.required],
       expirationDate: [item.addedDate || this.dateToday, Validators.required],
-      group: [item.group || this.inventoryService.selectedGroup === "" ? "Default" : this.inventoryService.selectedGroup, Validators.required],
+      group: [
+        item.group ||
+        this.inventoryService.selectedGroup === '' ?
+          'Default' :
+          this.inventoryService.selectedGroup, Validators.required
+      ],
     }));
   }
 
