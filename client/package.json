@@ -1,12 +1,12 @@
 {
-  "name": "kochii-app",
+  "name": "client",
   "description": "Kochii's core app",
   "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",
   "version": "0.0.2",
   "scripts": {
     "ng": "ng",
     "dev": "ng serve",
-    "build": "ng build --prod='true' --output-path dist --deploy-url /app/",
+    "build": "ng build --prod='true' --output-path dist",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

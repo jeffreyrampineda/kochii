@@ -4,10 +4,6 @@ const sendContactEmail = require('../services/external_api.service').sendContact
 
 const router = new Router();
 
-router.get(['login', 'register', 'app/*'], async (ctx) => {
-    await sendfile(ctx, __dirname + '/../kochii-app/dist/index.html');
-});
-
 router.post('send', async (ctx) => {
     try {
         const { from_email, from_name, body } = ctx.request.body;
@@ -19,8 +15,8 @@ router.post('send', async (ctx) => {
     }
 });
 
-router.get('/*', async (ctx) => {
-    await sendfile(ctx, __dirname + '/../public/index.html');
+router.get('(.*)', async (ctx) => {
+    await sendfile(ctx, __dirname + '/../client/dist/index.html');
 });
 
 module.exports = router.routes();

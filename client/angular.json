@@ -7,7 +7,7 @@
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
-      "prefix": "app",
+      "prefix": "kochii",
       "schematics": {},
       "architect": {
         "build": {
@@ -110,7 +110,7 @@
     "client-e2e": {
       "root": "e2e/",
       "projectType": "application",
-      "prefix": "",
+      "prefix": "kochii",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
