@@ -10,7 +10,7 @@
     "dev:app": "cd client && npm run dev",
     "build:app": "cd client && npm run build",
     "test": "jest --silent --forceExit --detectOpenHandles --maxWorkers=10",
-    "postinstall": "client && npm install"
+    "postinstall": "cd client && npm install"
   },
   "keywords": [],
   "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",
