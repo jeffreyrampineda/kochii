@@ -13,7 +13,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class LoginComponent implements OnInit {
 
-  imgLogo = "https://kochii.app/kochii-logo.png";
+  imgLogo = "https://www.kochii.app/kochii-logo.png";
   loginForm: FormGroup;
   loading = false;
   error = {

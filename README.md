@@ -5,7 +5,7 @@
 Assists and encourages individuals for a manageable meal preparation lifestyle
 
 <p align="center">
-    <a href="https://kochii.app">
+    <a href="https://www.kochii.app">
         <img width="600" height="400" src="https://i.ibb.co/tBGVzKG/kochii-mockup.jpg" alt="Kochii preview">
     </a>
 </p>
