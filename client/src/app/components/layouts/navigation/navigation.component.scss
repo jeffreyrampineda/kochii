@@ -1,31 +1,42 @@
-.k-sidebar-items * {
-  background: transparent;
-  border-color: transparent;
-  color: #fff;
+.k-sidebar-heading {
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: .65rem;
+  color: rgba(255, 255, 255, .5);
 }
 
 .k-sidebar-items .k-item {
   width: 100%;
-  padding: 1.15rem 1.15rem 1.15rem 2rem;
-  white-space: normal;
+  padding: 1rem 0;
+  margin-left: .8rem;
   text-align: left;
+  font-weight: 300;
+  font-size: .9rem;
+  color: rgba(255, 255, 255, .5);
+  background: transparent;
+  border: none;
+}
+
+.k-sidebar-items .k-item > * {
+  vertical-align: text-top;
 }
 
 .k-sidebar-items .k-item:hover {
-  background-color: #252a35;
+  color: rgba(255, 255, 255, 1);
 }
 
 .k-sidebar-items .k-item mat-icon {
-  margin-right: 1rem;
+  font-size: 1rem;
 }
 
 .k-sidebar-items .active {
-  -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .3);
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .3);
-  -webkit-border-radius: 0px;
-  border-radius: 0px;
-  background: linear-gradient(40deg, #45cafc, #303f9f);
-  width: calc(100% + 10px);
+  color: rgba(255, 255, 255, 1);
+  font-weight: 400;
+}
+
+.k-sidebar-items .active mat-icon {
+  color: rgba(255, 255, 255, 1);
+  font-weight: 500;
 }
 
 .k-sidebar-display {
@@ -33,24 +44,17 @@
 }
 
 .logo-wrapper {
-  padding: 1rem;
   width: 100%;
-  height: calc(1.5rem + 64px);
+  height: 3rem;
   text-align: center;
 }
 
-.logo-wrapper a img {
+.logo-wrapper * {
   max-height: 32px;
 }
 
 .k-dark-text {
   color: #1C2331;
-}
-
-.k-navigation-bottom {
-  width: 100%;
-  position: absolute;
-  bottom: 0;
 }
 
 .notification-wrapper .notification-content {
