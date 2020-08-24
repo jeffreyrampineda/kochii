@@ -17,7 +17,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
   mobileDisplaySidebar = false;
 
   imgBanner = '//www.kochii.app/kochii-banner.png';
-  showNotification: boolean;
   notifications: string[] = [];
 
   constructor(
@@ -50,10 +49,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsub.next();
     this.unsub.complete();
-  }
-
-  openNotification(state: boolean) {
-    this.showNotification = state;
   }
 
   logout(): void {
