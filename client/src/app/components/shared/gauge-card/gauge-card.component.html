@@ -1,13 +1,15 @@
-<div class="mat-elevation-z2 p-3 mt-3">
-    <div class="row no-gutters">
-        <div class="col-4">
-            <button mat-fab [color]="color" aria-label="icon">
-                <mat-icon>{{ icon }}</mat-icon>
-            </button>
-        </div>
-        <div class="col-8 k-data">
-            <p>{{ title }}</p>
-            <h4><strong>{{ value }}</strong></h4>
+<div class="card shadow-sm mt-3 k-border-left">
+    <div class="card-body">
+        <div class="row no-gutters">
+            <div class="col mr-2 k-data">
+                <div class="k-title">{{ title }}</div>
+                <div class="k-value">{{ value }}</div>
+            </div>
+            <div class="col-auto">
+                <button class="k-gauge-icon" mat-icon-button disabled [color]="color" aria-label="icon">
+                    <mat-icon>{{ icon }}</mat-icon>
+                </button>
+            </div>
         </div>
     </div>
 </div>

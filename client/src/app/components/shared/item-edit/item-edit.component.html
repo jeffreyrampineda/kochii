@@ -144,13 +144,16 @@
                     <div class="col-md-6 mb-4" style="height: 100%;">
 
                         <!--Image-->
-                        <div class="mat-elevation-z2 p-3">
-                            <span>{{ firstFood.description }} (Testing)</span>
-                            <ul>
-                                <li
-                                    *ngFor="let n of (firstFood.foodNutrients ? firstFood.foodNutrients.slice(0, 12) : [])">
-                                    {{ n.nutrientName }}, {{ n.value }}, {{ n.unitName }}</li>
-                            </ul>
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ firstFood.description }} (Testing)</h6>
+                                <ul class="list-group list-group-flush">
+                                    <li
+                                        class="list-group-item"
+                                        *ngFor="let n of (firstFood.foodNutrients ? firstFood.foodNutrients.slice(0, 12) : [])">
+                                        {{ n.nutrientName }}, {{ n.value }}, {{ n.unitName }}</li>
+                                </ul>
+                            </div>
                         </div>
                         <!--/.Image-->
 

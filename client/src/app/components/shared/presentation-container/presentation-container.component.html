@@ -1,11 +1,13 @@
-<h5><ng-content select="[prepend]"></ng-content><strong>{{ title }}</strong></h5>
+<h2 class="skinny"><ng-content select="[prepend]"></ng-content>{{ title }}</h2>
 
 <!--Container-->
-<div class="mat-elevation-z2 p-3 mt-4">
-
-    <!--Actions-->
-    <ng-content select="[actions]"></ng-content>
-    <!--/.Actions-->
+<div class="card shadow-sm mt-4">
+  <div class="card-body">
+    <h6 class="card-title">
+      <!--Actions-->
+      <ng-content select="[actions]"></ng-content>
+      <!--/.Actions-->
+    </h6>
 
     <!--Content-->
     <div class="mt-3">
@@ -22,6 +24,6 @@
       </ng-template>
     </div>
     <!--/.Content-->
-
   </div>
+</div>
 <!--/.Container-->

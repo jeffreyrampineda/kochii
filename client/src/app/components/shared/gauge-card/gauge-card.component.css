@@ -1,14 +1,24 @@
-.k-data {
-    text-align: right;
+.k-border-left {
+    border-left: 4px solid #aaa;
 }
 
-.k-data p {
-    color: #999999;
-    font-size: 12px;
+.k-data .k-title {
+    color: #aaa;
+    font-size: .8rem;
+    font-weight: 500;
 }
 
-.k-progress-description {
-    color: #747373;
-    font-size: .9rem;
-    font-weight: 400;
+.k-data .k-value {
+    color: #555;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.k-gauge-icon {
+    width: 3rem;
+    height: 3rem;
+}
+
+.k-gauge-icon .mat-icon {
+    font-size: 2.5rem;
 }
