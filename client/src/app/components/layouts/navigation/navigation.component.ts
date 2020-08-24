@@ -15,9 +15,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   private unsub = new Subject<void>();
   mobileDisplaySidebar = false;
-
-  imgBanner = '//www.kochii.app/kochii-banner.png';
   notifications: string[] = [];
+  username = '';
 
   constructor(
     private authenticationService: AuthenticationService,
@@ -33,8 +32,11 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
     this.authenticationService.currentUser.pipe(takeUntil(this.unsub)).subscribe({
       next: response => {
-        if (response && !response.isVerified) {
-          this.notifications.unshift('Check your email to verify this account');
+        if (response) {
+          if (!response.isVerified) {
+            this.notifications.unshift('Check your email to verify this account');
+          }
+          this.username = response.username;
         }
       },
       error: () => {

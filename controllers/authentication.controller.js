@@ -26,6 +26,7 @@ router.post('/login', async (ctx) => {
             // 202 - Accepted.
             ctx.status = 202;
             ctx.body = {
+                username,
                 token: Helper.generateToken(user.toJSON()),
                 isVerified: user.isVerified,
             };
@@ -60,6 +61,7 @@ router.post('/register', async (ctx) => {
         // 202 - Accepted
         ctx.status = 202;
         ctx.body = {
+            username,
             token: Helper.generateToken(user.toJSON()),
             isVerified: user.isVerified,
         };
