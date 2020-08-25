@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart } from 'chart.js';
 import { LinearTickOptions } from 'chart.js';
 import { HistoryService } from 'src/app/services/history.service';
@@ -17,6 +17,8 @@ interface ChartData {
 })
 export class OverviewComponent implements OnInit {
 
+  @ViewChild("canvasLine") canvasLine: ElementRef;
+
   fromDay = 6;
   doughnutChart;
   lineChart;
@@ -29,8 +31,8 @@ export class OverviewComponent implements OnInit {
   loadingHistory = false;
   weeklySpent = 0;
 
-  firstWeekDay;
-  lastWeekDay;
+  firstWeekDay: Date;
+  lastWeekDay: Date;
 
   displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
   history: MatTableDataSource<History>;
@@ -162,35 +164,33 @@ export class OverviewComponent implements OnInit {
   }
 
   initializeLineOne(): void {
+    const gradientBlue = this.canvasLine.nativeElement.getContext('2d').createLinearGradient(0, 0, 0, 400);
+    gradientBlue.addColorStop(0, 'rgba(50, 65, 160, 0.5)');
+    gradientBlue.addColorStop(1, 'rgba(70, 200, 250, 0.1)');
+
     const data = {
       datasets: [{
-        type: 'line',
         label: 'Total quantity',
         data: this.totalQuantityPerDay(
           this.rawHistoryData.filter(h => h.method === 'add'),
           this.rawHistoryData.filter(h => h.method === 'delete')
         ),
-        borderColor: 'rgba(0, 0, 255, 0.3)',
+        borderColor: gradientBlue,
         borderWidth: 2,
-        fill: false
-      }, {
-        type: 'bar',
-        label: 'Removed',
-        data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'delete')),
-        backgroundColor: 'rgba(255, 142, 167)',
-      }, {
-        type: 'bar',
-        label: 'Added',
-        data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'add')),
-        backgroundColor: 'rgba(139, 184, 255)',
+        pointHoverRadius: 10,
+        pointRadius: 5,
+        backgroundColor: gradientBlue,
       }]
     };
 
     this.lineChart = new Chart('chart-line', {
-      type: 'bar',
+      type: 'line',
       data: data,
       options: {
         responsive: true,
+        legend: {
+          display: false
+        },
         tooltips: {
           mode: 'index',
           intersect: false
@@ -273,16 +273,22 @@ export class OverviewComponent implements OnInit {
    * @returns An object of simplified histories.
    */
   mergeSameDates(data: any[]): any {
-    return data.reduce((acc, curr) => {
-      const dateString = (new Date(curr.addedDate)).toDateString();
+    const t = new Date();
+    let thisWeek = {};
+    thisWeek[this.today.toDateString()] = 0;
 
-      if (acc[dateString] !== undefined) {
-        acc[dateString] += Math.abs(curr.quantity);
-      } else {
-        acc[dateString] = Math.abs(curr.quantity);
+    for (let i = 0; i < this.fromDay; i++) {
+      const dateString = (new Date(t.setDate(t.getDate() - 1))).toDateString();
+      thisWeek[dateString] = 0;
+    }
+    data.forEach(d => {
+      const dateString = (new Date(d.addedDate)).toDateString();
+
+      if (thisWeek[dateString] !== undefined) {
+        thisWeek[dateString] += Math.abs(d.quantity);
       }
-      return acc;
-    }, {});
+    });
+    return thisWeek;
   }
 
   /**
@@ -294,16 +300,6 @@ export class OverviewComponent implements OnInit {
     return Object.keys(data).map(function (key) {
       return { 'x': new Date(key), 'y': data[key] };
     });
-  }
-
-  /**
-   * Parses raw history data to be used for chartjs.
-   * @param data - raw history data.
-   * @returns An array that can be used for chartjs.
-   */
-  parseRawData(data: any[]): ChartData[] {
-    const quantityPerDay = this.mergeSameDates(data);
-    return this.objectToChartData(quantityPerDay);
   }
 
   /**
