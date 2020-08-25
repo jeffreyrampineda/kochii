@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 // -------------------------------------------------------------
 
@@ -35,10 +34,9 @@ export class MessageService {
    * This method opens a MatSnackBar notification.
    * @param message - The message to be displayed.
    */
-  notify(message: string, verticalPositionp: any = 'top') {
+  notify(message: string, verticalPosition:  MatSnackBarVerticalPosition = 'top') {
     this.snackBar.open(message, 'dismiss', {
-      verticalPosition: verticalPositionp,
-      horizontalPosition: 'center',
+      verticalPosition,
     });
   }
 }

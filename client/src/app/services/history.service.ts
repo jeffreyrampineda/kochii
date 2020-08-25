@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
 import { History } from 'src/app/interfaces/history';
@@ -30,10 +30,19 @@ export class HistoryService {
       );
   }
 
-  getAllFromPastDays(days: number): Observable<any> {
+  getAllFromPastDays(days: number): Observable<History[]> {
     this.log(`fetched history records until ${days} days ago`);
 
-    return this.http.get<any>(`${this.historyUrl}/${days}`);
+    return this.http.get<History[]>(`${this.historyUrl}/${days}`)
+      .pipe(
+        map(result => {
+          result.forEach(element => {
+            element.addedDate = new Date(element.addedDate);
+            element.created_at = new Date(element.created_at);
+          });
+          return result;
+        })
+      );
   }
 
   /** Delete all history. */

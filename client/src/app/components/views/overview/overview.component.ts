@@ -2,12 +2,17 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart } from 'chart.js';
 import { LinearTickOptions } from 'chart.js';
 import { HistoryService } from 'src/app/services/history.service';
+import { History } from 'src/app/interfaces/history';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 interface ChartData {
-  x: any;
-  y: any;
+  x: Date;
+  y: number;
+}
+
+interface Week {
+  [index: string]: number;
 }
 
 @Component({
@@ -17,15 +22,14 @@ interface ChartData {
 })
 export class OverviewComponent implements OnInit {
 
-  @ViewChild("canvasLine") canvasLine: ElementRef;
+  @ViewChild('canvasLine') canvasLine: ElementRef;
 
   fromDay = 6;
   doughnutChart;
   lineChart;
-  start: Date = new Date();
   today: Date = new Date();
   numberOfExpired = 0;
-  rawHistoryData = [];
+  rawHistoryData: History[] = [];
   itemTotal = 0;
   loadingInventory = false;
   loadingHistory = false;
@@ -41,14 +45,18 @@ export class OverviewComponent implements OnInit {
     private historyService: HistoryService,
     private inventoryService: InventoryService
   ) {
-    const curr = new Date();
-    curr.setHours(0, 0, 0, 0);
-    const first = curr.getDate() - curr.getDay();
+    this.today.setHours(0, 0, 0, 0);
+    this.firstWeekDay = new Date(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.today.getDate() - this.today.getDay()
+    );
 
-    this.start.setDate(this.start.getDate() - 6);
-    this.start.setHours(0, 0, 0, 0);
-    this.firstWeekDay = new Date(curr.setDate(first));
-    this.lastWeekDay = new Date(curr.setDate(curr.getDate() + 6));
+    this.lastWeekDay = new Date(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.firstWeekDay.getDate() + 6
+    );
   }
 
   ngOnInit() {
@@ -183,6 +191,12 @@ export class OverviewComponent implements OnInit {
       }]
     };
 
+    const start = new Date(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.today.getDate() - 6
+    );
+
     this.lineChart = new Chart('chart-line', {
       type: 'line',
       data: data,
@@ -199,7 +213,7 @@ export class OverviewComponent implements OnInit {
           xAxes: [{
             type: 'time',
             ticks: {
-              min: this.start.toDateString(),
+              min: start.toDateString(),
               max: this.today.toDateString(),
             },
             time: {
@@ -236,70 +250,61 @@ export class OverviewComponent implements OnInit {
 
   /**
    * Combines the 'add' and 'delete' rawHistoryData to form the total quantity per day.
-   * @param data - raw history data.
-   * @param data2 - raw history data.
+   * @param dataAdd - data with adding quantities.
+   * @param dataDelete - data with removing quantities.
    * @returns An array that can be used for chartjs.
    */
-  totalQuantityPerDay(data: any[], data2: any[]): ChartData[] {
-    const quantityPerDay = this.mergeSameDates(data);
+  totalQuantityPerDay(dataAdd: History[], dataDelete: History[]): ChartData[] {
+    const quantityPerDay = this.createEmptyWeek();
 
-    data2.forEach(i => {
-      const dateString = (new Date(i.addedDate)).toDateString();
-
-      if (quantityPerDay[dateString] !== undefined) {
-        quantityPerDay[dateString] += i.quantity;
-      } else {
-        quantityPerDay[dateString] = i.quantity;
-      }
+    dataAdd.forEach(i => {
+      quantityPerDay[i.addedDate.toDateString()] += i.quantity;
     });
 
-    const totalQuantityPerDayData = this.objectToChartData(quantityPerDay);
+    dataDelete.forEach(i => {
+      quantityPerDay[i.addedDate.toDateString()] += i.quantity;
+    });
+
+    const totalQuantityPerDayData = this.weekToChartData(quantityPerDay);
 
     totalQuantityPerDayData.sort(function (a, b) {
-      return (+new Date(a.x)) - (+new Date(b.x));
+      return (+a.x) - (+b.x);
     });
 
-    for (let i = 0; i < totalQuantityPerDayData.length; i++) {
-      if (i !== 0) {
-        totalQuantityPerDayData[i].y += totalQuantityPerDayData[i - 1].y;
-      }
+    // Increment from previous day.
+    for (let i = 1; i < totalQuantityPerDayData.length; i++) {
+      totalQuantityPerDayData[i].y += totalQuantityPerDayData[i - 1].y;
     }
     return totalQuantityPerDayData;
   }
 
   /**
-   * Sums up the quantities of all histories with similar dates.
-   * @param data - raw history data.
-   * @returns An object of simplified histories.
+   * Creates an empty indexable object of the entire week with datestring
+   * as key, quantity as value.
+   * @returns An object of the entire week with empty values.
    */
-  mergeSameDates(data: any[]): any {
+  createEmptyWeek(): Week {
     const t = new Date();
-    let thisWeek = {};
-    thisWeek[this.today.toDateString()] = 0;
+    const thisWeek: Week = {};
+    thisWeek[t.toDateString()] = 0;
 
     for (let i = 0; i < this.fromDay; i++) {
-      const dateString = (new Date(t.setDate(t.getDate() - 1))).toDateString();
-      thisWeek[dateString] = 0;
+      thisWeek[new Date(t.setDate(t.getDate() - 1)).toDateString()] = 0;
     }
-    data.forEach(d => {
-      const dateString = (new Date(d.addedDate)).toDateString();
-
-      if (thisWeek[dateString] !== undefined) {
-        thisWeek[dateString] += Math.abs(d.quantity);
-      }
-    });
     return thisWeek;
   }
 
   /**
-   * Converts an object into a chartData[] array.
-   * @param data - object.
+   * Converts a week object into a chartData[] array.
+   * @param data - week object.
    * @returns An array that can be used for chartjs.
    */
-  objectToChartData(data: {}): ChartData[] {
-    return Object.keys(data).map(function (key) {
-      return { 'x': new Date(key), 'y': data[key] };
-    });
+  weekToChartData(week: Week): ChartData[] {
+    const data: ChartData[] = [];
+    for (const day in week) {
+      data.push({ 'x': new Date(day), 'y': week[day] });
+    }
+    return data;
   }
 
   /**
@@ -315,16 +320,14 @@ export class OverviewComponent implements OnInit {
   }
 
   quantityRemovedThisWeek(): number {
-    let totalRemoved = 0;
-
-    this.rawHistoryData.forEach(h => {
-      if ((new Date(h.addedDate)) >= this.firstWeekDay && (new Date(h.addedDate)) <= this.lastWeekDay) {
-        if (h.quantity < 0) {
-          totalRemoved += h.quantity;
-        }
+    return this.rawHistoryData.reduce((acc, curr) => {
+      if (curr.addedDate >= this.firstWeekDay &&
+          curr.addedDate <= this.lastWeekDay &&
+          curr.quantity < 0) {
+        acc -= curr.quantity;
       }
-    });
-    return Math.abs(totalRemoved);
+      return acc;
+    }, 0);
   }
 
   getItemsAddedThisWeek() {

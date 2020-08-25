@@ -93,7 +93,7 @@ export class ItemEditComponent implements OnInit {
   }
 
   /** Adds more form for adding multiple items. */
-  addMoreForms(item: any = {}): void {
+  addMoreForms(item: Item = null): void {
     this.itemEditForms.push(this.formBuilder.group({
       _id: {
         value: item._id || null,
