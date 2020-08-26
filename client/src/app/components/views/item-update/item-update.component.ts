@@ -9,7 +9,6 @@ import { InventoryService } from 'src/app/services/inventory.service';
   styleUrls: ['./item-update.component.css']
 })
 export class ItemUpdateComponent implements OnInit {
-
   item: Item;
 
   constructor(

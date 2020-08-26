@@ -16,7 +16,7 @@ export class ItemEditComponent implements OnInit {
   @Input() isAdding = false;
   @Input() title = '';
 
-  private dateToday = new Date();
+  private itemModel: Item;
   itemEditForms: FormGroup[] = [];
   groups: string[] = [];
   firstFood = {};
@@ -27,23 +27,20 @@ export class ItemEditComponent implements OnInit {
     private inventoryService: InventoryService,
     private messageService: MessageService,
     private formBuilder: FormBuilder
-  ) {
-    // Time is removed.
-    this.dateToday.setHours(0, 0, 0, 0);
-  }
+  ) { }
 
   // -------------------------------------------------------------
 
   ngOnInit() {
-    if (this.isAdding) {
-      this.addMoreForms();
-    }
     this.getGroups();
   }
 
   @Input()
   set item(val: Item) {
-    if (val) { this.addMoreForms(val); }
+    if (val) {
+      this.itemModel = val;
+      this.addMoreForms();
+    }
   }
 
   /**
@@ -93,36 +90,29 @@ export class ItemEditComponent implements OnInit {
   }
 
   /** Adds more form for adding multiple items. */
-  addMoreForms(item: Item = null): void {
+  addMoreForms(): void {
     this.itemEditForms.push(this.formBuilder.group({
-      _id: {
-        value: item._id || null,
-        disabled: true
+      _id: { value: this.itemModel._id, disabled: true
       },
-      name: [item.name || 'New Item', [
+      name: [this.itemModel.name, [
         Validators.minLength(2),
         Validators.maxLength(30),
         Validators.pattern('^[a-zA-Z0-9 _-]*$'),
         Validators.required
       ]],
-      cost: [item.cost || '0.00', [
+      cost: [this.itemModel.cost, [
         Validators.min(0),
         Validators.max(999),
         Validators.required
       ]],
-      quantity: [item.quantity || 1, [
+      quantity: [this.itemModel.quantity, [
         Validators.min(1),
         Validators.max(999),
         Validators.required
       ]],
-      addedDate: [item.addedDate || this.dateToday, Validators.required],
-      expirationDate: [item.addedDate || this.dateToday, Validators.required],
-      group: [
-        item.group ||
-        this.inventoryService.selectedGroup === '' ?
-          'Default' :
-          this.inventoryService.selectedGroup, Validators.required
-      ],
+      addedDate: [this.itemModel.addedDate, Validators.required],
+      expirationDate: [this.itemModel.addedDate, Validators.required],
+      group: [this.itemModel.group, Validators.required],
     }));
   }
 
