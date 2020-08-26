@@ -1,19 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'kochii-presentation-container',
   templateUrl: './presentation-container.component.html',
   styleUrls: ['./presentation-container.component.css']
 })
-export class PresentationContainerComponent implements OnInit {
+export class PresentationContainerComponent {
 
   @Input() title = '';
   @Input() loading = false;
   @Input() isEmpty = false;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

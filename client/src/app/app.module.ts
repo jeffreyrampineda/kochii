@@ -21,9 +21,9 @@ import { AppComponent } from './app.component';
 // Components - layouts
 import { FooterComponent } from './components/layouts/footer/footer.component';
 import { NavigationComponent } from './components/layouts/navigation/navigation.component';
+import { DashboardComponent } from './components/layouts/dashboard/dashboard.component';
 
 // Components - views
-import { DashboardComponent } from './components/views/dashboard/dashboard.component';
 import { LoginComponent } from './components/views/login/login.component';
 import { RegisterComponent } from './components/views/register/register.component';
 import { GroceriesComponent } from './components/views/groceries/groceries.component';

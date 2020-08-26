@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { MessageService } from 'src/app/services/message.service';
 
 // -------------------------------------------------------------
@@ -8,17 +8,11 @@ import { MessageService } from 'src/app/services/message.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
 
   constructor(
     private messageSevice: MessageService,
   ) { }
-
-  // -------------------------------------------------------------
-
-  ngOnInit() {
-
-  }
 
   @HostListener('window:online', ['$event'])
   private openOnlineNotification() {

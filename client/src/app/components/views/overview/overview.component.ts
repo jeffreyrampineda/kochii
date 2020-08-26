@@ -302,7 +302,7 @@ export class OverviewComponent implements OnInit {
   weekToChartData(week: Week): ChartData[] {
     const data: ChartData[] = [];
     for (const day in week) {
-      data.push({ 'x': new Date(day), 'y': week[day] });
+        data.push({ 'x': new Date(day), 'y': week[day] });
     }
     return data;
   }
