@@ -16,7 +16,7 @@ export class ItemEditComponent implements OnInit {
   @Input() isAdding = false;
   @Input() title = '';
 
-  private itemModel: Item;
+  itemModel: Item;
   itemEditForms: FormGroup[] = [];
   groups: string[] = [];
   firstFood = {};
