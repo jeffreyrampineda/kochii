@@ -53,7 +53,16 @@ async function create(history) {
     }
 }
 
+async function deleteHistoryByOwnerId(_id) {
+    try {
+        return await History.deleteOne({ owner: _id });
+    } catch (error) {
+        throw (error);
+    }
+}
+
 module.exports = {
     init,
     create,
+    deleteHistoryByOwnerId,
 };

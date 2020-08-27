@@ -254,6 +254,14 @@ async function deleteItemById(_id, user) {
     }
 }
 
+async function deleteInventoryByOwnerId(_id) {
+    try {
+        return await Inventory.deleteOne({ owner: _id });
+    } catch (error) {
+        throw (error);
+    }
+}
+
 module.exports = {
     init,
     getItems,
@@ -263,5 +271,6 @@ module.exports = {
     searchItemByName,
     createItem,
     updateItem,
-    deleteItemById
+    deleteItemById,
+    deleteInventoryByOwnerId,
 }
