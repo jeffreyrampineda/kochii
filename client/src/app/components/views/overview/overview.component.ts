@@ -24,7 +24,7 @@ export class OverviewComponent implements OnInit {
 
   @ViewChild('canvasLine') canvasLine: ElementRef;
 
-  fromDay = 6;
+  fromDay = 7;
   doughnutChart;
   lineChart;
   today: Date = new Date();
@@ -302,7 +302,9 @@ export class OverviewComponent implements OnInit {
   weekToChartData(week: Week): ChartData[] {
     const data: ChartData[] = [];
     for (const day in week) {
+      if (week.hasOwnProperty(day)) {
         data.push({ 'x': new Date(day), 'y': week[day] });
+      }
     }
     return data;
   }

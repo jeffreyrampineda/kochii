@@ -24,6 +24,6 @@ export class ItemAddComponent {
       addedDate: dateToday,
       expirationDate: dateToday,
       group: this.inventoryService.selectedGroup === '' ? 'Default' : this.inventoryService.selectedGroup,
-    }
+    };
   }
 }

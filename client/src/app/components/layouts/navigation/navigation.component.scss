@@ -1,31 +1,21 @@
-.k-sidebar-heading {
-  text-transform: uppercase;
-  font-weight: 600;
-  font-size: .65rem;
-  color: rgba(255, 255, 255, .5);
-}
-
-.k-sidebar-items .k-item {
-  width: 100%;
-  padding: 1rem 0;
-  margin-left: .8rem;
-  text-align: left;
+.k-sidebar-items a {
+  display: block;
+  padding: 1rem;
   font-weight: 300;
   font-size: .9rem;
-  color: rgba(255, 255, 255, .5);
-  background: transparent;
-  border: none;
+  color: #7f918b;
+  text-decoration: none;
 }
 
-.k-sidebar-items .k-item > * {
+.k-sidebar-items a > * {
   vertical-align: text-top;
 }
 
-.k-sidebar-items .k-item:hover {
+.k-sidebar-items a:hover {
   color: rgba(255, 255, 255, 1);
 }
 
-.k-sidebar-items .k-item mat-icon {
+.k-sidebar-items a mat-icon {
   font-size: 1rem;
 }
 
@@ -51,8 +41,4 @@
 
 .logo-wrapper * {
   max-height: 32px;
-}
-
-.k-dark-text {
-  color: #1C2331;
 }

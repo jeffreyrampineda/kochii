@@ -40,6 +40,7 @@ import { CreateGroupDialogComponent } from './components/shared/create-group-dia
 import { PresentationContainerComponent } from './components/shared/presentation-container/presentation-container.component';
 import { GaugeCardComponent } from './components/shared/gauge-card/gauge-card.component';
 import { ItemEditComponent } from './components/shared/item-edit/item-edit.component';
+import { LinkGroupComponent } from './components/shared/link-group/link-group.component';
 
 // -------------------------------------------------------------
 
@@ -66,6 +67,7 @@ import { ItemEditComponent } from './components/shared/item-edit/item-edit.compo
     GaugeCardComponent,
     ItemEditComponent,
     ItemUpdateComponent,
+    LinkGroupComponent,
   ],
   imports: [
     BrowserModule,
