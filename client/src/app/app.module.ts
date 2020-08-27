@@ -33,6 +33,7 @@ import { OverviewComponent } from './components/views/overview/overview.componen
 import { SettingsComponent } from './components/views/settings/settings.component';
 import { ItemAddComponent } from './components/views/item-add/item-add.component';
 import { ItemUpdateComponent } from './components/views/item-update/item-update.component';
+import { AccountComponent } from './components/views/account/account.component';
 
 // Components - shared
 import { UpdateDialogComponent } from './components/shared/update-dialog/update-dialog.component';
@@ -67,6 +68,7 @@ import { LinkGroupComponent } from './components/shared/link-group/link-group.co
     GaugeCardComponent,
     ItemEditComponent,
     ItemUpdateComponent,
+    AccountComponent,
     LinkGroupComponent,
   ],
   imports: [
