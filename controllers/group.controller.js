@@ -1,6 +1,6 @@
 const Router = require('koa-router');
 const Inventory = require('../models/inventory');
-const createHistory = require('../services/history.service').create;
+const createActivity = require('../services/activity.service').create;
 const Validate = require('../validators/group');
 
 const router = new Router();
@@ -41,7 +41,7 @@ router.post('/:name', async (ctx) => {
         );
 
         if (result.ok === 1) {
-            await createHistory({ owner: ctx.state.user._id, method: 'created', target: 'group', addedDate: new Date(), quantity: 0, description: "Group created" });
+            await createActivity({ owner: ctx.state.user._id, method: 'created', target: 'group', addedDate: new Date(), quantity: 0, description: "Group created" });
 
             for (const socket_id in global.currentConnections[ctx.state.user._id]) {
                 global.currentConnections[ctx.state.user._id][socket_id].socket.emit('group_create', name);
@@ -98,7 +98,7 @@ router.del('/:name', async (ctx) => {
         );
 
         if (result.ok === 1) {
-            await createHistory({ owner: ctx.state.user._id, method: 'removed', target: 'group', addedDate: new Date(), quantity: 0, description: "Permanently removed" });
+            await createActivity({ owner: ctx.state.user._id, method: 'removed', target: 'group', addedDate: new Date(), quantity: 0, description: "Permanently removed" });
 
             for (const socket_id in global.currentConnections[ctx.state.user._id]) {
                 global.currentConnections[ctx.state.user._id][socket_id].socket.emit('group_delete', name);

@@ -79,15 +79,15 @@
   </div>
   <!--/.Doughnut chart grid column-->
 
-  <!--History grid column-->
+  <!--Activities grid column-->
   <div class="col-md-12 mb-4">
 
     <!--Card-->
     <div class="card shadow-sm mt-4">
-      <h5 class="card-header">History</h5>
+      <h5 class="card-header">Activity Log</h5>
       <div class="card-body">
-        <div [hidden]="history.data.length === 0 || loadingHistory">
-          <table mat-table [dataSource]="history">
+        <div [hidden]="activities.data.length === 0 || loadingActivities">
+          <table mat-table [dataSource]="activities">
 
             <!-- Date Column -->
             <ng-container matColumnDef="date">
@@ -136,6 +136,6 @@
     <!--/.Card-->
 
   </div>
-  <!--/.History grid column-->
+  <!--/.Activities grid column-->
 
 </div>

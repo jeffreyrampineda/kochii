@@ -1,6 +1,6 @@
 const Inventory = require('../models/inventory');
 const ObjectId = require('mongoose').Types.ObjectId;
-const createHistory = require('../services/history.service').create;
+const createActivity = require('../services/activity.service').create;
 
 const itemProject = {
     '_id': '$items._id',
@@ -25,7 +25,7 @@ async function init(user, inventory_id) {
             }]
         });
 
-        await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: new Date(), quantity: 1, description: "Item created" });
+        await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: new Date(), quantity: 1, description: "Item created" });
 
         return true;
     } catch (error) {
@@ -140,7 +140,7 @@ async function createItem(user, name, quantity, cost, addedDate, expirationDate,
         if (result.ok === 1) {
             const item = result.value.items[0];
 
-            await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Item created" });
+            await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Item created" });
 
             for (const socket_id in global.currentConnections[user._id]) {
                 global.currentConnections[user._id][socket_id].socket.emit('item_create', item);
@@ -185,28 +185,28 @@ async function updateItem(user, _id, name, quantity, cost, addedDate, expiration
             const item = result.value.items.find(i => i._id == _id);
 
             if ((new Date(oldVItem.addedDate)).getTime() != (new Date(item.addedDate)).getTime()) {
-                await createHistory({ owner: user._id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity, description: "Changed dates" });
-                await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Changed dates" });
+                await createActivity({ owner: user._id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity, description: "Changed dates" });
+                await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Changed dates" });
             }
             if (oldVItem.group != group) {
-                await createHistory({ owner: user._id, method: 'edit', target: 'item', addedDate, quantity, description: "Changed groups" });
+                await createActivity({ owner: user._id, method: 'edit', target: 'item', addedDate, quantity, description: "Changed groups" });
             }
             if (option === 'set') {
                 const newQuantity = item.quantity - oldVItem.quantity;
 
                 if (newQuantity < 0) {
-                    await createHistory({ owner: user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity: newQuantity, description: "Updated item" });
+                    await createActivity({ owner: user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity: newQuantity, description: "Updated item" });
 
                 } else if (newQuantity > 0) {
-                    await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: newQuantity, description: "Updated item" });
+                    await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: newQuantity, description: "Updated item" });
                 }
 
             }
             if (option === 'inc') {
                 if (quantity <= 0) {
-                    await createHistory({ owner: user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity, description: "Decreased quantities" });
+                    await createActivity({ owner: user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity, description: "Decreased quantities" });
                 } else {
-                    await createHistory({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity, description: "Increased quantities" });
+                    await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity, description: "Increased quantities" });
                 }
             }
 
@@ -242,7 +242,7 @@ async function deleteItemById(_id, user) {
         );
 
         if (result.ok === 1) {
-            await createHistory({ owner: user._id, method: 'removed', target: 'item', addedDate: new Date(), quantity: 0, description: "Permanently removed" });
+            await createActivity({ owner: user._id, method: 'removed', target: 'item', addedDate: new Date(), quantity: 0, description: "Permanently removed" });
 
             for (const socket_id in global.currentConnections[user._id]) {
                 global.currentConnections[user._id][socket_id].socket.emit('item_delete', _id);

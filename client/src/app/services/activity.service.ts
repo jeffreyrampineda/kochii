@@ -4,16 +4,16 @@ import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
 import { MessageService } from './message.service';
-import { History } from 'src/app/interfaces/history';
+import { Activity } from 'src/app/interfaces/activity';
 
 // -------------------------------------------------------------
 
 @Injectable({
   providedIn: 'root'
 })
-export class HistoryService {
+export class ActivityService {
 
-  private historyUrl = '/api/history';
+  private activitiesUrl = '/api/activities';
 
   constructor(
     private http: HttpClient,
@@ -22,18 +22,18 @@ export class HistoryService {
 
 // -------------------------------------------------------------
 
-  /** Get all history. */
-  getHistory(): Observable<History[]> {
-    return this.http.get<History[]>(this.historyUrl)
+  /** Get all activities. */
+  getActivities(): Observable<Activity[]> {
+    return this.http.get<Activity[]>(this.activitiesUrl)
       .pipe(
-        tap(_ => this.log('fetched history')),
+        tap(_ => this.log('fetched activities')),
       );
   }
 
-  getAllFromPastDays(days: number): Observable<History[]> {
-    this.log(`fetched history records until ${days} days ago`);
+  getAllFromPastDays(days: number): Observable<Activity[]> {
+    this.log(`fetched activities records until ${days} days ago`);
 
-    return this.http.get<History[]>(`${this.historyUrl}/${days}`)
+    return this.http.get<Activity[]>(`${this.activitiesUrl}/${days}`)
       .pipe(
         map(result => {
           result.forEach(element => {
@@ -45,11 +45,11 @@ export class HistoryService {
       );
   }
 
-  /** Delete all history. */
-  deleteAllHistory(): Observable<any> {
-    return this.http.delete(this.historyUrl)
+  /** Delete all activities. */
+  clearActivities(): Observable<any> {
+    return this.http.delete(this.activitiesUrl)
       .pipe(
-        tap(_ => this.log('deleting all history')),
+        tap(_ => this.log('deleting all activities')),
       );
   }
 
@@ -60,6 +60,6 @@ export class HistoryService {
    * @param message - The message to log.
    */
   private log(message: string) {
-    this.messageService.add(`HistoryService: ${message}`);
+    this.messageService.add(`ActivityService: ${message}`);
   }
 }

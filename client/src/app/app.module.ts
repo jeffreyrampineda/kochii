@@ -27,7 +27,7 @@ import { DashboardComponent } from './components/layouts/dashboard/dashboard.com
 import { LoginComponent } from './components/views/login/login.component';
 import { RegisterComponent } from './components/views/register/register.component';
 import { GroceriesComponent } from './components/views/groceries/groceries.component';
-import { HistoryComponent } from './components/views/history/history.component';
+import { ActivityLogComponent } from './components/views/activity-log/activity-log.component';
 import { InventoryComponent } from './components/views/inventory/inventory.component';
 import { OverviewComponent } from './components/views/overview/overview.component';
 import { SettingsComponent } from './components/views/settings/settings.component';
@@ -55,7 +55,7 @@ import { LinkGroupComponent } from './components/shared/link-group/link-group.co
     LoginComponent,
     RegisterComponent,
     GroceriesComponent,
-    HistoryComponent,
+    ActivityLogComponent,
     InventoryComponent,
     OverviewComponent,
     SettingsComponent,

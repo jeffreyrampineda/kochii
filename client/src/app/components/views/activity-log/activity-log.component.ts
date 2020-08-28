@@ -2,44 +2,44 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { History } from 'src/app/interfaces/history';
-import { HistoryService } from 'src/app/services/history.service';
+import { Activity } from 'src/app/interfaces/activity';
+import { ActivityService } from 'src/app/services/activity.service';
 
 // -------------------------------------------------------------
 
 @Component({
-  selector: 'kochii-history',
-  templateUrl: './history.component.html',
-  styleUrls: ['./history.component.css']
+  selector: 'kochii-activity-log',
+  templateUrl: './activity-log.component.html',
+  styleUrls: ['./activity-log.component.css']
 })
-export class HistoryComponent implements OnInit {
+export class ActivityLogComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   displayedColumns: string[] = ['date', 'method', 'target', 'quantity', 'addedDate', 'description', ];
-  history: MatTableDataSource<History>;
+  activities: MatTableDataSource<Activity>;
   loading = false;
 
   constructor(
-    private historyService: HistoryService
+    private activityService: ActivityService
   ) { }
 
   // -------------------------------------------------------------
 
   ngOnInit() {
     // Set up inventory: MatTableDataSource with empty inital data
-    this.history = new MatTableDataSource();
-    this.history.paginator = this.paginator;
+    this.activities = new MatTableDataSource();
+    this.activities.paginator = this.paginator;
 
-    this.getHistory();
+    this.getActivities();
   }
 
-  /** Get all history and set them for presentation. */
-  getHistory(): void {
+  /** Get all activities and set them for presentation. */
+  getActivities(): void {
     this.loading = true;
-    this.historyService.getHistory().subscribe({
+    this.activityService.getActivities().subscribe({
       next: response => {
-        this.history.data = response;
+        this.activities.data = response;
       },
       error: err => {
         // Error
@@ -51,13 +51,13 @@ export class HistoryComponent implements OnInit {
     });
   }
 
-  /** Delete all history. */
+  /** Delete all activities. */
   clear(): void {
     this.loading = true;
-    this.historyService.deleteAllHistory().subscribe({
+    this.activityService.clearActivities().subscribe({
       next: response => {
         if (response === 1) {
-          this.history.data = [];
+          this.activities.data = [];
         }
       },
       error: err => {

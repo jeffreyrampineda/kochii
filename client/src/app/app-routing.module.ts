@@ -8,7 +8,7 @@ import { DashboardComponent } from './components/layouts/dashboard/dashboard.com
 import { LoginComponent } from './components/views/login/login.component';
 import { RegisterComponent } from './components/views/register/register.component';
 import { GroceriesComponent } from './components/views/groceries/groceries.component';
-import { HistoryComponent } from './components/views/history/history.component';
+import { ActivityLogComponent } from './components/views/activity-log/activity-log.component';
 import { InventoryComponent } from './components/views/inventory/inventory.component';
 import { OverviewComponent } from './components/views/overview/overview.component';
 import { SettingsComponent } from './components/views/settings/settings.component';
@@ -32,7 +32,7 @@ const routes: Routes = [
         children: [
           { path: '', redirectTo: 'account', pathMatch: 'full' },
           { path: 'account', component: AccountComponent },
-          { path: 'history', component: HistoryComponent },
+          { path: 'activity-log', component: ActivityLogComponent },
         ]},
       { path: '**', redirectTo: 'overview' }
     ]},

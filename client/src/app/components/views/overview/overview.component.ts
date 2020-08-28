@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart } from 'chart.js';
 import { LinearTickOptions } from 'chart.js';
-import { HistoryService } from 'src/app/services/history.service';
-import { History } from 'src/app/interfaces/history';
+import { ActivityService } from 'src/app/services/activity.service';
+import { Activity } from 'src/app/interfaces/activity';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { MatTableDataSource } from '@angular/material/table';
 
@@ -29,20 +29,20 @@ export class OverviewComponent implements OnInit {
   lineChart;
   today: Date = new Date();
   numberOfExpired = 0;
-  rawHistoryData: History[] = [];
+  rawActivitiesData: Activity[] = [];
   itemTotal = 0;
   loadingInventory = false;
-  loadingHistory = false;
+  loadingActivities = false;
   weeklySpent = 0;
 
   firstWeekDay: Date;
   lastWeekDay: Date;
 
   displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
-  history: MatTableDataSource<History>;
+  activities: MatTableDataSource<Activity>;
 
   constructor(
-    private historyService: HistoryService,
+    private activityService: ActivityService,
     private inventoryService: InventoryService
   ) {
     this.today.setHours(0, 0, 0, 0);
@@ -60,9 +60,9 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.history = new MatTableDataSource();
+    this.activities = new MatTableDataSource();
 
-    this.getHistoryData();
+    this.getActivitiesData();
     this.getInventory();
 
     this.getItemsAddedThisWeek();
@@ -91,19 +91,19 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  getHistoryData(): void {
-    this.loadingHistory = true;
-    this.historyService.getAllFromPastDays(this.fromDay).subscribe({
+  getActivitiesData(): void {
+    this.loadingActivities = true;
+    this.activityService.getAllFromPastDays(this.fromDay).subscribe({
       next: response => {
-        this.history.data = response.slice(0, 4);
-        this.rawHistoryData = response;
+        this.activities.data = response.slice(0, 4);
+        this.rawActivitiesData = response;
       },
       error: err => {
         // Error
-        this.loadingHistory = false;
+        this.loadingActivities = false;
       },
       complete: () => {
-        this.loadingHistory = false;
+        this.loadingActivities = false;
         this.initializeLineOne();
       }
     });
@@ -180,8 +180,8 @@ export class OverviewComponent implements OnInit {
       datasets: [{
         label: 'Total quantity',
         data: this.totalQuantityPerDay(
-          this.rawHistoryData.filter(h => h.method === 'add'),
-          this.rawHistoryData.filter(h => h.method === 'delete')
+          this.rawActivitiesData.filter(h => h.method === 'add'),
+          this.rawActivitiesData.filter(h => h.method === 'delete')
         ),
         borderColor: gradientBlue,
         borderWidth: 2,
@@ -249,12 +249,12 @@ export class OverviewComponent implements OnInit {
   }
 
   /**
-   * Combines the 'add' and 'delete' rawHistoryData to form the total quantity per day.
+   * Combines the 'add' and 'delete' rawActivitiesData to form the total quantity per day.
    * @param dataAdd - data with adding quantities.
    * @param dataDelete - data with removing quantities.
    * @returns An array that can be used for chartjs.
    */
-  totalQuantityPerDay(dataAdd: History[], dataDelete: History[]): ChartData[] {
+  totalQuantityPerDay(dataAdd: Activity[], dataDelete: Activity[]): ChartData[] {
     const quantityPerDay = this.createEmptyWeek();
 
     dataAdd.forEach(i => {
@@ -322,7 +322,7 @@ export class OverviewComponent implements OnInit {
   }
 
   quantityRemovedThisWeek(): number {
-    return this.rawHistoryData.reduce((acc, curr) => {
+    return this.rawActivitiesData.reduce((acc, curr) => {
       if (curr.addedDate >= this.firstWeekDay &&
           curr.addedDate <= this.lastWeekDay &&
           curr.quantity < 0) {

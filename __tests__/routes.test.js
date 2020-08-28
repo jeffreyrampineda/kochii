@@ -26,8 +26,8 @@ describe('/api route', () => {
         expect(response.status).toEqual(401);
         expect(response.text).toContain('Unauthorized');
     });
-    test('GET /api/history without token should give Unauthorized', async () => {
-        const response = await request(server).get('/api/history');
+    test('GET /api/activities without token should give Unauthorized', async () => {
+        const response = await request(server).get('/api/activities');
 
         expect(response.status).toEqual(401);
         expect(response.text).toContain('Unauthorized');

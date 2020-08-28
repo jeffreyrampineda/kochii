@@ -53,9 +53,9 @@ const userSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Inventory'
     },
-    history: {
+    activity: {
         type: Schema.Types.ObjectId,
-        ref: 'History'
+        ref: 'Activity'
     }
 }, { timestamps: true });
 
