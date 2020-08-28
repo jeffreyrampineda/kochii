@@ -1,13 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Chart } from 'chart.js';
 import { LinearTickOptions } from 'chart.js';
-import { HistoryService } from 'src/app/services/history.service';
+import { ActivityService } from 'src/app/services/activity.service';
+import { Activity } from 'src/app/interfaces/activity';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { MatTableDataSource } from '@angular/material/table';
 
 interface ChartData {
-  x: any;
-  y: any;
+  x: Date;
+  y: number;
+}
+
+interface Week {
+  [index: string]: number;
 }
 
 @Component({
@@ -17,42 +22,47 @@ interface ChartData {
 })
 export class OverviewComponent implements OnInit {
 
-  fromDay = 6;
+  @ViewChild('canvasLine') canvasLine: ElementRef;
+
+  fromDay = 7;
   doughnutChart;
   lineChart;
-  start: Date = new Date();
   today: Date = new Date();
   numberOfExpired = 0;
-  rawHistoryData = [];
+  rawActivitiesData: Activity[] = [];
   itemTotal = 0;
   loadingInventory = false;
-  loadingHistory = false;
+  loadingActivities = false;
   weeklySpent = 0;
 
-  firstWeekDay;
-  lastWeekDay;
+  firstWeekDay: Date;
+  lastWeekDay: Date;
 
   displayedColumns: string[] = ['method', 'target', 'quantity', 'addedDate', 'description'];
-  history: MatTableDataSource<History>;
+  activities: MatTableDataSource<Activity>;
 
   constructor(
-    private historyService: HistoryService,
+    private activityService: ActivityService,
     private inventoryService: InventoryService
   ) {
-    const curr = new Date();
-    curr.setHours(0, 0, 0, 0);
-    const first = curr.getDate() - curr.getDay();
+    this.today.setHours(0, 0, 0, 0);
+    this.firstWeekDay = new Date(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.today.getDate() - this.today.getDay()
+    );
 
-    this.start.setDate(this.start.getDate() - 6);
-    this.start.setHours(0, 0, 0, 0);
-    this.firstWeekDay = new Date(curr.setDate(first));
-    this.lastWeekDay = new Date(curr.setDate(curr.getDate() + 6));
+    this.lastWeekDay = new Date(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.firstWeekDay.getDate() + 6
+    );
   }
 
   ngOnInit() {
-    this.history = new MatTableDataSource();
+    this.activities = new MatTableDataSource();
 
-    this.getHistoryData();
+    this.getActivitiesData();
     this.getInventory();
 
     this.getItemsAddedThisWeek();
@@ -81,19 +91,19 @@ export class OverviewComponent implements OnInit {
     });
   }
 
-  getHistoryData(): void {
-    this.loadingHistory = true;
-    this.historyService.getAllFromPastDays(this.fromDay).subscribe({
+  getActivitiesData(): void {
+    this.loadingActivities = true;
+    this.activityService.getAllFromPastDays(this.fromDay).subscribe({
       next: response => {
-        this.history.data = response.slice(0, 4);
-        this.rawHistoryData = response;
+        this.activities.data = response.slice(0, 4);
+        this.rawActivitiesData = response;
       },
       error: err => {
         // Error
-        this.loadingHistory = false;
+        this.loadingActivities = false;
       },
       complete: () => {
-        this.loadingHistory = false;
+        this.loadingActivities = false;
         this.initializeLineOne();
       }
     });
@@ -162,35 +172,39 @@ export class OverviewComponent implements OnInit {
   }
 
   initializeLineOne(): void {
+    const gradientBlue = this.canvasLine.nativeElement.getContext('2d').createLinearGradient(0, 0, 0, 400);
+    gradientBlue.addColorStop(0, 'rgba(50, 65, 160, 0.5)');
+    gradientBlue.addColorStop(1, 'rgba(70, 200, 250, 0.1)');
+
     const data = {
       datasets: [{
-        type: 'line',
         label: 'Total quantity',
         data: this.totalQuantityPerDay(
-          this.rawHistoryData.filter(h => h.method === 'add'),
-          this.rawHistoryData.filter(h => h.method === 'delete')
+          this.rawActivitiesData.filter(h => h.method === 'add'),
+          this.rawActivitiesData.filter(h => h.method === 'delete')
         ),
-        borderColor: 'rgba(0, 0, 255, 0.3)',
+        borderColor: gradientBlue,
         borderWidth: 2,
-        fill: false
-      }, {
-        type: 'bar',
-        label: 'Removed',
-        data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'delete')),
-        backgroundColor: 'rgba(255, 142, 167)',
-      }, {
-        type: 'bar',
-        label: 'Added',
-        data: this.parseRawData(this.rawHistoryData.filter(h => h.method === 'add')),
-        backgroundColor: 'rgba(139, 184, 255)',
+        pointHoverRadius: 10,
+        pointRadius: 5,
+        backgroundColor: gradientBlue,
       }]
     };
 
+    const start = new Date(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.today.getDate() - 6
+    );
+
     this.lineChart = new Chart('chart-line', {
-      type: 'bar',
+      type: 'line',
       data: data,
       options: {
         responsive: true,
+        legend: {
+          display: false
+        },
         tooltips: {
           mode: 'index',
           intersect: false
@@ -199,7 +213,7 @@ export class OverviewComponent implements OnInit {
           xAxes: [{
             type: 'time',
             ticks: {
-              min: this.start.toDateString(),
+              min: start.toDateString(),
               max: this.today.toDateString(),
             },
             time: {
@@ -235,75 +249,64 @@ export class OverviewComponent implements OnInit {
   }
 
   /**
-   * Combines the 'add' and 'delete' rawHistoryData to form the total quantity per day.
-   * @param data - raw history data.
-   * @param data2 - raw history data.
+   * Combines the 'add' and 'delete' rawActivitiesData to form the total quantity per day.
+   * @param dataAdd - data with adding quantities.
+   * @param dataDelete - data with removing quantities.
    * @returns An array that can be used for chartjs.
    */
-  totalQuantityPerDay(data: any[], data2: any[]): ChartData[] {
-    const quantityPerDay = this.mergeSameDates(data);
+  totalQuantityPerDay(dataAdd: Activity[], dataDelete: Activity[]): ChartData[] {
+    const quantityPerDay = this.createEmptyWeek();
 
-    data2.forEach(i => {
-      const dateString = (new Date(i.addedDate)).toDateString();
-
-      if (quantityPerDay[dateString] !== undefined) {
-        quantityPerDay[dateString] += i.quantity;
-      } else {
-        quantityPerDay[dateString] = i.quantity;
-      }
+    dataAdd.forEach(i => {
+      quantityPerDay[i.addedDate.toDateString()] += i.quantity;
     });
 
-    const totalQuantityPerDayData = this.objectToChartData(quantityPerDay);
+    dataDelete.forEach(i => {
+      quantityPerDay[i.addedDate.toDateString()] += i.quantity;
+    });
+
+    const totalQuantityPerDayData = this.weekToChartData(quantityPerDay);
 
     totalQuantityPerDayData.sort(function (a, b) {
-      return (+new Date(a.x)) - (+new Date(b.x));
+      return (+a.x) - (+b.x);
     });
 
-    for (let i = 0; i < totalQuantityPerDayData.length; i++) {
-      if (i !== 0) {
-        totalQuantityPerDayData[i].y += totalQuantityPerDayData[i - 1].y;
-      }
+    // Increment from previous day.
+    for (let i = 1; i < totalQuantityPerDayData.length; i++) {
+      totalQuantityPerDayData[i].y += totalQuantityPerDayData[i - 1].y;
     }
     return totalQuantityPerDayData;
   }
 
   /**
-   * Sums up the quantities of all histories with similar dates.
-   * @param data - raw history data.
-   * @returns An object of simplified histories.
+   * Creates an empty indexable object of the entire week with datestring
+   * as key, quantity as value.
+   * @returns An object of the entire week with empty values.
    */
-  mergeSameDates(data: any[]): any {
-    return data.reduce((acc, curr) => {
-      const dateString = (new Date(curr.addedDate)).toDateString();
+  createEmptyWeek(): Week {
+    const t = new Date();
+    const thisWeek: Week = {};
+    thisWeek[t.toDateString()] = 0;
 
-      if (acc[dateString] !== undefined) {
-        acc[dateString] += Math.abs(curr.quantity);
-      } else {
-        acc[dateString] = Math.abs(curr.quantity);
+    for (let i = 0; i < this.fromDay; i++) {
+      thisWeek[new Date(t.setDate(t.getDate() - 1)).toDateString()] = 0;
+    }
+    return thisWeek;
+  }
+
+  /**
+   * Converts a week object into a chartData[] array.
+   * @param data - week object.
+   * @returns An array that can be used for chartjs.
+   */
+  weekToChartData(week: Week): ChartData[] {
+    const data: ChartData[] = [];
+    for (const day in week) {
+      if (week.hasOwnProperty(day)) {
+        data.push({ 'x': new Date(day), 'y': week[day] });
       }
-      return acc;
-    }, {});
-  }
-
-  /**
-   * Converts an object into a chartData[] array.
-   * @param data - object.
-   * @returns An array that can be used for chartjs.
-   */
-  objectToChartData(data: {}): ChartData[] {
-    return Object.keys(data).map(function (key) {
-      return { 'x': new Date(key), 'y': data[key] };
-    });
-  }
-
-  /**
-   * Parses raw history data to be used for chartjs.
-   * @param data - raw history data.
-   * @returns An array that can be used for chartjs.
-   */
-  parseRawData(data: any[]): ChartData[] {
-    const quantityPerDay = this.mergeSameDates(data);
-    return this.objectToChartData(quantityPerDay);
+    }
+    return data;
   }
 
   /**
@@ -319,16 +322,14 @@ export class OverviewComponent implements OnInit {
   }
 
   quantityRemovedThisWeek(): number {
-    let totalRemoved = 0;
-
-    this.rawHistoryData.forEach(h => {
-      if ((new Date(h.addedDate)) >= this.firstWeekDay && (new Date(h.addedDate)) <= this.lastWeekDay) {
-        if (h.quantity < 0) {
-          totalRemoved += h.quantity;
-        }
+    return this.rawActivitiesData.reduce((acc, curr) => {
+      if (curr.addedDate >= this.firstWeekDay &&
+          curr.addedDate <= this.lastWeekDay &&
+          curr.quantity < 0) {
+        acc -= curr.quantity;
       }
-    });
-    return Math.abs(totalRemoved);
+      return acc;
+    }, 0);
   }
 
   getItemsAddedThisWeek() {

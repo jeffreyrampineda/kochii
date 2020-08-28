@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const historySchema = new Schema({
+const activitySchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    history: [{
+    activity: [{
         created_at: {
             type: Date,
             default: Date.now
@@ -32,4 +32,4 @@ const historySchema = new Schema({
     }]
 });
 
-module.exports = mongoose.model('History', historySchema);
+module.exports = mongoose.model('Activity', activitySchema);

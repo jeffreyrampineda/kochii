@@ -21,18 +21,19 @@ import { AppComponent } from './app.component';
 // Components - layouts
 import { FooterComponent } from './components/layouts/footer/footer.component';
 import { NavigationComponent } from './components/layouts/navigation/navigation.component';
+import { DashboardComponent } from './components/layouts/dashboard/dashboard.component';
 
 // Components - views
-import { DashboardComponent } from './components/views/dashboard/dashboard.component';
 import { LoginComponent } from './components/views/login/login.component';
 import { RegisterComponent } from './components/views/register/register.component';
 import { GroceriesComponent } from './components/views/groceries/groceries.component';
-import { HistoryComponent } from './components/views/history/history.component';
+import { ActivityLogComponent } from './components/views/activity-log/activity-log.component';
 import { InventoryComponent } from './components/views/inventory/inventory.component';
 import { OverviewComponent } from './components/views/overview/overview.component';
 import { SettingsComponent } from './components/views/settings/settings.component';
 import { ItemAddComponent } from './components/views/item-add/item-add.component';
 import { ItemUpdateComponent } from './components/views/item-update/item-update.component';
+import { AccountComponent } from './components/views/account/account.component';
 
 // Components - shared
 import { UpdateDialogComponent } from './components/shared/update-dialog/update-dialog.component';
@@ -40,6 +41,7 @@ import { CreateGroupDialogComponent } from './components/shared/create-group-dia
 import { PresentationContainerComponent } from './components/shared/presentation-container/presentation-container.component';
 import { GaugeCardComponent } from './components/shared/gauge-card/gauge-card.component';
 import { ItemEditComponent } from './components/shared/item-edit/item-edit.component';
+import { LinkGroupComponent } from './components/shared/link-group/link-group.component';
 
 // -------------------------------------------------------------
 
@@ -53,7 +55,7 @@ import { ItemEditComponent } from './components/shared/item-edit/item-edit.compo
     LoginComponent,
     RegisterComponent,
     GroceriesComponent,
-    HistoryComponent,
+    ActivityLogComponent,
     InventoryComponent,
     OverviewComponent,
     SettingsComponent,
@@ -66,6 +68,8 @@ import { ItemEditComponent } from './components/shared/item-edit/item-edit.compo
     GaugeCardComponent,
     ItemEditComponent,
     ItemUpdateComponent,
+    AccountComponent,
+    LinkGroupComponent,
   ],
   imports: [
     BrowserModule,

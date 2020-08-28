@@ -1,1 +1,13 @@
-<h5><strong>Settings</strong></h5>
+<kochii-presentation-container title="Settings">
+    <div class="row" style="padding-left: 15px;">
+        <div class="col-2 k-settings-menu">
+            <kochii-link-group heading="General">
+                <a routerLink="account">Account</a>
+                <a routerLink="activity-log">Activity Log</a>
+            </kochii-link-group>
+        </div>
+        <div class="col-10" style="height: 100%;">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</kochii-presentation-container>

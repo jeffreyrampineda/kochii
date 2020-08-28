@@ -1,4 +1,4 @@
-<kochii-presentation-container title="History" [isEmpty]="history.data.length === 0" [loading]="loading">
+<kochii-presentation-container title="Activity Log" [isEmpty]="activities.data.length === 0" [loading]="loading">
 
   <!--Actions-->
   <div actions class="d-sm-flex justify-content-between">
@@ -7,7 +7,7 @@
   <!--/.Actions-->
 
   <!--Content-->
-  <table mat-table [dataSource]="history">
+  <table mat-table [dataSource]="activities">
 
     <!-- Date Column -->
     <ng-container matColumnDef="date">

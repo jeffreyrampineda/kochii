@@ -72,6 +72,16 @@ export class AuthenticationService {
             );
     }
 
+    /**
+     * Authenticates the user to the server.
+     * @param user - The user to be authenticated.
+     */
+    deleteAccount(): Observable<number> {
+        this.log('deleting account');
+
+        return this.http.delete<number>('/api/account');
+    }
+
     /** Logs out the current user then reloads the page. */
     logout(): void {
 

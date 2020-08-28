@@ -1,4 +1,4 @@
-export interface History {
+export interface Activity {
     _id?: string;
     created_at: Date;
     method: string;

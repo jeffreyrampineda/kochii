@@ -1,14 +1,16 @@
 const User = require('../models/user');
 const mongoose = require('mongoose');
 const initInventory = require('./inventory.service').init;
-const initHistory = require('./history.service').init;
+const delInventory = require('./inventory.service').deleteInventoryByOwnerId;
+const initActivity = require('./activity.service').init;
+const delActivity = require('./activity.service').deleteActivitiesByOwnerId;
 const cryptoRandomString = require('crypto-random-string');
 const sendVerificationEmail = require('./external_api.service').sendVerificationEmail;
 
 async function init(username, password, email) {
     try {
         const verificationToken = cryptoRandomString({ length: 16, type: 'url-safe' });
-        const history_id = mongoose.Types.ObjectId();
+        const activity_id = mongoose.Types.ObjectId();
         const inventory_id = mongoose.Types.ObjectId();
 
         const user = await User.create({
@@ -18,13 +20,13 @@ async function init(username, password, email) {
             isVerified: false,
             verificationToken,
             inventory: inventory_id,
-            history: history_id
+            activity: activity_id
         });
 
-        const initHistoryResult = await initHistory(user, history_id);
+        const initActivityResult = await initActivity(user, activity_id);
         const initInventoryResult = await initInventory(user, inventory_id);
 
-        if (initHistoryResult && initInventoryResult) {
+        if (initActivityResult && initInventoryResult) {
             console.log("User successfully created");
         }
 
@@ -66,9 +68,27 @@ async function getUserByEmail(email) {
     }
 }
 
+async function deleteUserById(_id) {
+    try {
+        let result = {
+            ok: 0
+        }
+        const activityResult = await delActivity(_id);
+        const inventoryResult = await delInventory(_id);
+        
+        if (activityResult.ok && inventoryResult.ok) {
+            result = await User.deleteOne({ _id: _id });
+        }
+        return result;
+    } catch (error) {
+        throw (error);
+    }
+}
+
 module.exports = {
     init,
     verify,
     getUserByName,
     getUserByEmail,
+    deleteUserById,
 }
