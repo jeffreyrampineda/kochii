@@ -7,7 +7,7 @@ const delActivity = require('./activity.service').deleteActivitiesByOwnerId;
 const cryptoRandomString = require('crypto-random-string');
 const sendVerificationEmail = require('./external_api.service').sendVerificationEmail;
 
-async function init(accountName, password, email) {
+async function init(accountName, password, email, firstName, lastName) {
     try {
         const verificationToken = cryptoRandomString({ length: 16, type: 'url-safe' });
         const activity_id = mongoose.Types.ObjectId();
@@ -17,6 +17,8 @@ async function init(accountName, password, email) {
             accountName,
             password,
             email,
+            firstName,
+            lastName,
             isVerified: false,
             verificationToken,
             inventory: inventory_id,

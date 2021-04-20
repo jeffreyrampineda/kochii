@@ -26,7 +26,10 @@ router.post('/login', async (ctx) => {
             // 202 - Accepted.
             ctx.status = 202;
             ctx.body = {
-                accountName,
+                accountName: account.accountName,
+                email: account.email,
+                firstName: account.firstName,
+                lastName: account.lastName,
                 token: Helper.generateToken(account.toJSON()),
                 isVerified: account.isVerified,
             };
@@ -41,12 +44,12 @@ router.post('/login', async (ctx) => {
 /**
  * POST /api/register
  * Registers the account to the database.
- * @requires { body } accountName, password, email
+ * @requires { body } accountName, password, email, firstName, lastName
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
 router.post('/register', async (ctx) => {
     try {
-        const { errors, accountName, password, email } = await Validate.register(ctx.request.body);
+        const { errors, accountName, password, email, firstName, lastName } = await Validate.register(ctx.request.body);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
@@ -56,12 +59,17 @@ router.post('/register', async (ctx) => {
             accountName,
             password,
             email,
+            firstName,
+            lastName
         );
 
         // 202 - Accepted
         ctx.status = 202;
         ctx.body = {
             accountName,
+            email,
+            firstName,
+            lastName,
             token: Helper.generateToken(account.toJSON()),
             isVerified: account.isVerified,
         };

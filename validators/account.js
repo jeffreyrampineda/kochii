@@ -39,12 +39,14 @@ async function login(body) {
  * @return { JSON } object containing all errors and data.
  */
 async function register(body) {
-    let { accountName = "", password = "", email = "" } = body;
+    let { accountName = "", password = "", email = "", firstName = "", lastName = "" } = body;
     let errors = {};
 
     accountName = Validator.escape(accountName);
     password = Validator.escape(password);
     email = Validator.escape(email);
+    firstName = Validator.escape(firstName);
+    lastName = Validator.escape(lastName);
 
     // accountName validation
     if (Validator.isEmpty(accountName)) {
@@ -72,7 +74,25 @@ async function register(body) {
     } else if (await Account.exists({ email })) {
         errors.email = "Email already exists";
     }
-    return { errors, accountName, password, email };
+
+    // firstName validation
+    if (Validator.isEmpty(firstName)) {
+        errors.firstName = "First name is required";
+    } else if (!Validator.isLength(firstName, { min: 2, max: 30 })) {
+        errors.firstName = "First name must be between 2 to 30 characters";
+    } else if (!/^[a-zA-Z]*$/.test(firstName)) {
+        errors.firstName = "First name must only contain letters";
+    }
+
+    // lastName validation
+    if (Validator.isEmpty(lastName)) {
+        errors.lastName = "Last name is required";
+    } else if (!Validator.isLength(lastName, { min: 2, max: 30 })) {
+        errors.lastName = "Last name must be between 2 to 30 characters";
+    } else if (!/^[a-zA-Z]*$/.test(lastName)) {
+        errors.lastName = "Last name must only contain letters";
+    }
+    return { errors, accountName, password, email, firstName, lastName };
 }
 
 /**

@@ -39,6 +39,28 @@
         </mat-error>
     </mat-form-field>
 
+    <!-- firstName -->
+    <mat-form-field style="width: 100%;">
+        <input matInput formControlName="firstName" type="text" placeholder="First Name" />
+        <mat-error *ngIf="f.firstName.errors">
+            <div *ngIf="f.firstName.errors.required">First name is required</div>
+            <div *ngIf="f.firstName.errors.minlength">Minimum length is 2</div>
+            <div *ngIf="f.firstName.errors.maxlength">Maximum length is 30</div>
+            <div *ngIf="f.firstName.errors.pattern">First name must only contain letters</div>
+        </mat-error>
+    </mat-form-field>
+
+    <!-- lastName -->
+    <mat-form-field style="width: 100%;">
+        <input matInput formControlName="lastName" type="text" placeholder="Last Name" />
+        <mat-error *ngIf="f.lastName.errors">
+            <div *ngIf="f.lastName.errors.required">Last name is required</div>
+            <div *ngIf="f.lastName.errors.minlength">Minimum length is 2</div>
+            <div *ngIf="f.lastName.errors.maxlength">Maximum length is 30</div>
+            <div *ngIf="f.lastName.errors.pattern">Last name must only contain letters</div>
+        </mat-error>
+    </mat-form-field>
+
     <!-- Messages -->
     <div class="text-center mt-4">
         <p *ngIf="loading">Loading...</p>

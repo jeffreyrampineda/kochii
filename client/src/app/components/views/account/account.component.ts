@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'src/app/services/account.service';
 
+import { Account } from '../../../interfaces/account';
+
 @Component({
   selector: 'kochii-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css']
 })
 export class AccountComponent implements OnInit {
-  accountName: string;
+  account: Account;
 
   constructor(
     private accountService: AccountService
@@ -21,7 +23,7 @@ export class AccountComponent implements OnInit {
     this.accountService.currentAccount.subscribe({
       next: response => {
         if (response) {
-          this.accountName = response.accountName;
+          this.account = response;
         }
       },
       error: () => {

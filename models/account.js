@@ -41,6 +41,26 @@ const accountSchema = new Schema({
             }
         ]
     },
+    firstName: {
+        type: String,
+        required: [true, "First name is required"],
+        minlength: [2, "First name must have a minimum length of 2"],
+        maxlength: [30, "First name must have a maximum length of 30"],
+        validate: {
+            validator: firstName => /^[a-zA-Z]*$/.test(firstName),
+            message: "First name must only contain letters"
+        }
+    },
+    lastName: {
+        type: String,
+        required: [true, "Last name is required"],
+        minlength: [2, "Last name must have a minimum length of 2"],
+        maxlength: [30, "Last name must have a maximum length of 30"],
+        validate: {
+            validator: lastName => /^[a-zA-Z]*$/.test(lastName),
+            message: "Last name must only contain letters"
+        }
+    },
     isVerified: {
         type: Boolean,
         default: false

@@ -63,7 +63,19 @@ export class RegisterComponent implements OnInit {
       email: ['', [
         Validators.required,
         Validators.email
-      ]]
+      ]],
+      firstName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(30),
+        Validators.pattern('^[a-zA-Z]*$')
+      ]],
+      lastName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(30),
+        Validators.pattern('^[a-zA-Z]*$')
+      ]],
     }, { validator: this.checkPasswords });
   }
 
@@ -84,9 +96,9 @@ export class RegisterComponent implements OnInit {
       email: undefined
     };
 
-    const { accountName, password, email } = registerData;
+    const { accountName, password, email, firstName, lastName } = registerData;
 
-    this.accountService.register({ accountName, password, email }).subscribe({
+    this.accountService.register({ accountName, password, email, firstName, lastName }).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/app']);

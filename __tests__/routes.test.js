@@ -38,7 +38,9 @@ describe('/api authentication route', () => {
     const correct_account = {
         accountName: "correct_accountName",
         password: "correct_password",
-        email: "correct_email@correct.com"
+        email: "correct_email@correct.com",
+        firstName: "correctFirstName",
+        lastName: "correctLastName",
     }
 
     test('POST /api/register with correct data should give 202 status /w token', async () => {
