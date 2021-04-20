@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { AccountService } from 'src/app/services/account.service';
 import { SocketioService } from 'src/app/services/socketio.service';
 import { Title } from '@angular/platform-browser';
 
@@ -19,7 +19,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   username = '';
 
   constructor(
-    private authenticationService: AuthenticationService,
+    private accountService: AccountService,
     private socketioService: SocketioService,
     private titleService: Title,
   ) {
@@ -30,7 +30,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.setTitle('Overview');
     this.socketioService.initSocket();
 
-    this.authenticationService.currentUser.pipe(takeUntil(this.unsub)).subscribe({
+    this.accountService.currentUser.pipe(takeUntil(this.unsub)).subscribe({
       next: response => {
         if (response) {
           if (!response.isVerified) {
@@ -55,7 +55,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.socketioService.disconnect();
-    this.authenticationService.logout();
+    this.accountService.logout();
   }
 
   setTitle(title: string): void {

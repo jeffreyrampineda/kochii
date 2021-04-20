@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { AccountService } from 'src/app/services/account.service';
 import io from 'socket.io-client';
 
 @Injectable({
@@ -12,12 +12,12 @@ export class SocketioService {
   private token = '';
 
   constructor(
-    private authenticationService: AuthenticationService
+    private accountService: AccountService
   ) { }
 
   initSocket(): void {
-    if (this.authenticationService.isLoggedIn) {
-      this.token = this.authenticationService.currentUserValue.token;
+    if (this.accountService.isLoggedIn) {
+      this.token = this.accountService.currentUserValue.token;
     }
     this.socket = io(environment.socket_endpoint);
     this.socket.emit('authenticate', { token: this.token });

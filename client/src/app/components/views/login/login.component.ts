@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { AccountService } from 'src/app/services/account.service';
 import { Title } from '@angular/platform-browser';
 
 // -------------------------------------------------------------
@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private accountService: AccountService,
     private formBuilder: FormBuilder,
     private titleService: Title,
   ) { }
@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit {
     this.titleService.setTitle('Login | Kochii');
 
     // If currently logged in, redirect to dashboard.
-    if (this.authenticationService.isLoggedIn) {
+    if (this.accountService.isLoggedIn) {
       this.router.navigate(['/app']);
     }
 
@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
       login: undefined
     };
 
-    this.authenticationService.login(loginData).subscribe({
+    this.accountService.login(loginData).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/app']);

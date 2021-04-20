@@ -2,12 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { AuthenticationService } from '../services/authentication.service';
+import { AccountService } from '../services/account.service';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
     constructor(
-        private authenticationService: AuthenticationService,
+        private accountService: AccountService,
     ) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -26,9 +26,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
                 // server-side error
                 console.error(`server-side error: ${error.status} - Name: ${error.name}`);
-                if (error.status === 401 && this.authenticationService.isLoggedIn) {
+                if (error.status === 401 && this.accountService.isLoggedIn) {
                     // auto logout if 401 response returned from api
-                    this.authenticationService.logout();
+                    this.accountService.logout();
                 }
 
             } else {

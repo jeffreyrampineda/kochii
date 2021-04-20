@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'kochii-account',
@@ -10,7 +10,7 @@ export class AccountComponent implements OnInit {
   username: string;
 
   constructor(
-    private authenticationService: AuthenticationService
+    private accountService: AccountService
   ) { }
 
   ngOnInit(): void {
@@ -18,7 +18,7 @@ export class AccountComponent implements OnInit {
   }
 
   getAccount(): void {
-    this.authenticationService.currentUser.subscribe({
+    this.accountService.currentUser.subscribe({
       next: response => {
         if (response) {
           this.username = response.username;
@@ -34,10 +34,10 @@ export class AccountComponent implements OnInit {
   }
 
   deleteAccount(): void {
-    this.authenticationService.deleteAccount().subscribe({
+    this.accountService.deleteAccount().subscribe({
       next: response => {
         if (response === 1) {
-          this.authenticationService.logout();
+          this.accountService.logout();
         }
       },
       error: () => {

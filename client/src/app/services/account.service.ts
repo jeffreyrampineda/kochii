@@ -7,9 +7,8 @@ import { User } from '../interfaces/user';
 import { MessageService } from './message.service';
 
 @Injectable({ providedIn: 'root' })
-export class AuthenticationService {
+export class AccountService {
 
-    private authenticationUrl = '/api';
     private currentUserSubject: BehaviorSubject<User>;
     public currentUser: Observable<User>;
 
@@ -46,7 +45,7 @@ export class AuthenticationService {
     login(user: User): Observable<User> {
         this.log('logging in');
 
-        return this.http.post<User>(`${this.authenticationUrl}/login`, user)
+        return this.http.post<User>('/api/login', user)
             .pipe(
                 map(response => {
                     this.onAuthenticated(response);
@@ -62,7 +61,7 @@ export class AuthenticationService {
     register(user: User): Observable<User> {
         this.log('registering');
 
-        return this.http.post<User>(`${this.authenticationUrl}/register`, user)
+        return this.http.post<User>('/api/register', user)
             .pipe(
                 map(response => {
                     // Login if successful.
@@ -99,6 +98,6 @@ export class AuthenticationService {
      * @param message - The message to log.
      */
     private log(message: string, type: string = 'Message') {
-        this.messageService.add(`authenticationService: ${message}`, type);
+        this.messageService.add(`accountService: ${message}`, type);
     }
 }
