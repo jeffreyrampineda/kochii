@@ -25,8 +25,8 @@ async function init(accountName, password, email, firstName, lastName) {
             activity: activity_id
         });
 
-        const initActivityResult = await initActivity(account, activity_id);
-        const initInventoryResult = await initInventory(account, inventory_id);
+        const initActivityResult = await initActivity(account._id, activity_id);
+        const initInventoryResult = await initInventory(account._id, inventory_id);
 
         if (initActivityResult && initInventoryResult) {
             console.log("Account successfully created");
@@ -40,10 +40,10 @@ async function init(accountName, password, email, firstName, lastName) {
     }
 }
 
-async function verify(account, email) {
+async function verify(account_id, email) {
     try {
         await Account.findOneAndUpdate(
-            { _id: account._id, email },
+            { _id: account_id, email },
             { isVerified: true },
             { runValidators: true }
         );
@@ -70,16 +70,16 @@ async function getAccountByEmail(email) {
     }
 }
 
-async function deleteAccountById(_id) {
+async function deleteAccountById(account_id) {
     try {
         let result = {
             ok: 0
         }
-        const activityResult = await delActivity(_id);
-        const inventoryResult = await delInventory(_id);
+        const activityResult = await delActivity(account_id);
+        const inventoryResult = await delInventory(account_id);
         
         if (activityResult.ok && inventoryResult.ok) {
-            result = await Account.deleteOne({ _id: _id });
+            result = await Account.deleteOne({ _id: account_id });
         }
         return result;
     } catch (error) {

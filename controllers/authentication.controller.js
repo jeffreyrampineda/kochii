@@ -30,7 +30,7 @@ router.post('/login', async (ctx) => {
                 email: account.email,
                 firstName: account.firstName,
                 lastName: account.lastName,
-                token: Helper.generateToken(account.toJSON()),
+                token: Helper.generateToken(account._id),
                 isVerified: account.isVerified,
             };
         } else {
@@ -70,7 +70,7 @@ router.post('/register', async (ctx) => {
             email,
             firstName,
             lastName,
-            token: Helper.generateToken(account.toJSON()),
+            token: Helper.generateToken(account._id),
             isVerified: account.isVerified,
         };
     } catch (error) {
@@ -98,7 +98,7 @@ router.get('/verification', async (ctx) => {
         if (account && account.isVerified) {
             response = "Account is already verified";
         } else if (account && account.compareTokens(token)) {
-            const verifyResult = await AccountService.verify(account, email);
+            const verifyResult = await AccountService.verify(account._id, email);
             response = verifyResult ? "Account has been verified" : "an error has occured";
         } else {
             response = "Token is expired";

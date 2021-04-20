@@ -141,7 +141,7 @@ router.put('/:option', async (ctx) => {
 
 /**
  * DEL /api/inventory/:id
- * Deletes an item by _id using the deleteItemById(string) function.
+ * Deletes an item by _id using the deleteItemById(account_id, item_id) function.
  * @requires { params } _id
  * @response { JSON, error? } delete's ok result otherwise, an error.
  */
@@ -153,7 +153,7 @@ router.del('/:_id', async (ctx) => {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        ctx.body = { ok: await InventoryService.deleteItemById(_id, ctx.state.user) };
+        ctx.body = { ok: await InventoryService.deleteItemById(ctx.state.user, _id) };
     } catch (error) {
         ctx.throw(400, error);
     }

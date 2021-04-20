@@ -11,10 +11,8 @@ const opts = {
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
     Account.findOne({ _id: jwt_payload._id }).then(account => {
         if (account) {
-            const trimmed = {
-                _id: account._id,
-            }
-            return done(null, trimmed);
+            const account_id = account._id;
+            return done(null, account_id);
         } else {
             return done(null, false);
         }

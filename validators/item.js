@@ -37,10 +37,10 @@ async function getByNames(query) {
 /**
  * Sanitizes and validates all data required to create an item.
  * @param { JSON } body received from the request.
- * @param { JSON } account object used to identify the owner.
+ * @param { string } account_id object used to identify the owner.
  * @return { JSON } object containing all errors and data.
  */
-async function create(body, account) {
+async function create(body, account_id) {
     let { name = "", quantity = 0, cost = 0, addedDate = "", expirationDate = "", group = "" } = body;
     let errors = {};
 
@@ -89,7 +89,7 @@ async function create(body, account) {
     // Group validation
     if (group === "") {
         errors.group = "Group cannot be an empty string";
-    } else if (!await Inventory.exists({ owner: account._id, groups: group })) {
+    } else if (!await Inventory.exists({ owner: account_id, groups: group })) {
         errors.group = "Group does not exist";
     }
     return { errors, name, quantity, cost, addedDate, expirationDate, group };
@@ -99,10 +99,10 @@ async function create(body, account) {
  * Sanitizes and validates all data required to update an item.
  * @param { JSON } body received from the request.
  * @param { JSON } params received from the request.
- * @param { JSON } account object used to identify the owner.
+ * @param { string } account_id object used to identify the owner.
  * @return { JSON } object containing all errors and data.
  */
-async function update(body, params, account) {
+async function update(body, params, account_id) {
     let { _id = "", name = "", quantity = 0, cost = 0, addedDate = "", expirationDate = "", group = "" } = body;
     let { option = "" } = params;
     let errors = {};
@@ -115,7 +115,7 @@ async function update(body, params, account) {
     option = Validator.escape(option);
 
     // _id validation
-    if (!await Inventory.exists({ owner: account._id, "items._id": _id })) {
+    if (!await Inventory.exists({ owner: account_id, "items._id": _id })) {
         errors._id = "Id does not exist";
     }
 
@@ -165,7 +165,7 @@ async function update(body, params, account) {
         errors.group = "Group must be between 1 to 30 characters";
     } else if (!/^[a-zA-Z0-9 _-]*$/.test(group)) {
         errors.group = "Group must contain an alphanumeric, space ( ), underscore (_), or dash (-)";
-    } else if (!await Inventory.exists({ owner: account._id, groups: group })) {
+    } else if (!await Inventory.exists({ owner: account_id, groups: group })) {
         errors.group = "Group does not exist";
     }
 
@@ -179,10 +179,10 @@ async function update(body, params, account) {
 /**
  * Sanitizes and validates all data required to delete an item.
  * @param { JSON } params received from the request.
- * @param { JSON } account object used to identify the owner.
+ * @param { string } account_id object used to identify the owner.
  * @return { JSON } object containing all errors and data.
  */
-async function del(params, account) {
+async function del(params, account_id) {
     let { _id = "" } = params;
     let errors = {};
 
@@ -191,7 +191,7 @@ async function del(params, account) {
     // _id validation
     if (Validator.isEmpty(_id)) {
         errors._id = "Id is required";
-    } else if (!await Inventory.exists({ owner: account._id, "items._id": _id })) {
+    } else if (!await Inventory.exists({ owner: account_id, "items._id": _id })) {
         errors._id = "Id does not exist";
     }
     return { errors, _id };

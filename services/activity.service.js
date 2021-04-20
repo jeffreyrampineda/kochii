@@ -10,11 +10,11 @@ const activityProject = {
     'description': '$activity.description'
 };
 
-async function init(account, activity_id) {
+async function init(account_id, activity_id) {
     try {
         await Activity.create({
             _id: activity_id,
-            owner: account._id,
+            owner: account_id,
             activity: [{
                 method: "create",
                 target: "Account",
@@ -31,13 +31,13 @@ async function init(account, activity_id) {
 }
 
 /**
- * Get all activities belonging to account.
- * @param { JSON } account
+ * Get all activities belonging to account_id.
+ * @param { JSON } account_id
  */
-async function getActivities(account) {
+async function getActivities(account_id) {
     try {
         const activities = await Activity.aggregate([
-            { $match: { owner: account._id } },
+            { $match: { owner: account_id } },
             { $unwind: '$activity' },
             { $project: activityProject }
         ]);
@@ -48,14 +48,14 @@ async function getActivities(account) {
     }
 }
 
-async function getActivitiesSince(account, days) {
+async function getActivitiesSince(account_id, days) {
     try {
         const fromDay = new Date();
 
         fromDay.setDate(fromDay.getDate() - days);
         fromDay.setHours(0, 0, 0, 0);
 
-        const his = await Activity.findOne({ owner: account._id }, 'activity');
+        const his = await Activity.findOne({ owner: account_id }, 'activity');
 
         return his.activity.filter(hi => hi.addedDate.getTime() > fromDay.getTime());
     } catch (error) {
@@ -96,10 +96,10 @@ async function create(activity) {
     }
 }
 
-async function clearActivities(account) {
+async function clearActivities(account_id) {
     try {
         const result = await Activity.findOneAndUpdate(
-            { owner: account._id },
+            { owner: account_id },
             { $pull: { activity: {} } },
             { new: true, rawResult: true }
         );

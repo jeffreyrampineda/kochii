@@ -1,8 +1,8 @@
 const jsonwebtoken = require('jsonwebtoken');
 
-function generateToken(account) {
+function generateToken(account_id) {
     const payload = {
-        _id: account._id,
+        _id: account_id,
     }
     return jsonwebtoken.sign(payload, process.env.SECRET_KEY);
 }

@@ -4,7 +4,7 @@ const router = new Router();
 
 router.del('/', async (ctx) => {
     try {
-        const result = await AccountService.deleteAccountById(ctx.state.user._id);
+        const result = await AccountService.deleteAccountById(ctx.state.user);
         ctx.body = result.ok;
     } catch (error) {
         ctx.throw(500, error);

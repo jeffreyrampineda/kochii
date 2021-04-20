@@ -4,10 +4,10 @@ const Inventory = require('../models/inventory');
 /**
  * Sanitizes and validates all data required to create a group.
  * @param { JSON } params received from the request.
- * @param { JSON } account object used to identify the owner.
+ * @param { JSON } account_id object used to identify the owner.
  * @return { JSON } object containing all errors and data.
  */
-async function create(params, account) {
+async function create(params, account_id) {
     let { name = "" } = params;
     let errors = {};
 
@@ -20,7 +20,7 @@ async function create(params, account) {
         errors.name = "Name must be between 1 to 30 characters";
     } else if (!/^[a-zA-Z0-9 _-]*$/.test(name)) {
         errors.name = "Name must contain an alphanumeric, space ( ), underscore (_), or dash (-)";
-    } else if (await Inventory.exists({ owner: account._id, groups: name })) {
+    } else if (await Inventory.exists({ owner: account_id, groups: name })) {
         errors.name = "Name already exists";
     }
     return { errors, name };
@@ -29,10 +29,10 @@ async function create(params, account) {
 /**
  * Sanitizes and validates all data required to delete a group.
  * @param { JSON } params received from the request.
- * @param { JSON } account object used to identify the owner.
+ * @param { JSON } account_id object used to identify the owner.
  * @return { JSON } object containing all errors and data.
  */
-async function del(params, account) {
+async function del(params, account_id) {
     let { name = "" } = params;
     let errors = {};
 
@@ -45,7 +45,7 @@ async function del(params, account) {
         errors.name = "Name must be between 1 to 30 characters";
     } else if (!/^[a-zA-Z0-9 _-]*$/.test(name)) {
         errors.name = "Name must contain an alphanumeric, space ( ), underscore (_), or dash (-)";
-    } else if (!await Inventory.exists({ owner: account._id, groups: name })) {
+    } else if (!await Inventory.exists({ owner: account_id, groups: name })) {
         errors.name = "Name does not exists";
     }
     return { errors, name };
