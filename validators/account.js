@@ -108,7 +108,7 @@ async function verify(query) {
     email = Validator.escape(email);
 
     // Token validation
-    if (Validator.isEmail(token)) {
+    if (Validator.isEmpty(token)) {
         errors.token = "Token is required";
     } else if (!Validator.isLength(token, { min: 16, max: 16 })) {
         errors.token = "Token is invalid";
@@ -118,8 +118,6 @@ async function verify(query) {
     if (Validator.isEmpty(email)) {
         errors.email = "Email is required";
     } else if (!Validator.isEmail(email)) {
-        errors.email = "Email is invalid";
-    } else if (!await Account.exists({ email })) {
         errors.email = "Email is invalid";
     }
     return { errors, token, email };

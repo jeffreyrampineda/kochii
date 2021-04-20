@@ -92,17 +92,10 @@ router.get('/verification', async (ctx) => {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        const account = await AccountService.getAccountByEmail(email);
         let response = "loading...";
 
-        if (account && account.isVerified) {
-            response = "Account is already verified";
-        } else if (account && account.compareTokens(token)) {
-            const verifyResult = await AccountService.verify(account._id, email);
-            response = verifyResult ? "Account has been verified" : "an error has occured";
-        } else {
-            response = "Token is expired";
-        }
+        const verifyResult = await AccountService.verify(token, email);
+        response = verifyResult ? "Account has been verified" : "Verification failed.";
 
         ctx.status = 202;
         ctx.body = response;

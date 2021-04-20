@@ -93,10 +93,6 @@ accountSchema.methods.comparePasswords = function (password) {
     return bcrypt.compareSync(password, this.password);
 }
 
-accountSchema.methods.compareTokens = function (token) {
-    return this.verificationToken = token;
-}
-
 const AccountModel = mongoose.model('Account', accountSchema);
 
 module.exports = AccountModel;

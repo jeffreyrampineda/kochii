@@ -40,15 +40,15 @@ async function init(accountName, password, email, firstName, lastName) {
     }
 }
 
-async function verify(account_id, email) {
+async function verify(token, email) {
     try {
-        await Account.findOneAndUpdate(
-            { _id: account_id, email },
+        const result = await Account.findOneAndUpdate(
+            { email: email, verificationToken: token },
             { isVerified: true },
-            { runValidators: true }
+            { runValidators: true, rawResult: true }
         );
-
-        return true;
+        return result.lastErrorObject.n === 1 ? true : false;
+        
     } catch (error) {
         throw (error);
     }
