@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const Account = require('../models/account');
 const mongoose = require('mongoose');
 const initInventory = require('./inventory.service').init;
 const delInventory = require('./inventory.service').deleteInventoryByOwnerId;
@@ -7,14 +7,14 @@ const delActivity = require('./activity.service').deleteActivitiesByOwnerId;
 const cryptoRandomString = require('crypto-random-string');
 const sendVerificationEmail = require('./external_api.service').sendVerificationEmail;
 
-async function init(username, password, email) {
+async function init(accountName, password, email) {
     try {
         const verificationToken = cryptoRandomString({ length: 16, type: 'url-safe' });
         const activity_id = mongoose.Types.ObjectId();
         const inventory_id = mongoose.Types.ObjectId();
 
-        const user = await User.create({
-            username,
+        const account = await Account.create({
+            accountName,
             password,
             email,
             isVerified: false,
@@ -23,25 +23,25 @@ async function init(username, password, email) {
             activity: activity_id
         });
 
-        const initActivityResult = await initActivity(user, activity_id);
-        const initInventoryResult = await initInventory(user, inventory_id);
+        const initActivityResult = await initActivity(account, activity_id);
+        const initInventoryResult = await initInventory(account, inventory_id);
 
         if (initActivityResult && initInventoryResult) {
-            console.log("User successfully created");
+            console.log("Account successfully created");
         }
 
         sendVerificationEmail(email, verificationToken);
 
-        return user;
+        return account;
     } catch (error) {
         throw (error);
     }
 }
 
-async function verify(user, email) {
+async function verify(account, email) {
     try {
-        await User.findOneAndUpdate(
-            { _id: user._id, email },
+        await Account.findOneAndUpdate(
+            { _id: account._id, email },
             { isVerified: true },
             { runValidators: true }
         );
@@ -52,23 +52,23 @@ async function verify(user, email) {
     }
 }
 
-async function getUserByName(username) {
+async function getAccountByName(accountName) {
     try {
-        return await User.findOne({ username });
+        return await Account.findOne({ accountName });
     } catch (error) {
         throw (error);
     }
 }
 
-async function getUserByEmail(email) {
+async function getAccountByEmail(email) {
     try {
-        return await User.findOne({ email });
+        return await Account.findOne({ email });
     } catch (error) {
         throw (error);
     }
 }
 
-async function deleteUserById(_id) {
+async function deleteAccountById(_id) {
     try {
         let result = {
             ok: 0
@@ -77,7 +77,7 @@ async function deleteUserById(_id) {
         const inventoryResult = await delInventory(_id);
         
         if (activityResult.ok && inventoryResult.ok) {
-            result = await User.deleteOne({ _id: _id });
+            result = await Account.deleteOne({ _id: _id });
         }
         return result;
     } catch (error) {
@@ -88,7 +88,7 @@ async function deleteUserById(_id) {
 module.exports = {
     init,
     verify,
-    getUserByName,
-    getUserByEmail,
-    deleteUserById,
+    getAccountByName,
+    getAccountByEmail,
+    deleteAccountById,
 }

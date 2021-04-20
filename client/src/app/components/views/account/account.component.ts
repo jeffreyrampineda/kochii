@@ -7,7 +7,7 @@ import { AccountService } from 'src/app/services/account.service';
   styleUrls: ['./account.component.css']
 })
 export class AccountComponent implements OnInit {
-  username: string;
+  accountName: string;
 
   constructor(
     private accountService: AccountService
@@ -18,10 +18,10 @@ export class AccountComponent implements OnInit {
   }
 
   getAccount(): void {
-    this.accountService.currentUser.subscribe({
+    this.accountService.currentAccount.subscribe({
       next: response => {
         if (response) {
-          this.username = response.username;
+          this.accountName = response.accountName;
         }
       },
       error: () => {

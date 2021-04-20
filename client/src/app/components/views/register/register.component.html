@@ -4,14 +4,14 @@
     <img alt="Kochii logo" [src]="imgLogo" style="height: 64px; display:block; margin-right: auto; margin-left: auto;">
     <h4 class="my-4 text-center">Register</h4>
 
-    <!-- Username -->
+    <!-- accountName -->
     <mat-form-field style="width: 100%;">
-        <input matInput formControlName="username" type="text" placeholder="Username" />
-        <mat-error *ngIf="f.username.errors">
-            <div *ngIf="f.username.errors.required">Username is required</div>
-            <div *ngIf="f.username.errors.minlength">Minimum length is 6</div>
-            <div *ngIf="f.username.errors.maxlength">Maximum length is 30</div>
-            <div *ngIf="f.username.errors.pattern">Must only be an alphanumeric, underscore (_), or dash (-)</div>
+        <input matInput formControlName="accountName" type="text" placeholder="Account Name" />
+        <mat-error *ngIf="f.accountName.errors">
+            <div *ngIf="f.accountName.errors.required">Account name is required</div>
+            <div *ngIf="f.accountName.errors.minlength">Minimum length is 6</div>
+            <div *ngIf="f.accountName.errors.maxlength">Maximum length is 30</div>
+            <div *ngIf="f.accountName.errors.pattern">Must only be an alphanumeric, underscore (_), or dash (-)</div>
         </mat-error>
     </mat-form-field>
 
@@ -42,7 +42,7 @@
     <!-- Messages -->
     <div class="text-center mt-4">
         <p *ngIf="loading">Loading...</p>
-        <p *ngIf="error.username" class="text-danger">{{ error.username }}</p>
+        <p *ngIf="error.accountName" class="text-danger">{{ error.accountName }}</p>
         <p *ngIf="error.password" class="text-danger">{{ error.password }}</p>
         <p *ngIf="error.email" class="text-danger">{{ error.email }}</p>
         <p *ngIf="registerForm.hasError('notSame')" class="text-danger">Passwords do not match</p>

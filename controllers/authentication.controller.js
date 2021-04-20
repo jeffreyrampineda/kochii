@@ -1,34 +1,34 @@
 const Router = require('koa-router');
-const UserService = require('../services/user.service');
+const AccountService = require('../services/account.service');
 const Helper = require('../util/helpers');
-const Validate = require('../validators/user');
+const Validate = require('../validators/account');
 const router = new Router();
 
 /**
  * POST /api/login
- * Authenticates the user to the database.
- * @requires { body } username, password
+ * Authenticates the Account to the database.
+ * @requires { body } accountName, password
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
 router.post('/login', async (ctx) => {
     try {
-        const { errors, username, password } = await Validate.login(ctx.request.body);
+        const { errors, accountName, password } = await Validate.login(ctx.request.body);
 
         if (Object.keys(errors).length) {
             ctx.throw(401, JSON.stringify(errors));
         }
 
-        const user = await UserService.getUserByName(username);
+        const account = await AccountService.getAccountByName(accountName);
 
-        // User should exist and should have matching passwords.
-        if (user && user.comparePasswords(password)) {
+        // Account should exist and should have matching passwords.
+        if (account && account.comparePasswords(password)) {
 
             // 202 - Accepted.
             ctx.status = 202;
             ctx.body = {
-                username,
-                token: Helper.generateToken(user.toJSON()),
-                isVerified: user.isVerified,
+                accountName,
+                token: Helper.generateToken(account.toJSON()),
+                isVerified: account.isVerified,
             };
         } else {
             ctx.throw(401, JSON.stringify({ login: "Authentication failed" }));
@@ -40,20 +40,20 @@ router.post('/login', async (ctx) => {
 
 /**
  * POST /api/register
- * Registers the user to the database.
- * @requires { body } username, password, email
+ * Registers the account to the database.
+ * @requires { body } accountName, password, email
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
 router.post('/register', async (ctx) => {
     try {
-        const { errors, username, password, email } = await Validate.register(ctx.request.body);
+        const { errors, accountName, password, email } = await Validate.register(ctx.request.body);
 
         if (Object.keys(errors).length) {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        const user = await UserService.init(
-            username,
+        const account = await AccountService.init(
+            accountName,
             password,
             email,
         );
@@ -61,9 +61,9 @@ router.post('/register', async (ctx) => {
         // 202 - Accepted
         ctx.status = 202;
         ctx.body = {
-            username,
-            token: Helper.generateToken(user.toJSON()),
-            isVerified: user.isVerified,
+            accountName,
+            token: Helper.generateToken(account.toJSON()),
+            isVerified: account.isVerified,
         };
     } catch (error) {
         ctx.throw(400, error);
@@ -84,14 +84,14 @@ router.get('/verification', async (ctx) => {
             ctx.throw(400, JSON.stringify(errors));
         }
 
-        const user = await UserService.getUserByEmail(email);
+        const account = await AccountService.getAccountByEmail(email);
         let response = "loading...";
 
-        if (user && user.isVerified) {
-            response = "User is already verified";
-        } else if (user && user.compareTokens(token)) {
-            const verifyResult = await UserService.verify(user, email);
-            response = verifyResult ? "User has been verified" : "an error has occured";
+        if (account && account.isVerified) {
+            response = "Account is already verified";
+        } else if (account && account.compareTokens(token)) {
+            const verifyResult = await AccountService.verify(account, email);
+            response = verifyResult ? "Account has been verified" : "an error has occured";
         } else {
             response = "Token is expired";
         }

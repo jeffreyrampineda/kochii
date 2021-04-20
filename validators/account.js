@@ -1,5 +1,5 @@
 const Validator = require('validator');
-const User = require('../models/user');
+const Account = require('../models/account');
 
 /**
  * Sanitizes and validates all data required to login.
@@ -7,20 +7,20 @@ const User = require('../models/user');
  * @return { JSON } object containing all errors and data.
  */
 async function login(body) {
-    let { username = "", password = "" } = body;
+    let { accountName = "", password = "" } = body;
     let errors = {};
 
-    username = Validator.escape(username);
+    accountName = Validator.escape(accountName);
     password = Validator.escape(password);
 
-    // Username validation
-    if (Validator.isEmpty(username)) {
-        errors.login = "Username is required";
-    } else if (!Validator.isLength(username, { min: 6, max: 30 })) {
-        errors.login = "Username must be between 6 to 30 characters";
-    } else if (!/^[a-zA-Z0-9_-]*$/.test(username)) {
-        errors.login = "Username must contain an alphanumeric, underscore (_), or dash (-)";
-    } else if (!await User.exists({ username })) {
+    // accountName validation
+    if (Validator.isEmpty(accountName)) {
+        errors.login = "Account name is required";
+    } else if (!Validator.isLength(accountName, { min: 6, max: 30 })) {
+        errors.login = "Account name must be between 6 to 30 characters";
+    } else if (!/^[a-zA-Z0-9_-]*$/.test(accountName)) {
+        errors.login = "Account name must contain an alphanumeric, underscore (_), or dash (-)";
+    } else if (!await Account.exists({ accountName })) {
         errors.login = "Authentication failed";
     }
 
@@ -30,7 +30,7 @@ async function login(body) {
     } else if (!Validator.isLength(password, { min: 6, max: 30 })) {
         errors.login = "Password must be between 6 to 30 characters";
     }
-    return { errors, username, password };
+    return { errors, accountName, password };
 }
 
 /**
@@ -39,22 +39,22 @@ async function login(body) {
  * @return { JSON } object containing all errors and data.
  */
 async function register(body) {
-    let { username = "", password = "", email = "" } = body;
+    let { accountName = "", password = "", email = "" } = body;
     let errors = {};
 
-    username = Validator.escape(username);
+    accountName = Validator.escape(accountName);
     password = Validator.escape(password);
     email = Validator.escape(email);
 
-    // Username validation
-    if (Validator.isEmpty(username)) {
-        errors.usename = "Username is required";
-    } else if (!Validator.isLength(username, { min: 6, max: 30 })) {
-        errors.username = "Username must be between 6 to 30 characters";
-    } else if (!/^[a-zA-Z0-9_-]*$/.test(username)) {
-        errors.username = "Username must contain an alphanumeric, underscore (_), or dash (-)";
-    } else if (await User.exists({ username })) {
-        errors.username = "Username already exists";
+    // accountName validation
+    if (Validator.isEmpty(accountName)) {
+        errors.usename = "Account name is required";
+    } else if (!Validator.isLength(accountName, { min: 6, max: 30 })) {
+        errors.accountName = "Account name must be between 6 to 30 characters";
+    } else if (!/^[a-zA-Z0-9_-]*$/.test(accountName)) {
+        errors.accountName = "Account name must contain an alphanumeric, underscore (_), or dash (-)";
+    } else if (await Account.exists({ accountName })) {
+        errors.accountName = "Account name already exists";
     }
 
     // Password validation
@@ -69,10 +69,10 @@ async function register(body) {
         errors.email = "Email is required";
     } else if (!Validator.isEmail(email)) {
         errors.email = "Email is invalid";
-    } else if (await User.exists({ email })) {
+    } else if (await Account.exists({ email })) {
         errors.email = "Email already exists";
     }
-    return { errors, username, password, email };
+    return { errors, accountName, password, email };
 }
 
 /**
@@ -99,7 +99,7 @@ async function verify(query) {
         errors.email = "Email is required";
     } else if (!Validator.isEmail(email)) {
         errors.email = "Email is invalid";
-    } else if (!await User.exists({ email })) {
+    } else if (!await Account.exists({ email })) {
         errors.email = "Email is invalid";
     }
     return { errors, token, email };

@@ -17,7 +17,7 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   loading = false;
   error = {
-    username: undefined,
+    accountName: undefined,
     password: undefined,
     email: undefined
   };
@@ -48,7 +48,7 @@ export class RegisterComponent implements OnInit {
     }
 
     this.registerForm = this.formBuilder.group({
-      username: ['', [
+      accountName: ['', [
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(30),
@@ -79,14 +79,14 @@ export class RegisterComponent implements OnInit {
     console.log('submitted');
     this.loading = true;
     this.error = {
-      username: undefined,
+      accountName: undefined,
       password: undefined,
       email: undefined
     };
 
-    const { username, password, email } = registerData;
+    const { accountName, password, email } = registerData;
 
-    this.accountService.register({ username, password, email }).subscribe({
+    this.accountService.register({ accountName, password, email }).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/app']);

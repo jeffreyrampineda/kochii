@@ -16,7 +16,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private unsub = new Subject<void>();
   mobileDisplaySidebar = false;
   notifications: string[] = [];
-  username = '';
+  accountName = '';
 
   constructor(
     private accountService: AccountService,
@@ -30,13 +30,13 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.setTitle('Overview');
     this.socketioService.initSocket();
 
-    this.accountService.currentUser.pipe(takeUntil(this.unsub)).subscribe({
+    this.accountService.currentAccount.pipe(takeUntil(this.unsub)).subscribe({
       next: response => {
         if (response) {
           if (!response.isVerified) {
             this.notifications.unshift('Check your email to verify this account');
           }
-          this.username = response.username;
+          this.accountName = response.accountName;
         }
       },
       error: () => {

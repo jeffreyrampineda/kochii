@@ -35,8 +35,8 @@ describe('/api route', () => {
 });
 
 describe('/api authentication route', () => {
-    const correct_user = {
-        username: "correct_username",
+    const correct_account = {
+        accountName: "correct_accountName",
         password: "correct_password",
         email: "correct_email@correct.com"
     }
@@ -44,7 +44,7 @@ describe('/api authentication route', () => {
     test('POST /api/register with correct data should give 202 status /w token', async () => {
         const response = await request(server)
             .post('/api/register')
-            .send(correct_user);
+            .send(correct_account);
 
         expect(response.status).toEqual(202);
         expect(response.text).toContain('token');
@@ -52,20 +52,20 @@ describe('/api authentication route', () => {
     test('POST /api/login with correct data should give 202 status /w token', async () => {
         const response = await request(server)
             .post('/api/login')
-            .send(correct_user);
+            .send(correct_account);
 
         expect(response.status).toEqual(202);
         expect(response.text).toContain('token');
     });
     test('POST /api/login with incorrect auth should give 401 status', async () => {
-        const incorrect_user = {
-            username: "incorrect_usename",
+        const incorrect_account = {
+            accountName: "incorrect_accountName",
             password: "incorrect_password"
         }
 
         const response = await request(server)
             .post('/api/login')
-            .send(incorrect_user);
+            .send(incorrect_account);
 
         expect(response.status).toEqual(401);
         expect(response.text).toContain('Authentication failed');

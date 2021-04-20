@@ -3,49 +3,49 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { User } from '../interfaces/user';
+import { Account } from '../interfaces/account';
 import { MessageService } from './message.service';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
 
-    private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
+    private currentAccountSubject: BehaviorSubject<Account>;
+    public currentAccount: Observable<Account>;
 
     constructor(
         private http: HttpClient,
         private messageService: MessageService
     ) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-        this.currentUser = this.currentUserSubject.asObservable();
+        this.currentAccountSubject = new BehaviorSubject<Account>(JSON.parse(localStorage.getItem('currentAccount')));
+        this.currentAccount = this.currentAccountSubject.asObservable();
     }
 
-    private onAuthenticated(response: User): void {
+    private onAuthenticated(response: Account): void {
         // login successful if there's a jwt token in the response
         if (response && response.token) {
 
-            // store user details and jwt token in local storage to keep user logged in between page refreshes
-            localStorage.setItem('currentUser', JSON.stringify(response));
-            this.currentUserSubject.next(response);
+            // store account details and jwt token in local storage to keep account logged in between page refreshes
+            localStorage.setItem('currentAccount', JSON.stringify(response));
+            this.currentAccountSubject.next(response);
         }
     }
 
-    public get currentUserValue(): User {
-        return this.currentUserSubject.value;
+    public get currentAccountValue(): Account {
+        return this.currentAccountSubject.value;
     }
 
     public get isLoggedIn(): boolean {
-        return this.currentUserSubject.value ? true : false;
+        return this.currentAccountSubject.value ? true : false;
     }
 
     /**
-     * Authenticates the user to the server.
-     * @param user - The user to be authenticated.
+     * Authenticates the account.
+     * @param account - The account to be authenticated.
      */
-    login(user: User): Observable<User> {
+    login(account: Account): Observable<Account> {
         this.log('logging in');
 
-        return this.http.post<User>('/api/login', user)
+        return this.http.post<Account>('/api/login', account)
             .pipe(
                 map(response => {
                     this.onAuthenticated(response);
@@ -55,13 +55,13 @@ export class AccountService {
     }
 
     /**
-     * Creates a new user to the server.
-     * @param user - The new user to be created.
+     * Creates a new account.
+     * @param account - The new account to be created.
      */
-    register(user: User): Observable<User> {
+    register(account: Account): Observable<Account> {
         this.log('registering');
 
-        return this.http.post<User>('/api/register', user)
+        return this.http.post<Account>('/api/register', account)
             .pipe(
                 map(response => {
                     // Login if successful.
@@ -71,22 +71,19 @@ export class AccountService {
             );
     }
 
-    /**
-     * Authenticates the user to the server.
-     * @param user - The user to be authenticated.
-     */
+    /** Deletes the account. */
     deleteAccount(): Observable<number> {
         this.log('deleting account');
 
         return this.http.delete<number>('/api/account');
     }
 
-    /** Logs out the current user then reloads the page. */
+    /** Logout then reload the page. */
     logout(): void {
 
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
-        this.currentUserSubject.next(null);
+        // remove account from local storage to logout.
+        localStorage.removeItem('currentAccount');
+        this.currentAccountSubject.next(null);
 
         window.location.href = '/';
     }

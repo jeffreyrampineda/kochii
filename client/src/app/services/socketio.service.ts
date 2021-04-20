@@ -17,7 +17,7 @@ export class SocketioService {
 
   initSocket(): void {
     if (this.accountService.isLoggedIn) {
-      this.token = this.accountService.currentUserValue.token;
+      this.token = this.accountService.currentAccountValue.token;
     }
     this.socket = io(environment.socket_endpoint);
     this.socket.emit('authenticate', { token: this.token });

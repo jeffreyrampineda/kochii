@@ -57,7 +57,7 @@
             <mat-icon>mail</mat-icon>
         </button>
         <button mat-button [matMenuTriggerFor]="profileMenu">
-            <mat-icon class="mr-2">account_circle</mat-icon>{{ username }}
+            <mat-icon class="mr-2">account_circle</mat-icon>{{ accountName }}
         </button>
         <mat-menu #profileMenu="matMenu" xPosition="before">
             <button mat-menu-item routerLink="settings/account"

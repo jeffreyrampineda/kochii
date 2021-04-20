@@ -71,7 +71,7 @@ io.on('authenticated', (socket) => {
         global.currentConnections[socket.decoded_token._id] = {};
     }
 
-    // For multiple connections/logins in one user.
+    // For multiple connections/logins in one account.
     global.currentConnections[socket.decoded_token._id][socket.id] = { socket };
     console.log('authenticated');
 

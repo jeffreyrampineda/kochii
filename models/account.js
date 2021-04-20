@@ -4,20 +4,20 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const Schema = mongoose.Schema;
-const userSchema = new Schema({
-    username: {
+const accountSchema = new Schema({
+    accountName: {
         type: String,
-        required: [true, "Username is required"],
-        minlength: [6, "Username must have a minimum length of 6"],
-        maxlength: [30, "Username must have a maximum length of 30"],
+        required: [true, "Account name is required"],
+        minlength: [6, "Account name must have a minimum length of 6"],
+        maxlength: [30, "Account name must have a maximum length of 30"],
         validate: [
             {
-                validator: username => /^[a-zA-Z0-9_-]*$/.test(username),
-                message: "Username must contain an alphanumeric, underscore (_), or dash (-)"
+                validator: accountName => /^[a-zA-Z0-9_-]*$/.test(accountName),
+                message: "Account name must contain an alphanumeric, underscore (_), or dash (-)"
             },
             {
-                validator: username => UserModel.doesNotExist({ username }),
-                message: "Username already exists"
+                validator: accountName => AccountModel.doesNotExist({ accountName }),
+                message: "Account name already exists"
             }
         ]
     },
@@ -36,7 +36,7 @@ const userSchema = new Schema({
                 message: "Email is invalid"
             },
             {
-                validator: email => UserModel.doesNotExist({ email }),
+                validator: email => AccountModel.doesNotExist({ email }),
                 message: "Email already exists"
             }
         ]
@@ -59,24 +59,24 @@ const userSchema = new Schema({
     }
 }, { timestamps: true });
 
-userSchema.pre('save', function () {
+accountSchema.pre('save', function () {
     if (this.isModified('password')) {
         this.password = bcrypt.hashSync(this.password, saltRounds);
     }
 });
 
-userSchema.statics.doesNotExist = async function (field) {
+accountSchema.statics.doesNotExist = async function (field) {
     return await this.where(field).countDocuments() === 0;
 }
 
-userSchema.methods.comparePasswords = function (password) {
+accountSchema.methods.comparePasswords = function (password) {
     return bcrypt.compareSync(password, this.password);
 }
 
-userSchema.methods.compareTokens = function (token) {
+accountSchema.methods.compareTokens = function (token) {
     return this.verificationToken = token;
 }
 
-const UserModel = mongoose.model('User', userSchema);
+const AccountModel = mongoose.model('Account', accountSchema);
 
-module.exports = UserModel;
+module.exports = AccountModel;

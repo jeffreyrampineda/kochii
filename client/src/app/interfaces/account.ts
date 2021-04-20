@@ -1,6 +1,6 @@
-export interface User {
+export interface Account {
     _id?: string;
-    username: string;
+    accountName: string;
     password: string;
     email: string;
     isVerified?: boolean;

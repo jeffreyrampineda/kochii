@@ -5,7 +5,7 @@ const router = new Router();
 
 /**
  * GET /api/activities
- * Get all the user's activities from the database.
+ * Get all the account's activities from the database.
  * @response { JSON, error? } array of activities objects if successful otherwise, an error. 
  */
 router.get('/', async (ctx) => {
