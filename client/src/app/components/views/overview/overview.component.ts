@@ -219,6 +219,7 @@ export class OverviewComponent implements OnInit {
             time: {
               unit: 'day',
               unitStepSize: 1,
+              tooltipFormat: 'll',
               displayFormats: {
                 'day': 'dd'
               }
