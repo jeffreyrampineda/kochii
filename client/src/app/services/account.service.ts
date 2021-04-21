@@ -20,14 +20,18 @@ export class AccountService {
         this.currentAccount = this.currentAccountSubject.asObservable();
     }
 
-    private onAuthenticated(response: Account): void {
+    private onAuthenticated(account: Account): void {
         // login successful if there's a jwt token in the response
-        if (response && response.token) {
+        if (account && account.token) {
 
             // store account details and jwt token in local storage to keep account logged in between page refreshes
-            localStorage.setItem('currentAccount', JSON.stringify(response));
-            this.currentAccountSubject.next(response);
+            this.setLocalStorageCurrentAccount(account);
         }
+    }
+
+    private setLocalStorageCurrentAccount(account: Account): void {
+        localStorage.setItem('currentAccount', JSON.stringify(account));
+        this.currentAccountSubject.next(account);
     }
 
     public get currentAccountValue(): Account {
@@ -45,13 +49,12 @@ export class AccountService {
     login(account: Account): Observable<Account> {
         this.log('logging in');
 
-        return this.http.post<Account>('/api/login', account)
-            .pipe(
-                map(response => {
-                    this.onAuthenticated(response);
-                    return response;
-                })
-            );
+        return this.http.post<Account>('/api/login', account).pipe(
+            map(response => {
+                this.onAuthenticated(response);
+                return response;
+            })
+        );
     }
 
     /**
@@ -61,14 +64,25 @@ export class AccountService {
     register(account: Account): Observable<Account> {
         this.log('registering');
 
-        return this.http.post<Account>('/api/register', account)
-            .pipe(
-                map(response => {
-                    // Login if successful.
-                    this.onAuthenticated(response);
-                    return response;
-                })
-            );
+        return this.http.post<Account>('/api/register', account).pipe(
+            map(response => {
+                // Login if successful.
+                this.onAuthenticated(response);
+                return response;
+            })
+        );
+    }
+
+    updateAccount(newAccount: Account): Observable<Account> {
+        this.log('updating');
+
+        return this.http.put<Account>('/api/account', newAccount).pipe(
+            map(updatedAccountFragment => {
+                let updatedAccount = Object.assign(this.currentAccountValue, updatedAccountFragment)
+                this.setLocalStorageCurrentAccount(updatedAccount);
+                return updatedAccount;
+            })
+        );
     }
 
     /** Deletes the account. */
@@ -88,7 +102,7 @@ export class AccountService {
         window.location.href = '/';
     }
 
-// -------------------------------------------------------------
+    // -------------------------------------------------------------
 
     /**
      * Adds the message to the messageService for logging.

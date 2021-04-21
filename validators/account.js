@@ -96,6 +96,38 @@ async function register(body) {
 }
 
 /**
+ * Sanitizes and validates all data required to update.
+ * @param { JSON } body received from the request.
+ * @return { JSON } object containing all errors and data.
+ */
+ async function update(body) {
+    let { firstName = "", lastName = "" } = body;
+    let errors = {};
+
+    firstName = Validator.escape(firstName);
+    lastName = Validator.escape(lastName);
+
+    // firstName validation
+    if (Validator.isEmpty(firstName)) {
+        errors.firstName = "First name is required";
+    } else if (!Validator.isLength(firstName, { min: 2, max: 30 })) {
+        errors.firstName = "First name must be between 2 to 30 characters";
+    } else if (!/^[a-zA-Z]*$/.test(firstName)) {
+        errors.firstName = "First name must only contain letters";
+    }
+
+    // lastName validation
+    if (Validator.isEmpty(lastName)) {
+        errors.lastName = "Last name is required";
+    } else if (!Validator.isLength(lastName, { min: 2, max: 30 })) {
+        errors.lastName = "Last name must be between 2 to 30 characters";
+    } else if (!/^[a-zA-Z]*$/.test(lastName)) {
+        errors.lastName = "Last name must only contain letters";
+    }
+    return { errors, firstName, lastName };
+}
+
+/**
  * Sanitizes and validates all data required to verify an email.
  * @param { JSON } query received from the request.
  * @return { JSON } object containing all errors and data.
@@ -127,4 +159,5 @@ module.exports = {
     login,
     register,
     verify,
+    update,
 };

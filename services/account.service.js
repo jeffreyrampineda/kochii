@@ -40,6 +40,20 @@ async function init(accountName, password, email, firstName, lastName) {
     }
 }
 
+async function updateAccount(account_id, firstName, lastName) {
+    try {
+        const result = await Account.findOneAndUpdate(
+            { _id: account_id },
+            { firstName, lastName },
+            { new: true, runValidators: true }
+        ).select('-_id firstName lastName');
+        return result;
+
+    } catch (error) {
+        throw (error);
+    }
+}
+
 async function verify(token, email) {
     try {
         const result = await Account.findOneAndUpdate(
@@ -93,4 +107,5 @@ module.exports = {
     getAccountByName,
     getAccountByEmail,
     deleteAccountById,
+    updateAccount,
 }
