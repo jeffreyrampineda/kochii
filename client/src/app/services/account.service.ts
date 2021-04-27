@@ -78,7 +78,7 @@ export class AccountService {
 
         return this.http.put<Account>('/api/account', newAccount).pipe(
             map(updatedAccountFragment => {
-                let updatedAccount = Object.assign(this.currentAccountValue, updatedAccountFragment)
+                const updatedAccount = Object.assign(this.currentAccountValue, updatedAccountFragment);
                 this.setLocalStorageCurrentAccount(updatedAccount);
                 return updatedAccount;
             })

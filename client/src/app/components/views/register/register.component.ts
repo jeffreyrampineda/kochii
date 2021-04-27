@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PasswordMatchValidator } from '../../shared/_validators/password-match.validator';
 import { AccountService } from 'src/app/services/account.service';
 import { Title } from '@angular/platform-browser';
 
@@ -30,14 +31,6 @@ export class RegisterComponent implements OnInit {
   ) { }
 
   // -------------------------------------------------------------
-
-  /** Validator for comparing password and passwordre */
-  checkPasswords(group: FormGroup) {
-    const password = group.controls.password.value;
-    const passwordre = group.controls.passwordre.value;
-
-    return password === passwordre ? null : { notSame: true };
-  }
 
   ngOnInit() {
     this.titleService.setTitle('Register | Kochii');
@@ -76,7 +69,7 @@ export class RegisterComponent implements OnInit {
         Validators.maxLength(30),
         Validators.pattern('^[a-zA-Z]*$')
       ]],
-    }, { validator: this.checkPasswords });
+    }, { validators: PasswordMatchValidator() });
   }
 
   /** convenience getter for easy access to form fields */

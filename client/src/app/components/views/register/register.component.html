@@ -28,6 +28,9 @@
     <!-- Password repeat -->
     <mat-form-field style="width: 100%;">
         <input matInput formControlName="passwordre" type="password" placeholder="Re-enter Password" />
+        <mat-error *ngIf="f.passwordre.errors">
+            <div *ngIf="f.passwordre.errors.noMatch">Passwords do not match</div>
+        </mat-error>
     </mat-form-field>
 
     <!-- Email -->
@@ -67,7 +70,7 @@
         <p *ngIf="error.accountName" class="text-danger">{{ error.accountName }}</p>
         <p *ngIf="error.password" class="text-danger">{{ error.password }}</p>
         <p *ngIf="error.email" class="text-danger">{{ error.email }}</p>
-        <p *ngIf="registerForm.hasError('notSame')" class="text-danger">Passwords do not match</p>
+        <p *ngIf="registerForm.hasError('noMatch')" class="text-danger">Passwords do not match</p>
     </div>
 
     <!-- Register button -->
