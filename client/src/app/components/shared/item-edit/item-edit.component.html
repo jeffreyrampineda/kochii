@@ -105,8 +105,7 @@
                                     <!-- AddedDate field -->
                                     <mat-form-field style="width: 100%;">
                                         <mat-label>Added date</mat-label>
-                                        <input matInput formControlName="addedDate" placeholder="Added Date"
-                                            [matDatepicker]="picker" />
+                                        <input matInput formControlName="addedDate" [matDatepicker]="picker" />
                                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                                         <mat-datepicker #picker></mat-datepicker>
                                         <mat-error *ngIf="f(idx).addedDate.errors">
@@ -120,8 +119,7 @@
                                     <!-- ExpirationDate -->
                                     <mat-form-field style="width: 100%;">
                                         <mat-label>Expiration date</mat-label>
-                                        <input matInput formControlName="expirationDate" placeholder="Expiration Date"
-                                            [matDatepicker]="picker2" />
+                                        <input matInput formControlName="expirationDate" [matDatepicker]="picker2" />
                                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                                         <mat-datepicker #picker2></mat-datepicker>
                                         <mat-error *ngIf="f(idx).expirationDate.errors">
