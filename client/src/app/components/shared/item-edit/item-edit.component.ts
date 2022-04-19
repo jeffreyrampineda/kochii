@@ -19,7 +19,7 @@ export class ItemEditComponent implements OnInit {
   itemModel: Item;
   itemEditForms: FormGroup[] = [];
   groups: string[] = [];
-  firstFood = {};
+  firstFood: any = {};
 
   constructor(
     private dialog: MatDialog,

@@ -197,11 +197,15 @@ export class InventoryComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Filters the inventory data by the specified filterValue.
-     * @param filterValue - The value to look for.
+     * Filters the inventory data by the specified event value.
+     * @param event - The event to extract target.value from.
      */
-    applyFilter(filterValue: string) {
-        this.inventory.filter = filterValue.trim().toLowerCase();
+    applyFilter(event: Event) {
+        const target = event.target as HTMLButtonElement;
+        if (target) {
+            const filterValue = target.value;
+            this.inventory.filter = filterValue.trim().toLowerCase();
+        }
     }
 
     /** Whether the number of selected elements matches the total number of rows. */

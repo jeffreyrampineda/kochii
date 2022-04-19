@@ -21,7 +21,7 @@
     <div>
       <mat-form-field class="k-search">
         <mat-label>Search</mat-label>
-        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Ex. apples">
+        <input matInput (keyup)="applyFilter($event)" placeholder="Ex. apples">
       </mat-form-field>
     </div>
     <!--/.Search actions-->
@@ -48,7 +48,7 @@
                                   ">
           <mat-icon aria-hidden="false" aria-label="check">check</mat-icon>
         </button>
-        <button mat-icon-button (click)="selectColumnToggle()">
+        <button mat-icon-button (click)="selectColumnToggle('')">
           <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
         </button>
       </div>
