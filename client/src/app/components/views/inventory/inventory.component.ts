@@ -28,7 +28,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
     @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
     @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-    displayedColumns: string[] = ['name', 'quantity', 'group', 'addedDate', 'expirationDate', 'edit'];
+    displayedColumns: string[] = ['name', 'quantity', 'group', 'addedDate', 'expirationDate'];
     inventory: MatTableDataSource<Item>;
     showSelect: Boolean = false;
     selection: SelectionModel<Item> = new SelectionModel<Item>(true, []);
@@ -126,13 +126,11 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.showSelect = !this.showSelect;
         if (this.showSelect) {
             this.displayedColumns.unshift('select');
-            this.displayedColumns.pop();
             this.option = option;
         } else {
             this.itemUpdateForm = {};
             this.selection.clear();
             this.displayedColumns.shift();
-            this.displayedColumns.push('edit');
             this.option = '';
         }
     }
