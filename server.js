@@ -7,16 +7,20 @@ const bodyParser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const errorHandler = require('./middlewares/errorHandler');
 const socket = require('socket.io');
-const socketioJwt = require('socketio-jwt');
 const { passport } = require('./passport');
 const helmet = require('koa-helmet');
+const { decodeToken } = require('./util/helpers');
 
 // Create Koa Application
 const app = new Koa();
 const routerProtected = new Router();
 const routerPublic = new Router();
 const server = http.createServer(app.callback());
-const io = socket(server);
+const io = socket(server, {
+    cors: {
+      origin: "http://localhost:4200"
+    }
+});
 
 global.currentConnections = {};
 
@@ -55,30 +59,35 @@ app.use(routerPublic.routes());
 mongoose.connect(process.env.MONGODB_URI,
     {
         useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
+        useUnifiedTopology: true
     }
 );
 mongoose.connection.on('error', console.error);
 mongoose.connection.once('open', () => console.log('Connection to mongodb established'));
 
-io.on('connection', socketioJwt.authorize({
-    secret: process.env.SECRET_KEY,
-    timeout: 15000 // 15 seconds to send the authentication message
-}));
-io.on('authenticated', (socket) => {
-    if (global.currentConnections[socket.decoded_token._id] === undefined) {
-        global.currentConnections[socket.decoded_token._id] = {};
+io.use((socket, next) => {
+    const token = socket.handshake.auth.token;
+    if (!token) {
+      return next(new Error("invalid token"));
+    }
+    //console.log("socket: requesting new connection");
+    //console.log('socket: decoding token');
+    const decoded_token = decodeToken(token);
+
+    if (global.currentConnections[decoded_token._id] === undefined) {
+        global.currentConnections[decoded_token._id] = {};
     }
 
     // For multiple connections/logins in one account.
-    global.currentConnections[socket.decoded_token._id][socket.id] = { socket };
-    console.log('authenticated');
+    global.currentConnections[decoded_token._id][socket.id] = { socket };
+    socket.emit('authenticated');
+    console.log('socket: connection authenticated');
 
     socket.on('disconnect', () => {
-        delete global.currentConnections[socket.decoded_token._id][socket.id];
-        console.log('disconnect');
+        delete global.currentConnections[decoded_token._id][socket.id];
+        console.log('socket: connection disconnect');
     });
+    next();
 });
 
 module.exports = server;
