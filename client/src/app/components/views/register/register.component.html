@@ -67,10 +67,7 @@
     <!-- Messages -->
     <div class="text-center mt-4">
         <p *ngIf="loading">Loading...</p>
-        <p *ngIf="error.accountName" class="text-danger">{{ error.accountName }}</p>
-        <p *ngIf="error.password" class="text-danger">{{ error.password }}</p>
-        <p *ngIf="error.email" class="text-danger">{{ error.email }}</p>
-        <p *ngIf="registerForm.hasError('noMatch')" class="text-danger">Passwords do not match</p>
+        <p *ngFor="let message of error_messages" class="text-danger">{{ message }}</p>
     </div>
 
     <!-- Register button -->

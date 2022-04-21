@@ -16,7 +16,7 @@
   </form>
   <span *ngIf="loading">Creating...</span>
   <mat-error>
-    <div *ngIf="error.name">{{ error.name }}</div>
+    <p *ngFor="let message of error_messages" class="text-danger">{{ message }}</p>
   </mat-error>
 </div>
 <div class="k-float-right">

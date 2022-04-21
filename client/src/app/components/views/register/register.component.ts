@@ -17,11 +17,7 @@ export class RegisterComponent implements OnInit {
   imgLogo = '//www.kochii.app/kochii-logo.png';
   registerForm: FormGroup;
   loading = false;
-  error = {
-    accountName: undefined,
-    password: undefined,
-    email: undefined
-  };
+  error_messages = [];
 
   constructor(
     private router: Router,
@@ -83,11 +79,7 @@ export class RegisterComponent implements OnInit {
 
     console.log('submitted');
     this.loading = true;
-    this.error = {
-      accountName: undefined,
-      password: undefined,
-      email: undefined
-    };
+    this.error_messages = [];
 
     const { accountName, password, email, firstName, lastName } = registerData;
 
@@ -98,7 +90,7 @@ export class RegisterComponent implements OnInit {
         }
       },
       error: err => {
-        this.error = err.error;
+        this.error_messages = err.error.error_messages;
         this.loading = false;
       },
       complete: () => {

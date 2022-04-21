@@ -16,9 +16,7 @@ export class LoginComponent implements OnInit {
   imgLogo = '//www.kochii.app/kochii-logo.png';
   loginForm: FormGroup;
   loading = false;
-  error = {
-    login: undefined
-  };
+  error_messages = [];
 
   constructor(
     private router: Router,
@@ -63,9 +61,7 @@ export class LoginComponent implements OnInit {
 
     console.log('submitted');
     this.loading = true;
-    this.error = {
-      login: undefined
-    };
+    this.error_messages = [];
 
     this.accountService.login(loginData).subscribe({
       next: response => {
@@ -74,7 +70,7 @@ export class LoginComponent implements OnInit {
         }
       },
       error: err => {
-        this.error = err.error;
+        this.error_messages = err.error.error_messages;
         this.loading = false;
       },
       complete: () => {

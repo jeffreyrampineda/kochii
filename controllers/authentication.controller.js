@@ -3,6 +3,7 @@ const router = express.Router();
 const AccountService = require("../services/account.service");
 const Helper = require("../util/helpers");
 const Validate = require("../validators/account");
+const createError = require("http-errors");
 
 /**
  * POST /api/public/login
@@ -10,13 +11,9 @@ const Validate = require("../validators/account");
  * @requires { body } accountName, password
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
-router.post("/login", async function (req, res) {
+router.post("/login", async function (req, res, next) {
   try {
-    const { errors, accountName, password } = await Validate.login(req.body);
-
-    if (Object.keys(errors).length) {
-      throw { status: 401, ...errors };
-    }
+    const { accountName, password } = await Validate.login(req.body);
 
     const account = await AccountService.getAccountByName(accountName);
 
@@ -32,10 +29,10 @@ router.post("/login", async function (req, res) {
         isVerified: account.isVerified,
       });
     } else {
-      throw { status: 401, login: "Authentication failed" };
+      throw { status: 401, error_messages: ["Authentication failed"] };
     }
   } catch (error) {
-    res.status(error.status ?? 500).json(error);
+    next(createError(error.status ?? 500, error));
   }
 });
 
@@ -45,14 +42,10 @@ router.post("/login", async function (req, res) {
  * @requires { body } accountName, password, email, firstName, lastName
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
-router.post("/register", async function (req, res) {
+router.post("/register", async function (req, res, next) {
   try {
-    const { errors, accountName, password, email, firstName, lastName } =
+    const { accountName, password, email, firstName, lastName } =
       await Validate.register(req.body);
-
-    if (Object.keys(errors).length) {
-      throw { status: 400, ...errors };
-    }
 
     const account = await AccountService.init(
       accountName,
@@ -72,7 +65,7 @@ router.post("/register", async function (req, res) {
       isVerified: account.isVerified,
     });
   } catch (error) {
-    res.status(error.status ?? 500).json(error);
+    next(createError(error.status ?? 500, error));
   }
 });
 
@@ -82,13 +75,9 @@ router.post("/register", async function (req, res) {
  * @requires { query } token, email
  * @response { JSON, error? } the result.
  */
-router.get("/verification", async function (req, res) {
+router.get("/verification", async function (req, res, next) {
   try {
-    const { errors, token, email } = await Validate.verify(req.query);
-
-    if (Object.keys(errors).length) {
-      throw { status: 400, ...errors };
-    }
+    const { token, email } = await Validate.verify(req.query);
 
     let response = "loading...";
 
@@ -99,7 +88,7 @@ router.get("/verification", async function (req, res) {
 
     res.status(202).send(response);
   } catch (error) {
-    res.status(error.status ?? 500).json(error);
+    next(createError(error.status ?? 500, error));
   }
 });
 

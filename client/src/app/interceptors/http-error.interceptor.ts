@@ -19,26 +19,20 @@ export class HttpErrorInterceptor implements HttpInterceptor {
 
     private handleError(method: string, url: string) {
         return (error: any): Observable<any> => {
-
-            console.error(`interceptor caught error from ${method} - ${url}`);
-
             if (error instanceof HttpErrorResponse) {
-
                 // server-side error
-                console.error(`server-side error: ${error.status} - Name: ${error.name}`);
+                console.error(`server-side error: ${method} - ${url} - ${error.status} - Name: ${error.name}`, error);
                 if (error.status === 401 && this.accountService.isLoggedIn) {
                     // auto logout if 401 response returned from api
                     this.accountService.logout();
                 }
 
             } else {
-
                 // client-side error
                 console.error(`client-side error: ${error.error.message}`);
             }
-
             // Let the app keep running by returning an empty result.
-            return throwError(error);
+            return throwError(() => error);
         };
     }
 }

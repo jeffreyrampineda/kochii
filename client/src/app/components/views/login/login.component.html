@@ -41,7 +41,7 @@
     <!-- Messages -->
     <div class="text-center pt-4">
         <p *ngIf="loading">Loading...</p>
-        <p *ngIf="error.login" class="text-danger">{{ error.login }}</p>
+        <p *ngFor="let message of error_messages" class="text-danger">{{ message }}</p>
     </div>
 
     <!-- Login button -->

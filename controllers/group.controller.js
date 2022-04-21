@@ -3,13 +3,14 @@ const router = express.Router();
 const Inventory = require("../models/inventory");
 const createActivity = require("../services/activity.service").create;
 const Validate = require("../validators/group");
+const createError = require("http-errors");
 
 /**
  * GET /api/groups
  * Get all groups from the database.
  * @response { string[], error? } array of strings if successful otherwise, an error.
  */
-router.get("/", async function (req, res) {
+router.get("/", async function (req, res, next) {
   try {
     const inventory = await Inventory.findOne(
       { owner: req.user._id },
@@ -17,7 +18,7 @@ router.get("/", async function (req, res) {
     );
     res.status(200).send(inventory.groups);
   } catch (error) {
-    res.status(error.status ?? 500).json(error);
+    next(createError(error.status ?? 500, error));
   }
 });
 
@@ -27,13 +28,9 @@ router.get("/", async function (req, res) {
  * @requires { params } name
  * @response { JSON, error? } group's name if successful otherwise, an error.
  */
-router.post("/:name", async function (req, res) {
+router.post("/:name", async function (req, res, next) {
   try {
-    const { errors, name } = await Validate.create(req.params, req.user);
-
-    if (Object.keys(errors).length) {
-      throw { status: 400, ...errors };
-    }
+    const { name } = await Validate.create(req.params, req.user);
 
     const result = await Inventory.findOneAndUpdate(
       { owner: req.user },
@@ -60,7 +57,7 @@ router.post("/:name", async function (req, res) {
       res.status(200).json({ name });
     }
   } catch (error) {
-    res.status(error.status ?? 500).json(error);
+    next(createError(error.status ?? 500, error));
   }
 });
 
@@ -71,13 +68,9 @@ router.post("/:name", async function (req, res) {
  * @requires { params } name
  * @response { JSON, error? } group's name if successful otherwise, an error.
  */
-router.delete("/:name", async function (req, res) {
+router.delete("/:name", async function (req, res, next) {
   try {
-    const { errors, name } = await Validate.del(req.params, req.user);
-
-    if (Object.keys(errors).length) {
-      throw { status: 400, ...errors };
-    }
+    const { name } = await Validate.del(req.params, req.user);
 
     const item_result = await Inventory.findOneAndUpdate(
       {
@@ -132,7 +125,7 @@ router.delete("/:name", async function (req, res) {
       res.status(200).json({ name });
     }
   } catch (error) {
-    res.status(error.status ?? 500).json(error);
+    next(createError(error.status ?? 500, error));
   }
 });
 
