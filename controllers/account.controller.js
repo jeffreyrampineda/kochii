@@ -1,24 +1,24 @@
-const Router = require('koa-router');
+const express = require("express");
+const router = express.Router();
 const AccountService = require('../services/account.service');
 const Validate = require('../validators/account');
-const router = new Router();
 
 /**
  * PUT /api/account
  * Updates the current account.
  * @response { JSON, error? } updated account if successful otherwise, an error.
  */
- router.put('/', async (ctx) => {
+ router.put('/', async function (req, res) {
     try {
-        const { errors, firstName, lastName } = await Validate.update(ctx.request.body);
+        const { errors, firstName, lastName } = await Validate.update(req.body);
 
         if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
+            throw { status: 400, ...errors };
         }
-        ctx.body = await AccountService.updateAccount(ctx.state.user, firstName, lastName);
-
+        const account = await AccountService.updateAccount(req.user, firstName, lastName);
+        res.status(200).json(account);
     } catch (error) {
-        ctx.throw(400, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
@@ -27,13 +27,14 @@ const router = new Router();
  * Delete the current account. 
  * @response { JSON, error? } delete's ok result otherwise, an error.
  */
-router.del('/', async (ctx) => {
+router.delete('/', async function (req, res) {
     try {
-        const result = await AccountService.deleteAccountById(ctx.state.user);
-        ctx.body = result.ok;
+        const result = await AccountService.deleteAccountById(req.user);
+        console.log(result);
+        res.status(200).json(result);
     } catch (error) {
-        ctx.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
-module.exports = router.routes();
+module.exports = router;

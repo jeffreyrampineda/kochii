@@ -1,20 +1,20 @@
-const Router = require('koa-router');
+const express = require("express");
+const router = express.Router();
 const InventoryService = require('../services/inventory.service');
 const Validate = require('../validators/item');
 const searchRawFood = require('../services/external_api.service').searchRawFood;
-
-const router = new Router();
 
 /**
  * GET /api/inventory
  * Get all items from the database.
  * @response { JSON, error? } array of item objects if successful otherwise, an error.
  */
-router.get('/', async (ctx) => {
+router.get('/', async function (req, res) {
     try {
-        ctx.body = await InventoryService.getItems(ctx.state.user);
+        const items = await InventoryService.getItems(req.user);
+        res.status(200).json(items);
     } catch (error) {
-        ctx.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
@@ -24,31 +24,33 @@ router.get('/', async (ctx) => {
  * @requires { params } name
  * @response { JSON, error? } array of item objects if successful otherwise, an error.
  */
-router.get('/search/:name', async (ctx) => {
+router.get('/search/:name', async function (req, res) {
     try {
-        const { errors, name } = await Validate.searchByName(ctx.params);
+        const { errors, name } = await Validate.searchByName(req.params);
 
         if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
+            throw { status: 400, ...errors };
         }
 
-        ctx.body = await InventoryService.searchItemByName(ctx.state.user, name);
+        const item = await InventoryService.searchItemByName(req.user, name);
+        res.status(200).json(item);
     } catch (error) {
-        ctx.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
-router.get('/between', async (ctx) => {
+router.get('/between', async function (req, res) {
     try {
-        const { errors, startDate, endDate } = Validate.getAddedBetween(ctx.query);
+        const { errors, startDate, endDate } = Validate.getAddedBetween(req.query);
 
         if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
+            throw { status: 400, ...errors };
         }
 
-        ctx.body = await InventoryService.getItemsAddedBetween(ctx.state.user, startDate, endDate);
+        const items = await InventoryService.getItemsAddedBetween(req.user, startDate, endDate);
+        res.status(200).json(items);
     } catch (error) {
-        ctx.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 })
 
@@ -58,27 +60,29 @@ router.get('/between', async (ctx) => {
  * @requires { query } names
  * @response { JSON, error? } array of item objects if successful otherwise, an error.
  */
-router.get('/names', async (ctx) => {
+router.get('/names', async function (req, res) {
     try {
-        const { errors, refined } = await Validate.getByNames(ctx.query);
+        const { errors, refined } = await Validate.getByNames(req.query);
 
         if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
+            throw { status: 400, ...errors };
         }
 
-        ctx.body = InventoryService.getItemsByNames(ctx.state.user, refined);
+        const items = InventoryService.getItemsByNames(req.user, refined);
+        res.status(200).json(items);
     } catch (error) {
-        ctx.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
-router.get('/nutrition', async (ctx) => {
+router.get('/nutrition', async function (req, res) {
     try {
-        const { query } = ctx.request.query;
+        const { query } = req.query;
 
-        ctx.body = await searchRawFood(query);
+        const result = await searchRawFood(query);
+        res.status(200).json(result);
     } catch (error) {
-        ctx.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
@@ -87,13 +91,14 @@ router.get('/nutrition', async (ctx) => {
  * Get all item from the database by _id.
  * @response { JSON, error? } Item objects if successful otherwise, an error.
  */
-router.get('/:_id', async (ctx) => {
+router.get('/:_id', async function (req, res) {
     try {
-        const { _id } = ctx.params;
+        const { _id } = req.params;
 
-        ctx.body = await InventoryService.getItemById(ctx.state.user, _id);
+        const item = await InventoryService.getItemById(req.user, _id);
+        res.status(200).json(item);
     } catch (error) {
-        ctx.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
@@ -103,17 +108,18 @@ router.get('/:_id', async (ctx) => {
  * @requires { body } name, quantity, cost, addedDate, expirationDate, group
  * @response { JSON, error? } new item if successful otherwise, an error.
  */
-router.post('/', async (ctx) => {
+router.post('/', async function (req, res) {
     try {
-        const { errors, name, quantity, cost, addedDate, expirationDate, group } = await Validate.create(ctx.request.body, ctx.state.user);
+        const { errors, name, quantity, cost, addedDate, expirationDate, group } = await Validate.create(req.body, req.user);
 
         if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
+            throw { status: 400, ...errors };
         }
 
-        ctx.body = await InventoryService.createItem(ctx.state.user, name, quantity, cost, addedDate, expirationDate, group);
+        const item = await InventoryService.createItem(req.user, name, quantity, cost, addedDate, expirationDate, group);
+        res.status(200).json(item);
     } catch (error) {
-        ctx.throw(400, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
@@ -124,18 +130,18 @@ router.post('/', async (ctx) => {
  * @requires { body, params } _id, name, quantity, cost, addedDate, expirationDate, group, option
  * @response { JSON, error? } updated item if successful otherwise, an error.
  */
-router.put('/:option', async (ctx) => {
+router.put('/:option', async function (req, res) {
     try {
-        const { errors, _id, name, quantity, cost, addedDate, expirationDate, group, option } = await Validate.update(ctx.request.body, ctx.params, ctx.state.user);
+        const { errors, _id, name, quantity, cost, addedDate, expirationDate, group, option } = await Validate.update(req.body, req.params, req.user);
 
         if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
+            throw { status: 400, ...errors };
         }
 
-        ctx.body = await InventoryService.updateItem(ctx.state.user, _id, name, quantity, cost, addedDate, expirationDate, group, option);
-
+        const item = await InventoryService.updateItem(req.user, _id, name, quantity, cost, addedDate, expirationDate, group, option);
+        res.status(200).json(item);
     } catch (error) {
-        ctx.throw(400, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
@@ -145,18 +151,19 @@ router.put('/:option', async (ctx) => {
  * @requires { params } _id
  * @response { JSON, error? } delete's ok result otherwise, an error.
  */
-router.del('/:_id', async (ctx) => {
+router.delete('/:_id', async function (req, res) {
     try {
-        const { errors, _id } = Validate.del(ctx.params, ctx.state.user);
+        const { errors, _id } = Validate.del(req.params, req.user);
 
         if (Object.keys(errors).length) {
-            ctx.throw(400, JSON.stringify(errors));
+            throw { status: 400, ...errors };
         }
 
-        ctx.body = { ok: await InventoryService.deleteItemById(ctx.state.user, _id) };
+        const result = { ok: await InventoryService.deleteItemById(req.user, _id) };
+        res.status(200).json(result);
     } catch (error) {
-        ctx.throw(400, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
-module.exports = router.routes();
+module.exports = router

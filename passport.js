@@ -1,4 +1,4 @@
-const passport = require("koa-passport"),
+const passport = require("passport"),
       Account = require('./models/account'),
       JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt;

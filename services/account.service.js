@@ -87,15 +87,14 @@ async function getAccountByEmail(email) {
 async function deleteAccountById(account_id) {
     try {
         let result = {
-            ok: 0
+            deletedCount: 0
         }
         const activityResult = await delActivity(account_id);
         const inventoryResult = await delInventory(account_id);
-        
-        if (activityResult.ok && inventoryResult.ok) {
+        if (activityResult.deletedCount && inventoryResult.deletedCount) {
             result = await Account.deleteOne({ _id: account_id });
         }
-        return result;
+        return result.deletedCount;
     } catch (error) {
         throw (error);
     }

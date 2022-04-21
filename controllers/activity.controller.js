@@ -1,18 +1,18 @@
-const Router = require('koa-router');
+const express = require("express");
+const router = express.Router();
 const ActivityService = require('../services/activity.service');
-
-const router = new Router();
 
 /**
  * GET /api/activities
  * Get all the account's activities from the database.
  * @response { JSON, error? } array of activities objects if successful otherwise, an error. 
  */
-router.get('/', async (ctx) => {
+router.get('/', async function (req, res) {
     try {
-        ctx.body = await ActivityService.getActivities(ctx.state.user);
+        const activities = await ActivityService.getActivities(req.user);
+        res.status(200).json(activities);
     } catch (error) {
-        ctx.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
@@ -22,21 +22,25 @@ router.get('/', async (ctx) => {
  * @requires { number } days
  * @response { JSON, error? } An object that contains activities and items.
  */
-router.get('/:days', async (ctx) => {
+router.get('/:days', async function (req, res) {
     try {
-        const { days = 1 } = ctx.params;
-        ctx.body = await ActivityService.getActivitiesSince(ctx.state.user, days);
+        console.log(req.params);
+        const { days = 1 } = req.params;
+        const activities = await ActivityService.getActivitiesSince(req.user, days);
+        res.status(200).json(activities);
     } catch (error) {
-        ctx.throw(500, error);
+        console.log('error')
+        res.status(error.status ?? 500).json(error);
     }
 });
 
-router.del('/', async (ctx) => {
+router.delete('/', async function (req, res) {
     try {
-        ctx.body = await ActivityService.clearActivities(ctx.state.user);
+        const result = await ActivityService.clearActivities(req.user);
+        res.status(200).json(result);
     } catch (error) {
-        ctw.throw(500, error);
+        res.status(error.status ?? 500).json(error);
     }
 });
 
-module.exports = router.routes();
+module.exports = router
