@@ -1,5 +1,5 @@
-const passport = require("koa-passport"),
-      User = require('./models/user'),
+const passport = require("passport"),
+      Account = require('./models/account'),
       JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt;
 
@@ -9,12 +9,10 @@ const opts = {
 };
 
 passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
-    User.findOne({ _id: jwt_payload._id }).then(user => {
-        if (user) {
-            const trimmed = {
-                _id: user._id,
-            }
-            return done(null, trimmed);
+    Account.findOne({ _id: jwt_payload._id }).then(account => {
+        if (account) {
+            const account_id = account._id;
+            return done(null, account_id);
         } else {
             return done(null, false);
         }

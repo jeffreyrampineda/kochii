@@ -10,17 +10,17 @@ const activityProject = {
     'description': '$activity.description'
 };
 
-async function init(user, activity_id) {
+async function init(account_id, activity_id) {
     try {
         await Activity.create({
             _id: activity_id,
-            owner: user._id,
+            owner: account_id,
             activity: [{
                 method: "create",
-                target: "user",
+                target: "Account",
                 quantity: 0,
                 addedDate: new Date(),
-                description: "Account registered",
+                description: "Account created",
             }]
         });
 
@@ -31,13 +31,13 @@ async function init(user, activity_id) {
 }
 
 /**
- * Get all items belonging to user.
- * @param { JSON } user
+ * Get all activities belonging to account_id.
+ * @param { JSON } account_id
  */
-async function getActivities(user) {
+async function getActivities(account_id) {
     try {
         const activities = await Activity.aggregate([
-            { $match: { owner: user._id } },
+            { $match: { owner: account_id } },
             { $unwind: '$activity' },
             { $project: activityProject }
         ]);
@@ -48,14 +48,14 @@ async function getActivities(user) {
     }
 }
 
-async function getActivitiesSince(user, days) {
+async function getActivitiesSince(account_id, days) {
     try {
         const fromDay = new Date();
 
         fromDay.setDate(fromDay.getDate() - days);
         fromDay.setHours(0, 0, 0, 0);
 
-        const his = await Activity.findOne({ owner: user._id }, 'activity');
+        const his = await Activity.findOne({ owner: account_id }, 'activity');
 
         return his.activity.filter(hi => hi.addedDate.getTime() > fromDay.getTime());
     } catch (error) {
@@ -96,10 +96,10 @@ async function create(activity) {
     }
 }
 
-async function clearActivities(user) {
+async function clearActivities(account_id) {
     try {
         const result = await Activity.findOneAndUpdate(
-            { owner: user._id },
+            { owner: account_id },
             { $pull: { activity: {} } },
             { new: true, rawResult: true }
         );

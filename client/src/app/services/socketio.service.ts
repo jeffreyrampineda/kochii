@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { AccountService } from 'src/app/services/account.service';
 import io from 'socket.io-client';
+import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,20 +13,24 @@ export class SocketioService {
   private token = '';
 
   constructor(
-    private authenticationService: AuthenticationService
+    private messageService: MessageService,
+    private accountService: AccountService
   ) { }
 
   initSocket(): void {
-    if (this.authenticationService.isLoggedIn) {
-      this.token = this.authenticationService.currentUserValue.token;
+    if (this.accountService.isLoggedIn) {
+      this.token = this.accountService.currentAccountValue.token;
     }
-    this.socket = io(environment.socket_endpoint);
-    this.socket.emit('authenticate', { token: this.token });
+    this.socket = io(environment.socket_endpoint, {
+      auth: {
+        token: this.token
+      },
+    });
     this.socket.on('authenticated', () => {
-      // console.log('auth');
+      this.log('connection established');
     });
     this.socket.on('unauthorized', (msg) => {
-      console.log(`unauthorized: ${JSON.stringify(msg.data.message)}`);
+      this.log(`unauthorized, ${JSON.stringify(msg.data.message)}`);
       throw new Error(msg.data.type);
     });
   }
@@ -36,5 +41,15 @@ export class SocketioService {
 
   disconnect() {
     this.socket.disconnect();
+  }
+
+  // -------------------------------------------------------------
+
+  /**
+   * Adds the message to the messageService for logging.
+   * @param message - The message to log.
+   */
+   private log(message: string) {
+    this.messageService.add(`SocketIoService: ${message}`);
   }
 }

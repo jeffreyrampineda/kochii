@@ -19,7 +19,7 @@ export class ItemEditComponent implements OnInit {
   itemModel: Item;
   itemEditForms: FormGroup[] = [];
   groups: string[] = [];
-  firstFood = {};
+  firstFood: any = {};
 
   constructor(
     private dialog: MatDialog,
@@ -151,13 +151,16 @@ export class ItemEditComponent implements OnInit {
       next: response => {
         if (response && response.successful) {
           this.messageService.notify(`${response.successful}/${response.total} items were successfully updated.`);
+          
+          // Return to app/inventory if successful, otherwise stay.
+          this.router.navigate(['app/inventory']);
         }
       },
       error: err => {
         this.messageService.notify(err.error);
       },
       complete: () => {
-        this.router.navigate(['app/inventory']);
+
       }
     });
   }

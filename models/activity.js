@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const activitySchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Account'
     },
     activity: [{
         created_at: {

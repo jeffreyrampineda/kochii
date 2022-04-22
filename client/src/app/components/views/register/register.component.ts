@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { PasswordMatchValidator } from '../../shared/_validators/password-match.validator';
+import { AccountService } from 'src/app/services/account.service';
 import { Title } from '@angular/platform-browser';
 
 // -------------------------------------------------------------
@@ -16,39 +17,27 @@ export class RegisterComponent implements OnInit {
   imgLogo = '//www.kochii.app/kochii-logo.png';
   registerForm: FormGroup;
   loading = false;
-  error = {
-    username: undefined,
-    password: undefined,
-    email: undefined
-  };
+  error_messages = [];
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private accountService: AccountService,
     private formBuilder: FormBuilder,
     private titleService: Title,
   ) { }
 
   // -------------------------------------------------------------
 
-  /** Validator for comparing password and passwordre */
-  checkPasswords(group: FormGroup) {
-    const password = group.controls.password.value;
-    const passwordre = group.controls.passwordre.value;
-
-    return password === passwordre ? null : { notSame: true };
-  }
-
   ngOnInit() {
     this.titleService.setTitle('Register | Kochii');
 
     // If currently logged in, redirect to dashboard.
-    if (this.authenticationService.isLoggedIn) {
+    if (this.accountService.isLoggedIn) {
       this.router.navigate(['/app']);
     }
 
     this.registerForm = this.formBuilder.group({
-      username: ['', [
+      accountName: ['', [
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(30),
@@ -63,8 +52,20 @@ export class RegisterComponent implements OnInit {
       email: ['', [
         Validators.required,
         Validators.email
-      ]]
-    }, { validator: this.checkPasswords });
+      ]],
+      firstName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(30),
+        Validators.pattern('^[a-zA-Z]*$')
+      ]],
+      lastName: ['', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(30),
+        Validators.pattern('^[a-zA-Z]*$')
+      ]],
+    }, { validators: PasswordMatchValidator() });
   }
 
   /** convenience getter for easy access to form fields */
@@ -78,22 +79,18 @@ export class RegisterComponent implements OnInit {
 
     console.log('submitted');
     this.loading = true;
-    this.error = {
-      username: undefined,
-      password: undefined,
-      email: undefined
-    };
+    this.error_messages = [];
 
-    const { username, password, email } = registerData;
+    const { accountName, password, email, firstName, lastName } = registerData;
 
-    this.authenticationService.register({ username, password, email }).subscribe({
+    this.accountService.register({ accountName, password, email, firstName, lastName }).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/app']);
         }
       },
       error: err => {
-        this.error = err.error;
+        this.error_messages = err.error.error_messages;
         this.loading = false;
       },
       complete: () => {

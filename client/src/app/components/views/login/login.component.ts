@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthenticationService } from 'src/app/services/authentication.service';
+import { AccountService } from 'src/app/services/account.service';
 import { Title } from '@angular/platform-browser';
 
 // -------------------------------------------------------------
@@ -16,13 +16,11 @@ export class LoginComponent implements OnInit {
   imgLogo = '//www.kochii.app/kochii-logo.png';
   loginForm: FormGroup;
   loading = false;
-  error = {
-    login: undefined
-  };
+  error_messages = [];
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
+    private accountService: AccountService,
     private formBuilder: FormBuilder,
     private titleService: Title,
   ) { }
@@ -33,12 +31,12 @@ export class LoginComponent implements OnInit {
     this.titleService.setTitle('Login | Kochii');
 
     // If currently logged in, redirect to dashboard.
-    if (this.authenticationService.isLoggedIn) {
+    if (this.accountService.isLoggedIn) {
       this.router.navigate(['/app']);
     }
 
     this.loginForm = this.formBuilder.group({
-      username: ['', [
+      accountName: ['', [
         Validators.required,
         Validators.minLength(6),
         Validators.maxLength(30),
@@ -63,18 +61,16 @@ export class LoginComponent implements OnInit {
 
     console.log('submitted');
     this.loading = true;
-    this.error = {
-      login: undefined
-    };
+    this.error_messages = [];
 
-    this.authenticationService.login(loginData).subscribe({
+    this.accountService.login(loginData).subscribe({
       next: response => {
         if (response && response.token) {
           this.router.navigate(['/app']);
         }
       },
       error: err => {
-        this.error = err.error;
+        this.error_messages = err.error.error_messages;
         this.loading = false;
       },
       complete: () => {

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const inventorySchema = new Schema({
     owner: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Account'
     },
     groups: [{
         type: String,

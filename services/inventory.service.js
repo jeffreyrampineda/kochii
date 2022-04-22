@@ -12,11 +12,11 @@ const itemProject = {
     'group': '$items.group'
 };
 
-async function init(user, inventory_id) {
+async function init(account_id, inventory_id) {
     try {
         await Inventory.create({
             _id: inventory_id,
-            owner: user._id,
+            owner: account_id,
             groups: ["Default"],
             items: [{
                 name: "Sample",
@@ -25,7 +25,7 @@ async function init(user, inventory_id) {
             }]
         });
 
-        await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: new Date(), quantity: 1, description: "Item created" });
+        await createActivity({ owner: account_id, method: 'add', target: 'item', addedDate: new Date(), quantity: 1, description: "Item created" });
 
         return true;
     } catch (error) {
@@ -34,13 +34,13 @@ async function init(user, inventory_id) {
 }
 
 /**
- * Get all items belonging to user.
- * @param { JSON } user
+ * Get all items belonging to account_id.
+ * @param { JSON } account_id
  */
-async function getItems(user) {
+async function getItems(account_id) {
     try {
         const items = await Inventory.aggregate([
-            { $match: { owner: user._id } },
+            { $match: { owner: account_id } },
             { $unwind: '$items' },
             { $project: itemProject }
         ]);
@@ -51,10 +51,10 @@ async function getItems(user) {
     }
 }
 
-async function getItemById(user, _id) {
+async function getItemById(account_id, _id) {
     try {
         const item = await Inventory.aggregate([
-            { $match: { owner: user._id } },
+            { $match: { owner: account_id } },
             { $unwind: '$items' },
             { $match: { 'items._id': ObjectId(_id) }},
             { $project: itemProject }
@@ -67,12 +67,12 @@ async function getItemById(user, _id) {
 }
 
 /**
- * Get all items added between the given date belonging to the specified user.
- * @param { object } user 
+ * Get all items added between the given date belonging to account_id.
+ * @param { object } account_id 
  * @param { date } startDate 
  * @param { date } endDate 
  */
-async function getItemsAddedBetween(user, startDate, endDate) {
+async function getItemsAddedBetween(account_id, startDate, endDate) {
     try {
         startDate = new Date(startDate);
         startDate.setHours(0, 0, 0);
@@ -80,7 +80,7 @@ async function getItemsAddedBetween(user, startDate, endDate) {
         endDate.setHours(23, 59, 59);
 
         const items = await Inventory.aggregate([
-            { $match: { owner: user._id } },
+            { $match: { owner: account_id } },
             { $unwind: '$items' },
             { $match: { 'items.addedDate': { $gte: startDate, $lte: endDate }}},
             { $project: itemProject }
@@ -92,9 +92,9 @@ async function getItemsAddedBetween(user, startDate, endDate) {
     }
 }
 
-async function getItemsByNames(user, refined) {
+async function getItemsByNames(account_id, refined) {
     try {
-        const i = await Inventory.findOne({ owner: user._id }, 'items');
+        const i = await Inventory.findOne({ owner: account_id }, 'items');
         const result = i.items.filter(item => refined.includes(item.name));
 
         return result;
@@ -103,9 +103,9 @@ async function getItemsByNames(user, refined) {
     }
 }
 
-async function searchItemByName(user, name) {
+async function searchItemByName(account_id, name) {
     try {
-        const i = await Inventory.findOne({ owner: user._id }, 'items');
+        const i = await Inventory.findOne({ owner: account_id }, 'items');
         const re = new RegExp("^" + name);
         const result = i.items.filter(item => re.test(item.name));
 
@@ -115,10 +115,10 @@ async function searchItemByName(user, name) {
     }
 }
 
-async function createItem(user, name, quantity, cost, addedDate, expirationDate, group) {
+async function createItem(account_id, name, quantity, cost, addedDate, expirationDate, group) {
     try {
         const result = await Inventory.findOneAndUpdate(
-            { owner: user._id },
+            { owner: account_id },
             {
                 $push: {
                     items: {
@@ -140,10 +140,10 @@ async function createItem(user, name, quantity, cost, addedDate, expirationDate,
         if (result.ok === 1) {
             const item = result.value.items[0];
 
-            await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Item created" });
+            await createActivity({ owner: account_id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Item created" });
 
-            for (const socket_id in global.currentConnections[user._id]) {
-                global.currentConnections[user._id][socket_id].socket.emit('item_create', item);
+            for (const socket_id in global.currentConnections[account_id]) {
+                global.currentConnections[account_id][socket_id].socket.emit('item_create', item);
             }
             return item;
         } else {
@@ -154,7 +154,7 @@ async function createItem(user, name, quantity, cost, addedDate, expirationDate,
     }
 }
 
-async function updateItem(user, _id, name, quantity, cost, addedDate, expirationDate, group, option) {
+async function updateItem(account_id, _id, name, quantity, cost, addedDate, expirationDate, group, option) {
     try {
         let itemData = {
             $set: {
@@ -170,11 +170,11 @@ async function updateItem(user, _id, name, quantity, cost, addedDate, expiration
         // Setting or incrementing.
         itemData["$" + option]["items.$.quantity"] = quantity;
 
-        const i = await Inventory.findOne({ owner: user._id, "items._id": _id }, { 'items.$': 1 });
+        const i = await Inventory.findOne({ owner: account_id, "items._id": _id }, { 'items.$': 1 });
         const oldVItem = i.items[0];
         const result = await Inventory.findOneAndUpdate(
             {
-                owner: user._id,
+                owner: account_id,
                 "items._id": _id
             },
             itemData,
@@ -185,37 +185,37 @@ async function updateItem(user, _id, name, quantity, cost, addedDate, expiration
             const item = result.value.items.find(i => i._id == _id);
 
             if ((new Date(oldVItem.addedDate)).getTime() != (new Date(item.addedDate)).getTime()) {
-                await createActivity({ owner: user._id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity, description: "Changed dates" });
-                await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Changed dates" });
+                await createActivity({ owner: account_id, method: 'delete', target: 'item', addedDate: oldVItem.addedDate, quantity: -oldVItem.quantity, description: "Changed dates" });
+                await createActivity({ owner: account_id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: item.quantity, description: "Changed dates" });
             }
             if (oldVItem.group != group) {
-                await createActivity({ owner: user._id, method: 'edit', target: 'item', addedDate, quantity, description: "Changed groups" });
+                await createActivity({ owner: account_id, method: 'edit', target: 'item', addedDate, quantity, description: "Changed groups" });
             }
             if (option === 'set') {
                 const newQuantity = item.quantity - oldVItem.quantity;
 
                 if (newQuantity < 0) {
-                    await createActivity({ owner: user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity: newQuantity, description: "Updated item" });
+                    await createActivity({ owner: account_id, method: 'delete', target: 'item', addedDate: new Date(), quantity: newQuantity, description: "Updated item" });
 
                 } else if (newQuantity > 0) {
-                    await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: newQuantity, description: "Updated item" });
+                    await createActivity({ owner: account_id, method: 'add', target: 'item', addedDate: item.addedDate, quantity: newQuantity, description: "Updated item" });
                 }
 
             }
             if (option === 'inc') {
                 if (quantity <= 0) {
-                    await createActivity({ owner: user._id, method: 'delete', target: 'item', addedDate: new Date(), quantity, description: "Decreased quantities" });
+                    await createActivity({ owner: account_id, method: 'delete', target: 'item', addedDate: new Date(), quantity, description: "Decreased quantities" });
                 } else {
-                    await createActivity({ owner: user._id, method: 'add', target: 'item', addedDate: item.addedDate, quantity, description: "Increased quantities" });
+                    await createActivity({ owner: account_id, method: 'add', target: 'item', addedDate: item.addedDate, quantity, description: "Increased quantities" });
                 }
             }
 
             // If new quantity is less than or equal to 0, delete Item.
             if (item.quantity <= 0) {
-                await deleteItemById(_id, user);
+                await deleteItemById(account_id, _id);
             } else {
-                for (const socket_id in global.currentConnections[user._id]) {
-                    global.currentConnections[user._id][socket_id].socket.emit('item_update', item);
+                for (const socket_id in global.currentConnections[account_id]) {
+                    global.currentConnections[account_id][socket_id].socket.emit('item_update', item);
                 }
             }
             return item;
@@ -233,19 +233,19 @@ async function updateItem(user, _id, name, quantity, cost, addedDate, expiration
  * @param { string } _id 
  * @returns { number } delete's result.
  */
-async function deleteItemById(_id, user) {
+async function deleteItemById(account_id, _id) {
     try {
         const result = await Inventory.findOneAndUpdate(
-            { owner: user._id },
+            { owner: account_id },
             { $pull: { items: { _id } } },
             { new: true, rawResult: true }
         );
 
         if (result.ok === 1) {
-            await createActivity({ owner: user._id, method: 'removed', target: 'item', addedDate: new Date(), quantity: 0, description: "Permanently removed" });
+            await createActivity({ owner: account_id, method: 'removed', target: 'item', addedDate: new Date(), quantity: 0, description: "Permanently removed" });
 
-            for (const socket_id in global.currentConnections[user._id]) {
-                global.currentConnections[user._id][socket_id].socket.emit('item_delete', _id);
+            for (const socket_id in global.currentConnections[account_id]) {
+                global.currentConnections[account_id][socket_id].socket.emit('item_delete', _id);
             }
         }
         return result.ok;

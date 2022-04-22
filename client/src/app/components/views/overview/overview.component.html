@@ -6,7 +6,7 @@
   <div class="col-xl-3 col-md-6 mb-r">
 
     <!--Card-->
-    <kochii-gauge-card icon="pie_chart" title="INVENTORY SIZE" [value]="itemTotal"></kochii-gauge-card>
+    <kochii-gauge-card icon="pie_chart" title="INVENTORY SIZE" [value]="itemTotal.toString()"></kochii-gauge-card>
     <!--/.Card-->
 
   </div>
@@ -16,7 +16,7 @@
   <div class="col-xl-3 col-md-6 mb-r">
 
     <!--Card-->
-    <kochii-gauge-card icon="delete_sweep" color="warn" title="EXPIRED ITEMS" [value]="numberOfExpired">
+    <kochii-gauge-card icon="delete_sweep" color="warn" title="EXPIRED ITEMS" [value]="numberOfExpired.toString()">
     </kochii-gauge-card>
     <!--/.Card-->
 
@@ -38,7 +38,7 @@
   <div class="col-xl-3 col-md-6 mb-r">
 
     <!--Card-->
-    <kochii-gauge-card icon="show_chart" title="ITEMS REMOVED" [value]="quantityRemovedThisWeek()">
+    <kochii-gauge-card icon="show_chart" title="ITEMS REMOVED" [value]="quantityRemovedThisWeek().toString()">
     </kochii-gauge-card>
     <!--/.Card-->
 

@@ -14,9 +14,7 @@ import { catchError } from 'rxjs/operators';
 export class UpdateDialogComponent {
 
   loading = false;
-  error = {
-    name: undefined
-  };
+  error_messages = [];
 
   constructor(
     private inventoryService: InventoryService,
@@ -42,11 +40,7 @@ export class UpdateDialogComponent {
       item.quantity = -item.quantity;
     }
 
-    return this.inventoryService.updateItem(item, this.data.option).pipe(
-      catchError((error: any): Observable<any> => {
-        return of(undefined);
-      }),
-    );
+    return this.inventoryService.updateItem(item, this.data.option);
   }
 
   /**
@@ -55,12 +49,7 @@ export class UpdateDialogComponent {
    * @param item - The item to be upserted.
    */
   createItem(newItem: Item): Observable<any> {
-    return this.inventoryService.createItem(newItem).pipe(
-      catchError((error: any): Observable<any> => {
-        // Return undefined to complete forkJoin.
-        return of(undefined);
-      }),
-    );
+    return this.inventoryService.createItem(newItem);
   }
 
   /** Loops through data.items and update each item individually. */
@@ -99,7 +88,7 @@ export class UpdateDialogComponent {
         this.dialogRef.close({ successful, total });
       },
       error: err => {
-        this.error = err.error;
+        this.error_messages = err.error.error_messages;
         this.loading = false;
       },
       complete: () => {
