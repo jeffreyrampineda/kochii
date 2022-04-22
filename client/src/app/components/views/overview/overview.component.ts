@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Chart } from 'chart.js';
-import { LinearTickOptions } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
+import 'chartjs-adapter-luxon';
 import { ActivityService } from 'src/app/services/activity.service';
 import { Activity } from 'src/app/interfaces/activity';
 import { InventoryService } from 'src/app/services/inventory.service';
@@ -45,6 +45,8 @@ export class OverviewComponent implements OnInit {
     private activityService: ActivityService,
     private inventoryService: InventoryService
   ) {
+    Chart.register(...registerables);
+
     this.today.setHours(0, 0, 0, 0);
     this.firstWeekDay = new Date(
       this.today.getFullYear(),
@@ -133,39 +135,37 @@ export class OverviewComponent implements OnInit {
       data: data,
       options: {
         responsive: true,
-        legend: {
-          position: 'bottom',
-          labels: {
-            usePointStyle: true,
-            filter: (item) => item.text !== '',
-          }
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              usePointStyle: true,
+              filter: (item) => item.text !== '',
+            }
+          },
         },
-        cutoutPercentage: 75,
-        tooltips: {
-          filter: (item, chart) => chart.labels[item.index] !== ''
-        },
+        cutout: 75,
         animation: {
           duration: 0
         },
-        responsiveAnimationDuration: 0,
         maintainAspectRatio: false,
       },
       plugins: [{
+        id: 'centerText',
         beforeDraw: function (chart) {
-          const width = chart.width,
-            height = chart.height,
-            ctx = chart.ctx;
-
-          ctx.restore();
-          ctx.font = `${(height / 110).toFixed(2)}em sans-serif`;
-          ctx.textBaseline = 'alphabetic';
-
-          const text = Math.round((good + ok) * 1.0 / itemsCount * 100).toString() + '%',
-            textX = Math.round((width - ctx.measureText(text).width) / 2),
-            textY = height / 2;
-
-          ctx.fillText(text, textX, textY);
+          const {
+            ctx,
+            chartArea: {
+              width, height
+            }
+          } = chart;
           ctx.save();
+
+          const label = Math.round((good + ok) * 1.0 / itemsCount * 100).toString() + '%';
+
+          ctx.font = '2em sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(label, width / 2, height / 2);
         }
       }]
     });
@@ -183,67 +183,59 @@ export class OverviewComponent implements OnInit {
           this.rawActivitiesData.filter(h => h.method === 'add'),
           this.rawActivitiesData.filter(h => h.method === 'delete')
         ),
-        borderColor: gradientBlue,
+        borderColor: 'rgba(28, 35, 49, 0.5)',
         borderWidth: 2,
         pointHoverRadius: 10,
         pointRadius: 5,
         backgroundColor: gradientBlue,
+        fill: true,
       }]
     };
-
-    const start = new Date(
-      this.today.getFullYear(),
-      this.today.getMonth(),
-      this.today.getDate() - 6
-    );
 
     this.lineChart = new Chart('chart-line', {
       type: 'line',
       data: data,
       options: {
         responsive: true,
-        legend: {
-          display: false
-        },
-        tooltips: {
-          mode: 'index',
-          intersect: false
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            mode: 'index',
+            intersect: false
+          },
         },
         scales: {
-          xAxes: [{
+          x: {
             type: 'time',
-            ticks: {
-              min: start.toDateString(),
-              max: this.today.toDateString(),
-            },
             time: {
               unit: 'day',
-              unitStepSize: 1,
-              tooltipFormat: 'll',
+              stepSize: 1,
+              tooltipFormat: 'MMMM dd',
               displayFormats: {
-                'day': 'dd'
+                'day': 'MMM dd'
               }
             },
             stacked: true,
-            gridLines: {
+            grid: {
               display: false
             }
-          }],
-          yAxes: [{
-            scaleLabel: {
+          },
+          y: {
+            title: {
               display: true,
-              labelString: 'Quantity'
+              text: 'Quantity',
             },
             ticks: {
               precision: 0,
-              beginAtZero: true
-            } as LinearTickOptions
-          }]
+            },
+            beginAtZero: true,
+          },
         },
         animation: {
           duration: 0
         },
-        responsiveAnimationDuration: 0,
         maintainAspectRatio: false,
       },
     });
