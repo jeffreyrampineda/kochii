@@ -1,38 +1,121 @@
-const express = require("express");
-const router = express.Router();
-const AccountService = require('../services/account.service');
-const Validate = require('../validators/account');
+const AccountService = require("../services/account.service");
+const Helper = require("../util/helpers");
+const Validate = require("../validators/account");
 const createError = require("http-errors");
 
 /**
- * PUT /api/account
+ * Registers the account to the database.
+ * @requires { body } accountName, password, email, firstName, lastName
+ * @response { JSON, error? } jwt if successful otherwise, an error.
+ */
+exports.account_create = async function (req, res, next) {
+  try {
+    const { accountName, password, email, firstName, lastName } =
+      await Validate.register(req.body);
+
+    const account = await AccountService.init(
+      accountName,
+      password,
+      email,
+      firstName,
+      lastName
+    );
+
+    // 202 - Accepted
+    res.status(202).json({
+      accountName,
+      email,
+      firstName,
+      lastName,
+      token: Helper.generateToken(account._id),
+      isVerified: account.isVerified,
+    });
+  } catch (error) {
+    next(createError(error.status ?? 500, error));
+  }
+};
+
+/**
+ * Authenticates the Account to the database.
+ * @requires { body } accountName, password
+ * @response { JSON, error? } jwt if successful otherwise, an error.
+ */
+exports.account_login = async function (req, res, next) {
+  try {
+    const { accountName, password } = await Validate.login(req.body);
+
+    const account = await AccountService.getAccountByName(accountName);
+
+    // Account should exist and should have matching passwords.
+    if (account && account.comparePasswords(password)) {
+      // 202 - Accepted.
+      res.status(202).json({
+        accountName: account.accountName,
+        email: account.email,
+        firstName: account.firstName,
+        lastName: account.lastName,
+        token: Helper.generateToken(account._id),
+        isVerified: account.isVerified,
+      });
+    } else {
+      throw { status: 401, error_messages: ["Authentication failed"] };
+    }
+  } catch (error) {
+    next(createError(error.status ?? 500, error));
+  }
+};
+
+/**
+ * Verifies the token and email.
+ * @requires { query } token, email
+ * @response { JSON, error? } the result.
+ */
+exports.account_verify = async function (req, res, next) {
+  try {
+    const { token, email } = await Validate.verify(req.query);
+
+    let response = "loading...";
+
+    const verifyResult = await AccountService.verify(token, email);
+    response = verifyResult
+      ? "Account has been verified"
+      : "Verification failed.";
+
+    res.status(202).send(response);
+  } catch (error) {
+    next(createError(error.status ?? 500, error));
+  }
+};
+
+/**
  * Updates the current account.
  * @response { JSON, error? } updated account if successful otherwise, an error.
  */
- router.put('/', async function (req, res, next) {
-    try {
-        const { firstName, lastName } = await Validate.update(req.body);
+exports.account_update = async function (req, res, next) {
+  try {
+    const { firstName, lastName } = await Validate.update(req.body);
 
-        const account = await AccountService.updateAccount(req.user, firstName, lastName);
-        res.status(200).json(account);
-    } catch (error) {
-        next(createError(error.status ?? 500, error));
-    }
-});
+    const account = await AccountService.updateAccount(
+      req.user,
+      firstName,
+      lastName
+    );
+    res.status(200).json(account);
+  } catch (error) {
+    next(createError(error.status ?? 500, error));
+  }
+};
 
 /**
- * DEL /api/account
- * Delete the current account. 
+ * Delete the current account.
  * @response { JSON, error? } delete's ok result otherwise, an error.
  */
-router.delete('/', async function (req, res, next) {
-    try {
-        const result = await AccountService.deleteAccountById(req.user);
+exports.account_delete = async function (req, res, next) {
+  try {
+    const result = await AccountService.deleteAccountById(req.user);
 
-        res.status(200).json(result);
-    } catch (error) {
-        next(createError(error.status ?? 500, error));
-    }
-});
-
-module.exports = router;
+    res.status(200).json(result);
+  } catch (error) {
+    next(createError(error.status ?? 500, error));
+  }
+};
