@@ -1,16 +1,13 @@
-const express = require("express");
-const router = express.Router();
 const Inventory = require("../models/inventory");
 const createActivity = require("../services/activity.service").create;
 const Validate = require("../validators/group");
 const createError = require("http-errors");
 
 /**
- * GET /api/groups
  * Get all groups from the database.
  * @response { string[], error? } array of strings if successful otherwise, an error.
  */
-router.get("/", async function (req, res, next) {
+exports.group_list = async function (req, res, next) {
   try {
     const inventory = await Inventory.findOne(
       { owner: req.user._id },
@@ -20,15 +17,14 @@ router.get("/", async function (req, res, next) {
   } catch (error) {
     next(createError(error.status ?? 500, error));
   }
-});
+};
 
 /**
- * POST /api/groups/:name
  * Creates a new group.
  * @requires { params } name
  * @response { JSON, error? } group's name if successful otherwise, an error.
  */
-router.post("/:name", async function (req, res, next) {
+exports.group_create = async function (req, res, next) {
   try {
     const { name } = await Validate.create(req.params, req.user);
 
@@ -59,16 +55,15 @@ router.post("/:name", async function (req, res, next) {
   } catch (error) {
     next(createError(error.status ?? 500, error));
   }
-});
+};
 
 /**
- * DEL /api/groups/:name
  * Deletes a group. Before deleting, sets all Items' group with the same group name
  * to 'Default'.
  * @requires { params } name
  * @response { JSON, error? } group's name if successful otherwise, an error.
  */
-router.delete("/:name", async function (req, res, next) {
+exports.group_delete = async function (req, res, next) {
   try {
     const { name } = await Validate.del(req.params, req.user);
 
@@ -127,6 +122,4 @@ router.delete("/:name", async function (req, res, next) {
   } catch (error) {
     next(createError(error.status ?? 500, error));
   }
-});
-
-module.exports = router;
+};
