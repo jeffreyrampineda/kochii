@@ -58,7 +58,7 @@ exports.group_create = async function (req, res, next) {
 };
 
 /**
- * Deletes a group. Before deleting, sets all Items' group with the same group name
+ * Deletes a group. Before deleting, set all Items' group with the same group name
  * to 'Default'.
  * @requires { params } name
  * @response { JSON, error? } group's name if successful otherwise, an error.
@@ -67,58 +67,51 @@ exports.group_delete = async function (req, res, next) {
   try {
     const { name } = await Validate.del(req.params, req.user);
 
-    const item_result = await Inventory.findOneAndUpdate(
+    const result = await Inventory.findOneAndUpdate(
       {
         owner: req.user,
       },
       {
+        // Set items with group {name} to "Default"
         $set: {
           "items.$[i].group": "Default",
         },
+
+        // Remove group {name} from groups array
+        $pull: { groups: name },
       },
       {
         arrayFilters: [{ "i.group": name }],
         new: true,
         runValidators: true,
-        rawResult: true,
       }
     );
 
-    if (item_result.ok === 1) {
-      const i = await Inventory.findOne({ owner: req.user }, "items");
-      const result = i.items.filter((item) => item.group === "Default");
-      for (const socket_id in global.currentConnections[req.user]) {
-        global.currentConnections[req.user][socket_id].socket.emit(
-          "item_updateMany",
-          result
-        );
-      }
-    }
-
-    const result = await Inventory.findOneAndUpdate(
-      { owner: req.user },
-      { $pull: { groups: name } },
-      { new: true, rawResult: true }
+    // Updating client's inventory
+    const updated_default_group = result.items.filter(
+      (item) => item.group === "Default"
     );
-
-    if (result.ok === 1) {
-      await createActivity({
-        owner: req.user,
-        method: "removed",
-        target: "group",
-        addedDate: new Date(),
-        quantity: 0,
-        description: "Permanently removed",
-      });
-
-      for (const socket_id in global.currentConnections[req.user]) {
-        global.currentConnections[req.user][socket_id].socket.emit(
-          "group_delete",
-          name
-        );
-      }
-      res.status(200).json({ name });
+    for (const socket_id in global.currentConnections[req.user]) {
+      global.currentConnections[req.user][socket_id].socket.emit(
+        "item_updateMany",
+        updated_default_group
+      );
+      global.currentConnections[req.user][socket_id].socket.emit(
+        "group_delete",
+        name
+      );
     }
+
+    // Create new activity for recording
+    await createActivity({
+      owner: req.user,
+      method: "removed",
+      target: "group",
+      addedDate: new Date(),
+      quantity: 0,
+      description: "Permanently removed",
+    });
+    res.status(200).json({ name });
   } catch (error) {
     next(createError(error.status ?? 500, error));
   }

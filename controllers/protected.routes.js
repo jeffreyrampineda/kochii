@@ -45,7 +45,7 @@ router.get("/groups", group_controller.group_list);
 router.post("/groups/:name", group_controller.group_create);
 
 // DELETE /api/groups/:name
-router.delete("/:name", group_controller.group_delete);
+router.delete("/groups/:name", group_controller.group_delete);
 
 /// ACTIVITIES ROUTES ///
 
