@@ -8,7 +8,11 @@
     <!--/.Actions-->
 
     <!--Content-->
-    <div *ngIf="loading; else viewEmpty" class="loader text-center" style="margin: auto;"></div>
+    <div
+      *ngIf="loading; else viewEmpty"
+      class="loader text-center"
+      style="margin: auto"
+    ></div>
     <ng-template #viewEmpty>
       <ng-container *ngIf="isEmpty; else viewContent">
         <h2 class="text-center">{{ title }} is empty</h2>

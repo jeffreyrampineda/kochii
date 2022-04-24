@@ -1,5 +1,8 @@
-<kochii-presentation-container title="Activity Log" [isEmpty]="activities.data.length === 0" [loading]="loading">
-
+<kochii-presentation-container
+  title="Activity Log"
+  [isEmpty]="activities.data.length === 0"
+  [loading]="loading"
+>
   <!--Actions-->
   <div actions class="d-sm-flex justify-content-between">
     <button mat-button (click)="clear()">Clear</button>
@@ -8,7 +11,6 @@
 
   <!--Content-->
   <table mat-table [dataSource]="activities">
-
     <!-- Date Column -->
     <ng-container matColumnDef="date">
       <th mat-header-cell *matHeaderCellDef>Recorded at</th>
@@ -46,10 +48,12 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[10, 15, 20]" showFirstLastButtons></mat-paginator>
+  <mat-paginator
+    [pageSizeOptions]="[10, 15, 20]"
+    showFirstLastButtons
+  ></mat-paginator>
   <!--/.Content-->
-
 </kochii-presentation-container>

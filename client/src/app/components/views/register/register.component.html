@@ -1,82 +1,129 @@
 <!-- Form -->
-<form class="shadow-sm bg-white p-5 k-center-isolated" [formGroup]="registerForm"
-    (ngSubmit)="onSubmit(registerForm.value)">
-    <img alt="Kochii logo" [src]="imgLogo" style="height: 64px; display:block; margin-right: auto; margin-left: auto;">
-    <h4 class="my-4 text-center">Register</h4>
+<form
+  class="shadow-sm bg-white p-5 k-center-isolated"
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit(registerForm.value)"
+>
+  <img
+    alt="Kochii logo"
+    [src]="imgLogo"
+    style="height: 64px; display: block; margin-right: auto; margin-left: auto"
+  />
+  <h4 class="my-4 text-center">Register</h4>
 
-    <!-- accountName -->
-    <mat-form-field style="width: 100%;">
-        <input matInput formControlName="accountName" type="text" placeholder="Account Name" />
-        <mat-error *ngIf="f.accountName.errors">
-            <div *ngIf="f.accountName.errors.required">Account name is required</div>
-            <div *ngIf="f.accountName.errors.minlength">Minimum length is 6</div>
-            <div *ngIf="f.accountName.errors.maxlength">Maximum length is 30</div>
-            <div *ngIf="f.accountName.errors.pattern">Must only be an alphanumeric, underscore (_), or dash (-)</div>
-        </mat-error>
-    </mat-form-field>
+  <!-- accountName -->
+  <mat-form-field style="width: 100%">
+    <input
+      matInput
+      formControlName="accountName"
+      type="text"
+      placeholder="Account Name"
+    />
+    <mat-error *ngIf="f.accountName.errors">
+      <div *ngIf="f.accountName.errors.required">Account name is required</div>
+      <div *ngIf="f.accountName.errors.minlength">Minimum length is 6</div>
+      <div *ngIf="f.accountName.errors.maxlength">Maximum length is 30</div>
+      <div *ngIf="f.accountName.errors.pattern">
+        Must only be an alphanumeric, underscore (_), or dash (-)
+      </div>
+    </mat-error>
+  </mat-form-field>
 
-    <!-- Password -->
-    <mat-form-field style="width: 100%;">
-        <input matInput formControlName="password" type="password" placeholder="Password" />
-        <mat-error *ngIf="f.password.errors">
-            <div *ngIf="f.password.errors.required">Password is required</div>
-            <div *ngIf="f.password.errors.minlength">Minimum length is 6</div>
-            <div *ngIf="f.password.errors.maxlength">Maximum length is 30</div>
-        </mat-error>
-    </mat-form-field>
+  <!-- Password -->
+  <mat-form-field style="width: 100%">
+    <input
+      matInput
+      formControlName="password"
+      type="password"
+      placeholder="Password"
+    />
+    <mat-error *ngIf="f.password.errors">
+      <div *ngIf="f.password.errors.required">Password is required</div>
+      <div *ngIf="f.password.errors.minlength">Minimum length is 6</div>
+      <div *ngIf="f.password.errors.maxlength">Maximum length is 30</div>
+    </mat-error>
+  </mat-form-field>
 
-    <!-- Password repeat -->
-    <mat-form-field style="width: 100%;">
-        <input matInput formControlName="passwordre" type="password" placeholder="Re-enter Password" />
-        <mat-error *ngIf="f.passwordre.errors">
-            <div *ngIf="f.passwordre.errors.noMatch">Passwords do not match</div>
-        </mat-error>
-    </mat-form-field>
+  <!-- Password repeat -->
+  <mat-form-field style="width: 100%">
+    <input
+      matInput
+      formControlName="passwordre"
+      type="password"
+      placeholder="Re-enter Password"
+    />
+    <mat-error *ngIf="f.passwordre.errors">
+      <div *ngIf="f.passwordre.errors.noMatch">Passwords do not match</div>
+    </mat-error>
+  </mat-form-field>
 
-    <!-- Email -->
-    <mat-form-field style="width: 100%;">
-        <input matInput formControlName="email" type="text" placeholder="Email" />
-        <mat-error *ngIf="f.email.errors">
-            <div *ngIf="f.email.errors.required">Email is required</div>
-            <div *ngIf="f.email.errors.email">Email is invalid</div>
-        </mat-error>
-    </mat-form-field>
+  <!-- Email -->
+  <mat-form-field style="width: 100%">
+    <input matInput formControlName="email" type="text" placeholder="Email" />
+    <mat-error *ngIf="f.email.errors">
+      <div *ngIf="f.email.errors.required">Email is required</div>
+      <div *ngIf="f.email.errors.email">Email is invalid</div>
+    </mat-error>
+  </mat-form-field>
 
-    <!-- firstName -->
-    <mat-form-field style="width: 100%;">
-        <input matInput formControlName="firstName" type="text" placeholder="First Name" />
-        <mat-error *ngIf="f.firstName.errors">
-            <div *ngIf="f.firstName.errors.required">First name is required</div>
-            <div *ngIf="f.firstName.errors.minlength">Minimum length is 2</div>
-            <div *ngIf="f.firstName.errors.maxlength">Maximum length is 30</div>
-            <div *ngIf="f.firstName.errors.pattern">First name must only contain letters</div>
-        </mat-error>
-    </mat-form-field>
+  <!-- firstName -->
+  <mat-form-field style="width: 100%">
+    <input
+      matInput
+      formControlName="firstName"
+      type="text"
+      placeholder="First Name"
+    />
+    <mat-error *ngIf="f.firstName.errors">
+      <div *ngIf="f.firstName.errors.required">First name is required</div>
+      <div *ngIf="f.firstName.errors.minlength">Minimum length is 2</div>
+      <div *ngIf="f.firstName.errors.maxlength">Maximum length is 30</div>
+      <div *ngIf="f.firstName.errors.pattern">
+        First name must only contain letters
+      </div>
+    </mat-error>
+  </mat-form-field>
 
-    <!-- lastName -->
-    <mat-form-field style="width: 100%;">
-        <input matInput formControlName="lastName" type="text" placeholder="Last Name" />
-        <mat-error *ngIf="f.lastName.errors">
-            <div *ngIf="f.lastName.errors.required">Last name is required</div>
-            <div *ngIf="f.lastName.errors.minlength">Minimum length is 2</div>
-            <div *ngIf="f.lastName.errors.maxlength">Maximum length is 30</div>
-            <div *ngIf="f.lastName.errors.pattern">Last name must only contain letters</div>
-        </mat-error>
-    </mat-form-field>
+  <!-- lastName -->
+  <mat-form-field style="width: 100%">
+    <input
+      matInput
+      formControlName="lastName"
+      type="text"
+      placeholder="Last Name"
+    />
+    <mat-error *ngIf="f.lastName.errors">
+      <div *ngIf="f.lastName.errors.required">Last name is required</div>
+      <div *ngIf="f.lastName.errors.minlength">Minimum length is 2</div>
+      <div *ngIf="f.lastName.errors.maxlength">Maximum length is 30</div>
+      <div *ngIf="f.lastName.errors.pattern">
+        Last name must only contain letters
+      </div>
+    </mat-error>
+  </mat-form-field>
 
-    <!-- Messages -->
-    <div class="text-center mt-4">
-        <p *ngIf="loading">Loading...</p>
-        <p *ngFor="let message of error_messages" class="text-danger">{{ message }}</p>
-    </div>
+  <!-- Messages -->
+  <div class="text-center mt-4">
+    <p *ngIf="loading">Loading...</p>
+    <p *ngFor="let message of error_messages" class="text-danger">
+      {{ message }}
+    </p>
+  </div>
 
-    <!-- Register button -->
-    <button mat-raised-button color="primary" type="submit" class="btn-block my-4">Register</button>
+  <!-- Register button -->
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    class="btn-block my-4"
+  >
+    Register
+  </button>
 
-    <!-- Login link -->
-    <div class="text-center">
-        <p>Already a member? <a routerLink="/login">Login</a></p>
-    </div>
+  <!-- Login link -->
+  <div class="text-center">
+    <p>Already a member? <a routerLink="/login">Login</a></p>
+  </div>
 </form>
 <!-- Form -->
 

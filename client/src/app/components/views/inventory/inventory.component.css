@@ -1,5 +1,5 @@
 .mat-column-select {
-    width: 75px;
+  width: 75px;
 }
 
 .mat-column-edit {
@@ -15,6 +15,12 @@
   text-align: center;
 }
 
-.good {background-color: rgba(45, 185, 140, 1);} /* Green */
-.warning {background-color: rgba(90, 155, 255, 1);} /* Blue */
-.expired {background-color: rgba(255, 95, 130, 1);} /* Red */
+.good {
+  background-color: rgba(45, 185, 140, 1);
+} /* Green */
+.warning {
+  background-color: rgba(90, 155, 255, 1);
+} /* Blue */
+.expired {
+  background-color: rgba(255, 95, 130, 1);
+} /* Red */

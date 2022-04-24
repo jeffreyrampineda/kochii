@@ -1,83 +1,122 @@
 <!--Main Navigation-->
 <header>
-
-    <!-- Sidebar -->
-    <div class="sidebar-fixed position-fixed" [class.k-sidebar-display]="mobileDisplaySidebar">
-        <div class="logo-wrapper">
-            <a *ngIf="!mobileDisplaySidebar; else viewCloseSidebar;" href="/"><img alt="Kochii banner" src="//www.kochii.app/kochii-banner.png"></a>
-            <ng-template #viewCloseSidebar>
-                <button mat-button (click)="toggleMobileDisplaySidebar()" style="color: white;">Close</button>
-            </ng-template>
-        </div>
-        <div class="k-sidebar-items">
-            <hr class="mt-0 mb-3" />
-            <kochii-link-group heading="Analytics">
-                <a routerLink="overview" routerLinkActive="active" (click)="setTitle('Overview')">
-                    <mat-icon aria-hidden="true">dashboard</mat-icon>
-                    Overview
-                </a>
-            </kochii-link-group>
-            <kochii-link-group heading="Storage">
-                <a routerLink="inventory" routerLinkActive="active" (click)="setTitle('Inventory')">
-                    <mat-icon aria-hidden="true">list_alt</mat-icon>
-                    Inventory
-                </a>
-                <a routerLink="groceries" routerLinkActive="active" (click)="setTitle('Grocery')">
-                    <mat-icon aria-hidden="true">shopping_basket</mat-icon>
-                    Groceries
-                </a>
-            </kochii-link-group>
-            <kochii-link-group heading="Other">
-                <a routerLink="settings" routerLinkActive="active" (click)="setTitle('Settings')">
-                    <mat-icon aria-hidden="true">settings</mat-icon>
-                    Settings
-                </a>
-            </kochii-link-group>
-        </div>
+  <!-- Sidebar -->
+  <div
+    class="sidebar-fixed position-fixed"
+    [class.k-sidebar-display]="mobileDisplaySidebar"
+  >
+    <div class="logo-wrapper">
+      <a *ngIf="!mobileDisplaySidebar; else viewCloseSidebar" href="/"
+        ><img alt="Kochii banner" src="//www.kochii.app/kochii-banner.png"
+      /></a>
+      <ng-template #viewCloseSidebar>
+        <button
+          mat-button
+          (click)="toggleMobileDisplaySidebar()"
+          style="color: white"
+        >
+          Close
+        </button>
+      </ng-template>
     </div>
-    <!-- Sidebar -->
+    <div class="k-sidebar-items">
+      <hr class="mt-0 mb-3" />
+      <kochii-link-group heading="Analytics">
+        <a
+          routerLink="overview"
+          routerLinkActive="active"
+          (click)="setTitle('Overview')"
+        >
+          <mat-icon aria-hidden="true">dashboard</mat-icon>
+          Overview
+        </a>
+      </kochii-link-group>
+      <kochii-link-group heading="Storage">
+        <a
+          routerLink="inventory"
+          routerLinkActive="active"
+          (click)="setTitle('Inventory')"
+        >
+          <mat-icon aria-hidden="true">list_alt</mat-icon>
+          Inventory
+        </a>
+        <a
+          routerLink="groceries"
+          routerLinkActive="active"
+          (click)="setTitle('Grocery')"
+        >
+          <mat-icon aria-hidden="true">shopping_basket</mat-icon>
+          Groceries
+        </a>
+      </kochii-link-group>
+      <kochii-link-group heading="Other">
+        <a
+          routerLink="settings"
+          routerLinkActive="active"
+          (click)="setTitle('Settings')"
+        >
+          <mat-icon aria-hidden="true">settings</mat-icon>
+          Settings
+        </a>
+      </kochii-link-group>
+    </div>
+  </div>
+  <!-- Sidebar -->
 
-    <!--Navbar-->
-    <mat-toolbar class="shadow-sm" style="background-color: white;">
-        <button mat-icon-button class="mr-2" aria-label="Example icon-button with menu icon"
-            (click)="toggleMobileDisplaySidebar()">
-            <mat-icon>menu</mat-icon>
-        </button>
-        <span>Kochii</span>
-        <span class="k-spacer"></span>
-        <button mat-icon-button [matMenuTriggerFor]="notificationsMenu">
-            <mat-icon [matBadge]="notifications.length" matBadgeColor="warn">notifications</mat-icon>
-        </button>
-        <mat-menu #notificationsMenu="matMenu" xPosition="before">
-            <div class="text-center skinny">Notifications</div>
-            <hr class="my-2" />
-            <button mat-menu-item *ngFor="let notify of notifications">{{ notify }}</button>
-        </mat-menu>
-        <button mat-icon-button aria-label="mail">
-            <mat-icon>mail</mat-icon>
-        </button>
-        <button mat-button [matMenuTriggerFor]="profileMenu">
-            <mat-icon class="mr-2">account_circle</mat-icon>{{ accountName }}
-        </button>
-        <mat-menu #profileMenu="matMenu" xPosition="before">
-            <button mat-menu-item routerLink="settings/account"
-                (click)="setTitle('Account')">
-                <mat-icon aria-hidden="true">account_circle</mat-icon>
-                Account
-            </button>
-            <button mat-menu-item routerLink="settings/activity-log"
-                (click)="setTitle('Activity Log')">
-                <mat-icon aria-hidden="true">history</mat-icon>
-                Activity Log
-            </button>
-            <hr class="my-1" />
-            <button mat-menu-item (click)="logout()">
-                <mat-icon aria-hidden="true">power_settings_new</mat-icon>
-                Logout
-            </button>
-        </mat-menu>
-    </mat-toolbar>
-    <!--/.Navbar-->
-
+  <!--Navbar-->
+  <mat-toolbar class="shadow-sm" style="background-color: white">
+    <button
+      mat-icon-button
+      class="mr-2"
+      aria-label="Example icon-button with menu icon"
+      (click)="toggleMobileDisplaySidebar()"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+    <span>Kochii</span>
+    <span class="k-spacer"></span>
+    <button mat-icon-button [matMenuTriggerFor]="notificationsMenu">
+      <mat-icon [matBadge]="notifications.length" matBadgeColor="warn"
+        >notifications</mat-icon
+      >
+    </button>
+    <mat-menu #notificationsMenu="matMenu" xPosition="before">
+      <div class="text-center skinny">Notifications</div>
+      <hr class="my-2" />
+      <button mat-menu-item *ngFor="let notify of notifications">
+        {{ notify }}
+      </button>
+    </mat-menu>
+    <button mat-icon-button aria-label="mail">
+      <mat-icon>mail</mat-icon>
+    </button>
+    <button mat-button [matMenuTriggerFor]="profileMenu">
+      <mat-icon class="mr-2">account_circle</mat-icon>{{ accountName }}
+    </button>
+    <mat-menu #profileMenu="matMenu" xPosition="before">
+      <button
+        mat-menu-item
+        routerLink="settings/account"
+        (click)="setTitle('Account')"
+      >
+        <mat-icon aria-hidden="true">account_circle</mat-icon>
+        Account
+      </button>
+      <button
+        mat-menu-item
+        routerLink="settings/activity-log"
+        (click)="setTitle('Activity Log')"
+      >
+        <mat-icon aria-hidden="true">history</mat-icon>
+        Activity Log
+      </button>
+      <hr class="my-1" />
+      <button mat-menu-item (click)="logout()">
+        <mat-icon aria-hidden="true">power_settings_new</mat-icon>
+        Logout
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+  <!--/.Navbar-->
 </header>
 <!--Main Navigation-->

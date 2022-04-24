@@ -3,23 +3,27 @@
   <form [formGroup]="form">
     <mat-form-field>
       <mat-label>Group name</mat-label>
-      <input  matInput 
-              formControlName="name"
-              type="text" />
+      <input matInput formControlName="name" type="text" />
       <mat-error *ngIf="f.name.errors">
         <div *ngIf="f.name.errors.required">Name is required</div>
         <div *ngIf="f.name.errors.minlength">Minimum length is 1</div>
         <div *ngIf="f.name.errors.maxlength">Maximum length is 30</div>
-        <div *ngIf="f.name.errors.pattern">Must only be an alphanumeric, space ( ), underscore (_), or dash (-)</div>
+        <div *ngIf="f.name.errors.pattern">
+          Must only be an alphanumeric, space ( ), underscore (_), or dash (-)
+        </div>
       </mat-error>
     </mat-form-field>
   </form>
   <span *ngIf="loading">Creating...</span>
   <mat-error>
-    <p *ngFor="let message of error_messages" class="text-danger">{{ message }}</p>
+    <p *ngFor="let message of error_messages" class="text-danger">
+      {{ message }}
+    </p>
   </mat-error>
 </div>
 <div class="k-float-right">
-  <button mat-button (click)="onSubmit()" [disabled]="loading || form.invalid">Save</button>
+  <button mat-button (click)="onSubmit()" [disabled]="loading || form.invalid">
+    Save
+  </button>
   <button mat-button (click)="onNoClick()">Cancel</button>
 </div>

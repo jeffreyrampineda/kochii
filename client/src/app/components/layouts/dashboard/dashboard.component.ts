@@ -6,13 +6,10 @@ import { MessageService } from 'src/app/services/message.service';
 @Component({
   selector: 'kochii-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
-
-  constructor(
-    private messageSevice: MessageService,
-  ) { }
+  constructor(private messageSevice: MessageService) {}
 
   @HostListener('window:online', ['$event'])
   private openOnlineNotification() {
