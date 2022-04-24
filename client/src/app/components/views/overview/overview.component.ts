@@ -161,7 +161,7 @@ export class OverviewComponent implements OnInit {
           } = chart;
           ctx.save();
 
-          const label = Math.round((good + ok) * 1.0 / itemsCount * 100).toString() + '%';
+          const label = itemsCount > 0 ? Math.round((good + ok) * 1.0 / itemsCount * 100) + '%' : 'N/A';
 
           ctx.font = '2em sans-serif';
           ctx.textAlign = 'center';
