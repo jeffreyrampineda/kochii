@@ -19,8 +19,9 @@ import { AccountComponent } from './components/views/account/account.component';
 // -------------------------------------------------------------
 
 const routes: Routes = [
-  { path: '', redirectTo: 'app', pathMatch: 'full' },
-  { path: 'app', component: DashboardComponent, canActivate: [AuthGuard],
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: '', component: DashboardComponent, canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: OverviewComponent },
@@ -36,9 +37,7 @@ const routes: Routes = [
         ]},
       { path: '**', redirectTo: 'overview' }
     ]},
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: '**', redirectTo: 'app' }
+    { path: '**', redirectTo: 'login' }
 ];
 
 @NgModule({

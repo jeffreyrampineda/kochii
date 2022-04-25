@@ -14,7 +14,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class RegisterComponent implements OnInit {
 
-  imgLogo = '//www.kochii.app/kochii-logo.png';
+  imgLogo = '/public/images/kochii-logo.png';
   registerForm: FormGroup;
   loading = false;
   error_messages = [];
@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
 
     // If currently logged in, redirect to dashboard.
     if (this.accountService.isLoggedIn) {
-      this.router.navigate(['/app']);
+      this.router.navigate(['/overview']);
     }
 
     this.registerForm = this.formBuilder.group({
@@ -86,7 +86,7 @@ export class RegisterComponent implements OnInit {
     this.accountService.register({ accountName, password, email, firstName, lastName }).subscribe({
       next: response => {
         if (response && response.token) {
-          this.router.navigate(['/app']);
+          this.router.navigate(['/overview']);
         }
       },
       error: err => {

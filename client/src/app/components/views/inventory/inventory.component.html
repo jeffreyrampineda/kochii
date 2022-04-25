@@ -39,7 +39,7 @@
     <!--Item actions-->
     <div>
       <div *ngIf="!showSelect">
-        <button mat-icon-button routerLink="/app/inventory/add">
+        <button mat-icon-button routerLink="/inventory/add">
           <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
         </button>
         <button mat-icon-button (click)="selectColumnToggle('inc')">
@@ -260,7 +260,7 @@
     <tr
       mat-row
       *matRowDef="let row; columns: displayedColumns"
-      [routerLink]="!showSelect ? ['/app/inventory/', row._id] : []"
+      [routerLink]="!showSelect ? ['/inventory/', row._id] : []"
     ></tr>
   </table>
 

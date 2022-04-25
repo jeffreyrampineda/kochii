@@ -8,7 +8,6 @@
 
 # gatsby files
 .cache/
-/public
 
 # jest-mongodb
 globalConfig.json

@@ -3,7 +3,6 @@ const http = require("http");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const logger = require("morgan");
-//const createError = require("http-errors");
 const socket = require("socket.io");
 const { passport } = require("./passport");
 const helmet = require("helmet");
@@ -32,6 +31,10 @@ app.use(helmet.noSniff());
 app.use(helmet.ieNoOpen());
 app.use(helmet.hsts({ maxAge: ninetyDaysInSeconds }));
 
+// view engine setup
+app.set("views", path.join(__dirname, "views"));
+app.set("view engine", "pug");
+
 app.use(logger("dev"));
 app.use(cors());
 app.use(express.json());
@@ -45,30 +48,46 @@ app.use(passport.initialize());
 const routerPublic = require("./controllers/public.routes");
 const routerProtected = require("./controllers/protected.routes");
 
-app.use(express.static(path.join(__dirname, "client/dist/client")));
-
-app.use("/api/public", routerPublic);
+// API Routes
 app.use(
   "/api",
   passport.authenticate("jwt", { session: false }),
   routerProtected
 );
 
+// Redirect website routes to public routes.
+app.use("/public", express.static(path.join(__dirname, "public")));
+app.use("/", routerPublic);
+
+// Redirect dashboard routes to client/dist.
+app.use("/dashboard", express.static(path.join(__dirname, "client/dist")));
+app.use(["/login", "/register", "/dashboard"], function (req, res) {
+  res.sendFile(path.join(__dirname, "client/dist", "index.html"));
+});
+
+// catch 404 error.
+app.use(function (req, res, next) {
+  res.render("message", {
+    title: "Page Not Found | Kochii",
+    message_title: "( ._.)",
+    message_subtitle: "404 Not Found",
+    message_description: "Sorry but the requested page is not found!",
+  });
+});
+
 // error handler
 app.use(function (err, req, res, next) {
   // set locals, only providing error in development
-  //res.locals.message = err.message;
-  //res.locals.error = req.app.get("env") === "development" ? err : {};
+  res.locals.message = err.message;
+  res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
   res.status(err.status || 500);
-  //res.render("error");
-  res.send(err);
-});
-
-// Redirect 404 to client's index.
-app.use("*", function (req, res) {
-  res.sendFile(path.join(__dirname, "client/dist/client", "index.html"));
+  if (["login", "register", "api"].includes(req.originalUrl.split("/")[1])) {
+    res.send(err);
+  } else {
+    res.render("error");
+  }
 });
 
 // MongoDB

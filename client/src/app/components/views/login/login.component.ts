@@ -13,7 +13,7 @@ import { Title } from '@angular/platform-browser';
 })
 export class LoginComponent implements OnInit {
 
-  imgLogo = '//www.kochii.app/kochii-logo.png';
+  imgLogo = '/public/images/kochii-logo.png';
   loginForm: FormGroup;
   loading = false;
   error_messages = [];
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
     // If currently logged in, redirect to dashboard.
     if (this.accountService.isLoggedIn) {
-      this.router.navigate(['/app']);
+      this.router.navigate(['/overview']);
     }
 
     this.loginForm = this.formBuilder.group({
@@ -66,7 +66,7 @@ export class LoginComponent implements OnInit {
     this.accountService.login(loginData).subscribe({
       next: response => {
         if (response && response.token) {
-          this.router.navigate(['/app']);
+          this.router.navigate(['/overview']);
         }
       },
       error: err => {
