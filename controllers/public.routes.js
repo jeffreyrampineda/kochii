@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const sendContactEmail =
-  require("../services/external_api.service").sendContactEmail;
+  require("../util/external_api.service").sendContactEmail;
 
 // Require controller modules.
 const account_controller = require("../controllers/account.controller");

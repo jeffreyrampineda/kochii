@@ -1,5 +1,5 @@
 const Inventory = require("../models/inventory");
-const createActivity = require("../services/activity.service").create;
+const activity_controller = require("../controllers/account.controller");
 const Validate = require("../validators/group");
 const createError = require("http-errors");
 
@@ -35,7 +35,7 @@ exports.group_create = async function (req, res, next) {
     );
 
     if (result.ok === 1) {
-      await createActivity({
+      await activity_controller.create({
         owner: req.user,
         method: "created",
         target: "group",
@@ -103,7 +103,7 @@ exports.group_delete = async function (req, res, next) {
     }
 
     // Create new activity for recording
-    await createActivity({
+    await activity_controller.create({
       owner: req.user,
       method: "removed",
       target: "group",
