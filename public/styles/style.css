@@ -1,11 +1,14 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,600,700&display=swap");
 
+html {
+  scroll-behavior: smooth;
+}
 h4 {
   font-weight: 300;
 }
 
 .navbar-brand img {
-  max-height: 1.75rem;
+  max-height: 1.5rem;
 }
 
 .k-intro-jumbotron {
