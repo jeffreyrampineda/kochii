@@ -99,6 +99,10 @@ accountSchema.methods.comparePasswords = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
+accountSchema.virtual("full_name_formatted").get(function () {
+  return this.firstName + " " + this.lastName;
+});
+
 const AccountModel = mongoose.model("Account", accountSchema);
 
 module.exports = AccountModel;

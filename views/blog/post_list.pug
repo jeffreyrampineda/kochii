@@ -1,0 +1,25 @@
+extends ../layout
+
+block content
+  div(class="container mb-5" style="margin-top: 5rem; min-height:100vh;")
+    h1(class="display-4 font-weight-bold") Recipes
+    div(Class="row")
+      each post in posts
+        div(class="col-sm col-md-4")
+          div(class="card shadow border-0")
+            img(class="card-img-top" src= `data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
+            div(class="card-body text-center")
+              p
+                each tag, index in post.tags
+                  a(href="#") #{tag}
+                  if index < post.tags.length - 1
+                    i(class="bi bi-dot")
+              h4(class="card-title font-weight-bold") #{post.title}
+              p(class="card-text") #{post.summary}
+              a(class="btn btn-secondary k-btn shadow" href=post.url) Read More
+            div(class="card-footer text-muted")
+              small
+                span #{post.likes} / #{post.dislikes}
+                span(class="float-right") #{post.createdAt_formatted}
+      else
+        h1(class="display-4 font-weight-bold") This blog is empty.

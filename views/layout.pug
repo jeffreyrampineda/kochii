@@ -11,28 +11,29 @@ html(lang='en')
         script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous")
         link(rel='stylesheet' href='/public/styles/style.css')
     body
-        div(class='container')
-            block navigation
-                nav(class='navbar fixed-top navbar-expand-lg navbar-dark shadow' style="background-color: #1c2331;")
-                    div(class='container')
-                        a(class='navbar-brand' href="/")
-                            img(class="align-top" alt="Kochii banner" src="/public/images/kochii-banner.png")
-                        ul(class="navbar-nav mr-auto" style="padding-inline-start: 20px;")
-                            li(class="nav-item")
-                                a(class='nav-link' href='/') Home
-                            li(class="nav-item")
-                                a(class='nav-link' href='/about-us') About Us
-                        ul(class="navbar-nav")
-                            li(class="nav-item")
-                                a(class='btn btn-dark k-btn shadow' href='/login' role="button") Login
-                            li(class="nav-item")
-                                a(class='btn btn-light k-btn shadow' href='/register' style="border-width: 0;" role="button") Register
-                            li(class='nav-item')
-                                a(class='nav-link' href='https://twitter.com/kochiiapp' target='_blank' rel='noreferrer')
-                                    i(class='bi bi-twitter k-icon' style="font-size: 1.25rem;")
-                            li(class='nav-item')
-                                a(class='nav-link' href='https://github.com/jeffreyrampineda/kochii' target='_blank' rel='noreferrer')
-                                    i(class='bi bi-github k-icon' style="font-size: 1.25rem;")
+        block navigation
+            nav(class='navbar fixed-top navbar-expand-lg navbar-dark shadow' style="background-color: #1c2331;")
+                div(class='container')
+                    a(class='navbar-brand' href="/")
+                        img(class="align-top" alt="Kochii banner" src="/public/images/kochii-banner.png")
+                    ul(class="navbar-nav mr-auto" style="padding-inline-start: 20px;")
+                        li(class="nav-item")
+                            a(class='nav-link' href='/') Home
+                        li(class="nav-item")
+                            a(class='nav-link' href='/blog') Blog
+                        li(class="nav-item")
+                            a(class='nav-link' href='/about-us') About Us
+                    ul(class="navbar-nav")
+                        li(class="nav-item")
+                            a(class='btn btn-dark k-btn shadow' href='/login' role="button") Login
+                        li(class="nav-item")
+                            a(class='btn btn-light k-btn shadow' href='/register' style="border-width: 0;" role="button") Register
+                        li(class='nav-item')
+                            a(class='nav-link' href='https://twitter.com/kochiiapp' target='_blank' rel='noreferrer')
+                                i(class='bi bi-twitter k-icon' style="font-size: 1.25rem;")
+                        li(class='nav-item')
+                            a(class='nav-link' href='https://github.com/jeffreyrampineda/kochii' target='_blank' rel='noreferrer')
+                                i(class='bi bi-github k-icon' style="font-size: 1.25rem;")
         block content
         footer(style="background-color: #1c2331;")
             div(class='k-blue-gradient')

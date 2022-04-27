@@ -27,6 +27,7 @@
     "helmet": "^5.0.2",
     "http-errors": "^2.0.0",
     "jsonwebtoken": "^8.4.0",
+    "luxon": "^2.3.2",
     "mongoose": "^6.3.0",
     "morgan": "^1.10.0",
     "passport": "^0.5.2",

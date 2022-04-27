@@ -1,45 +1,54 @@
 const express = require("express");
 const router = express.Router();
-const sendContactEmail =
-  require("../util/external_api.service").sendContactEmail;
 
 // Require controller modules.
 const account_controller = require("../controllers/account.controller");
+const post_controller = require("./post.controller");
+const website_controller = require("./website.controller");
 
-router.get("/", function (req, res) {
-  res.render("index", { title: "Personal Inventory | Kochii" });
-});
+/// WEBSITE ROUTES ///
 
-router.get("/about-us", function (req, res) {
-  res.render("about-us", { title: "About Us | Kochii" });
-});
+router.get("/", website_controller.website_index);
 
-router.get("/legal/privacy-policy", function (req, res) {
-  res.render("privacy-policy", { title: "Privacy | Kochii" });
-});
+router.get("/about-us", website_controller.website_about_us);
 
-router.get("/legal/terms-of-service", function (req, res) {
-  res.render("terms-of-service", { title: "Legal Information | Kochii" });
-});
+router.get("/legal/privacy-policy", website_controller.website_privacy_policy);
 
-router.get("/sent", function (req, res) {
-  res.render("message", {
-    title: "Message Sent | Kochii",
-    message_title: "Success",
-    message_description: "Your message was sent successfully",
-  });
-});
+router.get(
+  "/legal/terms-of-service",
+  website_controller.website_terms_of_service
+);
+
+router.get("/sent", website_controller.website_sent_get);
 
 // POST /send request to send email
-router.post("/send", async function (req, res) {
-  try {
-    const { from_email, from_name, body } = req.body;
-    sendContactEmail(from_email, from_name, body);
-    res.redirect("/sent");
-  } catch (error) {
-    res.status(400).json(error);
-  }
-});
+router.post("/send", website_controller.website_send_post);
+
+/// BLOG ROUTES ///
+
+// GET request for creating a Post. NOTE This must come before route that displays Post (uses id).
+router.get("/blog/create", post_controller.post_create_get);
+
+// POST request for creating Post.
+router.post("/blog/create", post_controller.post_create_post);
+
+// GET request to delete Post.
+router.get("/blog/:id/delete", post_controller.post_delete_get);
+
+// POST request to delete Post.
+router.post("/blog/:id/delete", post_controller.post_delete_post);
+
+// GET request to update Post.
+router.get("/blog/:id/update", post_controller.post_update_get);
+
+// POST request to update Post.
+router.post("/blog/:id/update", post_controller.post_update_post);
+
+// GET request for one Post.
+router.get("/blog/:id", post_controller.post_detail);
+
+// GET request for list of all Post.
+router.get("/blog", post_controller.post_list);
 
 /// AUTH ROUTES ///
 
