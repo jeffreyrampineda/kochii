@@ -31,7 +31,7 @@ mongoose.connection.once("open", () =>
 );
 
 mongoose.connection.once("close", () =>
-  console.log("mongodb: connection closed.")
+  console.log("mongodb: connection closed")
 );
 
 const accounts = [];
