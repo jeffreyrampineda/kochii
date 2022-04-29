@@ -1,0 +1,104 @@
+<h2 class="skinny">
+  <a [routerLink]="['/', 'recipes', 'catalog']" style="text-decoration: none"
+    >Blog</a
+  >
+  /
+  <a
+    [routerLink]="['/', 'recipes', 'catalog', post._id]"
+    style="text-decoration: none"
+    >{{ post.title }}</a
+  >
+  / Cooking
+</h2>
+
+<div class="card shadow-sm mt-4">
+  <div class="card-body">
+    <mat-stepper #stepper>
+      <mat-step label="Ingredients">
+        <div class="row mb-5">
+          <div class="col-md-6">
+            <h2 class="display-5">Missing:</h2>
+            <div
+              cdkDropList
+              #missingList="cdkDropList"
+              [cdkDropListData]="ingredients.missing"
+              [cdkDropListConnectedTo]="[foundList]"
+              class="card shadow-sm k-drop-list"
+              (cdkDropListDropped)="drop($event)"
+            >
+              <div
+                class="k-drop-list-box"
+                *ngFor="let ingredient of ingredients.missing"
+                cdkDrag
+              >
+                {{ ingredient }}
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <h2 class="display-5">Currently have:</h2>
+            <div
+              cdkDropList
+              #foundList="cdkDropList"
+              [cdkDropListData]="ingredients.found"
+              [cdkDropListConnectedTo]="[missingList]"
+              class="card shadow-sm k-drop-list"
+              (cdkDropListDropped)="drop($event)"
+            >
+              <div
+                class="k-drop-list-box"
+                *ngFor="let ingredient of ingredients.found"
+                cdkDrag
+              >
+                {{ ingredient }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="text-center">
+          <button mat-raised-button matStepperNext color="primary">Next</button>
+        </div>
+      </mat-step>
+      <mat-step label="Instructions">
+        <h4 class="text-warning" *ngIf="ingredients.missing.length > 0">
+          Warning: missing some ingredients!
+        </h4>
+        <h2 class="display-5">Instructions:</h2>
+        <ol class="mb-5">
+          <li class="mt-2" *ngFor="let instruction of post.instructions">
+            {{ instruction }}
+          </li>
+        </ol>
+        <div class="text-center">
+          <button
+            class="mx-2"
+            mat-raised-button
+            matStepperPrevious
+            color="primary"
+          >
+            Back
+          </button>
+          <button class="mx-2" mat-raised-button matStepperNext color="primary">
+            Next
+          </button>
+        </div>
+      </mat-step>
+      <mat-step label="Done">
+        <p>Deduct ingredients...</p>
+        <div class="text-center">
+          <button
+            class="mx-2"
+            mat-raised-button
+            matStepperPrevious
+            color="primary"
+          >
+            Back
+          </button>
+          <button class="mx-2" mat-raised-button matStepperNext color="primary">
+            Done
+          </button>
+        </div>
+      </mat-step>
+    </mat-stepper>
+  </div>
+</div>

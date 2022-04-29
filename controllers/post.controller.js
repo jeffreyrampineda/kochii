@@ -7,8 +7,12 @@ exports.post_list = async function (req, res) {
     {},
     "title tags createdAt summary banner likes dislikes"
   ).sort({ createdAt: -1, title: 1 });
-
-  res.render("blog/post_list", { title: "Blog | Kochii", posts });
+  if (!req.accepts("html")) {
+    // If does not expect html, return json.
+    res.send(posts);
+  } else {
+    res.render("blog/post_list", { title: "Blog | Kochii", posts });
+  }
 };
 
 // Display detail page for a specific Post.
@@ -19,18 +23,23 @@ exports.post_detail = async function (req, res, next) {
       "firstName lastName"
     );
 
-    if (!post) {
-      res.render("message", {
-        title: "Page Not Found | Kochii",
-        message_title: "( ._.)",
-        message_subtitle: "404 Not Found",
-        message_description: "Sorry but the requested page is not found!",
-      });
+    if (!req.accepts("html")) {
+      // If does not expect html, return json.
+      res.send(post);
     } else {
-      res.render("blog/post_detail", {
-        title: post.title + " | Blog",
-        post,
-      });
+      if (!post) {
+        res.render("message", {
+          title: "Page Not Found | Kochii",
+          message_title: "( ._.)",
+          message_subtitle: "404 Not Found",
+          message_description: "Sorry but the requested page is not found!",
+        });
+      } else {
+        res.render("blog/post_detail", {
+          title: post.title + " | Blog",
+          post,
+        });
+      }
     }
   } catch (error) {
     next(createError(error.status ?? 500, error));

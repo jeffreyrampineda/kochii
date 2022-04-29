@@ -2,7 +2,7 @@
   display: block;
   padding: 1rem;
   font-weight: 300;
-  font-size: .9rem;
+  //font-size: .9rem;
   color: #7f918b;
   text-decoration: none;
 }
@@ -16,7 +16,9 @@
 }
 
 .k-sidebar-items a mat-icon {
-  font-size: 1rem;
+  //font-size: 1rem;
+  vertical-align: bottom;
+  margin-right: 8px;
 }
 
 .k-sidebar-items .active {

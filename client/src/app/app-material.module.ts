@@ -18,6 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatStepperModule } from '@angular/material/stepper';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 // -------------------------------------------------------------
 
@@ -41,15 +43,13 @@ const matModules = [
   MatTabsModule,
   MatBadgeModule,
   MatMenuModule,
+  MatStepperModule,
+  DragDropModule,
 ];
 
 @NgModule({
   declarations: [],
-  imports: [
-    ...matModules,
-  ],
-  exports: [
-    ...matModules,
-  ]
+  imports: [...matModules],
+  exports: [...matModules],
 })
-export class AppMaterialModule { }
+export class AppMaterialModule {}

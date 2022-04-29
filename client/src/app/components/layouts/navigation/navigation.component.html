@@ -49,6 +49,24 @@
           Groceries
         </a>
       </kochii-link-group>
+      <kochii-link-group heading="Recipes">
+        <a
+          routerLink="recipes/catalog"
+          routerLinkActive="active"
+          (click)="setTitle('Catalog')"
+        >
+          <mat-icon aria-hidden="true">newspaper</mat-icon>
+          Catalog
+        </a>
+        <a
+          routerLink="recipes/collections"
+          routerLinkActive="active"
+          (click)="setTitle('Collections')"
+        >
+          <mat-icon aria-hidden="true">bookmarks</mat-icon>
+          Collections
+        </a>
+      </kochii-link-group>
       <kochii-link-group heading="Other">
         <a
           routerLink="settings"
@@ -87,9 +105,6 @@
         {{ notify }}
       </button>
     </mat-menu>
-    <button mat-icon-button aria-label="mail">
-      <mat-icon>mail</mat-icon>
-    </button>
     <button mat-button [matMenuTriggerFor]="profileMenu">
       <mat-icon class="mr-2">account_circle</mat-icon>{{ accountName }}
     </button>

@@ -21,7 +21,10 @@ import { AccountComponent } from './components/views/account/account.component';
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: '', component: DashboardComponent, canActivate: [AuthGuard],
+  {
+    path: '',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: OverviewComponent },
@@ -29,19 +32,33 @@ const routes: Routes = [
       { path: 'inventory/add', component: ItemAddComponent },
       { path: 'inventory/:id', component: ItemUpdateComponent },
       { path: 'groceries', component: GroceriesComponent },
-      { path: 'settings', component: SettingsComponent,
+      {
+        path: 'recipes',
+        loadChildren: () =>
+          import('./modules/blog/blog.module').then((m) => m.BlogModule),
+      },
+      {
+        path: 'settings',
+        component: SettingsComponent,
         children: [
           { path: '', redirectTo: 'account', pathMatch: 'full' },
           { path: 'account', component: AccountComponent },
           { path: 'activity-log', component: ActivityLogComponent },
-        ]},
-      { path: '**', redirectTo: 'overview' }
-    ]},
-    { path: '**', redirectTo: 'login' }
+        ],
+      },
+      { path: '**', redirectTo: 'overview' },
+    ],
+  },
+  { path: '**', redirectTo: 'login' },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { anchorScrolling: 'enabled', relativeLinkResolution: 'legacy' })],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes, {
+      anchorScrolling: 'enabled',
+      relativeLinkResolution: 'legacy',
+    }),
+  ],
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
