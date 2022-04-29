@@ -9,8 +9,8 @@ import { MessageService } from './message.service';
 @Injectable({
   providedIn: 'root',
 })
-export class BlogService {
-  private blogUrl = '/blog';
+export class RecipesService {
+  private recipesUrl = '/recipes';
   private collectionUrl = '/api/collection';
 
   private options = {
@@ -24,7 +24,7 @@ export class BlogService {
   ) {}
 
   getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.blogUrl, this.options).pipe(
+    return this.http.get<Post[]>(this.recipesUrl, this.options).pipe(
       tap((_) => this.log('fetched posts')),
       map((result) => {
         result.forEach((post) => {
@@ -88,6 +88,6 @@ export class BlogService {
    * @param message - The message to log.
    */
   private log(message: string) {
-    this.messageService.add(`BlogService: ${message}`);
+    this.messageService.add(`RecipesService: ${message}`);
   }
 }

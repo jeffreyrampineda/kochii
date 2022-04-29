@@ -1,12 +1,12 @@
 <h2 class="skinny">
   <a [routerLink]="['/', 'recipes', 'catalog']" style="text-decoration: none"
-    >Blog</a
+    >Recipes</a
   >
   /
   <a
-    [routerLink]="['/', 'recipes', 'catalog', post._id]"
+    [routerLink]="['/', 'recipes', 'catalog', post?._id]"
     style="text-decoration: none"
-    >{{ post.title }}</a
+    >{{ post?.title }}</a
   >
   / Cooking
 </h2>
@@ -65,7 +65,7 @@
         </h4>
         <h2 class="display-5">Instructions:</h2>
         <ol class="mb-5">
-          <li class="mt-2" *ngFor="let instruction of post.instructions">
+          <li class="mt-2" *ngFor="let instruction of post?.instructions">
             {{ instruction }}
           </li>
         </ol>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
-import { BlogService } from 'src/app/services/blog.service';
+import { RecipesService } from 'src/app/services/recipes.service';
 import { InventoryService } from 'src/app/services/inventory.service';
 import {
   CdkDragDrop,
@@ -22,7 +22,7 @@ export class PostCookComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private inventoryService: InventoryService,
-    private blogService: BlogService
+    private recipesService: RecipesService
   ) {}
 
   ngOnInit() {
@@ -33,7 +33,7 @@ export class PostCookComponent implements OnInit {
   cook(id: string): void {
     forkJoin({
       inventory: this.inventoryService.getItems(),
-      post: this.blogService.getPostById(id),
+      post: this.recipesService.getPostById(id),
     }).subscribe({
       next: (result) => {
         // Check post.ingredients against inventory.

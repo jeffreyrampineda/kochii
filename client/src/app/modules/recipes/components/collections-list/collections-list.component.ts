@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BlogService } from 'src/app/services/blog.service';
+import { RecipesService } from 'src/app/services/recipes.service';
 
 @Component({
   selector: 'kochii-collections-list',
@@ -9,14 +9,14 @@ import { BlogService } from 'src/app/services/blog.service';
 export class CollectionsListComponent implements OnInit {
   posts = [];
 
-  constructor(private blogService: BlogService) {}
+  constructor(private recipesService: RecipesService) {}
 
   ngOnInit(): void {
     this.getPostCollection();
   }
 
   getPostCollection(): void {
-    this.blogService.getPostCollection().subscribe({
+    this.recipesService.getPostCollection().subscribe({
       next: (result) => {
         this.posts = result.posts;
       },

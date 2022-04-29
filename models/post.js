@@ -34,7 +34,7 @@ const postSchema = new Schema(
 
 // Virtual for post's URL
 postSchema.virtual("url").get(function () {
-  return "/blog/" + this._id;
+  return "/recipes/" + this._id;
 });
 
 postSchema.virtual("createdAt_formatted").get(function () {

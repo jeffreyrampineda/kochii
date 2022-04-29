@@ -24,31 +24,31 @@ router.get("/sent", website_controller.website_sent_get);
 // POST /send request to send email
 router.post("/send", website_controller.website_send_post);
 
-/// BLOG ROUTES ///
+/// RECIPES ROUTES ///
 
 // GET request for creating a Post. NOTE This must come before route that displays Post (uses id).
-router.get("/blog/create", post_controller.post_create_get);
+router.get("/recipes/create", post_controller.post_create_get);
 
 // POST request for creating Post.
-router.post("/blog/create", post_controller.post_create_post);
+router.post("/recipes/create", post_controller.post_create_post);
 
 // GET request to delete Post.
-router.get("/blog/:id/delete", post_controller.post_delete_get);
+router.get("/recipes/:id/delete", post_controller.post_delete_get);
 
 // POST request to delete Post.
-router.post("/blog/:id/delete", post_controller.post_delete_post);
+router.post("/recipes/:id/delete", post_controller.post_delete_post);
 
 // GET request to update Post.
-router.get("/blog/:id/update", post_controller.post_update_get);
+router.get("/recipes/:id/update", post_controller.post_update_get);
 
 // POST request to update Post.
-router.post("/blog/:id/update", post_controller.post_update_post);
+router.post("/recipes/:id/update", post_controller.post_update_post);
 
 // GET request for one Post.
-router.get("/blog/:id", post_controller.post_detail);
+router.get("/recipes/:id", post_controller.post_detail);
 
 // GET request for list of all Post.
-router.get("/blog", post_controller.post_list);
+router.get("/recipes", post_controller.post_list);
 
 /// AUTH ROUTES ///
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from 'src/app/interfaces/post';
-import { BlogService } from 'src/app/services/blog.service';
+import { RecipesService } from 'src/app/services/recipes.service';
 
 @Component({
   selector: 'kochii-post-detail',
@@ -13,7 +13,7 @@ export class PostDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private blogService: BlogService
+    private recipesService: RecipesService
   ) {}
 
   ngOnInit(): void {
@@ -22,7 +22,7 @@ export class PostDetailComponent implements OnInit {
   }
 
   getPostById(id: string): void {
-    this.blogService.getPostById(id).subscribe({
+    this.recipesService.getPostById(id).subscribe({
       next: (result) => {
         this.post = result;
       },
@@ -33,11 +33,11 @@ export class PostDetailComponent implements OnInit {
 
   createPostCollection(id: string): void {
     this.post.saved = true;
-    this.blogService.createPostCollection(id).subscribe();
+    this.recipesService.createPostCollection(id).subscribe();
   }
 
   deletePostCollection(id: string): void {
     this.post.saved = false;
-    this.blogService.deletePostCollection(id).subscribe();
+    this.recipesService.deletePostCollection(id).subscribe();
   }
 }

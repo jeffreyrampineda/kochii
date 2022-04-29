@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { BlogService } from 'src/app/services/blog.service';
+import { RecipesService } from 'src/app/services/recipes.service';
 
 @Component({
   selector: 'kochii-post-list',
@@ -9,14 +9,14 @@ import { BlogService } from 'src/app/services/blog.service';
 export class PostListComponent implements OnInit {
   posts = [];
 
-  constructor(private blogService: BlogService) {}
+  constructor(private recipesService: RecipesService) {}
 
   ngOnInit(): void {
     this.getPosts();
   }
 
   getPosts(): void {
-    this.blogService.getPosts().subscribe({
+    this.recipesService.getPosts().subscribe({
       next: (result) => {
         this.posts = result;
       },

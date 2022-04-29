@@ -13,7 +13,7 @@ exports.post_list = async function (req, res) {
     posts = posts.map((post) => post.toObject()); // Makes image a base64
     res.send(posts);
   } else {
-    res.render("blog/post_list", { title: "Blog | Kochii", posts });
+    res.render("recipes/post_list", { title: "Recipes | Kochii", posts });
   }
 };
 
@@ -28,7 +28,7 @@ exports.post_detail = async function (req, res, next) {
     if (!req.accepts("html")) {
       // If does not expect html, return json.
       post = post.toObject(); // Allows adding properties, makes image a base64.
-      // If using /api/detail route, check if post is saved in collection.
+      // If using /api/recipes/detail route, check if post is saved in collection.
       if (req.user) {
         const isSaved = await PostCollection.findOne(
           {
@@ -53,8 +53,8 @@ exports.post_detail = async function (req, res, next) {
           message_description: "Sorry but the requested page is not found!",
         });
       } else {
-        res.render("blog/post_detail", {
-          title: post.title + " | Blog",
+        res.render("recipes/post_detail", {
+          title: post.title + " | Recipes",
           post,
         });
       }

@@ -35,7 +35,7 @@ const routes: Routes = [
       {
         path: 'recipes',
         loadChildren: () =>
-          import('./modules/blog/blog.module').then((m) => m.BlogModule),
+          import('./modules/recipes/recipes.module').then((m) => m.RecipesModule),
       },
       {
         path: 'settings',
