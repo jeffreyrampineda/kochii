@@ -4,6 +4,7 @@ const router = express.Router();
 // Require controller modules.
 const inventory_controller = require("../controllers/inventory.controller");
 const group_controller = require("../controllers/group.controller");
+const post_controller = require("../controllers/post.controller");
 const activity_controller = require("../controllers/activity.controller");
 const account_controller = require("../controllers/account.controller");
 
@@ -46,6 +47,21 @@ router.post("/groups/:name", group_controller.group_create);
 
 // DELETE /api/groups/:name
 router.delete("/groups/:name", group_controller.group_delete);
+
+/// RECIPES ROUTES ///
+
+router.get("/recipes/:id", post_controller.post_detail);
+
+/// COLLECTIOn ROUTES ///
+
+// GET /api/collection
+router.get("/collection", post_controller.postcollection_get);
+
+// POST /api/collection
+router.post("/collection/:id", post_controller.postcollection_create);
+
+// DELETE /api/collection
+router.delete("/collection/:id", post_controller.postcollection_delete);
 
 /// ACTIVITIES ROUTES ///
 

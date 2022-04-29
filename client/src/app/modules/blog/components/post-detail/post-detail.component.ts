@@ -24,7 +24,6 @@ export class PostDetailComponent implements OnInit {
   getPostById(id: string): void {
     this.blogService.getPostById(id).subscribe({
       next: (result) => {
-        console.log(result);
         this.post = result;
       },
       error: (err) => {},
@@ -32,12 +31,13 @@ export class PostDetailComponent implements OnInit {
     });
   }
 
-  toggleSaved(): void {
-    this.post.saved = !this.post.saved;
-    if (this.post.saved) {
-      this.blogService.savePost(this.post);
-    } else {
-      this.blogService.unsavePost(this.post);
-    }
+  createPostCollection(id: string): void {
+    this.post.saved = true;
+    this.blogService.createPostCollection(id).subscribe();
+  }
+
+  deletePostCollection(id: string): void {
+    this.post.saved = false;
+    this.blogService.deletePostCollection(id).subscribe();
   }
 }

@@ -12,10 +12,16 @@ export class CollectionsListComponent implements OnInit {
   constructor(private blogService: BlogService) {}
 
   ngOnInit(): void {
-    this.getSavedPosts();
+    this.getPostCollection();
   }
 
-  getSavedPosts(): void {
-    this.posts = this.blogService.getSavedPosts();
+  getPostCollection(): void {
+    this.blogService.getPostCollection().subscribe({
+      next: (result) => {
+        this.posts = result.posts;
+      },
+      error: (err) => {},
+      complete: () => {},
+    });
   }
 }

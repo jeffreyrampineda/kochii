@@ -41,7 +41,14 @@
                 >
                 {{ post.dislikes }}
               </button>
-              <button mat-button (click)="toggleSaved()">
+              <button
+                mat-button
+                (click)="
+                  post.saved
+                    ? deletePostCollection(post._id)
+                    : createPostCollection(post._id)
+                "
+              >
                 <mat-icon
                   [class]="post.saved ? null : 'material-icons-outlined'"
                   aria-hidden="false"
