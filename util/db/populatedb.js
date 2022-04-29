@@ -5,12 +5,12 @@ console.log("e.g.: node populatedb mongodb://localhost:27017/kochii");
 
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);
-/*
-if (!userArgs[0].startsWith('mongodb')) {
-    console.log('ERROR: You need to specify a valid mongodb URL as the first argument');
-    return
+if (userArgs.length == 0 || !userArgs[0].startsWith("mongodb")) {
+  throw new Error(
+    "ERROR: You need to specify a valid mongodb URL as the first argument"
+  );
 }
-*/
+
 const Post = require("../../models/post");
 const Account = require("../../models/account");
 const inventory_controller = require("../../controllers/inventory.controller");

@@ -9,6 +9,8 @@
     "dev:server": "DEBUG=kochii:* nodemon index.js",
     "dev:app": "cd client && npm run dev",
     "build:app": "cd client && npm run build",
+    "util:dropdb": "node util/db/dropdb",
+    "util:populatedb": "node util/db/populatedb",
     "test": "jest --silent --forceExit --detectOpenHandles --maxWorkers=10",
     "postinstall": "cd client && npm install"
   },
