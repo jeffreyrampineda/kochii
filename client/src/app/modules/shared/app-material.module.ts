@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -24,7 +23,6 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 // -------------------------------------------------------------
 
 const matModules = [
-  CommonModule,
   MatButtonModule,
   MatPaginatorModule,
   MatTableModule,

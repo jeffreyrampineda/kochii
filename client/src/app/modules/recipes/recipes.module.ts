@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+import { SharedModule } from '../shared/shared.module';
 
 import { RecipesRoutingModule } from './recipes-routing.module';
-import { AppMaterialModule } from '../../app-material.module';
 import { PostListComponent } from './components/post-list/post-list.component';
 import { PostDetailComponent } from './components/post-detail/post-detail.component';
 import { PostCookComponent } from './components/post-cook/post-cook.component';
@@ -15,6 +15,6 @@ import { CollectionsListComponent } from './components/collections-list/collecti
     PostCookComponent,
     CollectionsListComponent,
   ],
-  imports: [CommonModule, RecipesRoutingModule, AppMaterialModule],
+  imports: [SharedModule, RecipesRoutingModule],
 })
 export class RecipesModule {}

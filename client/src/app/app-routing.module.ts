@@ -3,18 +3,21 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './guards/auth.guard';
 
-// Components - views
-import { DashboardComponent } from './components/layouts/dashboard/dashboard.component';
-import { LoginComponent } from './components/views/login/login.component';
-import { RegisterComponent } from './components/views/register/register.component';
-import { GroceriesComponent } from './components/views/groceries/groceries.component';
-import { ActivityLogComponent } from './components/views/activity-log/activity-log.component';
-import { InventoryComponent } from './components/views/inventory/inventory.component';
-import { OverviewComponent } from './components/views/overview/overview.component';
-import { SettingsComponent } from './components/views/settings/settings.component';
-import { ItemAddComponent } from './components/views/item-add/item-add.component';
-import { ItemUpdateComponent } from './components/views/item-update/item-update.component';
-import { AccountComponent } from './components/views/account/account.component';
+// Components - Shared/Layouts
+import { SharedModule } from './modules/shared/shared.module';
+import { DashboardComponent } from './modules/shared/layouts/dashboard/dashboard.component';
+
+// Components - Views
+import { LoginComponent } from './views/login/login.component';
+import { RegisterComponent } from './views/register/register.component';
+import { GroceriesComponent } from './views/groceries/groceries.component';
+import { ActivityLogComponent } from './views/activity-log/activity-log.component';
+import { InventoryComponent } from './views/inventory/inventory.component';
+import { OverviewComponent } from './views/overview/overview.component';
+import { SettingsComponent } from './views/settings/settings.component';
+import { ItemAddComponent } from './views/item-add/item-add.component';
+import { ItemUpdateComponent } from './views/item-update/item-update.component';
+import { AccountComponent } from './views/account/account.component';
 
 // -------------------------------------------------------------
 
@@ -35,7 +38,9 @@ const routes: Routes = [
       {
         path: 'recipes',
         loadChildren: () =>
-          import('./modules/recipes/recipes.module').then((m) => m.RecipesModule),
+          import('./modules/recipes/recipes.module').then(
+            (m) => m.RecipesModule
+          ),
       },
       {
         path: 'settings',
@@ -54,6 +59,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
+    SharedModule,
     RouterModule.forRoot(routes, {
       anchorScrolling: 'enabled',
       relativeLinkResolution: 'legacy',

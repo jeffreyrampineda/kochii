@@ -1,5 +1,5 @@
 const Inventory = require("../models/inventory");
-const activity_controller = require("../controllers/account.controller");
+const activity_controller = require("../controllers/activity.controller");
 const Validate = require("../validators/group");
 const createError = require("http-errors");
 

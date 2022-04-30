@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountService } from 'src/app/services/account.service';
 import { MessageService } from 'src/app/services/message.service';
 
-import { Account } from '../../../interfaces/account';
+import { Account } from '../../interfaces/account';
 
 @Component({
   selector: 'kochii-account',

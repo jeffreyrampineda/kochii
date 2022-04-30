@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PasswordMatchValidator } from '../../shared/_validators/password-match.validator';
+import { PasswordMatchValidator } from 'src/app/modules/shared/validators/password-match.validator';
 import { AccountService } from 'src/app/services/account.service';
 import { Title } from '@angular/platform-browser';
 
