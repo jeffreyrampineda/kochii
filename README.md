@@ -45,6 +45,16 @@ Create .env file with the following:
 $ npm run dev
 ```
 
+```bash
+# Populates your database with basic data.
+$ npm run util:populatedb <uri_string>
+```
+
+```bash
+# Drops your entire database.
+$ npm run util:dropdb <uri_string>
+```
+
 ## Production
 
 Set the following environment variables:
