@@ -6,8 +6,10 @@
     <!--Card-->
     <kochii-gauge-card
       icon="pie_chart"
-      title="INVENTORY SIZE"
+      color="#2e3748"
+      title="Inventory Size"
       [value]="itemTotal.toString()"
+      change="+ 0"
     ></kochii-gauge-card>
     <!--/.Card-->
   </div>
@@ -18,9 +20,10 @@
     <!--Card-->
     <kochii-gauge-card
       icon="delete_sweep"
-      color="warn"
-      title="EXPIRED ITEMS"
+      color="#f44336"
+      title="Expired Items"
       [value]="numberOfExpired.toString()"
+      change="+ 0"
     >
     </kochii-gauge-card>
     <!--/.Card-->
@@ -32,8 +35,10 @@
     <!--Card-->
     <kochii-gauge-card
       icon="payment"
-      title="WEEKLY $ SPENT"
+      color="#2e3748"
+      title="Weekly Expenses"
       [value]="weeklySpent | currency"
+      change="+ 0.00"
     >
     </kochii-gauge-card>
     <!--/.Card-->
@@ -45,8 +50,10 @@
     <!--Card-->
     <kochii-gauge-card
       icon="show_chart"
-      title="ITEMS REMOVED"
+      color="#2e3748"
+      title="Items Removed"
       [value]="quantityRemovedThisWeek().toString()"
+      change="+ 0"
     >
     </kochii-gauge-card>
     <!--/.Card-->
@@ -56,7 +63,7 @@
   <!--Bar chart grid column-->
   <div class="col-md-8 mb-r">
     <!--Card-->
-    <div class="card shadow-sm mt-4">
+    <div class="card mt-4 k-card">
       <h5 class="card-header">Inventory</h5>
       <div class="card-body">
         <div style="display: block; height: 40vh">
@@ -71,7 +78,7 @@
   <!--Doughnut chart grid column-->
   <div class="col-md-4 mb-r">
     <!--Card-->
-    <div class="card shadow-sm mt-4">
+    <div class="card mt-4 k-card">
       <h5 class="card-header">Status</h5>
       <div class="card-body">
         <div style="display: block; height: 40vh">
@@ -86,7 +93,7 @@
   <!--Activities grid column-->
   <div class="col-md-12 mb-4">
     <!--Card-->
-    <div class="card shadow-sm mt-4">
+    <div class="card mt-4 k-card">
       <h5 class="card-header">Activity Log</h5>
       <div class="card-body">
         <div [hidden]="activities.data.length === 0 || loadingActivities">

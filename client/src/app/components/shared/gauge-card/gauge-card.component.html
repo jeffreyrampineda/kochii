@@ -1,20 +1,24 @@
-<div class="card shadow-sm mt-3 k-border-left">
-  <div class="card-body">
+<div class="card mt-3 k-card">
+  <div class="card-body k-border-left" [style.border-color]="color">
     <div class="row no-gutters">
       <div class="col mr-2 k-data">
-        <div class="k-title">{{ title }}</div>
-        <div class="k-value">{{ value }}</div>
+        <div class="k-title" [style.color]="color">{{ title }}</div>
+        <hr />
+        <div>
+          <span class="k-value" [style.color]="color">
+            {{ value }}
+          </span>
+          <small [style.color]="color">
+            <mat-icon> arrow_drop_up </mat-icon>{{ change }}
+          </small>
+        </div>
       </div>
       <div class="col-auto">
-        <button
-          class="k-gauge-icon"
-          mat-icon-button
-          disabled
-          [color]="color"
-          aria-label="icon"
+        <mat-icon
+          [style.color]="color"
+          style="font-size: 3rem; width: 3rem; height: 3rem"
+          >{{ icon }}</mat-icon
         >
-          <mat-icon>{{ icon }}</mat-icon>
-        </button>
       </div>
     </div>
   </div>
