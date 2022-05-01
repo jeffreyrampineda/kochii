@@ -2,17 +2,28 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-const server = require("./server");
+const app = require("./app");
+const io = require('./io');
+const db = require('./db');
 const debug = require("debug")("kochii:server");
+const http = require('http');
 
 // Get port from environment and store in Express.
 const port = normalizePort(process.env.PORT || "3001");
-//app.set("port", port);
+app.set("port", port);
+
+const server = http.createServer(app);
 
 // Listen on provided port, on all network interfaces.
 server.listen(port);
 server.on("error", onError);
 server.on("listening", onListening);
+
+// Socket.IO
+io.init(server);
+
+// Database
+db.init();
 
 // Normalize a port into a number, string, or false.
 function normalizePort(val) {

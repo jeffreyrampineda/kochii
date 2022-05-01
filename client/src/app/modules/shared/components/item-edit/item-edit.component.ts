@@ -153,7 +153,7 @@ export class ItemEditComponent implements OnInit {
           this.messageService.notify(`${response.successful}/${response.total} items were successfully updated.`);
           
           // Return to app/inventory if successful, otherwise stay.
-          this.router.navigate(['app/inventory']);
+          this.router.navigate(['inventory']);
         }
       },
       error: err => {

@@ -4,6 +4,7 @@ const activity_controller = require("../controllers/activity.controller");
 const Validate = require("../validators/item");
 const searchRawFood = require("../util/external_api.service").searchRawFood;
 const createError = require("http-errors");
+const io = require("../io");
 
 const itemProject = {
   _id: "$items._id",
@@ -203,13 +204,7 @@ exports.item_create = async function (req, res, next) {
         quantity: item.quantity,
         description: "Item created",
       });
-
-      for (const socket_id in global.currentConnections[req.user]) {
-        global.currentConnections[req.user][socket_id].socket.emit(
-          "item_create",
-          item
-        );
-      }
+      io.room(req.user.toString()).emit("item_create", item);
       //return item;
       res.status(200).json(item);
     } else {
@@ -350,12 +345,7 @@ exports.item_update = async function (req, res, next) {
       if (item.quantity <= 0) {
         await deleteItemById(req.user, _id);
       } else {
-        for (const socket_id in global.currentConnections[req.user]) {
-          global.currentConnections[req.user][socket_id].socket.emit(
-            "item_update",
-            item
-          );
-        }
+        io.room(req.user.toString()).emit("item_update", item);
       }
       res.status(200).json(item);
     } else {
@@ -405,13 +395,7 @@ async function deleteItemById(account_id, _id) {
         quantity: 0,
         description: "Permanently removed",
       });
-
-      for (const socket_id in global.currentConnections[account_id]) {
-        global.currentConnections[account_id][socket_id].socket.emit(
-          "item_delete",
-          _id
-        );
-      }
+      io.room(account_id.toString()).emit("item_delete", _id);
     }
     return result.ok;
   } catch (error) {

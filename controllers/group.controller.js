@@ -2,6 +2,7 @@ const Inventory = require("../models/inventory");
 const activity_controller = require("../controllers/activity.controller");
 const Validate = require("../validators/group");
 const createError = require("http-errors");
+const io = require("../io");
 
 /**
  * Get all groups from the database.
@@ -10,7 +11,7 @@ const createError = require("http-errors");
 exports.group_list = async function (req, res, next) {
   try {
     const inventory = await Inventory.findOne(
-      { owner: req.user._id },
+      { owner: req.user },
       "groups"
     );
     res.status(200).send(inventory.groups);
@@ -44,12 +45,7 @@ exports.group_create = async function (req, res, next) {
         description: "Group created",
       });
 
-      for (const socket_id in global.currentConnections[req.user]) {
-        global.currentConnections[req.user][socket_id].socket.emit(
-          "group_create",
-          name
-        );
-      }
+      io.room(req.user.toString()).emit("group_create", name);
       res.status(200).json({ name });
     }
   } catch (error) {
@@ -91,16 +87,9 @@ exports.group_delete = async function (req, res, next) {
     const updated_default_group = result.items.filter(
       (item) => item.group === "Default"
     );
-    for (const socket_id in global.currentConnections[req.user]) {
-      global.currentConnections[req.user][socket_id].socket.emit(
-        "item_updateMany",
-        updated_default_group
-      );
-      global.currentConnections[req.user][socket_id].socket.emit(
-        "group_delete",
-        name
-      );
-    }
+
+    io.room(req.user.toString()).emit("item_updateMany", updated_default_group);
+    io.room(req.user.toString()).emit("group_delete", name);
 
     // Create new activity for recording
     await activity_controller.create({

@@ -1,14 +1,24 @@
 #! /usr/bin/env node
 
-console.log("This script populates some accounts, posts to your database.");
-console.log("e.g.: node populatedb mongodb://localhost:27017/kochii");
+// Filename: populatedb.js
+// Description: This script populates some accounts, and posts to your database
+//
+// Author: Jeffrey Ram Pineda <https://jeffreyram.pineda.org/>
+
+console.log(
+  "This script populates some accounts, and posts to your database\n"
+);
 
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2);
+
+// Check arguments for valid MongoDB URI string
 if (userArgs.length == 0 || !userArgs[0].startsWith("mongodb")) {
-  throw new Error(
-    "ERROR: You need to specify a valid mongodb URL as the first argument"
+  console.log(
+    "You need to specify a valid mongodb URI string as the first argument\n"
   );
+  console.log("Usage: node populatedb <uri_string>\n");
+  process.exit(0);
 }
 
 const Post = require("../../models/post");
@@ -17,22 +27,27 @@ const inventory_controller = require("../../controllers/inventory.controller");
 const activity_controller = require("../../controllers/activity.controller");
 
 const mongoose = require("mongoose");
-const mongoDB = userArgs[0];
+const uri_string = userArgs[0];
 const fs = require("fs");
 const path = require("path");
 
-mongoose.connect(mongoDB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
 mongoose.connection.once("open", () =>
-  console.log("mongodb: connection established")
+  console.log("MongoDB: connection established")
 );
 
 mongoose.connection.once("close", () =>
-  console.log("mongodb: connection closed")
+  console.log("MongoDB: connection closed")
 );
+
+mongoose.connection.on("error", () => {
+  console.log("MongoDB: connection error");
+  process.exit(0);
+});
+
+mongoose.connect(uri_string, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
 const accounts = [];
 const posts = [];
@@ -70,7 +85,6 @@ async function accountCreate(
     account._id,
     inventory_id
   );
-
   if (initActivityResult && initInventoryResult) {
     console.log("Account successfully created");
   }
@@ -110,6 +124,7 @@ async function postCreate(
     dislikes,
     banner,
   };
+  console.log("Post successfully created");
 
   return await Post.create(postdetail);
 }

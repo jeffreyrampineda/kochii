@@ -72,6 +72,9 @@ export class InventoryComponent implements OnInit, OnDestroy {
         this.inventoryService.inventoryUpdate.pipe(takeUntil(this.unsub)).subscribe(() => {
             this.getItems();
         });
+        this.inventoryService.groupsUpdate.pipe(takeUntil(this.unsub)).subscribe(() => {
+            this.getGroups();
+        });
     }
 
     ngOnDestroy() {

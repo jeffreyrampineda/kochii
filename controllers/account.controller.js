@@ -5,10 +5,9 @@ const activity_controller = require("../controllers/activity.controller");
 const cryptoRandomString = require("crypto-random-string");
 const sendVerificationEmail =
   require("../util/external_api.service").sendVerificationEmail;
-
-const Helper = require("../util/helpers");
 const Validate = require("../validators/account");
 const createError = require("http-errors");
+const jwt = require("jsonwebtoken");
 
 /**
  * Registers the account to the database.
@@ -60,7 +59,7 @@ exports.account_create = async function (req, res, next) {
       email,
       firstName,
       lastName,
-      token: Helper.generateToken(account._id),
+      token: generateToken(account._id),
       isVerified: account.isVerified,
     });
   } catch (error) {
@@ -87,7 +86,7 @@ exports.account_login = async function (req, res, next) {
         email: account.email,
         firstName: account.firstName,
         lastName: account.lastName,
-        token: Helper.generateToken(account._id),
+        token: generateToken(account._id),
         isVerified: account.isVerified,
       });
     } else {
@@ -158,7 +157,9 @@ exports.account_delete = async function (req, res, next) {
     const activityResult = await activity_controller.deleteActivitiesByOwnerId(
       req.user
     );
-    const inventoryResult = await inventory_controller.deleteInventoryByOwnerId(req.user);
+    const inventoryResult = await inventory_controller.deleteInventoryByOwnerId(
+      req.user
+    );
     if (activityResult.deletedCount && inventoryResult.deletedCount) {
       result = await Account.deleteOne({ _id: req.user });
     }
@@ -168,3 +169,10 @@ exports.account_delete = async function (req, res, next) {
     next(createError(error.status ?? 500, error));
   }
 };
+
+function generateToken(account_id) {
+  const payload = {
+    _id: account_id,
+  };
+  return jwt.sign(payload, process.env.SECRET_KEY);
+}
