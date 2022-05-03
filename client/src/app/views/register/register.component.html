@@ -1,8 +1,8 @@
 <!-- Form -->
 <form
-  class="shadow-sm bg-white p-5 k-center-isolated"
+  class="shadow-sm bg-white p-5 mt-5 k-center-isolated"
   [formGroup]="registerForm"
-  (ngSubmit)="onSubmit(registerForm.value)"
+  (ngSubmit)="onSubmit()"
 >
   <img
     alt="Kochii logo"
@@ -75,8 +75,6 @@
       placeholder="First Name"
     />
     <mat-error *ngIf="f.firstName.errors">
-      <div *ngIf="f.firstName.errors.required">First name is required</div>
-      <div *ngIf="f.firstName.errors.minlength">Minimum length is 2</div>
       <div *ngIf="f.firstName.errors.maxlength">Maximum length is 30</div>
       <div *ngIf="f.firstName.errors.pattern">
         First name must only contain letters
@@ -93,8 +91,6 @@
       placeholder="Last Name"
     />
     <mat-error *ngIf="f.lastName.errors">
-      <div *ngIf="f.lastName.errors.required">Last name is required</div>
-      <div *ngIf="f.lastName.errors.minlength">Minimum length is 2</div>
       <div *ngIf="f.lastName.errors.maxlength">Maximum length is 30</div>
       <div *ngIf="f.lastName.errors.pattern">
         Last name must only contain letters
@@ -103,12 +99,10 @@
   </mat-form-field>
 
   <!-- Messages -->
-  <div class="text-center mt-4">
-    <p *ngIf="loading">Loading...</p>
-    <p *ngFor="let message of error_messages" class="text-danger">
-      {{ message }}
-    </p>
-  </div>
+  <kochii-error-messages
+    [error_messages]="error_messages"
+    [loading]="loading"
+  ></kochii-error-messages>
 
   <!-- Register button -->
   <button
@@ -116,14 +110,13 @@
     color="primary"
     type="submit"
     class="btn-block my-4"
+    [disabled]="loading || registerForm.invalid"
   >
     Register
   </button>
 
   <!-- Login link -->
-  <div class="text-center">
-    <p>Already a member? <a routerLink="/login">Login</a></p>
-  </div>
+  <p class="text-center">Already a member? <a routerLink="/login">Login</a></p>
 </form>
 <!-- Form -->
 

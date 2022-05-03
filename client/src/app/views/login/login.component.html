@@ -1,6 +1,6 @@
 <!-- Form -->
 <form
-  class="shadow-sm bg-white p-5 k-center-isolated"
+  class="shadow-sm bg-white p-5 mt-5 k-center-isolated"
   [formGroup]="loginForm"
   (ngSubmit)="onSubmit()"
 >
@@ -47,18 +47,14 @@
   <!-- Extra -->
   <div class="d-flex justify-content-between">
     <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
-    <div>
-      <a href="">Forgot password?</a>
-    </div>
+    <a href="">Forgot password?</a>
   </div>
 
   <!-- Messages -->
-  <div class="text-center pt-4">
-    <p *ngIf="loading">Loading...</p>
-    <p *ngFor="let message of error_messages" class="text-danger">
-      {{ message }}
-    </p>
-  </div>
+  <kochii-error-messages
+    [error_messages]="error_messages"
+    [loading]="loading"
+  ></kochii-error-messages>
 
   <!-- Login button -->
   <button
@@ -66,15 +62,15 @@
     color="primary"
     type="submit"
     class="btn-block my-4"
-    [disabled]="loading"
+    [disabled]="loading || loginForm.invalid"
   >
     Login
   </button>
 
   <!-- Register link -->
-  <div class="text-center">
-    <p>Not a member? <a routerLink="/register">Register</a></p>
-  </div>
+  <p class="text-center">
+    Not a member? <a routerLink="/register">Register</a>
+  </p>
 </form>
 <!-- Form -->
 

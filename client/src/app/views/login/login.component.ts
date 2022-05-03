@@ -9,10 +9,9 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'kochii-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-
   imgLogo = '/public/images/kochii-logo.png';
   loginForm: FormGroup;
   loading = false;
@@ -22,8 +21,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private formBuilder: FormBuilder,
-    private titleService: Title,
-  ) { }
+    private titleService: Title
+  ) {}
 
   // -------------------------------------------------------------
 
@@ -41,24 +40,30 @@ export class LoginComponent implements OnInit {
     if (localStorage.getItem('rememberMe_accountName') !== null) {
       rememberMe = true;
       accountName = localStorage.getItem('rememberMe_accountName');
-    };
+    }
 
     this.loginForm = this.formBuilder.group({
-      accountName: [accountName, [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(30),
-        Validators.pattern('^[a-zA-Z0-9_-]*$')
-      ]],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(30),
-      ]],
-      rememberMe: [rememberMe]
+      accountName: [
+        accountName,
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(30),
+          Validators.pattern('^[a-zA-Z0-9_-]*$'),
+        ],
+      ],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(6),
+          Validators.maxLength(30),
+        ],
+      ],
+      rememberMe: [rememberMe],
     });
 
-    this.loginForm.get('rememberMe').valueChanges.subscribe(value => {
+    this.loginForm.get('rememberMe').valueChanges.subscribe((value) => {
       if (value == false) {
         localStorage.removeItem('rememberMe_accountName');
       }
@@ -66,33 +71,36 @@ export class LoginComponent implements OnInit {
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
+  get f() {
+    return this.loginForm.controls;
+  }
 
   onSubmit() {
-    if (this.loginForm.invalid) {
-      return;
-    }
-
-    if (this.loginForm.value.rememberMe) {
-      localStorage.setItem('rememberMe_accountName', this.loginForm.get('accountName').value);
+    if (this.loginForm.get('rememberMe').value) {
+      localStorage.setItem(
+        'rememberMe_accountName',
+        this.loginForm.get('accountName').value
+      );
     }
 
     this.loading = true;
     this.error_messages = [];
 
-    this.accountService.login(this.loginForm.value).subscribe({
-      next: response => {
+    const { accountName, password } = this.loginForm.value;
+
+    this.accountService.login({ accountName, password }).subscribe({
+      next: (response) => {
         if (response && response.token) {
           this.router.navigate(['/overview']);
         }
       },
-      error: err => {
+      error: (err) => {
         this.error_messages = err.error.error_messages;
         this.loading = false;
       },
       complete: () => {
         this.loading = false;
-      }
+      },
     });
   }
 }

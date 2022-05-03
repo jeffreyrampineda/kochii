@@ -10,10 +10,9 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'kochii-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-
   imgLogo = '/public/images/kochii-logo.png';
   registerForm: FormGroup;
   loading = false;
@@ -23,8 +22,8 @@ export class RegisterComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private formBuilder: FormBuilder,
-    private titleService: Title,
-  ) { }
+    private titleService: Title
+  ) {}
 
   // -------------------------------------------------------------
 
@@ -36,66 +35,67 @@ export class RegisterComponent implements OnInit {
       this.router.navigate(['/overview']);
     }
 
-    this.registerForm = this.formBuilder.group({
-      accountName: ['', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(30),
-        Validators.pattern('^[a-zA-Z0-9_-]*$')
-      ]],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(6),
-        Validators.maxLength(30),
-      ]],
-      passwordre: [''],
-      email: ['', [
-        Validators.required,
-        Validators.email
-      ]],
-      firstName: ['', [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(30),
-        Validators.pattern('^[a-zA-Z]*$')
-      ]],
-      lastName: ['', [
-        Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(30),
-        Validators.pattern('^[a-zA-Z]*$')
-      ]],
-    }, { validators: PasswordMatchValidator() });
+    this.registerForm = this.formBuilder.group(
+      {
+        accountName: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(30),
+            Validators.pattern('^[a-zA-Z0-9_-]*$'),
+          ],
+        ],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(30),
+          ],
+        ],
+        passwordre: [''],
+        email: ['', [Validators.required, Validators.email]],
+        firstName: [
+          '',
+          [Validators.maxLength(30), Validators.pattern('^[a-zA-Z]*$')],
+        ],
+        lastName: [
+          '',
+          [Validators.maxLength(30), Validators.pattern('^[a-zA-Z]*$')],
+        ],
+      },
+      { validators: PasswordMatchValidator() }
+    );
   }
 
   /** convenience getter for easy access to form fields */
-  get f() { return this.registerForm.controls; }
+  get f() {
+    return this.registerForm.controls;
+  }
 
-  onSubmit(registerData) {
-    if (this.registerForm.invalid || this.loading) {
-      console.log('cannot submit');
-      return;
-    }
-
-    console.log('submitted');
+  onSubmit() {
     this.loading = true;
     this.error_messages = [];
 
-    const { accountName, password, email, firstName, lastName } = registerData;
+    const { accountName, password, email, firstName, lastName } =
+      this.registerForm.value;
 
-    this.accountService.register({ accountName, password, email, firstName, lastName }).subscribe({
-      next: response => {
-        if (response && response.token) {
-          this.router.navigate(['/overview']);
-        }
-      },
-      error: err => {
-        this.error_messages = err.error.error_messages;
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    });
+    this.accountService
+      .register({ accountName, password, email, firstName, lastName })
+      .subscribe({
+        next: (response) => {
+          if (response && response.token) {
+            this.router.navigate(['/overview']);
+          }
+        },
+        error: (err) => {
+          this.error_messages = err.error.error_messages;
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        },
+      });
   }
 }

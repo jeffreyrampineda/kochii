@@ -92,19 +92,15 @@ async function register(body) {
   }
 
   // firstName validation
-  if (Validator.isEmpty(firstName)) {
-    error_messages.push("First name is required");
-  } else if (!Validator.isLength(firstName, { min: 2, max: 30 })) {
-    error_messages.push("First name must be between 2 to 30 characters");
+  if (!Validator.isLength(firstName, { max: 30 })) {
+    error_messages.push("First name have a maximum of 30 characters");
   } else if (!/^[a-zA-Z]*$/.test(firstName)) {
     error_messages.push("First name must only contain letters");
   }
 
   // lastName validation
-  if (Validator.isEmpty(lastName)) {
-    error_messages.push("Last name is required");
-  } else if (!Validator.isLength(lastName, { min: 2, max: 30 })) {
-    error_messages.push("Last name must be between 2 to 30 characters");
+  if (!Validator.isLength(lastName, { max: 30 })) {
+    error_messages.push("Last name have a maximum of 30 characters");
   } else if (!/^[a-zA-Z]*$/.test(lastName)) {
     error_messages.push("Last name must only contain letters");
   }

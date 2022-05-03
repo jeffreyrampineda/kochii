@@ -36,25 +36,11 @@ table {
   flex: 1 1 auto;
 }
 
-/* Used for item-add/inventory */
-.k-search {
-  float: left;
-  width: 100%;
-}
-
 /* ----------------------------------- */
-
-/* Used for home/dashboard */
-.k-float-right {
-  float: right;
-}
-
-/* ----------------------- */
 
 .k-center-isolated {
   margin: auto;
   max-width: 400px;
-  margin-top: 5vh;
 }
 
 /* ----------------------- */
@@ -107,10 +93,6 @@ hr {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-a {
-  outline: none;
-}
-
 ol li {
   padding-inline-start: 20px;
 }
@@ -128,7 +110,6 @@ ol li {
 
 @media (min-width: 1200px) {
   .navbar,
-  .page-footer,
   main {
     padding-left: 240px;
   }

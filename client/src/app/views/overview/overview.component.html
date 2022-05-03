@@ -2,62 +2,50 @@
 
 <div class="row">
   <!--Inventory size grid column-->
-  <div class="col-xl-3 col-md-6 mb-r">
-    <!--Card-->
-    <kochii-gauge-card
-      icon="pie_chart"
-      color="#2e3748"
-      title="Inventory Size"
-      [value]="itemTotal.toString()"
-      change="+ 0"
-    ></kochii-gauge-card>
-    <!--/.Card-->
-  </div>
+  <kochii-gauge-card
+    class="col-xl-3 col-md-6 mb-r"
+    icon="pie_chart"
+    color="#2e3748"
+    title="Inventory Size"
+    [value]="itemTotal.toString()"
+    change="+ 0"
+  ></kochii-gauge-card>
   <!--/.Inventory size grid column-->
 
   <!--Expired items grid column-->
-  <div class="col-xl-3 col-md-6 mb-r">
-    <!--Card-->
-    <kochii-gauge-card
-      icon="delete_sweep"
-      color="#f44336"
-      title="Expired Items"
-      [value]="numberOfExpired.toString()"
-      change="+ 0"
-    >
-    </kochii-gauge-card>
-    <!--/.Card-->
-  </div>
+  <kochii-gauge-card
+    class="col-xl-3 col-md-6 mb-r"
+    icon="delete_sweep"
+    color="#f44336"
+    title="Expired Items"
+    [value]="numberOfExpired.toString()"
+    change="+ 0"
+  >
+  </kochii-gauge-card>
   <!--/.Expired items grid column-->
 
   <!--Weekly spent grid column-->
-  <div class="col-xl-3 col-md-6 mb-r">
-    <!--Card-->
-    <kochii-gauge-card
-      icon="payment"
-      color="#2e3748"
-      title="Weekly Expenses"
-      [value]="weeklySpent | currency"
-      change="+ 0.00"
-    >
-    </kochii-gauge-card>
-    <!--/.Card-->
-  </div>
+  <kochii-gauge-card
+    class="col-xl-3 col-md-6 mb-r"
+    icon="payment"
+    color="#2e3748"
+    title="Weekly Expenses"
+    [value]="weeklySpent | currency"
+    change="+ 0.00"
+  >
+  </kochii-gauge-card>
   <!--/.Weekly spent grid column-->
 
   <!--Weekly removed grid column-->
-  <div class="col-xl-3 col-md-6 mb-r">
-    <!--Card-->
-    <kochii-gauge-card
-      icon="show_chart"
-      color="#2e3748"
-      title="Items Removed"
-      [value]="quantityRemovedThisWeek().toString()"
-      change="+ 0"
-    >
-    </kochii-gauge-card>
-    <!--/.Card-->
-  </div>
+  <kochii-gauge-card
+    class="col-xl-3 col-md-6 mb-r"
+    icon="show_chart"
+    color="#2e3748"
+    title="Items Removed"
+    [value]="quantityRemovedThisWeek().toString()"
+    change="+ 0"
+  >
+  </kochii-gauge-card>
   <!--/.Weekly removed grid column-->
 
   <!--Bar chart grid column-->

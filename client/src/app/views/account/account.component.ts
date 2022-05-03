@@ -8,7 +8,7 @@ import { Account } from '../../interfaces/account';
 @Component({
   selector: 'kochii-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.css']
+  styleUrls: ['./account.component.css'],
 })
 export class AccountComponent implements OnInit {
   account: Account;
@@ -18,43 +18,47 @@ export class AccountComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private messageService: MessageService,
-    private formBuilder: FormBuilder,
-  ) { }
+    private formBuilder: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.getAccount();
   }
 
   /** convenience getter for easy access to form fields */
-  get f() { return this.accountForm.controls; }
+  get f() {
+    return this.accountForm.controls;
+  }
 
   getAccount(): void {
     this.accountService.currentAccount.subscribe({
-      next: response => {
+      next: (response) => {
         if (response) {
           this.account = response;
           this.accountForm = this.formBuilder.group({
-            firstName: [this.account.firstName, [
-              Validators.required,
-              Validators.minLength(2),
-              Validators.maxLength(30),
-              Validators.pattern('^[a-zA-Z]*$')
-            ]],
-            lastName: [this.account.lastName, [
-              Validators.required,
-              Validators.minLength(2),
-              Validators.maxLength(30),
-              Validators.pattern('^[a-zA-Z]*$')
-            ]],
+            firstName: [
+              this.account.firstName,
+              [
+                Validators.required,
+                Validators.minLength(2),
+                Validators.maxLength(30),
+                Validators.pattern('^[a-zA-Z]*$'),
+              ],
+            ],
+            lastName: [
+              this.account.lastName,
+              [
+                Validators.required,
+                Validators.minLength(2),
+                Validators.maxLength(30),
+                Validators.pattern('^[a-zA-Z]*$'),
+              ],
+            ],
           });
         }
       },
-      error: () => {
-
-      },
-      complete: () => {
-
-      }
+      error: () => {},
+      complete: () => {},
     });
   }
 
@@ -63,34 +67,30 @@ export class AccountComponent implements OnInit {
       this.messageService.notify('Forms are invalid');
       return;
     }
-    const newAccount = this.accountForm.value;
-    this.accountService.updateAccount(newAccount).subscribe({
-      next: response => {
+
+    const { firstName, lastName } = this.accountForm.value;
+
+    this.accountService.updateAccount({ firstName, lastName }).subscribe({
+      next: (response) => {
         this.account = response;
         this.messageService.notify('Account was successfully updated.');
       },
-      error: () => {
-
-      },
+      error: () => {},
       complete: () => {
         this.toggleEdit();
-      }
+      },
     });
   }
 
   deleteAccount(): void {
     this.accountService.deleteAccount().subscribe({
-      next: response => {
+      next: (response) => {
         if (response === 1) {
           this.accountService.logout();
         }
       },
-      error: () => {
-
-      },
-      complete: () => {
-
-      }
+      error: () => {},
+      complete: () => {},
     });
   }
 

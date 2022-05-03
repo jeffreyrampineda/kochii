@@ -12,6 +12,7 @@ import { DashboardComponent } from './layouts/dashboard/dashboard.component';
 
 // Components - Reusables
 import { LinkGroupComponent } from './components/link-group/link-group.component';
+import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
 import { ItemEditComponent } from './components/item-edit/item-edit.component';
 import { GaugeCardComponent } from './components/gauge-card/gauge-card.component';
 import { PresentationContainerComponent } from './components/presentation-container/presentation-container.component';
@@ -23,6 +24,7 @@ const sharedComponents = [
   NavigationComponent,
   DashboardComponent,
   LinkGroupComponent,
+  ErrorMessagesComponent,
   ItemEditComponent,
   GaugeCardComponent,
   PresentationContainerComponent,

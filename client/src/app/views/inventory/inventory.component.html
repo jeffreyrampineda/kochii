@@ -24,16 +24,10 @@
     <!--/.Group actions-->
 
     <!--Search actions-->
-    <div>
-      <mat-form-field class="k-search">
-        <mat-label>Search</mat-label>
-        <input
-          matInput
-          (keyup)="applyFilter($event)"
-          placeholder="Ex. apples"
-        />
-      </mat-form-field>
-    </div>
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. apples" />
+    </mat-form-field>
     <!--/.Search actions-->
 
     <!--Item actions-->
@@ -247,7 +241,7 @@
           <span
             [ngClass]="[
               'label',
-              'k-float-right',
+              'float-right',
               item.expirationDate | countdown | status
             ]"
             >{{ item.expirationDate | countdown | status | titlecase }}</span
