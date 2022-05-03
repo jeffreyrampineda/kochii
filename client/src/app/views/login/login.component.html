@@ -2,7 +2,7 @@
 <form
   class="shadow-sm bg-white p-5 k-center-isolated"
   [formGroup]="loginForm"
-  (ngSubmit)="onSubmit(loginForm.value)"
+  (ngSubmit)="onSubmit()"
 >
   <img
     alt="Kochii logo"
@@ -46,18 +46,7 @@
 
   <!-- Extra -->
   <div class="d-flex justify-content-between">
-    <div>
-      <div class="custom-control custom-checkbox">
-        <input
-          type="checkbox"
-          class="custom-control-input"
-          id="defaultLoginFormRemember"
-        />
-        <label class="custom-control-label" for="defaultLoginFormRemember"
-          >Remember me</label
-        >
-      </div>
-    </div>
+    <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
     <div>
       <a href="">Forgot password?</a>
     </div>
@@ -77,6 +66,7 @@
     color="primary"
     type="submit"
     class="btn-block my-4"
+    [disabled]="loading"
   >
     Login
   </button>
