@@ -6,7 +6,6 @@ import { MessageService } from 'src/app/services/message.service';
 @Component({
   selector: 'kochii-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent {
   constructor(private messageSevice: MessageService) {}

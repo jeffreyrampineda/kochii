@@ -4,7 +4,6 @@ import { RecipesService } from 'src/app/services/recipes.service';
 @Component({
   selector: 'kochii-collections-list',
   templateUrl: './collections-list.component.html',
-  styleUrls: ['./collections-list.component.scss'],
 })
 export class CollectionsListComponent implements OnInit {
   posts = [];

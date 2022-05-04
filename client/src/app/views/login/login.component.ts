@@ -9,7 +9,6 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'kochii-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   imgLogo = '/public/images/kochii-logo.png';

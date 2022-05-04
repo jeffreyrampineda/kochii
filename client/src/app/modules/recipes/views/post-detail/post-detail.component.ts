@@ -6,7 +6,6 @@ import { RecipesService } from 'src/app/services/recipes.service';
 @Component({
   selector: 'kochii-post-detail',
   templateUrl: './post-detail.component.html',
-  styleUrls: ['./post-detail.component.scss'],
 })
 export class PostDetailComponent implements OnInit {
   post: Post;

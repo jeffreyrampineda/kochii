@@ -6,7 +6,6 @@ import { InventoryService } from 'src/app/services/inventory.service';
 @Component({
   selector: 'kochii-item-update',
   templateUrl: './item-update.component.html',
-  styleUrls: ['./item-update.component.css']
 })
 export class ItemUpdateComponent implements OnInit {
   item: Item;

@@ -18,7 +18,6 @@ interface Week {
 @Component({
   selector: 'kochii-overview',
   templateUrl: './overview.component.html',
-  styleUrls: ['./overview.component.css'],
 })
 export class OverviewComponent implements OnInit {
   @ViewChild('canvasLine') canvasLine: ElementRef;

@@ -7,7 +7,6 @@ import { InventoryService } from 'src/app/services/inventory.service';
 @Component({
   selector: 'kochii-item-add',
   templateUrl: './item-add.component.html',
-  styleUrls: ['./item-add.component.css']
 })
 export class ItemAddComponent {
   item: Item;

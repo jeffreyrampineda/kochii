@@ -10,7 +10,6 @@ import { MatDialog } from '@angular/material/dialog';
 @Component({
   selector: 'kochii-item-edit',
   templateUrl: './item-edit.component.html',
-  styleUrls: ['./item-edit.component.css']
 })
 export class ItemEditComponent implements OnInit {
   @Input() isAdding = false;
