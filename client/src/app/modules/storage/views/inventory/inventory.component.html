@@ -3,6 +3,45 @@
   [isEmpty]="inventory.data.length === 0"
   [loading]="loading"
 >
+  <!--Header-->
+  <div title-append class="float-right">
+    <div *ngIf="!showSelect">
+      <button
+        mat-raised-button
+        color="accent"
+        routerLink="/storage/inventory/add"
+      >
+        Add
+      </button>
+      <button mat-raised-button (click)="selectColumnToggle('inc')">
+        Remove
+      </button>
+      <button mat-raised-button (click)="selectColumnToggle('set')">
+        Edit
+      </button>
+    </div>
+    <div *ngIf="showSelect">
+      <span style="font-size: medium"
+        >{{ option === "set" ? "You are updating " : "You are removing " }}
+        {{ selection.selected.length }} items</span
+      >
+      <button
+        mat-raised-button
+        [disabled]="selection.selected.length == 0"
+        color="accent"
+        (click)="
+          option === 'set'
+            ? openUpdateDialog('Update', 'New values for the updated items')
+            : openUpdateDialog('Remove', 'Removing the following items')
+        "
+      >
+        Save
+      </button>
+      <button mat-raised-button (click)="selectColumnToggle('')">Cancel</button>
+    </div>
+  </div>
+  <!--/.Header-->
+
   <!--Actions-->
   <div actions class="d-sm-flex justify-content-between">
     <!--Group actions-->
@@ -29,41 +68,6 @@
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. apples" />
     </mat-form-field>
     <!--/.Search actions-->
-
-    <!--Item actions-->
-    <div>
-      <div *ngIf="!showSelect">
-        <button mat-icon-button routerLink="/storage/inventory/add">
-          <mat-icon aria-hidden="false" aria-label="add">add</mat-icon>
-        </button>
-        <button mat-icon-button (click)="selectColumnToggle('inc')">
-          <mat-icon aria-hidden="false" aria-label="remove">remove</mat-icon>
-        </button>
-        <button mat-icon-button (click)="selectColumnToggle('set')">
-          <mat-icon aria-hidden="false" aria-label="create">create</mat-icon>
-        </button>
-      </div>
-      <div *ngIf="showSelect">
-        <span
-          >{{ option === "set" ? "You are updating " : "You are removing " }}
-          {{ selection.selected.length }} items</span
-        >
-        <button
-          mat-icon-button
-          (click)="
-            option === 'set'
-              ? openUpdateDialog('Update', 'New values for the updated items')
-              : openUpdateDialog('Remove', 'Removing the following items')
-          "
-        >
-          <mat-icon aria-hidden="false" aria-label="check">check</mat-icon>
-        </button>
-        <button mat-icon-button (click)="selectColumnToggle('')">
-          <mat-icon aria-hidden="false" aria-label="close">close</mat-icon>
-        </button>
-      </div>
-    </div>
-    <!--/.Item actions-->
   </div>
   <!--/.Actions-->
 

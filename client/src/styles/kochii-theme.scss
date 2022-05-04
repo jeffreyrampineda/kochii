@@ -1,4 +1,4 @@
-@use '@angular/material' as mat;
+@use "@angular/material" as mat;
 
 @include mat.core();
 
@@ -14,21 +14,29 @@ $kochii-blue: (
   800: #1c2331,
   900: #1c2331,
   contrast: (
+    100: white,
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
     700: white,
     800: white,
     900: white,
-  )
+  ),
 );
 
 $kochii-primary: mat.define-palette($kochii-blue, 900);
 $kochii-accent: mat.define-palette($kochii-blue, 200, 300, 400);
 
-$kochii-theme: mat.define-light-theme((
-  color: (
-    primary: $kochii-primary,
-    accent: $kochii-accent,
+$kochii-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $kochii-primary,
+      accent: $kochii-accent,
+    ),
   )
-));
+);
 
 @include mat.all-component-themes($kochii-theme);
 

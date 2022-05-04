@@ -22,6 +22,11 @@
   background-color: #f6f6f6;
 }
 
+.mat-button-base {
+  margin-right: 4px !important;
+  margin-left: 4px !important;
+}
+
 /* Removes the dotted lines around button. Bootstrap causes this.*/
 button:focus {
   outline: none !important;
@@ -95,6 +100,10 @@ hr {
 
 ol li {
   padding-inline-start: 20px;
+}
+
+a:hover {
+  text-decoration: none;
 }
 
 .sidebar-fixed {

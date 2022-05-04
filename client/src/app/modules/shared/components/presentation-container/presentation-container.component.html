@@ -1,4 +1,7 @@
-<h2 class="skinny"><ng-content select="[prepend]"></ng-content>{{ title }}</h2>
+<h2 class="skinny">
+  <ng-content select="[title-prepend]"></ng-content>{{ title
+  }}<ng-content select="[title-append]"></ng-content>
+</h2>
 
 <!--Container-->
 <div class="card shadow-sm mt-4">

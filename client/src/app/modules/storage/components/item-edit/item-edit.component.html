@@ -1,16 +1,14 @@
 <kochii-presentation-container [title]="title" [loading]="!itemModel">
-  <!--Title prepend-->
-  <span prepend
-    ><a routerLink="/storage/inventory" style="text-decoration: none">Inventory </a>
+  <!--Header -->
+  <span title-prepend
+    ><a routerLink="/storage/inventory">Inventory </a>
     /
   </span>
-  <!--/.Title prepend-->
-
-  <!--Actions-->
-  <div actions class="d-sm-flex justify-content-between">
-    <button mat-button (click)="onSubmit()">Save</button>
+  <div title-append class="float-right">
+    <button mat-raised-button color="accent" (click)="onSubmit()">Save</button>
+    <button mat-raised-button routerLink="/storage/inventory">Cancel</button>
   </div>
-  <!--/.Actions-->
+  <!--/.Header -->
 
   <!--Content-->
   <mat-tab-group [selectedIndex]="itemEditForms.length - 1">
