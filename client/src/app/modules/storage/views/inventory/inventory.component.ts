@@ -10,8 +10,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Item } from 'src/app/interfaces/item';
-import { UpdateDialogComponent } from 'src/app/modules/shared/components/update-dialog/update-dialog.component';
-import { CreateGroupDialogComponent } from 'src/app/modules/shared/components/create-group-dialog/create-group-dialog.component';
+import { UpdateDialogComponent } from '../../components/update-dialog/update-dialog.component';
+import { CreateGroupDialogComponent } from '../../components/create-group-dialog/create-group-dialog.component';
 import { MessageService } from 'src/app/services/message.service';
 
 // -------------------------------------------------------------

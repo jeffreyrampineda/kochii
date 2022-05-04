@@ -1,10 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-// -------------------------------------------------------------
-
 @Pipe({ name: 'expiration' })
 export class ExpirationPipe implements PipeTransform {
-
   /**
    * Transforms the value into a more readable format.
    * @param value - The number of days left before expiration.

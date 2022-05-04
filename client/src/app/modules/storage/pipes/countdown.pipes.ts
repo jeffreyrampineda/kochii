@@ -1,10 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-// -------------------------------------------------------------
-
 @Pipe({ name: 'countdown' })
 export class CountdownPipe implements PipeTransform {
-
   transform(value: string): number {
     const expirationDate = new Date(value);
     const today = new Date();

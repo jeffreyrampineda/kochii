@@ -10,13 +10,9 @@ import { DashboardComponent } from './modules/shared/layouts/dashboard/dashboard
 // Components - Views
 import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
-import { GroceriesComponent } from './views/groceries/groceries.component';
 import { ActivityLogComponent } from './views/activity-log/activity-log.component';
-import { InventoryComponent } from './views/inventory/inventory.component';
 import { OverviewComponent } from './views/overview/overview.component';
 import { SettingsComponent } from './views/settings/settings.component';
-import { ItemAddComponent } from './views/item-add/item-add.component';
-import { ItemUpdateComponent } from './views/item-update/item-update.component';
 import { AccountComponent } from './views/account/account.component';
 
 // -------------------------------------------------------------
@@ -31,10 +27,13 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       { path: 'overview', component: OverviewComponent },
-      { path: 'inventory', component: InventoryComponent },
-      { path: 'inventory/add', component: ItemAddComponent },
-      { path: 'inventory/:id', component: ItemUpdateComponent },
-      { path: 'groceries', component: GroceriesComponent },
+      {
+        path: 'storage',
+        loadChildren: () =>
+          import('./modules/storage/storage.module').then(
+            (m) => m.StorageModule
+          ),
+      },
       {
         path: 'recipes',
         loadChildren: () =>

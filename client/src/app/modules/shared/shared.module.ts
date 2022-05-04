@@ -14,11 +14,8 @@ import { DashboardComponent } from './layouts/dashboard/dashboard.component';
 import { AuthPageComponent } from './components/auth-page/auth-page.component';
 import { LinkGroupComponent } from './components/link-group/link-group.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
-import { ItemEditComponent } from './components/item-edit/item-edit.component';
 import { GaugeCardComponent } from './components/gauge-card/gauge-card.component';
 import { PresentationContainerComponent } from './components/presentation-container/presentation-container.component';
-import { CreateGroupDialogComponent } from './components/create-group-dialog/create-group-dialog.component';
-import { UpdateDialogComponent } from './components/update-dialog/update-dialog.component';
 
 const sharedComponents = [
   FooterComponent,
@@ -27,11 +24,8 @@ const sharedComponents = [
   AuthPageComponent,
   LinkGroupComponent,
   ErrorMessagesComponent,
-  ItemEditComponent,
   GaugeCardComponent,
   PresentationContainerComponent,
-  CreateGroupDialogComponent,
-  UpdateDialogComponent,
 ];
 
 @NgModule({
