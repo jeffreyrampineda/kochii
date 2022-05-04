@@ -11,6 +11,7 @@ import { NavigationComponent } from './layouts/navigation/navigation.component';
 import { DashboardComponent } from './layouts/dashboard/dashboard.component';
 
 // Components - Reusables
+import { AuthPageComponent } from './components/auth-page/auth-page.component';
 import { LinkGroupComponent } from './components/link-group/link-group.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
 import { ItemEditComponent } from './components/item-edit/item-edit.component';
@@ -23,6 +24,7 @@ const sharedComponents = [
   FooterComponent,
   NavigationComponent,
   DashboardComponent,
+  AuthPageComponent,
   LinkGroupComponent,
   ErrorMessagesComponent,
   ItemEditComponent,

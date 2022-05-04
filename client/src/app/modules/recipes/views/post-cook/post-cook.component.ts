@@ -26,8 +26,7 @@ export class PostCookComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const post_id = this.route.snapshot.paramMap.get('id');
-    this.cook(post_id);
+    this.cook(this.route.snapshot.paramMap.get('id'));
   }
 
   cook(id: string): void {

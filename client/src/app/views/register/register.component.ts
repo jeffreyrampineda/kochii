@@ -12,7 +12,6 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './register.component.html',
 })
 export class RegisterComponent implements OnInit {
-  imgLogo = '/public/images/kochii-logo.png';
   registerForm: FormGroup;
   loading = false;
   error_messages = [];
@@ -28,7 +27,6 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Register | Kochii');
-
     // If currently logged in, redirect to dashboard.
     if (this.accountService.isLoggedIn) {
       this.router.navigate(['/overview']);

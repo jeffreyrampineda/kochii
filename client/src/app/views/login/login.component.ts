@@ -11,7 +11,6 @@ import { Title } from '@angular/platform-browser';
   templateUrl: './login.component.html',
 })
 export class LoginComponent implements OnInit {
-  imgLogo = '/public/images/kochii-logo.png';
   loginForm: FormGroup;
   loading = false;
   error_messages = [];
@@ -27,7 +26,6 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.titleService.setTitle('Login | Kochii');
-
     // If currently logged in, redirect to dashboard.
     if (this.accountService.isLoggedIn) {
       this.router.navigate(['/overview']);

@@ -11,14 +11,12 @@ export class ItemUpdateComponent implements OnInit {
   item: Item;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
+    private route: ActivatedRoute,
     private inventoryService: InventoryService,
   ) { }
 
   ngOnInit(): void {
-    const id = this.activatedRoute.snapshot.params['id'];
-
-    this.getItemById(id);
+    this.getItemById(this.route.snapshot.paramMap.get('id'));
   }
 
   getItemById(id): void {
