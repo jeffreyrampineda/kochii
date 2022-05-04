@@ -11,22 +11,32 @@ import { HttpErrorInterceptor } from './interceptors/http-error.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
-// Components - views
-import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
-import { ActivityLogComponent } from './views/activity-log/activity-log.component';
-import { OverviewComponent } from './views/overview/overview.component';
-import { SettingsComponent } from './views/settings/settings.component';
-import { AccountComponent } from './views/account/account.component';
-
-// Components - shared
+// Shared
 import { SharedModule } from './modules/shared/shared.module';
+
+// Components
+import { GaugeCardComponent } from './_components/gauge-card/gauge-card.component';
+
+// Layouts
+import { NavigationComponent } from './_layouts/navigation/navigation.component';
+import { DashboardComponent } from './_layouts/dashboard/dashboard.component';
+
+// Views
+import { LoginComponent } from './_views/login/login.component';
+import { RegisterComponent } from './_views/register/register.component';
+import { ActivityLogComponent } from './_views/activity-log/activity-log.component';
+import { OverviewComponent } from './_views/overview/overview.component';
+import { SettingsComponent } from './_views/settings/settings.component';
+import { AccountComponent } from './_views/account/account.component';
 
 // -------------------------------------------------------------
 
 @NgModule({
   declarations: [
     AppComponent,
+    GaugeCardComponent,
+    NavigationComponent,
+    DashboardComponent,
     LoginComponent,
     RegisterComponent,
     ActivityLogComponent,

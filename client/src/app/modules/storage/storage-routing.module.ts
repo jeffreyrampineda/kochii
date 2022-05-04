@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+// Views
 import { InventoryComponent } from './views/inventory/inventory.component';
 import { GroceriesComponent } from './views/groceries/groceries.component';
 import { ItemAddComponent } from './views/item-add/item-add.component';

@@ -3,17 +3,16 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './guards/auth.guard';
 
-// Components - Shared/Layouts
-import { SharedModule } from './modules/shared/shared.module';
-import { DashboardComponent } from './modules/shared/layouts/dashboard/dashboard.component';
+// Layouts
+import { DashboardComponent } from './_layouts/dashboard/dashboard.component';
 
-// Components - Views
-import { LoginComponent } from './views/login/login.component';
-import { RegisterComponent } from './views/register/register.component';
-import { ActivityLogComponent } from './views/activity-log/activity-log.component';
-import { OverviewComponent } from './views/overview/overview.component';
-import { SettingsComponent } from './views/settings/settings.component';
-import { AccountComponent } from './views/account/account.component';
+// Views
+import { LoginComponent } from './_views/login/login.component';
+import { RegisterComponent } from './_views/register/register.component';
+import { ActivityLogComponent } from './_views/activity-log/activity-log.component';
+import { OverviewComponent } from './_views/overview/overview.component';
+import { SettingsComponent } from './_views/settings/settings.component';
+import { AccountComponent } from './_views/account/account.component';
 
 // -------------------------------------------------------------
 
@@ -58,7 +57,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    SharedModule,
     RouterModule.forRoot(routes, {
       anchorScrolling: 'enabled',
       relativeLinkResolution: 'legacy',

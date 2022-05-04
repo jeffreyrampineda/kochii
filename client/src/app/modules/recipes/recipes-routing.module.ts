@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+// Views
 import { PostListComponent } from './views/post-list/post-list.component';
 import { PostDetailComponent } from './views/post-detail/post-detail.component';
 import { PostCookComponent } from './views/post-cook/post-cook.component';
