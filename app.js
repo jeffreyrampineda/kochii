@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require("cors");
 const logger = require("morgan");
-const { passport } = require("./passport");
 const helmet = require("helmet");
 const path = require("path");
+const passport_middleware = require("./middlewares/passport.middleware");
+const error_middleware = require("./middlewares/error.middleware");
 //var cookieParser = require("cookie-parser");
 
 // Create Express Application.
@@ -30,7 +31,7 @@ app.use(express.urlencoded({ extended: false }));
 //app.use(cookieParser());
 
 // Authentication
-app.use(passport.initialize());
+app.use(passport_middleware.initialize());
 
 // Routes
 const routerPublic = require("./controllers/public.routes");
@@ -39,7 +40,7 @@ const routerProtected = require("./controllers/protected.routes");
 // API Routes
 app.use(
   "/api",
-  passport.authenticate("jwt", { session: false }),
+  passport_middleware.authenticate("jwt", { session: false }),
   routerProtected
 );
 
@@ -53,29 +54,10 @@ app.use(["/login", "/register", "/dashboard"], function (req, res) {
   res.sendFile(path.join(__dirname, "client/dist", "index.html"));
 });
 
-// catch 404 error.
-app.use(function (req, res, next) {
-  res.render("message", {
-    title: "Page Not Found | Kochii",
-    message_title: "( ._.)",
-    message_subtitle: "404 Not Found",
-    message_description: "Sorry but the requested page is not found!",
-  });
-});
+// Catch 404 error.
+app.use(error_middleware.not_found_handler);
 
-// error handler
-app.use(function (err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-  //console.log(err);
-  // render the error page
-  res.status(err.status || 500);
-  if (["login", "register", "api"].includes(req.originalUrl.split("/")[1])) {
-    res.send(err);
-  } else {
-    res.render("error");
-  }
-});
+// Error handler
+app.use(error_middleware.error_handler);
 
 module.exports = app;

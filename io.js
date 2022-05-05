@@ -1,5 +1,5 @@
 const socket = require("socket.io");
-const { passport } = require("./passport");
+const passport_middleware = require("./middlewares/passport.middleware");
 
 let io;
 
@@ -13,8 +13,8 @@ exports.init = function (server) {
     },
   });
 
-  io.use(wrap(passport.initialize()));
-  io.use(wrap(passport.authenticate("jwt", { session: false })));
+  io.use(wrap(passport_middleware.initialize()));
+  io.use(wrap(passport_middleware.authenticate("jwt", { session: false })));
 
   io.on("connection", (socket) => {
     socket.emit("authenticated");

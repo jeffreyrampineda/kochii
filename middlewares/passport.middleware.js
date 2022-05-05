@@ -1,7 +1,6 @@
-const passport = require("passport"),
-  Account = require("./models/account"),
-  JwtStrategy = require("passport-jwt").Strategy,
-  ExtractJwt = require("passport-jwt").ExtractJwt;
+const passport = require("passport");
+const Account = require("../models/account");
+const { Strategy, ExtractJwt } = require("passport-jwt")
 
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -9,7 +8,7 @@ const opts = {
 };
 
 passport.use(
-  new JwtStrategy(opts, function (jwt_payload, done) {
+  new Strategy(opts, function (jwt_payload, done) {
     Account.findOne({ _id: jwt_payload._id }).then((account) => {
       if (account) {
         return done(null, account._id);
@@ -20,6 +19,4 @@ passport.use(
   })
 );
 
-module.exports = {
-  passport,
-};
+module.exports = passport;
