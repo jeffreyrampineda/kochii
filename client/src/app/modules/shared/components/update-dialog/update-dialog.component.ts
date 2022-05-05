@@ -1,9 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { InventoryService } from 'src/app/services/inventory.service';
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { Item } from 'src/app/interfaces/item';
-import { catchError } from 'rxjs/operators';
 
 // -------------------------------------------------------------
 
@@ -12,15 +11,14 @@ import { catchError } from 'rxjs/operators';
   templateUrl: 'update-dialog.component.html',
 })
 export class UpdateDialogComponent {
-
   loading = false;
   error_messages = [];
 
   constructor(
     private inventoryService: InventoryService,
     public dialogRef: MatDialogRef<UpdateDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { }
+    @Inject(MAT_DIALOG_DATA) public data: any
+  ) {}
 
   // -------------------------------------------------------------
 
@@ -62,21 +60,17 @@ export class UpdateDialogComponent {
     const observablesGroup = [];
 
     if (this.data.isAdding) {
-      this.data.items.forEach(
-        item => {
-          observablesGroup.push(this.createItem(item));
-        }
-      );
+      this.data.items.forEach((item) => {
+        observablesGroup.push(this.createItem(item));
+      });
     } else {
-      this.data.items.forEach(
-        item => {
-          observablesGroup.push(this.updateItem(item));
-        }
-      );
+      this.data.items.forEach((item) => {
+        observablesGroup.push(this.updateItem(item));
+      });
     }
 
     forkJoin(observablesGroup).subscribe({
-      next: response => {
+      next: (response) => {
         const successful = response.reduce((acc: number, curr) => {
           // Only increment if it's not undefined.
           if (curr) {
@@ -87,13 +81,13 @@ export class UpdateDialogComponent {
         const total = observablesGroup.length;
         this.dialogRef.close({ successful, total });
       },
-      error: err => {
+      error: (err) => {
         this.error_messages = err.error.error_messages;
         this.loading = false;
       },
       complete: () => {
         this.loading = false;
-      }
+      },
     });
   }
 }

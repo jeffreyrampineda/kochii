@@ -10,6 +10,7 @@ import { AuthPageComponent } from './components/auth-page/auth-page.component';
 import { LinkGroupComponent } from './components/link-group/link-group.component';
 import { ErrorMessagesComponent } from './components/error-messages/error-messages.component';
 import { PresentationContainerComponent } from './components/presentation-container/presentation-container.component';
+import { UpdateDialogComponent } from '../shared/components/update-dialog/update-dialog.component';
 
 // Layouts
 import { FooterComponent } from './layouts/footer/footer.component';
@@ -21,6 +22,7 @@ const sharedComponents = [
   LinkGroupComponent,
   ErrorMessagesComponent,
   PresentationContainerComponent,
+  UpdateDialogComponent,
 ];
 
 @NgModule({

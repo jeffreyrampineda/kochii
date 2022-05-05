@@ -13,6 +13,6 @@
   ></kochii-error-messages>
 </div>
 <div class="float-right mt-4">
-  <button mat-button (click)="onSubmit()">Save</button>
+  <button mat-button [disabled]="loading" (click)="onSubmit()">Save</button>
   <button mat-button (click)="onNoClick()">Cancel</button>
 </div>

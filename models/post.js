@@ -16,9 +16,23 @@ const postSchema = new Schema(
     servings: { type: Number },
     ingredients: [
       {
-        name: { type: String, required: true },
-        description: { type: String },
-        quantity: { type: String, required: true },
+        name: {
+          type: String,
+          required: [true, "Name is required"],
+          minlength: [2, "Name must have a minimum length of 2"],
+          maxlength: [30, "Name must have a maximum length of 30"],
+          validate: {
+            validator: (name) => /^[a-zA-Z0-9 _-]*$/.test(name),
+            message:
+              "Name must contain an alphanumeric, space ( ), underscore (_), or dash (-)",
+          },
+        },
+        quantity: {
+          type: Number,
+          required: [true, "Quantity is required"],
+          min: [1, "Minimum quantity is 1"],
+          max: [999, "Maximum quantity is 999"],
+        },
         unit_of_measurement: { type: String },
       },
     ],

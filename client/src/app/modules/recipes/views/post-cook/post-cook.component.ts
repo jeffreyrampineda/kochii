@@ -1,35 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { RecipesService } from 'src/app/services/recipes.service';
 import { InventoryService } from 'src/app/services/inventory.service';
-import {
-  CdkDragDrop,
-  moveItemInArray,
-  transferArrayItem,
-} from '@angular/cdk/drag-drop';
 import { Post } from 'src/app/interfaces/post';
+import { UpdateDialogComponent } from '../../../shared/components/update-dialog/update-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'kochii-post-cook',
   templateUrl: './post-cook.component.html',
-  styleUrls: ['./post-cook.component.scss'],
 })
 export class PostCookComponent implements OnInit {
-  ingredients = { missing: [], found: [] };
+  ingredients = { recipe: [], inventory: [] };
   post: Post;
 
   constructor(
     private route: ActivatedRoute,
     private inventoryService: InventoryService,
-    private recipesService: RecipesService
+    private recipesService: RecipesService,
+    private dialog: MatDialog,
+    private messageService: MessageService,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.cook(this.route.snapshot.paramMap.get('id'));
+    this.startCooking(this.route.snapshot.paramMap.get('id'));
   }
 
-  cook(id: string): void {
+  startCooking(id: string): void {
     forkJoin({
       inventory: this.inventoryService.getItems(),
       post: this.recipesService.getPostById(id),
@@ -38,18 +38,24 @@ export class PostCookComponent implements OnInit {
         // Check post.ingredients against inventory.
         this.ingredients = result.post.ingredients.reduce(
           (prev, curr) => {
-            if (
-              !result.inventory.find(
-                (item) => item.name.toLowerCase() == curr.name.toLowerCase()
-              )
-            ) {
-              prev.missing.push(curr.name);
+            const found_item = result.inventory.find(
+              (item) => item.name.toLowerCase() == curr.name.toLowerCase()
+            );
+            if (!found_item) {
+              curr.found = false;
             } else {
-              prev.found.push(curr.name);
+              const item = Object.assign({ removing: true }, found_item);
+              // Set to remove curr.quantity if there is more item.quantity in inventory,
+              // else remove all item.quantity
+              item.quantity =
+                item.quantity > curr.quantity ? curr.quantity : item.quantity;
+              prev.inventory.push(item);
+              curr.found = true;
             }
+            prev.recipe.push(curr);
             return prev;
           },
-          { missing: [], found: [] }
+          { recipe: [], inventory: [] }
         );
         this.post = result.post;
       },
@@ -58,20 +64,45 @@ export class PostCookComponent implements OnInit {
     });
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
+  completeCooking(): void {
+    const items = this.ingredients.inventory.filter((item) => item.removing);
+
+    if (items.length == 0) {
+      this.messageService.notify('Cooking completed.');
+      this.router.navigate(['recipes/catalog', this.post._id]);
+      return;
     }
+
+    /** Opens the update dialog. */
+    const dialogRef = this.dialog.open(UpdateDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmation: Removing',
+        description: 'Removing the following items',
+        items: items,
+        isAdding: false,
+        option: 'inc',
+      },
+    });
+
+    // Confirmed.
+    dialogRef.afterClosed().subscribe({
+      next: (response) => {
+        if (response && response.successful) {
+          this.messageService.notify(
+            `${response.successful}/${response.total} items were successfully updated.`
+          );
+          this.router.navigate(['recipes/catalog', this.post._id]);
+        }
+      },
+      error: (err) => {
+        this.messageService.notify(err.error);
+      },
+      complete: () => {},
+    });
+  }
+
+  isMissing(): boolean {
+    return this.ingredients.recipe.some((ingredient) => !ingredient.found);
   }
 }

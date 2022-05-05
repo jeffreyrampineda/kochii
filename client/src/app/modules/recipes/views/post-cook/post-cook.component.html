@@ -13,89 +13,51 @@
 
 <div class="card shadow-sm mt-4">
   <div class="card-body">
-    <mat-stepper #stepper>
+    <mat-stepper #stepper orientation="vertical">
       <mat-step label="Ingredients">
-        <div class="row mb-5">
-          <div class="col-md-6">
-            <h2 class="display-5">Missing:</h2>
-            <div
-              cdkDropList
-              #missingList="cdkDropList"
-              [cdkDropListData]="ingredients.missing"
-              [cdkDropListConnectedTo]="[foundList]"
-              class="card shadow-sm k-drop-list"
-              (cdkDropListDropped)="drop($event)"
-            >
-              <div
-                class="k-drop-list-box"
-                *ngFor="let ingredient of ingredients.missing"
-                cdkDrag
-              >
-                {{ ingredient }}
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <h2 class="display-5">Currently have:</h2>
-            <div
-              cdkDropList
-              #foundList="cdkDropList"
-              [cdkDropListData]="ingredients.found"
-              [cdkDropListConnectedTo]="[missingList]"
-              class="card shadow-sm k-drop-list"
-              (cdkDropListDropped)="drop($event)"
-            >
-              <div
-                class="k-drop-list-box"
-                *ngFor="let ingredient of ingredients.found"
-                cdkDrag
-              >
-                {{ ingredient }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="text-center">
-          <button mat-raised-button matStepperNext color="primary">Next</button>
+        <h2 class="display-5">Ingredients:</h2>
+        <span class="text-warning" *ngIf="isMissing()">
+          Warning: missing some ingredients!
+        </span>
+        <div class="row my-5">
+          <mat-checkbox
+            class="col-6"
+            *ngFor="let ingredient of ingredients.recipe"
+            [(ngModel)]="ingredient.found"
+            >{{ ingredient.quantity }} {{ ingredient.unit_of_measurement }} -
+            {{ ingredient.name }}</mat-checkbox
+          >
         </div>
       </mat-step>
       <mat-step label="Instructions">
-        <h4 class="text-warning" *ngIf="ingredients.missing.length > 0">
-          Warning: missing some ingredients!
-        </h4>
         <h2 class="display-5">Instructions:</h2>
-        <ol class="mb-5">
+        <ol class="my-5">
           <li class="mt-2" *ngFor="let instruction of post?.instructions">
             {{ instruction }}
           </li>
         </ol>
-        <div class="text-center">
-          <button
-            class="mx-2"
-            mat-raised-button
-            matStepperPrevious
-            color="primary"
-          >
-            Back
-          </button>
-          <button class="mx-2" mat-raised-button matStepperNext color="primary">
-            Next
-          </button>
-        </div>
       </mat-step>
       <mat-step label="Done">
-        <p>Deduct ingredients...</p>
+        <h2 class="display-5">Complete:</h2>
+        <span>Removing the following ingredients from inventory </span>
+        <div class="row my-5">
+          <mat-checkbox
+            class="col-6"
+            [(ngModel)]="ingredient.removing"
+            *ngFor="let ingredient of ingredients.inventory"
+            >{{ ingredient.quantity }} {{ ingredient.unit_of_measurement }} -
+            {{ ingredient.name }}</mat-checkbox
+          >
+        </div>
         <div class="text-center">
           <button
             class="mx-2"
             mat-raised-button
-            matStepperPrevious
+            matStepperNext
             color="primary"
+            (click)="completeCooking()"
           >
-            Back
-          </button>
-          <button class="mx-2" mat-raised-button matStepperNext color="primary">
-            Done
+            Complete
           </button>
         </div>
       </mat-step>

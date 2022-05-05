@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { MessageService } from 'src/app/services/message.service';
 import { Item } from 'src/app/interfaces/item';
-import { UpdateDialogComponent } from '../update-dialog/update-dialog.component';
+import { UpdateDialogComponent } from '../../../shared/components/update-dialog/update-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({

@@ -183,25 +183,25 @@ async function createPosts() {
         {
           name: "green onions",
           description: "thinly sliced",
-          quantity: "1/2",
+          quantity: "1",
           unit_of_measurement: "cup",
         },
         {
           name: "white sugar",
           description: "",
-          quantity: "1/4",
+          quantity: "1",
           unit_of_measurement: "cup",
         },
         {
           name: "peacans",
           description: "",
-          quantity: "1/2",
+          quantity: "1",
           unit_of_measurement: "cup",
         },
         {
           name: "olive oil",
           description: "",
-          quantity: "1/3",
+          quantity: "1",
           unit_of_measurement: "cup",
         },
         {
@@ -213,13 +213,13 @@ async function createPosts() {
         {
           name: "white sugar",
           description: "",
-          quantity: "1 1/2",
+          quantity: "2",
           unit_of_measurement: "teaspoon",
         },
         {
           name: "mustard",
           description: "",
-          quantity: "1 1/2",
+          quantity: "2",
           unit_of_measurement: "teaspoon",
         },
         {
@@ -231,7 +231,7 @@ async function createPosts() {
         {
           name: "salt",
           description: "",
-          quantity: "1/2",
+          quantity: "1",
           unit_of_measurement: "teaspoon",
         },
         {
@@ -304,25 +304,25 @@ async function createPosts() {
         {
           name: "green onions",
           description: "thinly sliced",
-          quantity: "1/2",
+          quantity: "1",
           unit_of_measurement: "cup",
         },
         {
           name: "white sugar",
           description: "",
-          quantity: "1/4",
+          quantity: "1",
           unit_of_measurement: "cup",
         },
         {
           name: "peacans",
           description: "",
-          quantity: "1/2",
+          quantity: "1",
           unit_of_measurement: "cup",
         },
         {
           name: "olive oil",
           description: "",
-          quantity: "1/3",
+          quantity: "1",
           unit_of_measurement: "cup",
         },
         {
@@ -334,13 +334,13 @@ async function createPosts() {
         {
           name: "white sugar",
           description: "",
-          quantity: "1 1/2",
+          quantity: "2",
           unit_of_measurement: "teaspoon",
         },
         {
           name: "mustard",
           description: "",
-          quantity: "1 1/2",
+          quantity: "2",
           unit_of_measurement: "teaspoon",
         },
         {
@@ -352,7 +352,7 @@ async function createPosts() {
         {
           name: "salt",
           description: "",
-          quantity: "1/2",
+          quantity: "1",
           unit_of_measurement: "teaspoon",
         },
         {

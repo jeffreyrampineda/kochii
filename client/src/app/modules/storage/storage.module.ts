@@ -11,7 +11,6 @@ import { StatusPipe } from './pipes/status.pipes';
 // Components
 import { ItemEditComponent } from './components/item-edit/item-edit.component';
 import { CreateGroupDialogComponent } from './components/create-group-dialog/create-group-dialog.component';
-import { UpdateDialogComponent } from './components/update-dialog/update-dialog.component';
 
 // Views
 import { InventoryComponent } from './views/inventory/inventory.component';
@@ -26,7 +25,6 @@ import { GroceriesComponent } from './views/groceries/groceries.component';
     StatusPipe,
     ItemEditComponent,
     CreateGroupDialogComponent,
-    UpdateDialogComponent,
     InventoryComponent,
     ItemAddComponent,
     ItemUpdateComponent,
