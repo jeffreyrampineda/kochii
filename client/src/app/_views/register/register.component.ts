@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
 
     this.registerForm = this.formBuilder.group(
       {
-        accountName: [
+        username: [
           '',
           [
             Validators.required,
@@ -75,11 +75,11 @@ export class RegisterComponent implements OnInit {
     this.loading = true;
     this.error_messages = [];
 
-    const { accountName, password, email, firstName, lastName } =
+    const { username, password, email, firstName, lastName } =
       this.registerForm.value;
 
     this.accountService
-      .register({ accountName, password, email, firstName, lastName })
+      .register({ username, password, email, firstName, lastName })
       .subscribe({
         next: (response) => {
           if (response && response.token) {

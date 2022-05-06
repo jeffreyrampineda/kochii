@@ -31,17 +31,17 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/overview']);
     }
 
-    let accountName = '';
+    let username = '';
     let rememberMe = false;
 
-    if (localStorage.getItem('rememberMe_accountName') !== null) {
+    if (localStorage.getItem('rememberMe_username') !== null) {
       rememberMe = true;
-      accountName = localStorage.getItem('rememberMe_accountName');
+      username = localStorage.getItem('rememberMe_username');
     }
 
     this.loginForm = this.formBuilder.group({
-      accountName: [
-        accountName,
+      username: [
+        username,
         [
           Validators.required,
           Validators.minLength(6),
@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
 
     this.loginForm.get('rememberMe').valueChanges.subscribe((value) => {
       if (value == false) {
-        localStorage.removeItem('rememberMe_accountName');
+        localStorage.removeItem('rememberMe_username');
       }
     });
   }
@@ -75,17 +75,17 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if (this.loginForm.get('rememberMe').value) {
       localStorage.setItem(
-        'rememberMe_accountName',
-        this.loginForm.get('accountName').value
+        'rememberMe_username',
+        this.loginForm.get('username').value
       );
     }
 
     this.loading = true;
     this.error_messages = [];
 
-    const { accountName, password } = this.loginForm.value;
+    const { username, password } = this.loginForm.value;
 
-    this.accountService.login({ accountName, password }).subscribe({
+    this.accountService.login({ username, password }).subscribe({
       next: (response) => {
         if (response && response.token) {
           this.router.navigate(['/overview']);

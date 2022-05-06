@@ -53,7 +53,7 @@ const accounts = [];
 const posts = [];
 
 async function accountCreate(
-  accountName,
+  username,
   password,
   email,
   firstName,
@@ -65,7 +65,7 @@ async function accountCreate(
   const inventory_id = mongoose.Types.ObjectId();
 
   const accountDetail = {
-    accountName,
+    username,
     password,
     email,
     firstName,

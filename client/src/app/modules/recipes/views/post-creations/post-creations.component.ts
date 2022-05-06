@@ -20,7 +20,7 @@ export class PostCreationsComponent implements OnInit {
 
   getPosts(): void {
     this.recipesService
-      .getPosts(this.accountService.currentAccountValue.accountName)
+      .getPosts(this.accountService.currentAccountValue.username)
       .subscribe({
         next: (result) => {
           this.posts = result;

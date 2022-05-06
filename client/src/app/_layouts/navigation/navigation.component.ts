@@ -16,7 +16,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   private unsub = new Subject<void>();
   mobileDisplaySidebar = false;
   notifications: string[] = [];
-  accountName = '';
+  username = '';
 
   constructor(
     private accountService: AccountService,
@@ -36,7 +36,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
           if (!response.isVerified) {
             this.notifications.unshift('Check your email to verify this account');
           }
-          this.accountName = response.accountName;
+          this.username = response.username;
         }
       },
       error: () => {

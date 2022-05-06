@@ -1,6 +1,6 @@
 export interface Account {
     _id?: string;
-    accountName?: string;
+    username?: string;
     password?: string;
     email?: string;
     firstName?: string;

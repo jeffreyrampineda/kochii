@@ -39,7 +39,7 @@ describe("/api route", () => {
 
 describe("/api authentication route", () => {
   const correct_account = {
-    accountName: "correct_accountName",
+    username: "correct_username",
     password: "correct_password",
     email: "correct_email@correct.com",
     firstName: "correctFirstName",
@@ -64,7 +64,7 @@ describe("/api authentication route", () => {
   });
   test("POST /api/login with incorrect auth should give 401 status", async () => {
     const incorrect_account = {
-      accountName: "incorrect_accountName",
+      username: "incorrect_username",
       password: "incorrect_password",
     };
 

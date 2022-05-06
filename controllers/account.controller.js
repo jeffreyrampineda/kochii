@@ -11,12 +11,12 @@ const jwt = require("jsonwebtoken");
 
 /**
  * Registers the account to the database.
- * @requires { body } accountName, password, email, firstName, lastName
+ * @requires { body } username, password, email, firstName, lastName
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
 exports.account_create = async function (req, res, next) {
   try {
-    const { accountName, password, email, firstName, lastName } =
+    const { username, password, email, firstName, lastName } =
       await Validate.register(req.body);
 
     const verificationToken = cryptoRandomString({
@@ -27,7 +27,7 @@ exports.account_create = async function (req, res, next) {
     const inventory_id = mongoose.Types.ObjectId();
 
     const account = await Account.create({
-      accountName,
+      username,
       password,
       email,
       firstName,
@@ -55,7 +55,7 @@ exports.account_create = async function (req, res, next) {
 
     // 202 - Accepted
     res.status(202).json({
-      accountName,
+      username,
       email,
       firstName,
       lastName,
@@ -69,20 +69,20 @@ exports.account_create = async function (req, res, next) {
 
 /**
  * Authenticates the Account to the database.
- * @requires { body } accountName, password
+ * @requires { body } username, password
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
 exports.account_login = async function (req, res, next) {
   try {
-    const { accountName, password } = await Validate.login(req.body);
+    const { username, password } = await Validate.login(req.body);
 
-    const account = await Account.findOne({ accountName });
+    const account = await Account.findOne({ username });
 
     // Account should exist and should have matching passwords.
     if (account && account.comparePasswords(password)) {
       // 202 - Accepted.
       res.status(202).json({
-        accountName: account.accountName,
+        username: account.username,
         email: account.email,
         firstName: account.firstName,
         lastName: account.lastName,

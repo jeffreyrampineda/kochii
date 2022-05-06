@@ -8,22 +8,22 @@ const Account = require("../models/account");
  * @return { JSON } object containing all sanitized data.
  */
 async function login(body) {
-  let { accountName = "", password = "" } = body;
+  let { username = "", password = "" } = body;
   let error_messages = [];
 
-  accountName = Validator.escape(accountName);
+  username = Validator.escape(username);
   password = Validator.escape(password);
 
-  // accountName validation
-  if (Validator.isEmpty(accountName)) {
-    error_messages.push("Account name is required");
-  } else if (!Validator.isLength(accountName, { min: 6, max: 30 })) {
-    error_messages.push("Account name must be between 6 to 30 characters");
-  } else if (!/^[a-zA-Z0-9_-]*$/.test(accountName)) {
+  // username validation
+  if (Validator.isEmpty(username)) {
+    error_messages.push("Username is required");
+  } else if (!Validator.isLength(username, { min: 6, max: 30 })) {
+    error_messages.push("Username must be between 6 to 30 characters");
+  } else if (!/^[a-zA-Z0-9_-]*$/.test(username)) {
     error_messages.push(
-      "Account name must contain an alphanumeric, underscore (_), or dash (-)"
+      "Username must contain an alphanumeric, underscore (_), or dash (-)"
     );
-  } else if (!(await Account.exists({ accountName }))) {
+  } else if (!(await Account.exists({ username }))) {
     error_messages.push("Authentication failed");
   }
 
@@ -37,7 +37,7 @@ async function login(body) {
   if (error_messages.length > 0) {
     throw { status: 401, error_messages: error_messages };
   }
-  return { accountName, password };
+  return { username, password };
 }
 
 /**
@@ -48,7 +48,7 @@ async function login(body) {
  */
 async function register(body) {
   let {
-    accountName = "",
+    username = "",
     password = "",
     email = "",
     firstName = "",
@@ -56,23 +56,23 @@ async function register(body) {
   } = body;
   let error_messages = [];
 
-  accountName = Validator.escape(accountName);
+  username = Validator.escape(username);
   password = Validator.escape(password);
   email = Validator.escape(email);
   firstName = Validator.escape(firstName);
   lastName = Validator.escape(lastName);
 
-  // accountName validation
-  if (Validator.isEmpty(accountName)) {
-    error_messages.push("Account name is required");
-  } else if (!Validator.isLength(accountName, { min: 6, max: 30 })) {
-    error_messages.push("Account name must be between 6 to 30 characters");
-  } else if (!/^[a-zA-Z0-9_-]*$/.test(accountName)) {
+  // username validation
+  if (Validator.isEmpty(username)) {
+    error_messages.push("Username is required");
+  } else if (!Validator.isLength(username, { min: 6, max: 30 })) {
+    error_messages.push("Username must be between 6 to 30 characters");
+  } else if (!/^[a-zA-Z0-9_-]*$/.test(username)) {
     error_messages.push(
-      "Account name must contain an alphanumeric, underscore (_), or dash (-)"
+      "Username must contain an alphanumeric, underscore (_), or dash (-)"
     );
-  } else if (await Account.exists({ accountName })) {
-    error_messages.push("Account name already exists");
+  } else if (await Account.exists({ username })) {
+    error_messages.push("Username already exists");
   }
 
   // Password validation
@@ -108,7 +108,7 @@ async function register(body) {
   if (error_messages.length > 0) {
     throw { status: 400, error_messages: error_messages };
   }
-  return { accountName, password, email, firstName, lastName };
+  return { username, password, email, firstName, lastName };
 }
 
 /**

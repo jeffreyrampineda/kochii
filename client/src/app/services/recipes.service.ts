@@ -37,11 +37,11 @@ export class RecipesService {
     }
   }
 
-  getPosts(accountName: string = ''): Observable<Post[]> {
+  getPosts(username: string = ''): Observable<Post[]> {
     const options = {
       headers: new HttpHeaders({ Accept: 'application/json' }),
       params: {
-        accountName: accountName,
+        username: username,
       },
     };
 

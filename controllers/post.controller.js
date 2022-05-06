@@ -30,10 +30,10 @@ exports.post_create = async function (req, res, next) {
 
 // Display list of all Post.
 exports.post_list = async function (req, res) {
-  const accountName = req.query.accountName ?? "";
+  const username = req.query.username ?? "";
 
   const account = await Account.findOne(
-    { accountName: accountName },
+    { username: username },
     "_id"
   ).lean();
   const query = account ? { author: account._id } : {};
