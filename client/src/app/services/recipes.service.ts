@@ -23,21 +23,70 @@ export class RecipesService {
     private sanitizer: DomSanitizer
   ) {}
 
-  getPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(this.recipesUrl, this.options).pipe(
+  // Posts
+
+  savePost(post: Post): Observable<Post> {
+    if (post._id) {
+      this.log('updating Post');
+
+      return this.http.put<Post>(`api/recipes/${post._id}`, post, this.options);
+    } else {
+      this.log('creating Post');
+
+      return this.http.post<Post>(`api/recipes`, post, this.options);
+    }
+  }
+
+  getPosts(accountName: string = ''): Observable<Post[]> {
+    const options = {
+      headers: new HttpHeaders({ Accept: 'application/json' }),
+      params: {
+        accountName: accountName,
+      },
+    };
+
+    return this.http.get<Post[]>(this.recipesUrl, options).pipe(
       tap((_) => this.log('fetched posts')),
       map((result) => {
         result.forEach((post) => {
-          post.banner = this.sanitizer.bypassSecurityTrustUrl(
-            'data:image/jpg;base64,' + post.banner.data
-            //this.convertArrayToBase64String(post.banner.data.data)
-          );
+          if (post.banner) {
+            post.banner = this.sanitizer.bypassSecurityTrustUrl(
+              'data:image/jpg;base64,' + post.banner.data
+              //this.convertArrayToBase64String(post.banner.data.data)
+            );
+          }
           return post;
         });
         return result;
       })
     );
   }
+
+  getPostById(id: string): Observable<Post> {
+    const options = {
+      headers: new HttpHeaders({ Accept: 'application/json' }),
+    };
+    return this.http.get<Post>(`/api/recipes/${id}`, options).pipe(
+      tap((_) => this.log(`fetched post /w id=${id}`)),
+      map((result) => {
+        if (result.banner) {
+          result.banner = this.sanitizer.bypassSecurityTrustUrl(
+            'data:image/jpg;base64,' + result.banner.data
+            //this.convertArrayToBase64String(result.banner.data.data)
+          );
+        }
+        return result;
+      })
+    );
+  }
+
+  deletePost(id: string): Observable<any> {
+    this.log('deleting Post');
+
+    return this.http.delete<any>(`api/${this.recipesUrl}/${id}`, this.options);
+  }
+
+  // PostCollection
 
   createPostCollection(id: string): Observable<any> {
     return this.http
@@ -56,28 +105,14 @@ export class RecipesService {
       tap((_) => this.log('fetched postCollection')),
       map((result) => {
         result.posts.forEach((post) => {
-          post.banner = this.sanitizer.bypassSecurityTrustUrl(
-            'data:image/jpg;base64,' + post.banner.data
-            //this.convertArrayToBase64String(post.banner.data.data)
-          );
+          if (post.banner) {
+            post.banner = this.sanitizer.bypassSecurityTrustUrl(
+              'data:image/jpg;base64,' + post.banner.data
+              //this.convertArrayToBase64String(post.banner.data.data)
+            );
+          }
           return post;
         });
-        return result;
-      })
-    );
-  }
-
-  getPostById(id: string): Observable<Post> {
-    const options = {
-      headers: new HttpHeaders({ Accept: 'application/json' }),
-    };
-    return this.http.get<Post>(`/api/recipes/${id}`, options).pipe(
-      tap((_) => this.log(`fetched post /w id=${id}`)),
-      map((result) => {
-        result.banner = this.sanitizer.bypassSecurityTrustUrl(
-          'data:image/jpg;base64,' + result.banner.data
-          //this.convertArrayToBase64String(result.banner.data.data)
-        );
         return result;
       })
     );

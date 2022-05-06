@@ -34,9 +34,12 @@ const postSchema = new Schema(
           max: [999, "Maximum quantity is 999"],
         },
         unit_of_measurement: { type: String },
+        description: {
+          type: String,
+        },
       },
     ],
-    instructions: [{ type: String }],
+    instructions: [{ description: { type: String } }],
     content: { type: String },
     summary: { type: String },
     banner: { data: Buffer, contentType: String },

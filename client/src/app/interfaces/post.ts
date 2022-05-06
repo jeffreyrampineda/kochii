@@ -1,18 +1,18 @@
 export interface Post {
   _id?: string;
   title: string;
-  summary: string;
-  banner: any;
-  createdAt: Date;
-  saved?: boolean;
-  ingredients: any;
-  instructions: string[];
+  author: any;
   tags: string[];
-  likes: number;
-  dislikes: number;
   cooking_time: string;
   prep_time: string;
   calories: number;
   servings: number;
-  author: any;
+  ingredients: any;
+  instructions: any;
+  summary: string;
+  banner: any;
+  likes: number;
+  dislikes: number;
+  createdAt: Date;
+  saved?: boolean;
 }

@@ -51,6 +51,14 @@
       </kochii-link-group>
       <kochii-link-group heading="Recipes">
         <a
+          routerLink="recipes/creations"
+          routerLinkActive="active"
+          (click)="setTitle('Creations')"
+        >
+          <mat-icon aria-hidden="true">menu_book</mat-icon>
+          Creations
+        </a>
+        <a
           routerLink="recipes/catalog"
           routerLinkActive="active"
           (click)="setTitle('Catalog')"

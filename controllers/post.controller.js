@@ -1,11 +1,45 @@
 const Post = require("../models/post");
+const Account = require("../models/account");
 const PostCollection = require("../models/postcollection");
 const createError = require("http-errors");
 
+// Handle Post create.
+exports.post_create = async function (req, res, next) {
+  try {
+    const postdetail = {
+      title,
+      tags,
+      cooking_time,
+      prep_time,
+      calories,
+      servings,
+      ingredients,
+      instructions,
+      summary,
+    } = req.body;
+
+    postdetail.author = req.user;
+
+    const result = await Post.create(postdetail);
+
+    res.send(result);
+  } catch (error) {
+    next(createError(error.status ?? 500, error));
+  }
+};
+
 // Display list of all Post.
 exports.post_list = async function (req, res) {
+  const accountName = req.query.accountName ?? "";
+
+  const account = await Account.findOne(
+    { accountName: accountName },
+    "_id"
+  ).lean();
+  const query = account ? { author: account._id } : {};
+
   let posts = await Post.find(
-    {},
+    query,
     "title tags createdAt summary banner likes dislikes"
   ).sort({ createdAt: -1, title: 1 });
   if (!req.accepts("html")) {
@@ -46,12 +80,8 @@ exports.post_detail = async function (req, res, next) {
       res.send(post);
     } else {
       if (!post) {
-        res.render("message", {
-          title: "Page Not Found | Kochii",
-          message_title: "( ._.)",
-          message_subtitle: "404 Not Found",
-          message_description: "Sorry but the requested page is not found!",
-        });
+        // Not Found
+        next();
       } else {
         res.render("recipes/post_detail", {
           title: post.title + " | Recipes",
@@ -64,34 +94,56 @@ exports.post_detail = async function (req, res, next) {
   }
 };
 
-// Display Post create form on GET.
-exports.post_create_get = function (req, res) {
-  res.send("NOT IMPLEMENTED: Post create GET");
+// Handle Post update.
+exports.post_update = async function (req, res, next) {
+  try {
+    const { id } = req.params;
+    const {
+      calories,
+      cooking_time,
+      prep_time,
+      servings,
+      ingredients,
+      instructions,
+      summary,
+      tags,
+      title,
+    } = req.body;
+
+    const result = await Post.findOneAndUpdate(
+      {
+        _id: id,
+        author: req.user,
+      },
+      {
+        title,
+        tags,
+        cooking_time,
+        prep_time,
+        calories,
+        servings,
+        ingredients,
+        instructions,
+        summary,
+      },
+      { new: true, runValidators: true }
+    );
+    res.send(result);
+  } catch (error) {
+    next(createError(error.status ?? 500, error));
+  }
 };
 
-// Handle Post create on POST.
-exports.post_create_post = function (req, res) {
-  res.send("NOT IMPLEMENTED: Post create POST");
-};
+exports.post_delete = async function (req, res, next) {
+  try {
+    const { id } = req.params;
 
-// Display Post delete form on GET.
-exports.post_delete_get = function (req, res) {
-  res.send("NOT IMPLEMENTED: Post delete GET");
-};
+    const result = await Post.findOneAndDelete({ _id: id, author: req.user });
 
-// Handle Post delete on POST.
-exports.post_delete_post = function (req, res) {
-  res.send("NOT IMPLEMENTED: Post delete POST");
-};
-
-// Display Post update form on GET.
-exports.post_update_get = function (req, res) {
-  res.send("NOT IMPLEMENTED: Post update GET");
-};
-
-// Handle Post update on POST.
-exports.post_update_post = function (req, res) {
-  res.send("NOT IMPLEMENTED: Post update POST");
+    res.status(200).send({ success: 1 });
+  } catch (error) {
+    next(createError(error.status ?? 500, error));
+  }
 };
 
 /// PROTECTED ROUTES ///

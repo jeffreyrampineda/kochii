@@ -50,9 +50,19 @@ router.delete("/groups/:name", group_controller.group_delete);
 
 /// RECIPES ROUTES ///
 
+// POST request for creating Post.
+router.post("/recipes", post_controller.post_create);
+
+// DELETE request to delete Post.
+router.delete("/recipes/:id", post_controller.post_delete);
+
+// PUT request to update Post.
+router.put("/recipes/:id", post_controller.post_update);
+
+// GET /api/recipes/:id
 router.get("/recipes/:id", post_controller.post_detail);
 
-/// COLLECTIOn ROUTES ///
+/// COLLECTIONS ROUTES ///
 
 // GET /api/collection
 router.get("/collection", post_controller.postcollection_get);
