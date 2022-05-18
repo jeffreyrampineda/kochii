@@ -1,0 +1,66 @@
+<kochii-auth-page title="Login">
+  <!-- Form -->
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <!-- username -->
+    <mat-form-field class="w-100">
+      <input
+        matInput
+        formControlName="username"
+        type="text"
+        placeholder="Account"
+      />
+      <mat-error *ngIf="f.username.errors">
+        <div *ngIf="f.username.errors.required">Account is required</div>
+        <div *ngIf="f.username.errors.minlength">Minimum length is 6</div>
+        <div *ngIf="f.username.errors.maxlength">Maximum length is 30</div>
+        <div *ngIf="f.username.errors.pattern">
+          Must only be an alphanumeric, underscore (_), or dash (-)
+        </div>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Password -->
+    <mat-form-field class="w-100">
+      <input
+        matInput
+        formControlName="password"
+        type="password"
+        placeholder="Password"
+      />
+      <mat-error *ngIf="f.password.errors">
+        <div *ngIf="f.password.errors.required">Password is required</div>
+        <div *ngIf="f.password.errors.minlength">Minimum length is 6</div>
+        <div *ngIf="f.password.errors.maxlength">Maximum length is 30</div>
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Extra -->
+    <div class="d-flex justify-content-between">
+      <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
+      <a href="">Forgot password?</a>
+    </div>
+
+    <!-- Messages -->
+    <kochii-error-messages
+      [error_messages]="error_messages"
+      [loading]="loading"
+    ></kochii-error-messages>
+
+    <!-- Login button -->
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      class="btn-block my-4"
+      [disabled]="loading || loginForm.invalid"
+    >
+      Login
+    </button>
+
+    <!-- Register link -->
+    <p class="text-center">
+      Not a member? <a routerLink="/register">Register</a>
+    </p>
+  </form>
+  <!-- Form -->
+</kochii-auth-page>

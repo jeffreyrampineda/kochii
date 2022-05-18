@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  div(class="container-fluid d-flex align-items-center justify-content-center" style="height: 100vh")
+    div(class="row d-flex justify-content-center text-center")
+      div(class="col-md-12")
+        h2(class="display-1 font-weight-bold")= message_title
+        h1(class="display-4 font-weight-bold")= message_subtitle
+        hr
+        h4(class="my-4")= message_description
+        a(class='btn btn-dark k-btn k-blue-gradient shadow' href="/") Go home

@@ -1,0 +1,7 @@
+<!-- Messages -->
+<div class="text-center pt-4">
+  <p *ngIf="loading">Loading...</p>
+  <p *ngFor="let message of error_messages" class="text-danger">
+    {{ message }}
+  </p>
+</div>

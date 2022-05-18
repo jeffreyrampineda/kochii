@@ -49,7 +49,7 @@ export class AccountService {
     login(account: Account): Observable<Account> {
         this.log('logging in');
 
-        return this.http.post<Account>('/api/public/auth/login', account).pipe(
+        return this.http.post<Account>('/login', account).pipe(
             map(response => {
                 this.onAuthenticated(response);
                 return response;
@@ -64,7 +64,7 @@ export class AccountService {
     register(account: Account): Observable<Account> {
         this.log('registering');
 
-        return this.http.post<Account>('/api/public/auth/register', account).pipe(
+        return this.http.post<Account>('/register', account).pipe(
             map(response => {
                 // Login if successful.
                 this.onAuthenticated(response);

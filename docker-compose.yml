@@ -1,0 +1,25 @@
+version: "3.7" # specify docker-compose version
+
+# Define the services/ containers to be run
+services:
+  server:
+    build: # specify the directory of the Dockerfile
+      context: .
+      dockerfile: Dockerfile
+    container_name: kochii
+    ports:
+      - "3001:3001" #specify ports mapping
+    environment:
+      - PORT=${PORT}
+      - MONGODB_URI=${MONGODB_URI}
+      - SECRET_KEY=${SECRET_KEY}
+      - SENDGRID_API_KEY=${SENDGRID_API_KEY}
+      - SENDGRID_TEMPLATE_ID=${SENDGRID_TEMPLATE_ID}
+      - FDC_API_KEY=${FDC_API_KEY}
+    links:
+      - database # link this service to the database service
+
+  database: # name of the third service
+    image: mongo # specify image to build container from
+    ports:
+      - "27017:27017" # specify port forwarding

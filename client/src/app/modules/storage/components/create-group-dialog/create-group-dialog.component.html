@@ -1,0 +1,28 @@
+<h3>Add group</h3>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field class="w-100">
+    <mat-label>Group name</mat-label>
+    <input matInput formControlName="name" type="text" />
+    <mat-error *ngIf="f.name.errors">
+      <div *ngIf="f.name.errors.required">Name is required</div>
+      <div *ngIf="f.name.errors.minlength">Minimum length is 1</div>
+      <div *ngIf="f.name.errors.maxlength">Maximum length is 30</div>
+      <div *ngIf="f.name.errors.pattern">
+        Must only be an alphanumeric, space ( ), underscore (_), or dash (-)
+      </div>
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Messages -->
+  <kochii-error-messages
+    [error_messages]="error_messages"
+    [loading]="loading"
+  ></kochii-error-messages>
+
+  <div class="float-right">
+    <button mat-button type="submit" [disabled]="loading || form.invalid">
+      Save
+    </button>
+    <button mat-button type="button" (click)="onNoClick()">Cancel</button>
+  </div>
+</form>

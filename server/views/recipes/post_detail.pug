@@ -1,0 +1,45 @@
+extends ../layout
+
+block content
+  div(class="container mb-5" style="margin-top: 5rem; min-height:100vh;")
+    nav(aria-label="breadcrumb")
+      ol(class="breadcrumb bg-white")
+        li(class="breadcrumb-item") 
+          a(href="/") Home
+        li(class="breadcrumb-item") 
+          a(href="/recipes") Recipes
+        li(class="breadcrumb-item active" aria-current="page") #{post.title}
+    div(class="row")
+      div(class="col-md-8")
+        div(class="card border-0 shadow")
+          img(class="card-img-top" src= `data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
+          div(class="card-body")
+            p
+              each tag, index in post.tags
+                a(href="#") #{tag}
+                if index < post.tags.length - 1
+                  i(class="bi bi-dot")
+            h1(class="display-4 font-weight-bold") #{post.title}
+            p(class="text-muted") #{post.createdAt_formatted} 
+              span(class="float-right")
+                button(class="btn" style="padding-top: 0; padding-bottom:0;") #[i(class="bi bi-hand-thumbs-up")] #{post.likes} 
+                button(class="btn" style="padding-top: 0; padding-bottom:0;") #[i(class="bi bi-hand-thumbs-down")] #{post.dislikes}
+            hr
+            div(class="d-flex justify-content-between mb-5")
+              span Cooking Time: #[span(class="font-weight-bold") #{post.cooking_time}]
+              span Preparation Time: #[span(class="font-weight-bold") #{post.prep_time}]
+              span Calories: #[span(class="font-weight-bold") #{post.calories} kcal]
+              span Servings: #[span(class="font-weight-bold") #{post.servings}]
+            h4(class="font-weight-bold") Ingredients
+            div(class="row m-3")
+              each ingredient in post.ingredients
+                div(class="col-md-6") #{ingredient.quantity} #{ingredient.unit_of_measurement} - #{ingredient.name}, #{ingredient.description}
+            h4(class="font-weight-bold") Instructions 
+            ol(class="mb-5 k-instructions")
+              each instruction in post.instructions 
+                li(class="mt-3") #{instruction.description}
+            p #{post.content}
+      div(class="col-md-4")
+        h2 #{post.author.full_name_formatted}
+        p(class="lead") Recipe Author
+        p #{post.summary}

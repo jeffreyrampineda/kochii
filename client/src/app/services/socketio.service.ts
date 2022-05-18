@@ -5,25 +5,24 @@ import io from 'socket.io-client';
 import { MessageService } from './message.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SocketioService {
-
   private socket;
   private token = '';
 
   constructor(
     private messageService: MessageService,
     private accountService: AccountService
-  ) { }
+  ) {}
 
   initSocket(): void {
     if (this.accountService.isLoggedIn) {
       this.token = this.accountService.currentAccountValue.token;
     }
     this.socket = io(environment.socket_endpoint, {
-      auth: {
-        token: this.token
+      extraHeaders: {
+        Authorization: `Bearer ${this.token}`,
       },
     });
     this.socket.on('authenticated', () => {
@@ -49,7 +48,7 @@ export class SocketioService {
    * Adds the message to the messageService for logging.
    * @param message - The message to log.
    */
-   private log(message: string) {
+  private log(message: string) {
     this.messageService.add(`SocketIoService: ${message}`);
   }
 }
