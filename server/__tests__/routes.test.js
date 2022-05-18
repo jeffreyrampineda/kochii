@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 // Set up database connection before any tests
 beforeAll(async () => {
-  await mongoose.connect(process.env.MONGO_URL, {
+  await mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

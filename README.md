@@ -59,11 +59,15 @@ $ npm run util:dropdb <uri_string>
 
 Set the following environment variables:
 
+* PORT=your_port
+
 * MONGODB_URI=your_uri_string
 
 * SECRET_KEY=your_secret_key
 
 * SENDGRID_API_KEY=your_api_key
+
+* SENDGRID_TEMPLATE_ID=your_template_id
 
 * FDC_API_KEY=your_api_key
 
