@@ -1,0 +1,13 @@
+node_modules
+npm-debug.log
+
+/client/dist
+/client/node_modules
+/client/npm-debug.log
+/client/README.md
+
+/server/node_modules
+/server/npm-debug.log
+/server/README.md
+/server/globalConfig.json
+/server/*.env

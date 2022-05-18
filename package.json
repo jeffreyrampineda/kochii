@@ -2,8 +2,8 @@
   "name": "kochii",
   "version": "0.0.3",
   "description": "Assists and encourages individuals for a manageable meal preparation lifestyle",
-  "main": "index.js",
   "scripts": {
+    "start": "cd server && npm start",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
