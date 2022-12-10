@@ -4,11 +4,11 @@
   "description": "Assists and encourages individuals for a manageable meal preparation lifestyle",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "DEBUG=kochii:* nodemon index.js",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development DEBUG=kochii:* nodemon index.js",
     "util:dropdb": "node util/scripts/dropdb",
     "util:populatedb": "node util/scripts/populatedb",
-    "test": "jest --silent --forceExit --detectOpenHandles --maxWorkers=10"
+    "test": "jest"
   },
   "keywords": [],
   "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",

@@ -5,7 +5,7 @@ block content
     h1(class="display-4 font-weight-bold") Recipes
     div(Class="row")
       each post in posts
-        div(class="col-sm col-md-4")
+        div(class="col-sm col-md-4 k-card-hover")
           div(class="card shadow border-0")
             img(class="card-img-top" src= `data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
             div(class="card-body text-center")
