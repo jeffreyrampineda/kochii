@@ -1,15 +1,16 @@
 const mongoose = require("mongoose");
+const debug = require("debug")("kochii:server-database");
 
-mongoose.connection.on(
-  "error",
-  console.error.bind(console, "mongodb: connection error")
-);
-mongoose.connection.once("open", () =>
-  console.log("mongodb: connection established")
-);
+const connectionString = process.env.MONGODB_URI;
+
+mongoose.set("strictQuery", false);
+
+mongoose.connection.on("error", () => debug("Connection established"));
+mongoose.connection.once("open", () => debug("Connection established"));
 
 exports.init = function () {
-  mongoose.connect(process.env.MONGODB_URI, {
+  debug("Connecting...");
+  mongoose.connect(connectionString, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
