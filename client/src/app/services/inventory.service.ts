@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of, Subject } from 'rxjs';
-import { tap, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import {
+  tap,
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+} from 'rxjs/operators';
 
 import { MessageService } from './message.service';
 import { Item } from 'src/app/interfaces/item';
@@ -10,15 +16,14 @@ import { SocketioService } from './socketio.service';
 // -------------------------------------------------------------
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
 @Injectable({ providedIn: 'root' })
 export class InventoryService {
-
-  private inventoryUrl = '/api/inventory';
-  private groupsUrl = '/api/groups';
-  private queryUrl = '/search/';
+  private inventoryUrl = `${environment.domain}/api/inventory`;
+  private groupsUrl = `${environment.domain}/api/groups`;
+  private queryUrl = `${environment.domain}/search/`;
   private localInv: Item[] = [];
   private localGroups: string[] = [];
   private isSocketListenerSet = false;
@@ -30,8 +35,8 @@ export class InventoryService {
   constructor(
     private http: HttpClient,
     private messageService: MessageService,
-    private socketioService: SocketioService,
-  ) { }
+    private socketioService: SocketioService
+  ) {}
 
   // -------------------------------------------------------------
 
@@ -53,34 +58,35 @@ export class InventoryService {
 
   /** Get all items. */
   getItems(group: string = ''): Observable<Item[]> {
-    return new Observable(obs => {
+    return new Observable((obs) => {
       this.selectedGroup = group;
       if (this.localInv.length !== 0) {
         let filtered = this.localInv;
         if (group !== '') {
-          filtered = this.localInv.filter(i => i.group === group);
+          filtered = this.localInv.filter((i) => i.group === group);
         }
         obs.next(filtered);
         return obs.complete();
       }
-      this.http.get<Item[]>(this.inventoryUrl).pipe(
-        tap(_ => this.log('fetched inventory')),
-      ).subscribe({
-        next: response => {
-          this.localInv = response;
-          let filtered = this.localInv;
-          if (group !== '') {
-            filtered = this.localInv.filter(i => i.group === group);
-          }
-          obs.next(filtered);
-        },
-        error: err => {
-          obs.error(err);
-        },
-        complete: () => {
-          obs.complete();
-        }
-      });
+      this.http
+        .get<Item[]>(this.inventoryUrl)
+        .pipe(tap((_) => this.log('fetched inventory')))
+        .subscribe({
+          next: (response) => {
+            this.localInv = response;
+            let filtered = this.localInv;
+            if (group !== '') {
+              filtered = this.localInv.filter((i) => i.group === group);
+            }
+            obs.next(filtered);
+          },
+          error: (err) => {
+            obs.error(err);
+          },
+          complete: () => {
+            obs.complete();
+          },
+        });
     });
   }
 
@@ -102,13 +108,12 @@ export class InventoryService {
     const url = `${this.inventoryUrl}/names`;
     const options = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-      params: params
+      params: params,
     };
 
-    return this.http.get<Item[]>(url, options)
-      .pipe(
-        tap(_ => this.log(`fetched items names=${names}`)),
-      );
+    return this.http
+      .get<Item[]>(url, options)
+      .pipe(tap((_) => this.log(`fetched items names=${names}`)));
   }
 
   getItemsAddedBetween(startDate, endDate): Observable<Item[]> {
@@ -118,8 +123,8 @@ export class InventoryService {
       headers: httpOptions.headers,
       params: {
         startDate,
-        endDate
-      }
+        endDate,
+      },
     };
 
     return this.http.get<Item[]>(url, options);
@@ -153,12 +158,11 @@ export class InventoryService {
    * @param terms - The terms used to search.
    */
   search(terms: Observable<string>): Observable<Item[]> {
-    return terms
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        switchMap(term => this.searchEntries(term))
-      );
+    return terms.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((term) => this.searchEntries(term))
+    );
   }
 
   /**
@@ -182,7 +186,7 @@ export class InventoryService {
   /** Returns the size of the specified group. */
   getGroupSize(group: string = ''): number {
     if (group !== '') {
-      return this.localInv.filter(i => i.group === group).length;
+      return this.localInv.filter((i) => i.group === group).length;
     }
     return this.localInv.length;
   }
@@ -191,25 +195,26 @@ export class InventoryService {
   getGroups(): Observable<string[]> {
     const url = `${this.groupsUrl}`;
 
-    return new Observable(obs => {
+    return new Observable((obs) => {
       if (this.localGroups.length !== 0) {
         obs.next(this.localGroups);
         return obs.complete();
       }
-      this.http.get<string[]>(url).pipe(
-        tap(_ => this.log('fetched groups')),
-      ).subscribe({
-        next: response => {
-          this.localGroups = response;
-          obs.next(this.localGroups);
-        },
-        error: err => {
-          obs.error(err);
-        },
-        complete: () => {
-          obs.complete();
-        }
-      });
+      this.http
+        .get<string[]>(url)
+        .pipe(tap((_) => this.log('fetched groups')))
+        .subscribe({
+          next: (response) => {
+            this.localGroups = response;
+            obs.next(this.localGroups);
+          },
+          error: (err) => {
+            obs.error(err);
+          },
+          complete: () => {
+            obs.complete();
+          },
+        });
     });
   }
 
@@ -248,7 +253,7 @@ export class InventoryService {
   onItemUpdate() {
     this.socketioService.getSocket().on('item_update', (item) => {
       this.log(`updated - item w/ name=${item.name}, id=${item._id}`);
-      const ite = this.localInv.find(i => i._id === item._id);
+      const ite = this.localInv.find((i) => i._id === item._id);
 
       ite.name = item.name;
       ite.quantity = item.quantity;
@@ -265,8 +270,8 @@ export class InventoryService {
     this.socketioService.getSocket().on('item_updateMany', (items: Item[]) => {
       if (items.length !== 0) {
         this.log('updated - many item');
-        items.forEach(i => {
-          const ite = this.localInv.find(it => it._id === i._id);
+        items.forEach((i) => {
+          const ite = this.localInv.find((it) => it._id === i._id);
 
           ite.group = i.group;
         });
@@ -278,7 +283,7 @@ export class InventoryService {
   onItemDelete() {
     this.socketioService.getSocket().on('item_delete', (id) => {
       this.log(`deleted - item /w id=${id}`);
-      this.localInv = this.localInv.filter(i => i._id !== id);
+      this.localInv = this.localInv.filter((i) => i._id !== id);
       this.inventoryUpdate.next();
     });
   }
@@ -294,7 +299,7 @@ export class InventoryService {
   onGroupDelete() {
     this.socketioService.getSocket().on('group_delete', (group: string) => {
       this.log(`deleted - group /w name=${group}`);
-      this.localGroups = this.localGroups.filter(g => g !== group);
+      this.localGroups = this.localGroups.filter((g) => g !== group);
       this.groupsUpdate.next();
     });
   }

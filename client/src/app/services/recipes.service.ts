@@ -1,4 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map, Observable, tap } from 'rxjs';
@@ -10,8 +11,8 @@ import { MessageService } from './message.service';
   providedIn: 'root',
 })
 export class RecipesService {
-  private recipesUrl = '/recipes';
-  private collectionUrl = '/api/collection';
+  private recipesUrl = `${environment.domain}/recipes`;
+  private collectionUrl = `${environment.domain}/api/collection`;
 
   private options = {
     headers: new HttpHeaders({ Accept: 'application/json' }),

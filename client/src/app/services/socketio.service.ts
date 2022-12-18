@@ -10,6 +10,7 @@ import { MessageService } from './message.service';
 export class SocketioService {
   private socket;
   private token = '';
+  private socketUrl = `${environment.domain}/`;
 
   constructor(
     private messageService: MessageService,
@@ -20,7 +21,7 @@ export class SocketioService {
     if (this.accountService.isLoggedIn) {
       this.token = this.accountService.currentAccountValue.token;
     }
-    this.socket = io(environment.socket_endpoint, {
+    this.socket = io(this.socketUrl, {
       extraHeaders: {
         Authorization: `Bearer ${this.token}`,
       },

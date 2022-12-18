@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  socket_endpoint: 'http://localhost:3001',
+  domain: 'http://localhost:3001',
 };
 
 /*
