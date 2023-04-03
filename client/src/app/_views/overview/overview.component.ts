@@ -212,6 +212,12 @@ export class OverviewComponent implements OnInit {
       ],
     };
 
+    const start = new Date(
+      this.today.getFullYear(),
+      this.today.getMonth(),
+      this.today.getDate() - 6
+    );
+
     this.lineChart = new Chart('chart-line', {
       type: 'line',
       data: data,
