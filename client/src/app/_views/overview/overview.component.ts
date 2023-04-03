@@ -4,7 +4,7 @@ import 'chartjs-adapter-luxon';
 import { ActivityService } from 'src/app/services/activity.service';
 import { Activity } from 'src/app/interfaces/activity';
 import { InventoryService } from 'src/app/services/inventory.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 
 interface ChartData {
   x: Date;

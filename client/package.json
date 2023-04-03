@@ -14,16 +14,16 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "~14.3.0",
-    "@angular/cdk": "^14.2.7",
-    "@angular/common": "~14.3.0",
-    "@angular/compiler": "~14.3.0",
-    "@angular/core": "~14.3.0",
-    "@angular/forms": "~14.3.0",
-    "@angular/material": "^14.2.7",
-    "@angular/platform-browser": "~14.3.0",
-    "@angular/platform-browser-dynamic": "~14.3.0",
-    "@angular/router": "~14.3.0",
+    "@angular/animations": "~15.2.5",
+    "@angular/cdk": "^15.2.5",
+    "@angular/common": "~15.2.5",
+    "@angular/compiler": "~15.2.5",
+    "@angular/core": "~15.2.5",
+    "@angular/forms": "~15.2.5",
+    "@angular/material": "^15.2.5",
+    "@angular/platform-browser": "~15.2.5",
+    "@angular/platform-browser-dynamic": "~15.2.5",
+    "@angular/router": "~15.2.5",
     "chart.js": "^3.7.1",
     "chartjs-adapter-luxon": "^1.1.0",
     "luxon": "^2.5.2",
@@ -33,9 +33,9 @@
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~14.2.11",
-    "@angular/cli": "~14.2.11",
-    "@angular/compiler-cli": "~14.3.0",
+    "@angular-devkit/build-angular": "~15.2.4",
+    "@angular/cli": "~15.2.4",
+    "@angular/compiler-cli": "~15.2.5",
     "@types/jasmine": "~3.10.0",
     "@types/node": "^12.11.1",
     "jasmine-core": "~4.0.0",
@@ -44,6 +44,6 @@
     "karma-coverage": "~2.1.0",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
-    "typescript": "~4.6.2"
+    "typescript": "~4.9.5"
   }
 }

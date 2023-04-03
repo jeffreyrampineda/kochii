@@ -5,7 +5,7 @@ import { InventoryService } from 'src/app/services/inventory.service';
 import { MessageService } from 'src/app/services/message.service';
 import { Item } from 'src/app/interfaces/item';
 import { UpdateDialogComponent } from '../../../shared/components/update-dialog/update-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 
 @Component({
   selector: 'kochii-item-edit',
