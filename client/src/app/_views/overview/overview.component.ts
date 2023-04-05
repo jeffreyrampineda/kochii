@@ -237,12 +237,12 @@ export class OverviewComponent implements OnInit {
             type: 'time',
             time: {
               unit: 'day',
-              stepSize: 1,
+              //stepSize: 1,
               tooltipFormat: 'MMMM dd',
               displayFormats: {
                 day: 'MMM dd',
               },
-            },
+            }, 
             stacked: true,
             grid: {
               display: false,

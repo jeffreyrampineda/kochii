@@ -23,8 +23,8 @@ exports.account_create = async function (req, res, next) {
       length: 16,
       type: "url-safe",
     });
-    const activity_id = mongoose.Types.ObjectId();
-    const inventory_id = mongoose.Types.ObjectId();
+    const activity_id = new mongoose.Types.ObjectId();
+    const inventory_id = new mongoose.Types.ObjectId();
 
     const account = await Account.create({
       username,
