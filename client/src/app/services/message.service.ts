@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition } from '@angular/material/legacy-snack-bar';
 
 // -------------------------------------------------------------
 

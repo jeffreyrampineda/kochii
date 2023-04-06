@@ -4,7 +4,7 @@ import 'chartjs-adapter-luxon';
 import { ActivityService } from 'src/app/services/activity.service';
 import { Activity } from 'src/app/interfaces/activity';
 import { InventoryService } from 'src/app/services/inventory.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 
 interface ChartData {
   x: Date;
@@ -237,12 +237,12 @@ export class OverviewComponent implements OnInit {
             type: 'time',
             time: {
               unit: 'day',
-              stepSize: 1,
+              //stepSize: 1,
               tooltipFormat: 'MMMM dd',
               displayFormats: {
                 day: 'MMM dd',
               },
-            },
+            }, 
             stacked: true,
             grid: {
               display: false,

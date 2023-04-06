@@ -152,7 +152,7 @@ exports.item_detail = async function (req, res, next) {
     const result = await Inventory.aggregate([
       { $match: { owner: req.user } },
       { $unwind: "$items" },
-      { $match: { "items._id": ObjectId(_id) } },
+      { $match: { "items._id": new ObjectId(_id) } },
       { $project: itemProject },
     ]);
     res.status(200).json(result[0]);

@@ -5,7 +5,7 @@ import { RecipesService } from 'src/app/services/recipes.service';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { Post } from 'src/app/interfaces/post';
 import { UpdateDialogComponent } from '../../../shared/components/update-dialog/update-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { MessageService } from 'src/app/services/message.service';
 
 @Component({

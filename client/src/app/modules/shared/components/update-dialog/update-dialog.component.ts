@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { InventoryService } from 'src/app/services/inventory.service';
 import { forkJoin, Observable } from 'rxjs';
 import { Item } from 'src/app/interfaces/item';

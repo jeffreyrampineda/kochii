@@ -15,6 +15,6 @@
   "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^7.2.0"
+    "concurrently": "^7.6.0"
   }
 }

@@ -61,8 +61,8 @@ async function accountCreate(
   isVerified,
   verificationToken
 ) {
-  const activity_id = mongoose.Types.ObjectId();
-  const inventory_id = mongoose.Types.ObjectId();
+  const activity_id = new mongoose.Types.ObjectId();
+  const inventory_id = new mongoose.Types.ObjectId();
 
   const accountDetail = {
     username,
