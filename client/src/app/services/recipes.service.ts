@@ -11,7 +11,7 @@ import { MessageService } from './message.service';
   providedIn: 'root',
 })
 export class RecipesService {
-  private recipesUrl = `${environment.domain}/recipes`;
+  private recipesUrl = `${environment.domain}/api/recipes`;
   private collectionUrl = `${environment.domain}/api/collection`;
 
   private options = {
@@ -30,11 +30,11 @@ export class RecipesService {
     if (post._id) {
       this.log('updating Post');
 
-      return this.http.put<Post>(`api/recipes/${post._id}`, post, this.options);
+      return this.http.put<Post>(`${this.recipesUrl}/${post._id}`, post, this.options);
     } else {
       this.log('creating Post');
 
-      return this.http.post<Post>(`api/recipes`, post, this.options);
+      return this.http.post<Post>(`${this.recipesUrl}`, post, this.options);
     }
   }
 
@@ -67,7 +67,7 @@ export class RecipesService {
     const options = {
       headers: new HttpHeaders({ Accept: 'application/json' }),
     };
-    return this.http.get<Post>(`/api/recipes/${id}`, options).pipe(
+    return this.http.get<Post>(`${this.recipesUrl}/${id}`, options).pipe(
       tap((_) => this.log(`fetched post /w id=${id}`)),
       map((result) => {
         if (result.banner) {
@@ -84,7 +84,7 @@ export class RecipesService {
   deletePost(id: string): Observable<any> {
     this.log('deleting Post');
 
-    return this.http.delete<any>(`api/${this.recipesUrl}/${id}`, this.options);
+    return this.http.delete<any>(`${this.recipesUrl}/${id}`, this.options);
   }
 
   // PostCollection

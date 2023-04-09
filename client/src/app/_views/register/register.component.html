@@ -10,9 +10,7 @@
         placeholder="Username"
       />
       <mat-error *ngIf="f.username.errors">
-        <div *ngIf="f.username.errors.required">
-          Username is required
-        </div>
+        <div *ngIf="f.username.errors.required">Username is required</div>
         <div *ngIf="f.username.errors.minlength">Minimum length is 6</div>
         <div *ngIf="f.username.errors.maxlength">Maximum length is 30</div>
         <div *ngIf="f.username.errors.pattern">

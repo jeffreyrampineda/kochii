@@ -1,4 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AccountService } from 'src/app/services/account.service';
@@ -8,12 +15,14 @@ import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'kochii-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit, OnDestroy {
   @ViewChild('sidenav', { static: true }) sidenav: ElementRef;
 
   private unsub = new Subject<void>();
+
+  domainUrl = environment.domain;
   mobileDisplaySidebar = false;
   notifications: string[] = [];
   username = '';
@@ -21,30 +30,26 @@ export class NavigationComponent implements OnInit, OnDestroy {
   constructor(
     private accountService: AccountService,
     private socketioService: SocketioService,
-    private titleService: Title,
-  ) {
-
-  }
+    private titleService: Title
+  ) {}
 
   ngOnInit() {
     this.setTitle('Overview');
     this.socketioService.initSocket();
 
     this.accountService.currentAccount.pipe(takeUntil(this.unsub)).subscribe({
-      next: response => {
+      next: (response) => {
         if (response) {
           if (!response.isVerified) {
-            this.notifications.unshift('Check your email to verify this account');
+            this.notifications.unshift(
+              'Check your email to verify this account'
+            );
           }
           this.username = response.username;
         }
       },
-      error: () => {
-
-      },
-      complete: () => {
-
-      }
+      error: () => {},
+      complete: () => {},
     });
   }
 

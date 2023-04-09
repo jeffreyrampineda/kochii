@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Component, Input } from '@angular/core';
 
 @Component({
@@ -6,4 +7,6 @@ import { Component, Input } from '@angular/core';
 })
 export class AuthPageComponent {
   @Input() title;
+
+  domainUrl = environment.domain;
 }
