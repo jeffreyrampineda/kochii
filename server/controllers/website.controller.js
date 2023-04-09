@@ -1,16 +1,28 @@
+const debug = require("debug")("kochii:server-website.controller");
 const Post = require("../models/post");
 const sendContactEmail =
   require("../util/external_api.service").sendContactEmail;
 
-exports.website_index = async function (req, res) {
-  const latest_posts = await Post.find(
-    {},
-    "title tags createdAt summary banner author"
-  )
-    .sort({ createdAt: -1 })
-    .populate("author", "firstName lastName")
-    .limit(2);
-  res.render("index", { title: "Personal Inventory | Kochii", latest_posts });
+exports.website_index = async function (req, res, next) {
+  try {
+    const latest_posts = await Post.find(
+      {},
+      "title tags createdAt summary banner author"
+    )
+      .sort({ createdAt: -1 })
+      .populate("author", "firstName lastName")
+      .limit(2);
+    res.render("index", { title: "Personal Inventory | Kochii", latest_posts });
+  } catch (error) {
+    debug("Error");
+    res.locals.render_view = "index";
+    res.locals.render_data = {
+      title: "Personal Inventory | Kochii",
+      latest_posts: [],
+    };
+
+    next(error);
+  }
 };
 
 exports.website_about_us = function (req, res) {
@@ -34,12 +46,21 @@ exports.website_sent_get = function (req, res) {
 };
 
 // POST /send request to send email
-exports.website_send_post = async function (req, res) {
+exports.website_send_post = async function (req, res, next) {
   try {
     const { from_email, from_name, body } = req.body;
     sendContactEmail(from_email, from_name, body);
     res.redirect("/sent");
   } catch (error) {
-    res.status(400).json(error);
+    debug("Error");
+    res.locals.render_view = "message";
+    res.locals.render_data = {
+      title: "Error | Kochii",
+      message_title: "( ._.)",
+      message_subtitle: "Error Sending Email",
+      message_description: "Something went wrong",
+    };
+
+    next(error);
   }
 };

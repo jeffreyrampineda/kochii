@@ -1,9 +1,9 @@
+const debug = require("debug")("kochii:server-inventory.controller");
 const Inventory = require("../models/inventory");
 const ObjectId = require("mongoose").Types.ObjectId;
 const activity_controller = require("../controllers/activity.controller");
 const Validate = require("../validators/item");
 const searchRawFood = require("../util/external_api.service").searchRawFood;
-const createError = require("http-errors");
 const io = require("../io");
 
 const itemProject = {
@@ -60,7 +60,9 @@ exports.item_list = async function (req, res, next) {
 
     res.status(200).json(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -78,7 +80,9 @@ exports.item_list_search = async function (req, res, next) {
     const result = i.items.filter((item) => re.test(item.name));
     res.status(200).json(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -109,7 +113,9 @@ exports.item_list_between_dates = async function (req, res, next) {
     ]);
     res.status(200).json(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -126,7 +132,9 @@ exports.item_list_names = async function (req, res, next) {
     const result = i.items.filter((item) => refined.includes(item.name));
     res.status(200).json(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -137,7 +145,9 @@ exports.item_nutrition = async function (req, res, next) {
     const result = await searchRawFood(query);
     res.status(200).json(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -157,7 +167,9 @@ exports.item_detail = async function (req, res, next) {
     ]);
     res.status(200).json(result[0]);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -211,7 +223,9 @@ exports.item_create = async function (req, res, next) {
       res.status(200).json(result.ok);
     }
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -352,7 +366,9 @@ exports.item_update = async function (req, res, next) {
       res.status(200).json(result.ok);
     }
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -368,9 +384,13 @@ exports.item_delete = async function (req, res, next) {
     const result = { ok: await InventoryService.deleteItemById(req.user, _id) };
     res.status(200).json(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
+
+// -------------------------------------------------------------
 
 /**
  * Deletes an item by _id. If successful, emits 'item_delete' to the

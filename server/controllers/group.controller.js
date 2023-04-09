@@ -1,7 +1,7 @@
+const debug = require("debug")("kochii:server-group.controller");
 const Inventory = require("../models/inventory");
 const activity_controller = require("../controllers/activity.controller");
 const Validate = require("../validators/group");
-const createError = require("http-errors");
 const io = require("../io");
 
 /**
@@ -10,13 +10,12 @@ const io = require("../io");
  */
 exports.group_list = async function (req, res, next) {
   try {
-    const inventory = await Inventory.findOne(
-      { owner: req.user },
-      "groups"
-    );
+    const inventory = await Inventory.findOne({ owner: req.user }, "groups");
     res.status(200).send(inventory.groups);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -49,7 +48,9 @@ exports.group_create = async function (req, res, next) {
       res.status(200).json({ name });
     }
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -102,6 +103,8 @@ exports.group_delete = async function (req, res, next) {
     });
     res.status(200).json({ name });
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };

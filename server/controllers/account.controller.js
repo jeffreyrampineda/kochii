@@ -1,3 +1,4 @@
+const debug = require("debug")("kochii:server-activity.controller");
 const Account = require("../models/account");
 const mongoose = require("mongoose");
 const inventory_controller = require("../controllers/inventory.controller");
@@ -6,7 +7,6 @@ const cryptoRandomString = require("crypto-random-string");
 const sendVerificationEmail =
   require("../util/external_api.service").sendVerificationEmail;
 const Validate = require("../validators/account");
-const createError = require("http-errors");
 const jwt = require("jsonwebtoken");
 
 /**
@@ -63,7 +63,9 @@ exports.account_create = async function (req, res, next) {
       isVerified: account.isVerified,
     });
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -93,7 +95,9 @@ exports.account_login = async function (req, res, next) {
       throw { status: 401, error_messages: ["Authentication failed"] };
     }
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -121,7 +125,9 @@ exports.account_verify = async function (req, res, next) {
 
     res.status(202).send(response);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -141,7 +147,9 @@ exports.account_update = async function (req, res, next) {
 
     res.status(200).json(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -166,7 +174,9 @@ exports.account_delete = async function (req, res, next) {
 
     res.status(200).json(result.deletedCount);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
