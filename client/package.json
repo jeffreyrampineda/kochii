@@ -28,7 +28,7 @@
     "chartjs-adapter-luxon": "^1.1.0",
     "luxon": "^2.5.2",
     "rxjs": "~7.5.0",
-    "socket.io-client": "^4.4.1",
+    "socket.io-client": "^4.6.1",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
