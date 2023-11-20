@@ -11,10 +11,7 @@ mongoose.connection.once("open", () => debug("Connection established."));
 exports.init = async function () {
   try {
     debug("Connecting...");
-    await mongoose.connect(connectionString, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(connectionString);
   } catch (error) {
     debug(error);
   }

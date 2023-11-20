@@ -3,7 +3,7 @@ const Account = require("../models/account");
 const mongoose = require("mongoose");
 const inventory_controller = require("../controllers/inventory.controller");
 const activity_controller = require("../controllers/activity.controller");
-const cryptoRandomString = require("crypto-random-string");
+//const cryptoRandomString = require("crypto-random-string");
 const sendVerificationEmail =
   require("../util/external_api.service").sendVerificationEmail;
 const Validate = require("../validators/account");
@@ -19,10 +19,12 @@ exports.account_create = async function (req, res, next) {
     const { username, password, email, firstName, lastName } =
       await Validate.register(req.body);
 
-    const verificationToken = cryptoRandomString({
-      length: 16,
-      type: "url-safe",
-    });
+    // TODO: cryptoRandomString(...);
+    //const verificationToken = cryptoRandomString({
+    //  length: 16,
+    //  type: "url-safe",
+    //});
+    const verificationToken = "temp";
     const activity_id = new mongoose.Types.ObjectId();
     const inventory_id = new mongoose.Types.ObjectId();
 

@@ -1,8 +1,8 @@
 const axios = require("axios");
-const sgMail = require("@sendgrid/mail");
+//const sgMail = require("@sendgrid/mail");
 const Validator = require("validator");
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+//sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function searchRawFood(query) {
   try {
@@ -45,11 +45,12 @@ function sendVerificationEmail(to, verificationToken) {
     },
     template_id: template_id,
   };
-  sgMail.send(msg, false, (error, result) => {
-    if (error) {
-      console.log(error);
-    }
-  });
+  // TODO: sendgrid.send(...);
+  //sgMail.send(msg, false, (error, result) => {
+  //  if (error) {
+  //    console.log(error);
+  //  }
+  //});
 }
 
 async function sendContactEmail(from_email, from_name, body) {
