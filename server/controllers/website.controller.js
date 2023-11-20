@@ -11,7 +11,7 @@ exports.website_index = async function (req, res, next) {
     )
       .sort({ createdAt: -1 })
       .populate("author", "firstName lastName")
-      .limit(2);
+      .limit(6);
     res.render("index", { title: "Personal Inventory | Kochii", latest_posts });
   } catch (error) {
     debug("Error");
@@ -49,8 +49,13 @@ exports.website_sent_get = function (req, res) {
 exports.website_send_post = async function (req, res, next) {
   try {
     const { from_email, from_name, body } = req.body;
-    sendContactEmail(from_email, from_name, body);
-    res.redirect("/sent");
+    const response = await sendContactEmail(from_email, from_name, body);
+
+    if (response.data.success) {
+      res.redirect("/sent");
+    } else {
+      throw { status: 500, error_messages: ["Something went wrong"] };
+    }
   } catch (error) {
     debug("Error");
     res.locals.render_view = "message";

@@ -50,6 +50,9 @@ router.delete("/groups/:name", group_controller.group_delete);
 
 /// RECIPES ROUTES ///
 
+// GET request for list of all Post.
+router.get("/recipes", post_controller.post_list);
+
 // POST request for creating Post.
 router.post("/recipes", post_controller.post_create);
 

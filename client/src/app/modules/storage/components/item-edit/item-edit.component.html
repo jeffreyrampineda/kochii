@@ -198,13 +198,21 @@
           <!--Image-->
           <div class="card shadow-sm">
             <div class="card-body">
-              <h6 class="card-title">{{ firstFood.description }} (Testing)</h6>
-              <ul class="list-group list-group-flush">
+              <!-- <h6 class="card-title">{{ firstFood.description }} (Testing)</h6> -->
+              <mat-form-field appearance="fill" *ngIf="similarFoods.length > 0">
+                <mat-label>Food</mat-label>
+                <mat-select [(ngModel)]="selectedSimilarFood" name="food">
+                  <mat-option *ngFor="let food of similarFoods" [value]="food">
+                    {{food.description}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <ul class="list-group list-group-flush" *ngIf="selectedSimilarFood.foodNutrients.length > 0">
                 <li
                   class="list-group-item"
                   *ngFor="
-                    let n of firstFood.foodNutrients
-                      ? firstFood.foodNutrients.slice(0, 12)
+                    let n of selectedSimilarFood.foodNutrients
+                      ? selectedSimilarFood.foodNutrients.slice(0, 12)
                       : []
                   "
                 >

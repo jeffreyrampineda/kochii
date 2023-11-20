@@ -40,8 +40,10 @@ exports.post_list = async function (req, res, next) {
 
     let posts = await Post.find(
       query,
-      "title tags createdAt summary banner likes dislikes"
-    ).sort({ createdAt: -1, title: 1 });
+      "title tags createdAt summary banner likes dislikes author"
+    )
+      .sort({ createdAt: -1, title: 1 })
+      .populate("author", "firstName lastName");
     if (!req.accepts("html")) {
       // If does not expect html, return json.
       posts = posts.map((post) => post.toObject()); // Makes image a base64

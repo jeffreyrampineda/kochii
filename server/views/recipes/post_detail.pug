@@ -1,19 +1,19 @@
 extends ../layout
 
 block content
-  div(class="container mb-5" style="margin-top: 5rem; min-height:100vh;")
+  div(class="container p-1 py-3" style="min-height:100vh;")
     nav(aria-label="breadcrumb")
-      ol(class="breadcrumb bg-white")
+      ol(class="breadcrumb")
         li(class="breadcrumb-item") 
           a(href="/") Home
         li(class="breadcrumb-item") 
           a(href="/recipes") Recipes
-        li(class="breadcrumb-item active" aria-current="page") #{post.title}
+        li(class="breadcrumb-item" aria-current="page") #{post.title}
     div(class="row")
-      div(class="col-md-8")
-        div(class="card border-0 shadow")
-          img(class="card-img-top" src= `data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
-          div(class="card-body")
+      div(class="col")
+        div(class="shadow")
+          img(class="" src= `data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
+          div(class="p-1")
             p
               each tag, index in post.tags
                 a(href="#") #{tag}
@@ -31,15 +31,15 @@ block content
               span Calories: #[span(class="font-weight-bold") #{post.calories} kcal]
               span Servings: #[span(class="font-weight-bold") #{post.servings}]
             h4(class="font-weight-bold") Ingredients
-            div(class="row m-3")
+            div(class="grid-2 p-1")
               each ingredient in post.ingredients
-                div(class="col-md-6") #{ingredient.quantity} #{ingredient.unit_of_measurement} - #{ingredient.name}, #{ingredient.description}
+                span #{ingredient.quantity} #{ingredient.unit_of_measurement} - #{ingredient.name}, #{ingredient.description}
             h4(class="font-weight-bold") Instructions 
-            ol(class="mb-5 k-instructions")
+            ol(class="d-flex-col p-1")
               each instruction in post.instructions 
                 li(class="mt-3") #{instruction.description}
             p #{post.content}
-      div(class="col-md-4")
+      div(class="col")
         h2 #{post.author.full_name_formatted}
         p(class="lead") Recipe Author
         p #{post.summary}

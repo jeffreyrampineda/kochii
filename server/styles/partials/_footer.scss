@@ -1,0 +1,51 @@
+@import "./mixins";
+@import "./variables";
+
+.footer {
+  &__socials {
+    justify-content: space-between;
+  }
+
+  &__content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+    @include tablet {
+      flex-direction: row;
+      justify-content: space-evenly;
+      text-align: start;
+    }
+
+    &--column {
+      flex: 1;
+    }
+
+    &--header {
+      text-transform: uppercase;
+      font-weight: 500;
+      font-size: 1.05rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid grey;
+    }
+
+    &--description {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  &__foot {
+    padding: 2rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    @include tablet {
+      padding: 2rem 1rem;
+      flex-direction: row;
+    }
+  }
+}

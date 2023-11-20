@@ -1,0 +1,183 @@
+@import "./mixins";
+@import "./variables";
+
+.bg-hero {
+  background-color: rgba(0, 0, 0, 0.75);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.65)),
+    url(/public/images/close-up-portrait-female-hands-slicing-vegetables.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.bg-blue-gradient {
+  background: linear-gradient(40deg, $color-skyblue, $color-navyblue);
+}
+
+.bg-skyblue {
+  background-color: $color-skyblue;
+}
+
+.bg-lightgray {
+  background-color: rgb(245, 245, 245);
+}
+
+.bg-line-slash {
+  background: url("../../public//images//line-slash.svg");
+  background-repeat: no-repeat;
+  background-size: 75%;
+}
+
+.bg-white {
+  background-color: $color-white;
+}
+
+.bg-primary-dark {
+  background-color: $color-primary-dark;
+}
+
+.bg-primary {
+  background-color: $color-primary;
+}
+
+.btn {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  display: inline-block;
+  padding: 1rem;
+  text-decoration: none;
+  color: $color-white;
+  border-radius: 1rem;
+  @include tablet {
+    padding: 1rem 3rem;
+  }
+
+  &-sm {
+    display: inline-block;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    @include tablet {
+      padding: 0.5rem 2rem;
+    }
+  }
+
+  &--border-white {
+    border: 1px solid white;
+  }
+
+  &--border-primary {
+    border: 1px solid $color-primary;
+  }
+}
+
+.shadow {
+  box-shadow: 5px 10px 30px rgba($color-primary, 0.2);
+}
+
+.d-flex-col {
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  @include tablet {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+.col-2 {
+  flex: 2;
+}
+
+.col-8 {
+  flex: 8;
+}
+
+.col {
+  flex: 1;
+}
+
+.d-flex {
+  display: flex;
+  gap: 1rem;
+}
+
+.d-flex-align-center {
+  align-items: center;
+}
+
+.d-flex-justify-center {
+  justify-content: center;
+}
+
+.h-100 {
+  height: 100%;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+
+  &--label {
+    font-size: 1.25rem;
+  }
+
+  &--control {
+    font-family: inherit;
+    font-size: 1.25rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid lightgray;
+    border-radius: 1rem;
+  }
+}
+
+.brd-x-1 {
+  border-left: 1px solid lightgray;
+  border-right: 1px solid lightgray;
+}
+
+.brd-rad-1 {
+  border-radius: 1rem;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.icon-blue-gradient {
+  background: linear-gradient(40deg, $color-skyblue, $color-navyblue);
+  -webkit-background-clip: text;
+  color: transparent;
+  font-size: 4rem;
+}
+
+.breadcrumb {
+  list-style-type: none;
+  display: flex;
+}
+
+.breadcrumb-item {
+  list-style: none;
+
+  &:not(:first-child) {
+    &::before {
+      display: inline-block;
+      padding-right: 0.5rem;
+      padding-left: 0.5rem;
+      color: #6c757d;
+      content: "/";
+    }
+  }
+}

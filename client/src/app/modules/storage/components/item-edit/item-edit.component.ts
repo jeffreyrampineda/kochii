@@ -19,6 +19,10 @@ export class ItemEditComponent implements OnInit {
   itemEditForms: FormGroup[] = [];
   groups: string[] = [];
   firstFood: any = {};
+  similarFoods = []; // Foods with similar names,
+  selectedSimilarFood = {
+    foodNutrients: []
+  };
 
   constructor(
     private dialog: MatDialog,
@@ -128,7 +132,10 @@ export class ItemEditComponent implements OnInit {
 
   checkNutrients(name: string): void {
     this.inventoryService.getNutrients(name).subscribe(result => {
-      this.firstFood = result;
+      this.similarFoods = result;
+      if (result.length > 0) {
+        this.selectedSimilarFood = result[0];
+      }
     });
   }
 

@@ -1,0 +1,180 @@
+@import "./partials/mixins";
+@import "./partials/spacings";
+@import "./partials/variables";
+
+.hero {
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.65)),
+    url(/public/images/close-up-portrait-female-hands-slicing-vegetables.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+  @include tablet {
+    height: 110vh;
+  }
+}
+
+.features {
+  @include tablet {
+    margin-top: -5rem;
+  }
+
+  &__card {
+    border-radius: 2rem 0;
+    background-color: $color-white;
+    padding: 3rem 1rem;
+  }
+
+  &--image {
+    display: block;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+}
+
+.featured-recipes {
+  padding: 4rem 1rem;
+
+  &__card {
+    border-radius: 1rem;
+    overflow: hidden;
+    position: relative;
+    height: 20rem;
+
+    @include tablet {
+      &:nth-child(1),
+      &:nth-child(6) {
+        grid-column: span 2;
+      }
+    }
+
+    &--image {
+      height: 20rem;
+      width: 100%;
+      object-fit: cover;
+      filter: brightness(50%);
+      transition: 0.25s;
+
+      &:hover {
+        filter: brightness(100%);
+        transform: scale(1.1);
+      }
+    }
+
+    &--content {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      padding: 1rem;
+      pointer-events: none;
+    }
+  }
+}
+
+.newsletter {
+  position: absolute;
+  width: 100%;
+  margin-top: -4rem;
+  height: 8rem;
+}
+
+.technologies {
+  &--icon {
+    height: 4rem;
+    opacity: 0.5;
+    transition: 0.5s;
+    object-fit: contain;
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+//-------------- Accordion
+
+.accordion {
+  .accordion-item {
+    background-color: $color-white;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    border-radius: 1rem;
+  }
+
+  button {
+    background-color: $color-white;
+    position: relative;
+    display: block;
+    text-align: left;
+    width: 100%;
+    border-radius: 1rem;
+    padding: 1.25rem 1rem;
+    font-size: 1.15rem;
+    font-weight: 400;
+    border: none;
+    outline: none;
+    &:hover {
+      cursor: pointer;
+      color: $color-skyblue;
+    }
+
+    .icon {
+      display: inline-block;
+      position: absolute;
+      top: 1.25rem;
+      right: 1rem;
+      width: 22px;
+      height: 22px;
+      border: 1px solid;
+      border-radius: 22px;
+      &::before {
+        display: block;
+        position: absolute;
+        content: "";
+        top: 9px;
+        left: 5px;
+        width: 10px;
+        height: 2px;
+        background: currentColor;
+      }
+      &::after {
+        display: block;
+        position: absolute;
+        content: "";
+        top: 5px;
+        left: 9px;
+        width: 2px;
+        height: 10px;
+        background: currentColor;
+      }
+    }
+  }
+
+  button[aria-expanded="true"] {
+    color: $color-skyblue;
+    .icon {
+      &::after {
+        width: 0;
+      }
+    }
+    + .accordion-content {
+      opacity: 1;
+      max-height: 9rem;
+      transition: all 200ms linear;
+      will-change: opacity, max-height;
+    }
+  }
+
+  .accordion-content {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity 200ms linear, max-height 200ms linear;
+    will-change: opacity, max-height;
+    p {
+      padding: 1.25rem 1rem;
+    }
+  }
+}
