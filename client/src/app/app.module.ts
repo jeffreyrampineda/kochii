@@ -12,21 +12,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 // Shared
-import { SharedModule } from './modules/shared/shared.module';
+import { SharedModule } from './_modules/shared/shared.module';
 
 // Components
+import { NavigationComponent } from './_components/navigation/navigation.component';
 import { GaugeCardComponent } from './_components/gauge-card/gauge-card.component';
 
 // Layouts
-import { NavigationComponent } from './_layouts/navigation/navigation.component';
+import { AuthPageComponent } from './_layouts/auth-page/auth-page.component';
 import { DashboardComponent } from './_layouts/dashboard/dashboard.component';
+import { SettingsComponent } from './_layouts/settings/settings.component';
 
 // Views
 import { LoginComponent } from './_views/login/login.component';
 import { RegisterComponent } from './_views/register/register.component';
 import { ActivityLogComponent } from './_views/activity-log/activity-log.component';
 import { OverviewComponent } from './_views/overview/overview.component';
-import { SettingsComponent } from './_views/settings/settings.component';
 import { AccountComponent } from './_views/account/account.component';
 
 // -------------------------------------------------------------
@@ -36,6 +37,7 @@ import { AccountComponent } from './_views/account/account.component';
     AppComponent,
     GaugeCardComponent,
     NavigationComponent,
+    AuthPageComponent,
     DashboardComponent,
     LoginComponent,
     RegisterComponent,

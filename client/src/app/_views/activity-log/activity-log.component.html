@@ -1,6 +1,6 @@
-<kochii-presentation-container
+<app-presentation-container
   title="Activity Log"
-  [isEmpty]="activities.data.length === 0"
+  [isEmpty]="activities.length === 0"
   [loading]="loading"
 >
   <!--Actions-->
@@ -56,4 +56,4 @@
     showFirstLastButtons
   ></mat-paginator>
   <!--/.Content-->
-</kochii-presentation-container>
+</app-presentation-container>

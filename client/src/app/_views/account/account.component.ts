@@ -6,13 +6,13 @@ import { MessageService } from 'src/app/services/message.service';
 import { Account } from '../../interfaces/account';
 
 @Component({
-  selector: 'kochii-account',
+  selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css'],
 })
 export class AccountComponent implements OnInit {
-  account: Account;
-  accountForm: FormGroup;
+  account!: Account;
+  accountForm!: FormGroup;
   isEditting = false;
 
   constructor(
@@ -96,7 +96,7 @@ export class AccountComponent implements OnInit {
 
   toggleEdit(): void {
     this.isEditting = !this.isEditting;
-    this.f.firstName.setValue(this.account.firstName);
-    this.f.lastName.setValue(this.account.lastName);
+    this.f['firstName'].setValue(this.account.firstName);
+    this.f['lastName'].setValue(this.account.lastName);
   }
 }

@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition } from '@angular/material/legacy-snack-bar';
+import {
+  MatSnackBar,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 
 // -------------------------------------------------------------
 
@@ -7,14 +10,11 @@ import { MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as 
   providedIn: 'root',
 })
 export class MessageService {
-
   messages: string[] = [];
 
-  constructor(
-    private snackBar: MatSnackBar,
-  ) { }
+  constructor(private snackBar: MatSnackBar) {}
 
-// -------------------------------------------------------------
+  // -------------------------------------------------------------
 
   /**
    * Add the message to the messages array.
@@ -34,7 +34,10 @@ export class MessageService {
    * This method opens a MatSnackBar notification.
    * @param message - The message to be displayed.
    */
-  notify(message: string, verticalPosition:  MatSnackBarVerticalPosition = 'top') {
+  notify(
+    message: string,
+    verticalPosition: MatSnackBarVerticalPosition = 'top'
+  ) {
     this.snackBar.open(message, 'dismiss', {
       verticalPosition,
     });

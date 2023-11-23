@@ -26,11 +26,11 @@ export class ActivityService {
   getActivities(): Observable<Activity[]> {
     return this.http
       .get<Activity[]>(this.activitiesUrl)
-      .pipe(tap((_) => this.log('fetched activities')));
+      .pipe(tap(() => this.log('fetched activities')));
   }
 
   getAllFromPastDays(days: number): Observable<Activity[]> {
-    this.log(`fetched activities records until ${days} days ago`);
+    tap(() => this.log(`fetched activities records until ${days} days ago`));
 
     return this.http.get<Activity[]>(`${this.activitiesUrl}/${days}`).pipe(
       map((result) => {
@@ -47,7 +47,7 @@ export class ActivityService {
   clearActivities(): Observable<any> {
     return this.http
       .delete(this.activitiesUrl)
-      .pipe(tap((_) => this.log('deleting all activities')));
+      .pipe(tap(() => this.log('deleting all activities')));
   }
 
   // -------------------------------------------------------------

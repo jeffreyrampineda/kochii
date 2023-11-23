@@ -70,7 +70,7 @@ export class InventoryService {
       }
       this.http
         .get<Item[]>(this.inventoryUrl)
-        .pipe(tap((_) => this.log('fetched inventory')))
+        .pipe(tap(() => this.log('fetched inventory')))
         .subscribe({
           next: (response) => {
             this.localInv = response;
@@ -113,10 +113,10 @@ export class InventoryService {
 
     return this.http
       .get<Item[]>(url, options)
-      .pipe(tap((_) => this.log(`fetched items names=${names}`)));
+      .pipe(tap(() => this.log(`fetched items names=${names}`)));
   }
 
-  getItemsAddedBetween(startDate, endDate): Observable<Item[]> {
+  getItemsAddedBetween(startDate: string, endDate: string): Observable<Item[]> {
     this.log(`fetched items added between=${startDate}, ${endDate}`);
     const url = `${this.inventoryUrl}/between`;
     const options = {
@@ -157,7 +157,7 @@ export class InventoryService {
    * Search for the specified terms every 400ms.
    * @param terms - The terms used to search.
    */
-  search(terms: Observable<string>): Observable<Item[]> {
+  search(terms: Observable<string>): Observable<Item[] | undefined> {
     return terms.pipe(
       debounceTime(400),
       distinctUntilChanged(),
@@ -169,18 +169,18 @@ export class InventoryService {
    * Search for the item with the similar name as the term.
    * @param term - The term used to search
    */
-  searchEntries(term): Observable<Item[]> {
+  searchEntries(term: string): Observable<Item[] | undefined> {
     if (term !== '') {
       return this.http.get<Item[]>(this.inventoryUrl + this.queryUrl + term);
     }
     return of(undefined);
   }
 
-  getNutrients(query: string): Observable<any[]> {
+  getNutrients(query: string): Observable<{ description: string }[]> {
     this.log('getting nutrients for: ' + query);
     const url = `${this.inventoryUrl}/nutrition?query=${query}`;
 
-    return this.http.get<any[]>(url);
+    return this.http.get<{ description: string }[]>(url);
   }
 
   /** Returns the size of the specified group. */
@@ -202,7 +202,7 @@ export class InventoryService {
       }
       this.http
         .get<string[]>(url)
-        .pipe(tap((_) => this.log('fetched groups')))
+        .pipe(tap(() => this.log('fetched groups')))
         .subscribe({
           next: (response) => {
             this.localGroups = response;
@@ -243,7 +243,7 @@ export class InventoryService {
   // -------------------------------------------------------------
 
   onItemCreate() {
-    this.socketioService.getSocket().on('item_create', (item) => {
+    this.socketioService.getSocket()?.on('item_create', (item) => {
       this.log(`created - item w/ id=${item._id}`);
       this.localInv.unshift(item);
       this.inventoryUpdate.next();
@@ -251,29 +251,30 @@ export class InventoryService {
   }
 
   onItemUpdate() {
-    this.socketioService.getSocket().on('item_update', (item) => {
+    this.socketioService.getSocket()?.on('item_update', (item) => {
       this.log(`updated - item w/ name=${item.name}, id=${item._id}`);
       const ite = this.localInv.find((i) => i._id === item._id);
-
-      ite.name = item.name;
-      ite.quantity = item.quantity;
-      ite.cost = item.cost;
-      ite.addedDate = item.addedDate;
-      ite.expirationDate = item.expirationDate;
-      ite.group = item.group;
-
+      if (ite) {
+        ite.name = item.name;
+        ite.quantity = item.quantity;
+        ite.cost = item.cost;
+        ite.addedDate = item.addedDate;
+        ite.expirationDate = item.expirationDate;
+        ite.group = item.group;
+      }
       this.inventoryUpdate.next();
     });
   }
 
   onItemUpdateMany() {
-    this.socketioService.getSocket().on('item_updateMany', (items: Item[]) => {
+    this.socketioService.getSocket()?.on('item_updateMany', (items: Item[]) => {
       if (items.length !== 0) {
         this.log('updated - many item');
         items.forEach((i) => {
           const ite = this.localInv.find((it) => it._id === i._id);
-
-          ite.group = i.group;
+          if (ite) {
+            ite.group = i.group;
+          }
         });
       }
       this.inventoryUpdate.next();
@@ -281,7 +282,7 @@ export class InventoryService {
   }
 
   onItemDelete() {
-    this.socketioService.getSocket().on('item_delete', (id) => {
+    this.socketioService.getSocket()?.on('item_delete', (id) => {
       this.log(`deleted - item /w id=${id}`);
       this.localInv = this.localInv.filter((i) => i._id !== id);
       this.inventoryUpdate.next();
@@ -289,7 +290,7 @@ export class InventoryService {
   }
 
   onGroupCreate() {
-    this.socketioService.getSocket().on('group_create', (group: string) => {
+    this.socketioService.getSocket()?.on('group_create', (group: string) => {
       this.log(`created - group /w name=${group}`);
       this.localGroups.push(group);
       this.groupsUpdate.next();
@@ -297,7 +298,7 @@ export class InventoryService {
   }
 
   onGroupDelete() {
-    this.socketioService.getSocket().on('group_delete', (group: string) => {
+    this.socketioService.getSocket()?.on('group_delete', (group: string) => {
       this.log(`deleted - group /w name=${group}`);
       this.localGroups = this.localGroups.filter((g) => g !== group);
       this.groupsUpdate.next();

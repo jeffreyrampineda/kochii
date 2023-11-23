@@ -2,18 +2,18 @@
 
 <div class="row">
   <!--Inventory size grid column-->
-  <kochii-gauge-card
+  <app-gauge-card
     class="col-xl-3 col-md-6 mb-r"
     icon="pie_chart"
     color="#3e485d"
     title="Inventory Size"
     [value]="itemTotal.toString()"
     change="+ 0"
-  ></kochii-gauge-card>
+  ></app-gauge-card>
   <!--/.Inventory size grid column-->
 
   <!--Expired items grid column-->
-  <kochii-gauge-card
+  <app-gauge-card
     class="col-xl-3 col-md-6 mb-r"
     icon="delete_sweep"
     color="#f44336"
@@ -21,23 +21,23 @@
     [value]="numberOfExpired.toString()"
     change="+ 0"
   >
-  </kochii-gauge-card>
+  </app-gauge-card>
   <!--/.Expired items grid column-->
 
   <!--Weekly spent grid column-->
-  <kochii-gauge-card
+  <app-gauge-card
     class="col-xl-3 col-md-6 mb-r"
     icon="payment"
     color="#3e485d"
     title="Weekly Expenses"
-    [value]="weeklySpent | currency"
+    [value]="weeklySpent.toString()"
     change="+ 0.00"
   >
-  </kochii-gauge-card>
+  </app-gauge-card>
   <!--/.Weekly spent grid column-->
 
   <!--Weekly removed grid column-->
-  <kochii-gauge-card
+  <app-gauge-card
     class="col-xl-3 col-md-6 mb-r"
     icon="show_chart"
     color="#3e485d"
@@ -45,7 +45,7 @@
     [value]="quantityRemovedThisWeek().toString()"
     change="+ 0"
   >
-  </kochii-gauge-card>
+  </app-gauge-card>
   <!--/.Weekly removed grid column-->
 
   <!--Bar chart grid column-->
@@ -84,7 +84,7 @@
     <div class="card mt-4 k-card">
       <h5 class="card-header">Activity Log</h5>
       <div class="card-body">
-        <div [hidden]="activities.data.length === 0 || loadingActivities">
+        <div [hidden]="activities?.length === 0 || loadingActivities">
           <table mat-table [dataSource]="activities">
             <!-- Date Column -->
             <ng-container matColumnDef="date">

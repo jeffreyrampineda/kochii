@@ -30,7 +30,11 @@ export class RecipesService {
     if (post._id) {
       this.log('updating Post');
 
-      return this.http.put<Post>(`${this.recipesUrl}/${post._id}`, post, this.options);
+      return this.http.put<Post>(
+        `${this.recipesUrl}/${post._id}`,
+        post,
+        this.options
+      );
     } else {
       this.log('creating Post');
 
@@ -47,7 +51,7 @@ export class RecipesService {
     };
 
     return this.http.get<Post[]>(this.recipesUrl, options).pipe(
-      tap((_) => this.log('fetched posts')),
+      tap(() => this.log('fetched posts')),
       map((result) => {
         result.forEach((post) => {
           if (post.banner) {
@@ -68,7 +72,7 @@ export class RecipesService {
       headers: new HttpHeaders({ Accept: 'application/json' }),
     };
     return this.http.get<Post>(`${this.recipesUrl}/${id}`, options).pipe(
-      tap((_) => this.log(`fetched post /w id=${id}`)),
+      tap(() => this.log(`fetched post /w id=${id}`)),
       map((result) => {
         if (result.banner) {
           result.banner = this.sanitizer.bypassSecurityTrustUrl(
@@ -92,18 +96,18 @@ export class RecipesService {
   createPostCollection(id: string): Observable<any> {
     return this.http
       .post<any>(`${this.collectionUrl}/${id}`, null, this.options)
-      .pipe(tap((_) => this.log('creating postCollection')));
+      .pipe(tap(() => this.log('creating postCollection')));
   }
 
   deletePostCollection(id: string): Observable<any> {
     return this.http
       .delete<any>(`${this.collectionUrl}/${id}`, this.options)
-      .pipe(tap((_) => this.log('deleting postCollection')));
+      .pipe(tap(() => this.log('deleting postCollection')));
   }
 
   getPostCollection(): Observable<PostCollection> {
     return this.http.get<PostCollection>(this.collectionUrl, this.options).pipe(
-      tap((_) => this.log('fetched postCollection')),
+      tap(() => this.log('fetched postCollection')),
       map((result) => {
         result.posts.forEach((post) => {
           if (post.banner) {

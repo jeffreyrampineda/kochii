@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AccountService } from 'src/app/services/account.service';
-import io from 'socket.io-client';
+import io, { Socket } from 'socket.io-client';
 import { MessageService } from './message.service';
+import { DefaultEventsMap } from '@socket.io/component-emitter';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SocketioService {
-  private socket;
+  private socket: Socket<DefaultEventsMap, DefaultEventsMap> | undefined;
   private token = '';
   private socketUrl = `${environment.domain}/`;
 
@@ -19,7 +20,7 @@ export class SocketioService {
 
   initSocket(): void {
     if (this.accountService.isLoggedIn) {
-      this.token = this.accountService.currentAccountValue.token;
+      this.token = this.accountService.currentAccountValue.token ?? '';
     }
     this.socket = io(this.socketUrl, {
       extraHeaders: {
@@ -40,7 +41,7 @@ export class SocketioService {
   }
 
   disconnect() {
-    this.socket.disconnect();
+    this.socket?.disconnect();
   }
 
   // -------------------------------------------------------------

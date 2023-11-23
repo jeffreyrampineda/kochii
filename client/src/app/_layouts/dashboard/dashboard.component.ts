@@ -1,10 +1,10 @@
 import { Component, HostListener } from '@angular/core';
-import { MessageService } from 'src/app/services/message.service';
+import { MessageService } from '../../services/message.service';
 
 // -------------------------------------------------------------
 
 @Component({
-  selector: 'kochii-dashboard',
+  selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent {

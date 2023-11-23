@@ -20,7 +20,7 @@ export class AccountService {
     private messageService: MessageService
   ) {
     this.currentAccountSubject = new BehaviorSubject<Account>(
-      JSON.parse(localStorage.getItem('currentAccount'))
+      JSON.parse(localStorage.getItem('currentAccount') ?? '{}')
     );
     this.currentAccount = this.currentAccountSubject.asObservable();
   }
@@ -43,7 +43,7 @@ export class AccountService {
   }
 
   public get isLoggedIn(): boolean {
-    return this.currentAccountSubject.value ? true : false;
+    return this.currentAccountSubject.value.token ? true : false;
   }
 
   /**
@@ -107,7 +107,7 @@ export class AccountService {
   logout(): void {
     // remove account from local storage to logout.
     localStorage.removeItem('currentAccount');
-    this.currentAccountSubject.next(null);
+    this.currentAccountSubject.next(JSON.parse('{}'));
 
     window.location.href = '/';
   }
