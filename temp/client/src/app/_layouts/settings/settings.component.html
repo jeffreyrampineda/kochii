@@ -1,0 +1,11 @@
+<app-presentation-container title="Settings">
+  <div class="row">
+    <app-link-group heading="General" class="col-2 k-settings-menu">
+      <a routerLink="account">Account</a>
+      <a routerLink="activity-log">Activity Log</a>
+    </app-link-group>
+    <div class="col-10">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</app-presentation-container>

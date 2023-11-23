@@ -1,0 +1,43 @@
+<h2 class="skinny">
+  Creations
+  <div title-append class="float-right">
+    <button mat-raised-button color="accent" [routerLink]="['create']">
+      Add
+    </button>
+  </div>
+</h2>
+
+<div class="mt-4">
+  <div
+    class="card mb-3 k-card"
+    [routerLink]="[post._id]"
+    *ngFor="let post of posts"
+  >
+    <div class="row g-0">
+      <div class="col-md-4">
+        <img
+          class="img-fluid rounded-start h-100"
+          [src]="post.banner"
+          alt="banner"
+        />
+      </div>
+      <div class="col-md-8">
+        <div class="card-body" style="padding-left: 0">
+          <h5 class="card-title">
+            {{ post.title }}
+          </h5>
+          <p>
+            <span *ngFor="let tag of post.tags; let index = index">
+              <a href="#">{{ tag }}</a>
+              <span *ngIf="index < post.tags.length - 1"> • </span>
+            </span>
+          </p>
+          <p class="card-text">{{ post.summary }}</p>
+          <p class="card-text">
+            <small class="text-muted">{{ post.createdAt | date }}</small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
