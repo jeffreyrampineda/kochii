@@ -1,159 +1,161 @@
 extends layout
 
 block content
-  div(class="hero text-white d-flex d-flex-align-center d-flex-justify-center")
-    div(class="container p-1 w-100")
-      h1(class="header-1") Organize your kitchen
-      h4(class="lead mt-1 mb-2") Kochii assists and encourages individuals for a manageable meal preparation lifestyle
-      div(class="row text-center")
-        a(class="btn bg-blue-gradient" href="/register" role="button") Sign Up
-        a(class="btn btn--border-white" href="#features" role="button") Learn More
-    a(class="text-white" href="#features" style="cursor: pointer; font-size: 4em; position: absolute; bottom: 0;")
-      i(class="bi bi-chevron-compact-down")
-  div(class="container")
-    section(class="features text-center p-1" id="features")
-      div(class="row")
-        div(class="features__card col shadow")
-          i(class='bi bi-clipboard-check icon-blue-gradient')
-          h3(class="text-feature py-1") Record   
+  div(class="bg-[url('/public/images/close-up-portrait-female-hands-slicing-vegetables.jpg')] bg-cover bg-no-repeat bg-center text-white h-screen")
+    div(class="h-full backdrop-brightness-[.25]")
+      div(class="h-full container mx-auto px-4 md:p-6 xl:px-32 flex flex-col justify-center gap-8")
+        h1(class="text-6xl font-bold") Organize your kitchen
+        h4(class="text-2xl font-light") Kochii assists and encourages individuals for a manageable meal preparation lifestyle
+        div(class="flex flex-col md:flex-row gap-4 text-center")
+          a(class='rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-16' href="/register" role="button") Sign Up
+          a(class='rounded-full text-white border-white border py-4 px-16' href="/#features" role="button") Learn More
+      div(class="absolute pb-16 w-full bottom-0 flex justify-center")
+        a(class="text-white" href="/#features" style="font-size: 4em;")
+          i(class="bi bi-chevron-compact-down")
+  div(class="bg-gray-100")
+    div(class="container mx-auto px-4 md:p-6 xl:px-32")
+      section(class="flex flex-col lg:flex-row mt-[-4rem] gap-8" id="features")
+        div(class="flex-1 z-10 bg-white rounded-ss-3xl rounded-ee-3xl shadow-2xl text-center flex flex-col gap-8 py-16 px-8")
+          i(class='bi bi-clipboard-check text-6xl font-bold bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text')
+          h3(class="text-xl font-bold") Record
           p.
             Keep track of what you buy and use on a week-by-week basis and
             organize them using Kochii's simplified user interface.
-        div(class="features__card col shadow")
-          i(class='bi bi-bell icon-blue-gradient')
-          h3(class="text-feature py-1") Notify 
+        div(class="flex-1 z-10 bg-white rounded-ss-3xl rounded-ee-3xl shadow-2xl text-center flex flex-col gap-8 py-16 px-8")
+          i(class='bi bi-bell text-6xl font-bold bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text')
+          h3(class="text-xl font-bold") Notify 
           p.
             Receive real-time up to date notifications regarding the
             status of your inventory with a quick glance.
-        div(class="features__card col shadow")
-          i(class='bi bi-bar-chart-line icon-blue-gradient')
-          h3(class="text-feature py-1") Analyze 
+        div(class="flex-1 z-10 bg-white rounded-ss-3xl rounded-ee-3xl shadow-2xl text-center flex flex-col gap-8 py-16 px-8")
+          i(class='bi bi-bar-chart-line text-6xl font-bold bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text')
+          h3(class="text-xl font-bold") Analyze 
           p.
             Examine a summary of your inventory's current and weekly
             state, and gain insights on your unforeseen behaviors.
-    section(class="p-1 pt-2 pb-3")
-      div(class="brd-rad-1 shadow")
-        div(class="row")
-          div(class="col p-1")
-            h4(class="sub-header-1") A mindful approach to consumption
-            p(class="my-1").
+      section(class="pb-8 pt-16")
+        div(class="flex justify-between")
+          div(class="flex-1 py-8 text-center")
+            h4(class='text-5xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text lg:text-left') A mindful approach to consumption
+            p(class="my-8 lg:text-left").
               Recognize what you have, purchasing only what you truly need, and reduce waste to 
               not only save money but also minimize your environmental impact.
-            div(class="row text-center mb-1")
-              div(class="col")
-                i(class='bi bi-book icon-blue-gradient')
-                h3(class="text-feature") Find Recipes
-              div(class="col brd-x-1")
-                i(class='bi bi-bag icon-blue-gradient')
-                h3(class="text-feature") Grocery List
-              div(class="col")
-                i(class='bi bi-wallet2 icon-blue-gradient')
-                h3(class="text-feature") Save Money
-            div(class="row")
-              a(class="btn bg-blue-gradient text-center" href="/register" role="button") Sign Up
-          div(class="col")
-            img(class="features--image" alt="Recipe website opened on a Mac laptop screen" src="/public/images/different-vegetables-textile-bag-beige.png" loading="lazy")
-  div(class="bg-white pb-3")
-    div(class="container")
-      section(class="featured-recipes" id="featured-recipes")
-        h2(class="header-3 text-end") Share your recipes
-        h4(class="sub-header-1 text-end mb-2") What's the best way to cook chicken?
+            div(class="my-8 flex flex-col gap-6 px-2 justify-center md:flex-row lg:justify-start")
+              div(class="")
+                i(class='bi bi-book text-6xl font-bold bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text')
+                h3(class="text-xl font-bold mt-4") Find Recipes
+              div(class=" md:border-x md:px-8")
+                i(class='bi bi-bag text-6xl font-bold bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text')
+                h3(class="text-xl font-bold mt-4") Grocery List
+              div(class="")
+                i(class='bi bi-wallet2 text-6xl font-bold bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text')
+                h3(class="text-xl font-bold mt-4") Save Money
+            div(class="mt-16 flex flex-col justify-center md:flex-row lg:justify-start")
+              a(class='rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' href="/register" role="button") Sign Up
+          div(class="hidden lg:block flex-1")
+            img(class="h-full w-full rounded-ee-3xl" alt="Recipe website opened on a Mac laptop screen" src="/public/images/different-vegetables-textile-bag-beige.png" loading="lazy")
+  div(class="pb-3")
+    div(class="container mx-auto px-4 md:p-6 xl:px-32")
+      section(class="pt-8 pb-32" id="featured-recipes")
+        h2(class="text-4xl text-center lg:text-right") Share your recipes
+        h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text text-center lg:text-right mb-8") What's the best way to cook chicken?
         if latest_posts.length > 0
-          div(class="recipes__container")
+          div(class="grid grid-cols-1 md:grid-cols-4 gap-4 text-white")
             each post, index in latest_posts
-              div(class="featured-recipes__card")
+              div(class="md:first:col-span-2 md:last:col-span-2 rounded-3xl relative overflow-hidden")
                 a(style="display: block; height: 100%;" href=post.url)
-                  img(class="featured-recipes__card--image" src=`data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
-                  div(class="featured-recipes__card--content text-white")
-                    h4(class="recipes__card--title") #{post.title}
-                    p by #{post.author.full_name_formatted}
-                    div(class="recipes__tags mt-1")
-                      each tag, index in post.tags
-                        span #{tag}
-                        if index < post.tags.length - 1
-                          i(class="bi bi-dot")
+                  img(class="rounded-3xl object-cover w-full h-[20rem] brightness-50 hover:scale-110 hover:brightness-100 duration-200" src=`data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
+                  div(class="rounded-3xl w-full absolute bottom-0 p-4 flex flex-col justify-end pointer-events-none")
+                    div
+                      h4(class="text-xl font-bold") #{post.title}
+                      p by bob
+                      div(class="bg-navyblue mt-4 inline-block rounded-full py-1 px-4")
+                        each tag, index in post.tags
+                          span #{tag}
+                          if index < post.tags.length - 1
+                            i(class="bi bi-dot")
         else
           h2(class="text-center") Be the first to share!
-  div(class="bg-line-slash newsletter text-white")
-    div(class="container d-flex d-flex-align-center h-100 p-1")
-      h2(class="header-3") Always Providing the Best Service
-      a(class="btn bg-white text-primary" href="#features" role="button") Join Newsletter
   div(class="bg-primary text-white pt-3")
-    div(class="container")
-      section(class="p-1")
-        h2(class="header-3 text-center mb-2") Who we are
-        div(class="row")
-          div(class="col")
-            img(class="features--image" alt="Recipe website opened on a Mac laptop screen" src="/public/images/andy-chilton-0JFveX0c778-unsplash.png" loading="lazy")
-          div(class="col")
-            h4(class="sub-header-1") Who created Kochii?
-            p(class="my-1").
+    div(class="bg-gradient-to-r from-skyblue to-navyblue lg:bg-[url('/public/images/line-slash.svg')] bg-no-repeat text-white mt-[-4rem] text-center py-8 lg:py-2 lg:bg-75%")
+      div(class="container mx-auto px-4 md:p-6 xl:px-32 flex flex-col lg:flex-row gap-4 items-center")
+        h2(class="inline-block text-4xl") Always Providing the Best Service
+        a(class="rounded-full bg-white py-4 px-12 text-primary shadow-2xl" href="#features" role="button") Join Newsletter
+    div(class="container mx-auto px-4 md:p-6 xl:px-32")
+      section(class="pt-16")
+        h2(class="text-4xl text-center mb-16") Who we are
+        div(class="grid grid-cols-2 gap-8")
+          div(class="hidden md:block")
+            img(alt="Recipe website opened on a Mac laptop screen" src="/public/images/andy-chilton-0JFveX0c778-unsplash.png" loading="lazy")
+          div(class="col-span-2 text-center md:col-span-1 md:text-left")
+            h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text") Who created Kochii?
+            p(class="my-8").
               Kochii is a personal open source project created by Jeffrey Ram Pineda as a hobby. 
               It is created with Angular as a frontend framework, Express.js for the backend server, 
               and MongoDB as its database.
-            h4(class="sub-header-1") What is Kochii?
-            p(class="my-1").
+            h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text") What is Kochii?
+            p(class="my-8").
               Knowing how to prepare your meals in advance will help you save money. Kochii is designed 
               to keep track of busy people's cooking ingredients with the intention of assisting and 
               promoting home-cooked meals. Through Kochii's upcoming recipe feature, cooking instructions 
               can be archived for later use and will reveal to the user which recipes he/she can and 
               cannot make in relation to his/her recorded inventory.
-  div(class="container")
-    section(class="featured-recipes" id="faq")
-      h2(class="header-3 text-center mb-2") Frequently Asked Questions
-      div(class="accordion")
-        h4(class="sub-header-1") General:
-        div(class="accordion-item shadow")
-          button(aria-expanded="false")
-            span How do I sign up?
-              span(class="icon" aria-hidden="true")
-          div(class="accordion-content")
-            p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
-        div(class="accordion-item shadow")
-          button(aria-expanded="false")
-            span Can I remove a recipe?
-              span(class="icon" aria-hidden="true")
-          div(class="accordion-content")
-            p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
-        h4(class="sub-header-1 mt-2") Account:
-        div(class="accordion-item shadow")
-          button(aria-expanded="false")
-            span How do I change my password?
-              span(class="icon" aria-hidden="true")
-          div(class="accordion-content")
-            p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
-        div(class="accordion-item shadow")
-          button(aria-expanded="false")
-            span How do I delete my account?
-              span(class="icon" aria-hidden="true")
-          div(class="accordion-content")
-            p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
-        div(class="accordion-item shadow")
-          button(aria-expanded="false")
-            span How do I change my account settings?
-              span(class="icon" aria-hidden="true")
-          div(class="accordion-content")
-            p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
-    section(class="row d-flex-align-center d-flex-justify-center g-2 pb-2")
-      img(class="technologies--icon" alt="Logo of Angular" src="/public/images/angular-logo.svg")
-      img(class="technologies--icon" alt="Logo of Angular Material" src="/public/images/material-logo.svg")
-      img(class="technologies--icon" alt="Logo of FoodData Central's USDA " src="/public/images/usda-logo.svg")
-      img(class="technologies--icon" alt="Logo of expressJS" src="/public/images/expressjs-logo.svg")
-      img(class="technologies--icon" alt="Logo of MongoDB " src="/public/images/mongodb-logo.svg")
-  div(class="bg-white")
-    div(class="container")
-      section(class="featured-recipes" id="faq")
-        h2(class="header-3 text-center") Contact
-        h4(class="sub-header-1 text-center mb-2") Get a hold of us. We're always happy to talk!
-        form(method="POST" action="/send")
-          div(class="form-group")
-            label(class="form-group--label" for="name") Name
-            input(class="form-group--control" type="text" name="from_name" id="name" placeholder="Full Name *")
-          div(class="form-group")
-            label(class="form-group--label" for="email") Email address
-            input(class="form-group--control" type="text" name="from_email" id="email" placeholder="Email Address *")
-          div(class="form-group")
-            label(class="form-group--label" for="body") Message
-            textarea(class="form-group--control" type="text" name="body" id="body" rows="7" placeholder="Message" style="resize: none;")
-          div(class="text-center")
-            button(class='btn bg-blue-gradient' type="submit") Send
+  div(class="bg-gray-100")
+    div(class="container mx-auto px-4 md:p-6 xl:px-32")
+      section(class="py-8" id="faq")
+        h2(class="text-4xl text-center") Frequently Asked Questions
+        div(class="accordion")
+          h4(class="bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text text-2xl mt-8 mb-4") General:
+          div(class="accordion-item shadow-2xl")
+            button(class="hover:text-skyblue" aria-expanded="false")
+              span How do I sign up?
+                span(class="icon" aria-hidden="true")
+            div(class="accordion-content")
+              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+          div(class="accordion-item shadow-2xl")
+            button(class="hover:text-skyblue" aria-expanded="false")
+              span Can I remove a recipe?
+                span(class="icon" aria-hidden="true")
+            div(class="accordion-content")
+              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+          h4(class="bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text text-2xl mt-8 mb-4") Account:
+          div(class="accordion-item shadow-2xl")
+            button(class="hover:text-skyblue" aria-expanded="false")
+              span How do I change my password?
+                span(class="icon" aria-hidden="true")
+            div(class="accordion-content")
+              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+          div(class="accordion-item shadow-2xl")
+            button(class="hover:text-skyblue" aria-expanded="false")
+              span How do I delete my account?
+                span(class="icon" aria-hidden="true")
+            div(class="accordion-content")
+              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+          div(class="accordion-item shadow-2xl")
+            button(class="hover:text-skyblue" aria-expanded="false")
+              span How do I change my account settings?
+                span(class="icon" aria-hidden="true")
+            div(class="accordion-content")
+              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+      section(class="flex flex-col md:flex-row justify-center gap-8 py-8")
+        img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of Angular" src="/public/images/angular-logo.svg")
+        img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of Angular Material" src="/public/images/material-logo.svg")
+        img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of FoodData Central's USDA " src="/public/images/usda-logo.svg")
+        img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of expressJS" src="/public/images/expressjs-logo.svg")
+        img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of MongoDB " src="/public/images/mongodb-logo.svg")
+  div(class="container mx-auto px-4 md:p-6 xl:px-32")
+    section(class="py-8" id="faq")
+      h2(class="text-4xl text-center") Contact
+      h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text text-center") Get a hold of us. We're always happy to talk!
+      form(class="mt-16" method="POST" action="/send")
+        div(class="text-xl mb-4")
+          label(class="block my-2" for="name") Name
+          input(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="from_name" id="name" placeholder="Full Name *")
+        div(class="text-xl mb-4")
+          label(class="block my-2" for="email") Email address
+          input(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="from_email" id="email" placeholder="Email Address *")
+        div(class="text-xl mb-4")
+          label(class="block my-2" for="body") Message
+          textarea(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="body" id="body" rows="7" placeholder="Message" style="resize: none;")
+        div(class="text-center")
+          button(class='rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' type="submit") Send

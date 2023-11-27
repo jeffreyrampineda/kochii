@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+.mobile-menu-container .mobile-menu {
+  display: none;
+}
+input[type="checkbox"]#mobile-menu-toggle {
+  display: none;
+}
+input[type="checkbox"]:checked#mobile-menu-toggle
+  + .mobile-menu-container
+  .mobile-menu {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+.accordion .accordion-item {
+  background-color: white;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 1rem;
+}
+.accordion button {
+  background-color: white;
+  position: relative;
+  display: block;
+  text-align: left;
+  width: 100%;
+  border-radius: 1rem;
+  padding: 1.25rem 1rem;
+  font-size: 1.15rem;
+  font-weight: 400;
+  border: none;
+  outline: none;
+}
+.accordion button .icon {
+  display: inline-block;
+  position: absolute;
+  top: 1.25rem;
+  right: 1rem;
+  width: 22px;
+  height: 22px;
+  border: 1px solid;
+  border-radius: 22px;
+}
+.accordion button .icon::before {
+  display: block;
+  position: absolute;
+  content: "";
+  top: 9px;
+  left: 5px;
+  width: 10px;
+  height: 2px;
+  background: currentColor;
+}
+.accordion button .icon::after {
+  display: block;
+  position: absolute;
+  content: "";
+  top: 5px;
+  left: 9px;
+  width: 2px;
+  height: 10px;
+  background: currentColor;
+}
+.accordion button[aria-expanded="true"] .icon::after {
+  width: 0;
+}
+.accordion button[aria-expanded="true"] + .accordion-content {
+  opacity: 1;
+  max-height: 9rem;
+  transition: all 200ms linear;
+  will-change: opacity, max-height;
+}
+.accordion .accordion-content {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 200ms linear, max-height 200ms linear;
+  will-change: opacity, max-height;
+}
+.accordion .accordion-content p {
+  padding: 1.25rem 1rem;
+}
