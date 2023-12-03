@@ -1,27 +1,27 @@
 extends ../layout
 
 block content
-  div(class="container p-1 py-3" style="min-height:100vh;")
-    div(class="row pt-2")
-      div(class="col")
-        h2(class="header-3 text-center") Recipes
-        div(class="row g-1 d-flex-justify-center my-1")
-          a(class="btn-sm btn--border-primary text-primary text-center" href="#") All
-          a(class="btn-sm btn--border-primary text-primary text-center" href="#") Chicken
-          a(class="btn-sm btn--border-primary text-primary text-center" href="#") Pork
-          a(class="btn-sm btn--border-primary text-primary text-center" href="#") Beef
-        div(Class="recipes__container")
-          each post, index in posts
-            div(class="recipes__card")
-              a(style="display: block; height: 100%;" href=post.url)
-                img(class="featured-recipes__card--image" src=`data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
-                div(class="featured-recipes__card--content text-white")
-                  h4(class="recipes__card--title") #{post.title}
-                  p by #{post.author.full_name_formatted}
-                  div(class="recipes__tags mt-1")
-                    each tag, index in post.tags
-                      span #{tag}
-                      if index < post.tags.length - 1
-                        i(class="bi bi-dot")
-          else
-            h2(class="header-3") This Recipes Catalog is empty.
+  div(class="container mx-auto px-4 md:px-6 xl:px-32 pb-14 pt-40 text-center")
+    h1(class="text-4xl mb-4") Recipes
+    div(class="flex flex-col md:flex-row gap-4 justify-center mt-8")
+      a(class="rounded-full border-black border py-2 px-12" href="#") All
+      a(class="rounded-full border-black border py-2 px-12" href="#") Chicken
+      a(class="rounded-full border-black border py-2 px-12" href="#") Pork
+      a(class="rounded-full border-black border py-2 px-12" href="#") Beef
+  div(class="container mx-auto px-4 md:px-6 xl:px-32 pb-14" style="min-height:100vh;")
+    div(Class="grid grid-cols-1 md:grid-cols-4 gap-4")
+      each post, index in posts
+        div(class="rounded-3xl relative overflow-hidden text-white")
+          a(style="display: block; height: 100%;" href=post.url)
+            img(class="rounded-3xl object-cover w-full h-[20rem] brightness-50 hover:scale-110 hover:brightness-100 duration-200" src=`data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
+            div(class="rounded-3xl w-full absolute bottom-0 p-4 flex flex-col justify-end pointer-events-none")
+              div
+                h4(class="text-xl font-bold") #{post.title}
+                p by Jeffrey Pineda
+                div(class="bg-navyblue mt-4 inline-block rounded-full py-1 px-4")
+                  each tag, index in post.tags
+                    span #{tag}
+                    if index < post.tags.length - 1
+                      i(class="bi bi-dot")
+      else
+        h2(class="text-center") This Recipes Catalog is empty.

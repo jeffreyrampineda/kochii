@@ -1,10 +1,10 @@
 extends layout
 
 block content
-  div(class="container d-flex d-flex-justify-center d-flex-align-center" style="height: 100vh")
-    div(class="text-center p-1")
-      h2(class="header-1")= message_title
-      h1(class="header-2")= message_subtitle
-      hr
-      h4(class="my-1 sub-header-1")= message_description
-      a(class='btn bg-blue-gradient shadow' href="/") Go home
+  div(class="container mx-auto px-4 md:px-6 xl:px-32 flex flex-col justify-center gap-4 text-center" style="height: 100vh")
+    h2(class="text-6xl font-bold")= message_title
+    h1(class="text-6xl font-bold")= message_subtitle
+    hr
+    h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text")= message_description
+    div(class="mt-8")
+      a(class='rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' href="/") Go home

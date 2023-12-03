@@ -3,7 +3,7 @@ extends layout
 block content
   div(class="bg-[url('/public/images/close-up-portrait-female-hands-slicing-vegetables.jpg')] bg-cover bg-no-repeat bg-center text-white h-screen")
     div(class="h-full backdrop-brightness-[.25]")
-      div(class="h-full container mx-auto px-4 md:p-6 xl:px-32 flex flex-col justify-center gap-8")
+      div(class="h-full container mx-auto px-4 md:px-6 xl:px-32 flex flex-col justify-center gap-8")
         h1(class="text-6xl font-bold") Organize your kitchen
         h4(class="text-2xl font-light") Kochii assists and encourages individuals for a manageable meal preparation lifestyle
         div(class="flex flex-col md:flex-row gap-4 text-center")
@@ -13,7 +13,7 @@ block content
         a(class="text-white" href="/#features" style="font-size: 4em;")
           i(class="bi bi-chevron-compact-down")
   div(class="bg-gray-100")
-    div(class="container mx-auto px-4 md:p-6 xl:px-32")
+    div(class="container mx-auto px-4 md:px-6 xl:px-32")
       section(class="flex flex-col lg:flex-row mt-[-4rem] gap-8" id="features")
         div(class="flex-1 z-10 bg-white rounded-ss-3xl rounded-ee-3xl shadow-2xl text-center flex flex-col gap-8 py-16 px-8")
           i(class='bi bi-clipboard-check text-6xl font-bold bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text')
@@ -55,7 +55,7 @@ block content
           div(class="hidden lg:block flex-1")
             img(class="h-full w-full rounded-ee-3xl" alt="Recipe website opened on a Mac laptop screen" src="/public/images/different-vegetables-textile-bag-beige.png" loading="lazy")
   div(class="pb-3")
-    div(class="container mx-auto px-4 md:p-6 xl:px-32")
+    div(class="container mx-auto px-4 md:px-6 xl:px-32")
       section(class="pt-8 pb-32" id="featured-recipes")
         h2(class="text-4xl text-center lg:text-right") Share your recipes
         h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text text-center lg:text-right mb-8") What's the best way to cook chicken?
@@ -68,7 +68,7 @@ block content
                   div(class="rounded-3xl w-full absolute bottom-0 p-4 flex flex-col justify-end pointer-events-none")
                     div
                       h4(class="text-xl font-bold") #{post.title}
-                      p by bob
+                      p by Jeffrey Pineda
                       div(class="bg-navyblue mt-4 inline-block rounded-full py-1 px-4")
                         each tag, index in post.tags
                           span #{tag}
@@ -78,10 +78,10 @@ block content
           h2(class="text-center") Be the first to share!
   div(class="bg-primary text-white pt-3")
     div(class="bg-gradient-to-r from-skyblue to-navyblue lg:bg-[url('/public/images/line-slash.svg')] bg-no-repeat text-white mt-[-4rem] text-center py-8 lg:py-2 lg:bg-75%")
-      div(class="container mx-auto px-4 md:p-6 xl:px-32 flex flex-col lg:flex-row gap-4 items-center")
+      div(class="container mx-auto px-4 md:px-6 xl:px-32 flex flex-col lg:flex-row gap-4 items-center py-6")
         h2(class="inline-block text-4xl") Always Providing the Best Service
         a(class="rounded-full bg-white py-4 px-12 text-primary shadow-2xl" href="#features" role="button") Join Newsletter
-    div(class="container mx-auto px-4 md:p-6 xl:px-32")
+    div(class="container mx-auto px-4 md:px-6 xl:px-32")
       section(class="pt-16")
         h2(class="text-4xl text-center mb-16") Who we are
         div(class="grid grid-cols-2 gap-8")
@@ -101,7 +101,7 @@ block content
               can be archived for later use and will reveal to the user which recipes he/she can and 
               cannot make in relation to his/her recorded inventory.
   div(class="bg-gray-100")
-    div(class="container mx-auto px-4 md:p-6 xl:px-32")
+    div(class="container mx-auto px-4 md:px-6 xl:px-32")
       section(class="py-8" id="faq")
         h2(class="text-4xl text-center") Frequently Asked Questions
         div(class="accordion")
@@ -143,7 +143,7 @@ block content
         img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of FoodData Central's USDA " src="/public/images/usda-logo.svg")
         img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of expressJS" src="/public/images/expressjs-logo.svg")
         img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of MongoDB " src="/public/images/mongodb-logo.svg")
-  div(class="container mx-auto px-4 md:p-6 xl:px-32")
+  div(class="container mx-auto px-4 md:px-6 xl:px-32")
     section(class="py-8" id="faq")
       h2(class="text-4xl text-center") Contact
       h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text text-center") Get a hold of us. We're always happy to talk!
