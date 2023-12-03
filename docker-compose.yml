@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     container_name: kochii
     ports:
-      - "3001:3001" #specify ports mapping
+      - "3000:3000" #specify ports mapping
     environment:
       - PORT=${PORT}
       - MONGODB_URI=${MONGODB_URI}

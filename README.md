@@ -37,7 +37,7 @@ Create .env file with the following:
 
 * FDC_API_KEY=your_api_key
 
-* HOST_URL=http://localhost:3001
+* HOST_URL=http://localhost:3000
 
 ```bash
 # starts client development server
