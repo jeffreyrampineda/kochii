@@ -35,17 +35,17 @@ mongoose.connection.on("error", () => {
   process.exit(0);
 });
 
-mongoose.connect(
-  uri_string,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  function () {
-    mongoose.connection.db.dropDatabase().finally(() => {
-      console.log("MongoDB: database dropped");
-      // All done, disconnect from database
-      mongoose.disconnect();
-    });
-  }
-);
+mongoose.connect(uri_string, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+async function dropDatabase() {
+  await mongoose.connection.dropDatabase();
+
+  console.log("MongoDB: database dropped");
+}
+
+dropDatabase()
+  // All done, disconnect from database
+  .finally(() => mongoose.disconnect());

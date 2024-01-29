@@ -5,13 +5,13 @@ import { AuthGuard } from './guards/auth.guard';
 
 // Layouts
 import { DashboardComponent } from './_layouts/dashboard/dashboard.component';
+import { SettingsComponent } from './_layouts/settings/settings.component';
 
 // Views
 import { LoginComponent } from './_views/login/login.component';
 import { RegisterComponent } from './_views/register/register.component';
 import { ActivityLogComponent } from './_views/activity-log/activity-log.component';
 import { OverviewComponent } from './_views/overview/overview.component';
-import { SettingsComponent } from './_views/settings/settings.component';
 import { AccountComponent } from './_views/account/account.component';
 
 // -------------------------------------------------------------
@@ -29,14 +29,14 @@ const routes: Routes = [
       {
         path: 'storage',
         loadChildren: () =>
-          import('./modules/storage/storage.module').then(
+          import('./_modules/storage/storage.module').then(
             (m) => m.StorageModule
           ),
       },
       {
         path: 'recipes',
         loadChildren: () =>
-          import('./modules/recipes/recipes.module').then(
+          import('./_modules/recipes/recipes.module').then(
             (m) => m.RecipesModule
           ),
       },
@@ -59,7 +59,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       anchorScrolling: 'enabled',
-      relativeLinkResolution: 'legacy',
+      // relativeLinkResolution: 'legacy',
     }),
   ],
   exports: [RouterModule],

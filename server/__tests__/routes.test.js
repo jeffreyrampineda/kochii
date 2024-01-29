@@ -8,10 +8,12 @@ beforeAll(async () => {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
+  await mongoose.connection.db.dropDatabase();
 });
 
 // close database and server after all tests are complete
 afterAll(async () => {
+  await mongoose.connection.db.dropDatabase();
   await mongoose.connection.close();
   await server.close();
 });
@@ -46,30 +48,28 @@ describe("/api authentication route", () => {
     lastName: "correctLastName",
   };
 
-  test("POST /api/register with correct data should give 202 status /w token", async () => {
+  test("POST /register with correct data should give 202 status /w token", async () => {
     const response = await request(server)
-      .post("/api/register")
+      .post("/register")
       .send(correct_account);
 
     expect(response.status).toEqual(202);
     expect(response.text).toContain("token");
   });
-  test("POST /api/login with correct data should give 202 status /w token", async () => {
-    const response = await request(server)
-      .post("/api/login")
-      .send(correct_account);
+  test("POST /login with correct data should give 202 status /w token", async () => {
+    const response = await request(server).post("/login").send(correct_account);
 
     expect(response.status).toEqual(202);
     expect(response.text).toContain("token");
   });
-  test("POST /api/login with incorrect auth should give 401 status", async () => {
+  test("POST /login with incorrect auth should give 401 status", async () => {
     const incorrect_account = {
       username: "incorrect_username",
       password: "incorrect_password",
     };
 
     const response = await request(server)
-      .post("/api/login")
+      .post("/login")
       .send(incorrect_account);
 
     expect(response.status).toEqual(401);

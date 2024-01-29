@@ -11,3 +11,5 @@
 
 # jest-mongodb
 globalConfig.json
+
+/public/css/main.css

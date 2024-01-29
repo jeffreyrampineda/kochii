@@ -1,0 +1,28 @@
+<h2 class="text-2xl font-light my-4">
+  <ng-content select="[title-prepend]"></ng-content>{{ title
+  }}<ng-content select="[title-append]"></ng-content>
+</h2>
+
+<div class="bg-white mat-elevation-z2 p-4">
+  <!--Actions-->
+  <ng-content select="[actions]"></ng-content>
+  <!--/.Actions-->
+
+  <!--Content-->
+  <div
+    *ngIf="loading; else viewEmpty"
+    class="loader text-center"
+    style="margin: auto"
+  ></div>
+  <ng-template #viewEmpty>
+    <ng-container *ngIf="isEmpty; else viewContent">
+      <h2 class="text-center">{{ title }} is empty</h2>
+    </ng-container>
+  </ng-template>
+  <ng-template #viewContent>
+    <div [hidden]="isEmpty || loading">
+      <ng-content></ng-content>
+    </div>
+  </ng-template>
+  <!--/.Content-->
+</div>

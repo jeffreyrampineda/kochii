@@ -1,0 +1,32 @@
+<h3>Add group</h3>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-form-field class="w-100">
+    <mat-label>Group name</mat-label>
+    <input matInput formControlName="name" type="text" />
+    <mat-error *ngIf="f['name'].hasError('required')">
+      Name is required
+    </mat-error>
+    <mat-error *ngIf="f['name'].hasError('minlength')">
+      Minimum length is 1
+    </mat-error>
+    <mat-error *ngIf="f['name'].hasError('maxlength')">
+      Maximum length is 30
+    </mat-error>
+    <mat-error *ngIf="f['name'].hasError('pattern')">
+      Must only be an alphanumeric, space ( ), underscore (_), or dash (-)
+    </mat-error>
+  </mat-form-field>
+
+  <!-- Messages -->
+  <app-error-messages
+    [error_messages]="error_messages"
+    [loading]="loading"
+  ></app-error-messages>
+
+  <div class="float-right">
+    <button mat-button type="submit" [disabled]="loading || form.invalid">
+      Save
+    </button>
+    <button mat-button type="button" (click)="onNoClick()">Cancel</button>
+  </div>
+</form>

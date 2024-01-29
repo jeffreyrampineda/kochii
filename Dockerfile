@@ -27,6 +27,6 @@ RUN npm ci
 ## From ‘builder’ copy published angular bundles in app/dist
 COPY --from=builder /app/dist /app/dist
 ## expose port for express
-EXPOSE 3001
+EXPOSE 3000
 
 CMD ["npm",  "start"]

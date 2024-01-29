@@ -1,0 +1,7 @@
+<!-- Messages -->
+<div class="text-center py-4">
+  <p *ngIf="loading">Loading...</p>
+  <p *ngFor="let message of error_messages" class="text-[red]">
+    {{ message }}
+  </p>
+</div>

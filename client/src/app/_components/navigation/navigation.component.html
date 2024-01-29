@@ -1,0 +1,97 @@
+<nav class="relative w-60">
+  <div class="fixed h-full w-60 bg-primary p-4">
+    <a href="/"
+      ><img
+        alt="Kochii banner"
+        src="{{ domainUrl }}/public/images/kochii-banner.png"
+        class="max-h-8 mr-auto ml-auto"
+    /></a>
+    <div class="mt-8">
+      <app-link-group heading="Analytics">
+        <a
+          routerLink="overview"
+          routerLinkActive="font-bold text-white"
+          (click)="setTitle('Overview')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
+        >
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >dashboard</mat-icon
+          >
+          Overview
+        </a>
+      </app-link-group>
+      <app-link-group heading="Storage">
+        <a
+          routerLink="storage/inventory"
+          routerLinkActive="font-bold text-white"
+          (click)="setTitle('Inventory')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
+        >
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >list_alt</mat-icon
+          >
+          Inventory
+        </a>
+        <a
+          routerLink="storage/groceries"
+          routerLinkActive="font-bold text-white"
+          (click)="setTitle('Grocery')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
+        >
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >shopping_basket</mat-icon
+          >
+          Groceries
+        </a>
+      </app-link-group>
+      <app-link-group heading="Recipes">
+        <a
+          routerLink="recipes/creations"
+          routerLinkActive="font-bold text-white"
+          (click)="setTitle('Creations')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
+        >
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >menu_book</mat-icon
+          >
+          Creations
+        </a>
+        <a
+          routerLink="recipes/catalog"
+          routerLinkActive="font-bold text-white"
+          (click)="setTitle('Catalog')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
+        >
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >newspaper</mat-icon
+          >
+          Catalog
+        </a>
+        <a
+          routerLink="recipes/collections"
+          routerLinkActive="font-bold text-white"
+          (click)="setTitle('Collections')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
+        >
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >bookmarks</mat-icon
+          >
+          Collections
+        </a>
+      </app-link-group>
+      <app-link-group heading="Other">
+        <a
+          routerLink="settings"
+          routerLinkActive="font-bold text-white"
+          (click)="setTitle('Settings')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
+        >
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >settings</mat-icon
+          >
+          Settings
+        </a>
+      </app-link-group>
+    </div>
+  </div>
+</nav>

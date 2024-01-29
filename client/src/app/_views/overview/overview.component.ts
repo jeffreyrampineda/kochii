@@ -4,7 +4,6 @@ import 'chartjs-adapter-luxon';
 import { ActivityService } from 'src/app/services/activity.service';
 import { Activity } from 'src/app/interfaces/activity';
 import { InventoryService } from 'src/app/services/inventory.service';
-import { MatTableDataSource } from '@angular/material/table';
 
 interface ChartData {
   x: Date;
@@ -16,16 +15,16 @@ interface Week {
 }
 
 @Component({
-  selector: 'kochii-overview',
+  selector: 'app-overview',
   templateUrl: './overview.component.html',
 })
 export class OverviewComponent implements OnInit {
-  @ViewChild('canvasLine') canvasLine: ElementRef;
+  @ViewChild('canvasLine') canvasLine!: ElementRef;
 
   fromDay = 7;
-  doughnutChart;
-  lineChart;
-  today: Date = new Date();
+  doughnutChart: any;
+  lineChart: any;
+  today!: Date;
   numberOfExpired = 0;
   rawActivitiesData: Activity[] = [];
   itemTotal = 0;
@@ -33,8 +32,8 @@ export class OverviewComponent implements OnInit {
   loadingActivities = false;
   weeklySpent = 0;
 
-  firstWeekDay: Date;
-  lastWeekDay: Date;
+  firstWeekDay!: Date;
+  lastWeekDay!: Date;
 
   displayedColumns: string[] = [
     'method',
@@ -43,7 +42,7 @@ export class OverviewComponent implements OnInit {
     'addedDate',
     'description',
   ];
-  activities: MatTableDataSource<Activity>;
+  activities: any;
 
   constructor(
     private activityService: ActivityService,
@@ -51,6 +50,7 @@ export class OverviewComponent implements OnInit {
   ) {
     Chart.register(...registerables);
 
+    this.today = new Date();
     this.today.setHours(0, 0, 0, 0);
     this.firstWeekDay = new Date(
       this.today.getFullYear(),
@@ -65,8 +65,8 @@ export class OverviewComponent implements OnInit {
     );
   }
 
-  ngOnInit() {
-    this.activities = new MatTableDataSource();
+  ngOnInit(): void {
+    //this.activities = new MatTableDataSource();
 
     this.getActivitiesData();
     this.getInventory();
@@ -97,7 +97,7 @@ export class OverviewComponent implements OnInit {
           this.numberOfExpired
         );
       },
-      error: (err) => {
+      error: () => {
         // Error
         this.loadingInventory = false;
       },
@@ -111,10 +111,10 @@ export class OverviewComponent implements OnInit {
     this.loadingActivities = true;
     this.activityService.getAllFromPastDays(this.fromDay).subscribe({
       next: (response) => {
-        this.activities.data = response.slice(0, 4);
+        this.activities = response.slice(0, 4);
         this.rawActivitiesData = response;
       },
-      error: (err) => {
+      error: () => {
         // Error
         this.loadingActivities = false;
       },
@@ -237,7 +237,7 @@ export class OverviewComponent implements OnInit {
             type: 'time',
             time: {
               unit: 'day',
-              stepSize: 1,
+              //stepSize: 1,
               tooltipFormat: 'MMMM dd',
               displayFormats: {
                 day: 'MMM dd',
@@ -326,7 +326,7 @@ export class OverviewComponent implements OnInit {
   weekToChartData(week: Week): ChartData[] {
     const data: ChartData[] = [];
     for (const day in week) {
-      if (week.hasOwnProperty(day)) {
+      if (Object.prototype.hasOwnProperty.call(week, day)) {
         data.push({ x: new Date(day), y: week[day] });
       }
     }
@@ -342,7 +342,7 @@ export class OverviewComponent implements OnInit {
     const expirationDate = new Date(date);
     const timeDiff = expirationDate.getTime() - this.today.getTime();
     const diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-    return diffDays === -0 ? 0 : diffDays;
+    return diffDays === 0 ? 0 : diffDays;
   }
 
   quantityRemovedThisWeek(): number {
@@ -360,7 +360,10 @@ export class OverviewComponent implements OnInit {
 
   getItemsAddedThisWeek() {
     this.inventoryService
-      .getItemsAddedBetween(this.firstWeekDay, this.lastWeekDay)
+      .getItemsAddedBetween(
+        this.firstWeekDay.toString(),
+        this.lastWeekDay.toString()
+      )
       .subscribe((result) => {
         this.weeklySpent = result.reduce(
           (acc, curr) => (acc += curr.cost * curr.quantity),

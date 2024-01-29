@@ -3,15 +3,16 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 const app = require("./app");
-const io = require('./io');
-const db = require('./db');
+const io = require("./io");
+const db = require("./db");
 const debug = require("debug")("kochii:server");
-const http = require('http');
+const http = require("http");
 
 // Get port from environment and store in Express.
-const port = normalizePort(process.env.PORT || "3001");
+const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
+// Create HTTP server.
 const server = http.createServer(app);
 
 // Listen on provided port, on all network interfaces.

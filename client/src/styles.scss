@@ -1,0 +1,93 @@
+@use '@angular/material' as mat;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.dense {
+  @include mat.all-component-densities(-5);
+}
+
+/* You can add global styles to this file, and also import other style files */
+
+.mdc-notched-outline__notch {
+  border-right: none;
+}
+
+.mat-menu-panel {
+  width: 250px;
+}
+
+.mat-row:hover {
+  background-color: #f6f6f6;
+}
+
+.mat-button-base {
+  margin-right: 4px !important;
+  margin-left: 4px !important;
+}
+
+/* Removes the dotted lines around button. Bootstrap causes this.*/
+button:focus {
+  outline: none !important;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* ----------------------------------- */
+
+/* ----------------------- */
+
+.loader {
+  border: 16px solid #00000000;
+  border-radius: 50%;
+  border-top: 12px solid rgba(90, 155, 255, 1);
+  border-bottom: 12px solid rgba(90, 155, 255, 1);
+  width: 100px;
+  height: 100px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 1s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*------------*/
+
+/* You can add global styles to this file, and also import other style files */
+html {
+  /* prevent scrollbar from repositioning the page */
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #eee;
+}
+
+a {
+  color: #3f51b5;
+}
+
+hr {
+  border-color: rgba(255, 255, 255, 0.2);
+}

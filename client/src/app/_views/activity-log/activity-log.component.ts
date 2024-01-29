@@ -1,6 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit } from '@angular/core';
 
 import { Activity } from 'src/app/interfaces/activity';
 import { ActivityService } from 'src/app/services/activity.service';
@@ -8,28 +6,33 @@ import { ActivityService } from 'src/app/services/activity.service';
 // -------------------------------------------------------------
 
 @Component({
-  selector: 'kochii-activity-log',
+  selector: 'app-activity-log',
   templateUrl: './activity-log.component.html',
-  styleUrls: ['./activity-log.component.css']
+  styleUrls: ['./activity-log.component.css'],
 })
 export class ActivityLogComponent implements OnInit {
+  //@ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-
-  displayedColumns: string[] = ['date', 'method', 'target', 'quantity', 'addedDate', 'description', ];
-  activities: MatTableDataSource<Activity>;
+  displayedColumns: string[] = [
+    'date',
+    'method',
+    'target',
+    'quantity',
+    'addedDate',
+    'description',
+  ];
+  //activities: MatTableDataSource<Activity>;
+  activities!: Activity[];
   loading = false;
 
-  constructor(
-    private activityService: ActivityService
-  ) { }
+  constructor(private activityService: ActivityService) {}
 
   // -------------------------------------------------------------
 
   ngOnInit() {
     // Set up inventory: MatTableDataSource with empty inital data
-    this.activities = new MatTableDataSource();
-    this.activities.paginator = this.paginator;
+    //this.activities = new MatTableDataSource();
+    //this.activities.paginator = this.paginator;
 
     this.getActivities();
   }
@@ -38,16 +41,16 @@ export class ActivityLogComponent implements OnInit {
   getActivities(): void {
     this.loading = true;
     this.activityService.getActivities().subscribe({
-      next: response => {
-        this.activities.data = response;
+      next: (response) => {
+        this.activities = response;
       },
-      error: err => {
+      error: () => {
         // Error
         this.loading = false;
       },
       complete: () => {
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -55,18 +58,18 @@ export class ActivityLogComponent implements OnInit {
   clear(): void {
     this.loading = true;
     this.activityService.clearActivities().subscribe({
-      next: response => {
+      next: (response) => {
         if (response === 1) {
-          this.activities.data = [];
+          this.activities = [];
         }
       },
-      error: err => {
+      error: () => {
         // Error
         this.loading = false;
       },
       complete: () => {
         this.loading = false;
-      }
+      },
     });
   }
 }

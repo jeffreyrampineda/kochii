@@ -1,5 +1,5 @@
+const debug = require("debug")("kochii:server-activity.controller");
 const Activity = require("../models/activity");
-const createError = require("http-errors");
 
 exports.init = async function (account_id, activity_id) {
   const result = await Activity.create({
@@ -83,7 +83,9 @@ exports.activity_list = async function (req, res, next) {
     ]);
     res.status(200).json(activities);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -108,7 +110,9 @@ exports.activity_list_period = async function (req, res, next) {
 
     res.status(200).json(activities);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -121,6 +125,8 @@ exports.activity_delete = async function (req, res, next) {
     );
     res.status(200).json(result.ok);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };

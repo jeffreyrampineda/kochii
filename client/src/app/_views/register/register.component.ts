@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PasswordMatchValidator } from 'src/app/modules/shared/validators/password-match.validator';
+import { PasswordMatchValidator } from 'src/app/validators/password-match.validator';
 import { AccountService } from 'src/app/services/account.service';
 import { Title } from '@angular/platform-browser';
 
 // -------------------------------------------------------------
 
 @Component({
-  selector: 'kochii-register',
+  selector: 'app-register',
   templateUrl: './register.component.html',
 })
 export class RegisterComponent implements OnInit {
-  registerForm: FormGroup;
+  registerForm!: FormGroup;
   loading = false;
   error_messages = [];
 

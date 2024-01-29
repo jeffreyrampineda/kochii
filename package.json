@@ -4,7 +4,7 @@
   "description": "Assists and encourages individuals for a manageable meal preparation lifestyle",
   "scripts": {
     "start": "cd server && npm start",
-    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev": "concurrently --raw \"npm run dev:server\" \"npm run dev:client\"",
     "dev:server": "cd server && npm run dev",
     "dev:client": "cd client && npm run dev",
     "build:client": "cd client && npm run build",
@@ -15,6 +15,6 @@
   "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^7.2.0"
+    "concurrently": "^8.2.2"
   }
 }

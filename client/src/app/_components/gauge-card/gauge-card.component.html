@@ -1,22 +1,20 @@
-<div class="card mt-3 k-card">
-  <div
-    class="card-body k-border-left d-flex justify-content-between"
-    [style.border-color]="color"
-  >
-    <div>
-      <span class="k-data-title" [style.color]="color">{{ title }}</span>
-      <hr />
-      <span class="k-data-value" [style.color]="color">
-        {{ value }}
-      </span>
-      <small [style.color]="color">
-        <mat-icon> arrow_drop_up </mat-icon>{{ change }}
-      </small>
-    </div>
-    <mat-icon
-      [style.color]="color"
-      style="font-size: 3rem; width: 3rem; height: 3rem"
-      >{{ icon }}</mat-icon
-    >
+<div
+  class="bg-white border-l-4 px-4 py-8 mat-elevation-z2 flex justify-between hover:shadow hover:cursor-pointer"
+  [style.border-color]="color"
+>
+  <div>
+    <span class="font-medium" [style.color]="color">{{ title }}</span>
+    <hr />
+    <span class="font-medium text-2xl" [style.color]="color">
+      {{ value }}
+    </span>
+    <small [style.color]="color">
+      <mat-icon> arrow_drop_up </mat-icon>{{ change }}
+    </small>
   </div>
+  <mat-icon
+    [style.color]="color"
+    style="font-size: 3rem; width: 3rem; height: 3rem"
+    >{{ icon }}</mat-icon
+  >
 </div>

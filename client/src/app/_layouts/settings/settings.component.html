@@ -1,0 +1,11 @@
+<app-presentation-container title="Settings">
+  <div class="flex">
+    <app-link-group heading="General" class="w-1/6 mt-4">
+      <a routerLink="account" class="block mt-2">Account</a>
+      <a routerLink="activity-log" class="block mt-2">Activity Log</a>
+    </app-link-group>
+    <div class="flex-1">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</app-presentation-container>

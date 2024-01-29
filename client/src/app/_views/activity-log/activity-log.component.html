@@ -1,13 +1,13 @@
-<kochii-presentation-container
+<app-presentation-container
   title="Activity Log"
-  [isEmpty]="activities.data.length === 0"
+  [isEmpty]="activities.length === 0"
   [loading]="loading"
 >
-  <!--Actions-->
-  <div actions class="d-sm-flex justify-content-between">
-    <button mat-button (click)="clear()">Clear</button>
+  <!--Header-->
+  <div title-append class="float-right">
+    <button mat-raised-button color="primary" (click)="clear()">Clear</button>
   </div>
-  <!--/.Actions-->
+  <!--/.Header-->
 
   <!--Content-->
   <table mat-table [dataSource]="activities">
@@ -56,4 +56,4 @@
     showFirstLastButtons
   ></mat-paginator>
   <!--/.Content-->
-</kochii-presentation-container>
+</app-presentation-container>

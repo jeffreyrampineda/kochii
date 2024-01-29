@@ -1,5 +1,8 @@
+const debug = require("debug")("kochii:server-error.middleware");
+
 // Catch 404 error
 exports.not_found_handler = function (req, res, next) {
+  res.status(404);
   res.render("message", {
     title: "Page Not Found | Kochii",
     message_title: "( ._.)",
@@ -9,16 +12,16 @@ exports.not_found_handler = function (req, res, next) {
 };
 
 // Error handler
-exports.error_handler = function (err, req, res, next) {
+exports.error_handler = function (error, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get("env") === "development" ? err : {};
-  //console.log(err);
+  res.locals.message = error.message;
+  res.locals.error = req.app.get("env") === "development" ? error : {};
+  debug(error);
   // render the error page
-  res.status(err.status || 500);
+  res.status(error.status || 500);
   if (["login", "register", "api"].includes(req.originalUrl.split("/")[1])) {
-    res.send(err);
+    res.send(error);
   } else {
-    res.render("error");
+    res.render(res.locals.render_view, res.locals.render_data);
   }
 };

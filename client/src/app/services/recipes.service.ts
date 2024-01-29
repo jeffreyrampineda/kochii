@@ -1,4 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { map, Observable, tap } from 'rxjs';
@@ -10,8 +11,8 @@ import { MessageService } from './message.service';
   providedIn: 'root',
 })
 export class RecipesService {
-  private recipesUrl = '/recipes';
-  private collectionUrl = '/api/collection';
+  private recipesUrl = `${environment.domain}/api/recipes`;
+  private collectionUrl = `${environment.domain}/api/collection`;
 
   private options = {
     headers: new HttpHeaders({ Accept: 'application/json' }),
@@ -29,11 +30,15 @@ export class RecipesService {
     if (post._id) {
       this.log('updating Post');
 
-      return this.http.put<Post>(`api/recipes/${post._id}`, post, this.options);
+      return this.http.put<Post>(
+        `${this.recipesUrl}/${post._id}`,
+        post,
+        this.options
+      );
     } else {
       this.log('creating Post');
 
-      return this.http.post<Post>(`api/recipes`, post, this.options);
+      return this.http.post<Post>(`${this.recipesUrl}`, post, this.options);
     }
   }
 
@@ -46,7 +51,7 @@ export class RecipesService {
     };
 
     return this.http.get<Post[]>(this.recipesUrl, options).pipe(
-      tap((_) => this.log('fetched posts')),
+      tap(() => this.log('fetched posts')),
       map((result) => {
         result.forEach((post) => {
           if (post.banner) {
@@ -66,8 +71,8 @@ export class RecipesService {
     const options = {
       headers: new HttpHeaders({ Accept: 'application/json' }),
     };
-    return this.http.get<Post>(`/api/recipes/${id}`, options).pipe(
-      tap((_) => this.log(`fetched post /w id=${id}`)),
+    return this.http.get<Post>(`${this.recipesUrl}/${id}`, options).pipe(
+      tap(() => this.log(`fetched post /w id=${id}`)),
       map((result) => {
         if (result.banner) {
           result.banner = this.sanitizer.bypassSecurityTrustUrl(
@@ -83,7 +88,7 @@ export class RecipesService {
   deletePost(id: string): Observable<any> {
     this.log('deleting Post');
 
-    return this.http.delete<any>(`api/${this.recipesUrl}/${id}`, this.options);
+    return this.http.delete<any>(`${this.recipesUrl}/${id}`, this.options);
   }
 
   // PostCollection
@@ -91,18 +96,18 @@ export class RecipesService {
   createPostCollection(id: string): Observable<any> {
     return this.http
       .post<any>(`${this.collectionUrl}/${id}`, null, this.options)
-      .pipe(tap((_) => this.log('creating postCollection')));
+      .pipe(tap(() => this.log('creating postCollection')));
   }
 
   deletePostCollection(id: string): Observable<any> {
     return this.http
       .delete<any>(`${this.collectionUrl}/${id}`, this.options)
-      .pipe(tap((_) => this.log('deleting postCollection')));
+      .pipe(tap(() => this.log('deleting postCollection')));
   }
 
   getPostCollection(): Observable<PostCollection> {
     return this.http.get<PostCollection>(this.collectionUrl, this.options).pipe(
-      tap((_) => this.log('fetched postCollection')),
+      tap(() => this.log('fetched postCollection')),
       map((result) => {
         result.posts.forEach((post) => {
           if (post.banner) {

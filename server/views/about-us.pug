@@ -1,46 +1,43 @@
 extends layout
 
 block content
-    div(class="jumbotron k-blue-gradient")
-        div(class="text-white text-center pt-5 px-4")
-            h1(class="display-4 font-weight-bold text-white pt-5 mb-2") About Us
-            h4(class="text-white my-4") Everything you need to know about Kochii
-    main(class="mt-5")
-        div(class="container mb-5")
-            div(class="row")
-                div(class="col-md-6 mb-4")
-                    h2 Who created Kochii?
-                    p.
-                        This is a personal open-source project created by
-                        #[span(class="font-weight-bold") Jeffrey Ram Pineda] as a hobby. 
-                        It is created with Angular as a frontend framework, Express.js for the 
-                        backend server, and MongoDB as its database.
-                    p. 
-                        Have any questions? Got any suggestions? Fill the form on your
-                        right or use kochii's primary email 
-                        #[span(class="font-weight-bold") contact@kochii.app]
-                    h2 What is Kochii?
-                    p.
-                        Knowing how to prepare your meals in advance will help you save
-                        money. Kochii is designed to keep track of busy people's cooking
-                        ingredients with the intention of assisting and promoting
-                        home-cooked meals.
-                    p.
-                        Through Kochii's upcoming recipe feature, cooking instructions
-                        can be archived for later use and will reveal to the user which
-                        recipes he/she can and cannot make in relation to his/her
-                        recorded inventory.
-                div(class="col-md-6")
-                    h2 Contact
-                    form(method="POST" action="/send")
-                        div(class="form-group")
-                            label(for="name") Name
-                            input(class="form-control" type="text" name="from_name" id="name" placeholder="Enter name")
-                        div(class="form-group")
-                            label(for="email") Email address
-                            input(class="form-control" type="text" name="from_email" id="email" placeholder="Enter email")
-                        div(class="form-group")
-                            label(for="body") Message
-                            textarea(class="form-control" type="text" name="body" id="body" rows="7" placeholder="Enter your message" style="resize: none;")
-                        div(class="text-center")
-                            button(class='btn btn-dark k-btn k-blue-gradient shadow' type="submit") Send
+  div(class="bg-gradient-to-r from-skyblue to-navyblue text-white text-center")
+    div(class="container mx-auto px-4 md:px-6 xl:px-32 pb-28 pt-40")
+      h1(class="text-6xl font-bold mb-4") About Us
+      h4(class="text-2xl font-light") Everything you need to know about Kochii
+  div(class="container mx-auto px-4 md:px-6 xl:px-32 py-16")
+    div(class="grid grid-cols-1 md:grid-cols-2 gap-8")
+      div(class="text-center md:col-span-1 md:text-left")
+        h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text mb-8") Who created Kochii?
+        p.
+          Kochii is a personal open source project created by Jeffrey Ram Pineda as a hobby. 
+          It is created with Angular as a frontend framework, Express.js for the backend server, 
+          and MongoDB as its database.
+        p. 
+          Have any questions? Got any suggestions? Fill the form on your
+          right or use kochii's primary email contact@kochii.app
+        h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text my-8") What is Kochii?
+        p.
+          Knowing how to prepare your meals in advance will help you save
+          money. Kochii is designed to keep track of busy people's cooking
+          ingredients with the intention of assisting and promoting
+          home-cooked meals.
+        p.
+          Through Kochii's upcoming recipe feature, cooking instructions
+          can be archived for later use and will reveal to the user which
+          recipes he/she can and cannot make in relation to his/her
+          recorded inventory.
+      div
+        h2(class="text-4xl text-center") Contact
+        form(method="POST" action="/send")
+          div(class="text-xl mb-4")
+            label(class="block my-2" for="name") Name
+            input(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="from_name" id="name" placeholder="Full Name *")
+          div(class="text-xl mb-4")
+            label(class="block my-2" for="email") Email address
+            input(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="from_email" id="email" placeholder="Email Address *")
+          div(class="text-xl mb-4")
+            label(class="block my-2" for="body") Message
+            textarea(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="body" id="body" rows="7" placeholder="Message" style="resize: none;")
+          div(class="text-center")
+            button(class='rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' type="submit") Send

@@ -1,12 +1,12 @@
+const debug = require("debug")("kochii:server-post.controller");
 const Post = require("../models/post");
 const Account = require("../models/account");
 const PostCollection = require("../models/postcollection");
-const createError = require("http-errors");
 
 // Handle Post create.
 exports.post_create = async function (req, res, next) {
   try {
-    const postdetail = {
+    const postdetail = ({
       title,
       tags,
       cooking_time,
@@ -16,7 +16,7 @@ exports.post_create = async function (req, res, next) {
       ingredients,
       instructions,
       summary,
-    } = req.body;
+    } = req.body);
 
     postdetail.author = req.user;
 
@@ -24,30 +24,37 @@ exports.post_create = async function (req, res, next) {
 
     res.send(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
 // Display list of all Post.
-exports.post_list = async function (req, res) {
-  const username = req.query.username ?? "";
+exports.post_list = async function (req, res, next) {
+  try {
+    const username = req.query.username ?? "";
 
-  const account = await Account.findOne(
-    { username: username },
-    "_id"
-  ).lean();
-  const query = account ? { author: account._id } : {};
+    const account = await Account.findOne({ username: username }, "_id").lean();
+    const query = account ? { author: account._id } : {};
 
-  let posts = await Post.find(
-    query,
-    "title tags createdAt summary banner likes dislikes"
-  ).sort({ createdAt: -1, title: 1 });
-  if (!req.accepts("html")) {
-    // If does not expect html, return json.
-    posts = posts.map((post) => post.toObject()); // Makes image a base64
-    res.send(posts);
-  } else {
-    res.render("recipes/post_list", { title: "Recipes | Kochii", posts });
+    let posts = await Post.find(
+      query,
+      "title tags createdAt summary banner likes dislikes author"
+    )
+      .sort({ createdAt: -1, title: 1 })
+      .populate("author", "firstName lastName");
+    if (!req.accepts("html")) {
+      // If does not expect html, return json.
+      posts = posts.map((post) => post.toObject()); // Makes image a base64
+      res.send(posts);
+    } else {
+      res.render("recipes/post_list", { title: "Recipes | Kochii", posts });
+    }
+  } catch (error) {
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -90,7 +97,9 @@ exports.post_detail = async function (req, res, next) {
       }
     }
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -130,7 +139,9 @@ exports.post_update = async function (req, res, next) {
     );
     res.send(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -142,7 +153,9 @@ exports.post_delete = async function (req, res, next) {
 
     res.status(200).send({ success: 1 });
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -158,7 +171,9 @@ exports.postcollection_get = async function (req, res, next) {
       .lean(); // Lean makes image a base64.
     res.send(postcollection);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -182,7 +197,9 @@ exports.postcollection_create = async function (req, res, next) {
     );
     res.send(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
 
@@ -201,6 +218,8 @@ exports.postcollection_delete = async function (req, res, next) {
     ).lean();
     res.send(result);
   } catch (error) {
-    next(createError(error.status ?? 500, error));
+    debug("Error");
+
+    next(error);
   }
 };
