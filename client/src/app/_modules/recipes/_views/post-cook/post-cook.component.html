@@ -1,66 +1,72 @@
-<h2 class="skinny">
-  <a [routerLink]="['/', 'recipes', 'catalog']" style="text-decoration: none"
-    >Recipes</a
-  >
-  /
-  <a
-    [routerLink]="['/', 'recipes', 'catalog', post._id]"
-    style="text-decoration: none"
-    >{{ post.title }}</a
-  >
-  / Cooking
-</h2>
+<app-presentation-container title="Cooking" [isEmpty]="post === undefined">
+  <!--Header -->
+  <span title-prepend>
+    <a [routerLink]="['/', 'recipes', 'catalog']" style="text-decoration: none"
+      >Recipes</a
+    >
+    /
+    <a
+      [routerLink]="['/', 'recipes', 'catalog', post._id]"
+      style="text-decoration: none"
+      >{{ post.title }}</a
+    >
+    /
+  </span>
+  <!--/.Header -->
 
-<div class="card shadow-sm mt-4">
-  <div class="card-body">
-    <mat-stepper #stepper orientation="vertical">
-      <mat-step label="Ingredients">
-        <h2 class="display-5">Ingredients:</h2>
-        <span class="text-warning" *ngIf="isMissing()">
-          Warning: missing some ingredients!
-        </span>
-        <div class="row my-5">
-          <mat-checkbox
-            class="col-6"
-            *ngFor="let ingredient of ingredients.recipe"
-            [(ngModel)]="ingredient.found"
-            >{{ ingredient.quantity }} {{ ingredient.unit_of_measurement }} -
-            {{ ingredient.name }}</mat-checkbox
-          >
-        </div>
-      </mat-step>
-      <mat-step label="Instructions">
-        <h2 class="display-5">Instructions:</h2>
-        <ol class="my-5">
-          <li class="mt-2" *ngFor="let instruction of post?.instructions">
-            {{ instruction.description }}
-          </li>
-        </ol>
-      </mat-step>
-      <mat-step label="Done">
-        <h2 class="display-5">Complete:</h2>
-        <span>Removing the following ingredients from inventory </span>
-        <div class="row my-5">
-          <mat-checkbox
-            class="col-6"
-            [(ngModel)]="ingredient.removing"
-            *ngFor="let ingredient of ingredients.inventory"
-            >{{ ingredient.quantity }} {{ ingredient.unit_of_measurement }} -
-            {{ ingredient.name }}</mat-checkbox
-          >
-        </div>
-        <div class="text-center">
-          <button
-            class="mx-2"
-            mat-raised-button
-            matStepperNext
-            color="primary"
-            (click)="completeCooking()"
-          >
-            Complete
-          </button>
-        </div>
-      </mat-step>
-    </mat-stepper>
+  <!--Content-->
+  <div class="card shadow-sm mt-4">
+    <div class="card-body">
+      <mat-stepper #stepper orientation="vertical">
+        <mat-step label="Ingredients">
+          <h2 class="display-5">Ingredients:</h2>
+          <span class="text-warning" *ngIf="isMissing()">
+            Warning: missing some ingredients!
+          </span>
+          <div class="row my-5">
+            <mat-checkbox
+              class="col-6"
+              *ngFor="let ingredient of ingredients.recipe"
+              [(ngModel)]="ingredient.found"
+              >{{ ingredient.quantity }} {{ ingredient.unit_of_measurement }} -
+              {{ ingredient.name }}</mat-checkbox
+            >
+          </div>
+        </mat-step>
+        <mat-step label="Instructions">
+          <h2 class="display-5">Instructions:</h2>
+          <ol class="my-5">
+            <li class="mt-2" *ngFor="let instruction of post?.instructions">
+              {{ instruction.description }}
+            </li>
+          </ol>
+        </mat-step>
+        <mat-step label="Done">
+          <h2 class="display-5">Complete:</h2>
+          <span>Removing the following ingredients from inventory </span>
+          <div class="row my-5">
+            <mat-checkbox
+              class="col-6"
+              [(ngModel)]="ingredient.removing"
+              *ngFor="let ingredient of ingredients.inventory"
+              >{{ ingredient.quantity }} {{ ingredient.unit_of_measurement }} -
+              {{ ingredient.name }}</mat-checkbox
+            >
+          </div>
+          <div class="text-center">
+            <button
+              class="mx-2"
+              mat-raised-button
+              matStepperNext
+              color="primary"
+              (click)="completeCooking()"
+            >
+              Complete
+            </button>
+          </div>
+        </mat-step>
+      </mat-stepper>
+    </div>
   </div>
-</div>
+  <!--/.Content-->
+</app-presentation-container>

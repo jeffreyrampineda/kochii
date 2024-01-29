@@ -1,163 +1,153 @@
-<h2 class="skinny">
-  <a [routerLink]="['/', 'recipes', 'creations']" style="text-decoration: none"
-    >Creations
-  </a>
-  / Recipe Edit
-  <div title-append class="float-right">
-    <button mat-raised-button color="accent" (click)="onSave()">Save</button>
+<app-presentation-container title="Recipe Edit">
+  <!--Header -->
+  <span title-prepend><a routerLink="/recipes/creations">Creations </a>/ </span>
+  <div title-append class="flex gap-2 float-right">
+    <button mat-raised-button color="primary" (click)="onSave()">Save</button>
     <button mat-raised-button (click)="onDelete()">Delete</button>
     <button mat-raised-button routerLink="/recipes/creations">Cancel</button>
   </div>
-</h2>
+  <!--/.Header -->
 
-<div class="mt-4">
-  <div class="row" *ngIf="postForm; else emptyPostDetails">
-    <div class="col-md-8">
-      <div class="card border-0 shadow">
-        <form [formGroup]="postForm">
-          <!-- <img class="card-img-top" [src]="post.banner" /> -->
-          <div class="card-body">
-            <!-- Tags -->
-            <!--             <p>
-              <span
-                *ngFor="
-                  let tag of postForm.get('tags').value;
-                  let index = index
-                "
-              >
-                <a href="#">{{ tag }}</a>
-                <span *ngIf="index < postForm.get('tags').value.length - 1">
-                  •
+  <!--Content-->
+  <div
+    class="flex flex-col lg:flex-row gap-4"
+    *ngIf="postForm; else emptyPostDetails"
+  >
+    <div class="lg:w-4/6 mat-elevation-z2 p-4">
+      <form [formGroup]="postForm">
+        <!-- <img class="card-img-top" [src]="post.banner" /> -->
+        <!-- Tags -->
+        <!--             <p>
+                <span
+                  *ngFor="
+                    let tag of postForm.get('tags').value;
+                    let index = index
+                  "
+                >
+                  <a href="#">{{ tag }}</a>
+                  <span *ngIf="index < postForm.get('tags').value.length - 1">
+                    •
+                  </span>
                 </span>
-              </span>
-            </p> -->
-            <!-- Title -->
-            <h4>Title</h4>
-            <mat-form-field appearance="fill" class="w-100">
-              <mat-label>Title</mat-label>
-              <input matInput formControlName="title" />
-            </mat-form-field>
-            <!-- Created At -->
-            <!--             <div class="text-muted">
-              {{ postForm.get("createdAt").value | date }}
-            </div> -->
-            <hr />
-            <div class="row">
-              <!-- Cooking Time -->
-              <mat-form-field appearance="fill" class="col-3">
-                <mat-label>Cooking Time: </mat-label>
-                <input matInput formControlName="cooking_time" />
+              </p> -->
+        <!-- Title -->
+        <mat-form-field class="w-full">
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" />
+        </mat-form-field>
+        <!-- Created At -->
+        <!--             <div class="text-muted">
+                {{ postForm.get("createdAt").value | date }}
+              </div> -->
+        <div class="grid grid-cols-4 gap-4">
+          <!-- Cooking Time -->
+          <mat-form-field>
+            <mat-label>Cooking Time: </mat-label>
+            <input matInput formControlName="cooking_time" />
+          </mat-form-field>
+          <!-- Preparation Time -->
+          <mat-form-field>
+            <mat-label>Preparation Time: </mat-label>
+            <input matInput formControlName="prep_time" />
+          </mat-form-field>
+          <!-- Calories -->
+          <mat-form-field>
+            <mat-label>Calories</mat-label>
+            <input matInput formControlName="calories" />
+          </mat-form-field>
+          <!-- Servings -->
+          <mat-form-field>
+            <mat-label>Servings</mat-label>
+            <input matInput formControlName="servings" />
+          </mat-form-field>
+        </div>
+        <!-- Ingredients -->
+        <h4 class="font-bold my-4">Ingredients</h4>
+        <ng-container formArrayName="ingredients">
+          <ng-container
+            *ngFor="let ingredientForm of ingredients.controls; let i = index"
+          >
+            <div [formGroupName]="i" class="grid grid-cols-12 gap-4">
+              <!-- Quantity -->
+              <mat-form-field class="col-span-2">
+                <mat-label>Quantity</mat-label>
+                <input matInput formControlName="quantity" />
               </mat-form-field>
-              <!-- Preparation Time -->
-              <mat-form-field appearance="fill" class="col-3">
-                <mat-label>Preparation Time: </mat-label>
-                <input matInput formControlName="prep_time" />
+              <!-- Unit of Measurement -->
+              <mat-form-field class="col-span-2">
+                <mat-label>Unit</mat-label>
+                <input matInput formControlName="unit_of_measurement" />
               </mat-form-field>
-              <!-- Calories -->
-              <mat-form-field appearance="fill" class="col-3">
-                <mat-label>Calories</mat-label>
-                <input matInput formControlName="calories" />
+              <!-- Name -->
+              <mat-form-field class="col-span-4">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" />
               </mat-form-field>
-              <!-- Servings -->
-              <mat-form-field appearance="fill" class="col-3">
-                <mat-label>Servings</mat-label>
-                <input matInput formControlName="servings" />
+              <!-- Description -->
+              <mat-form-field class="col-span-3">
+                <mat-label>Description</mat-label>
+                <input matInput formControlName="description" />
               </mat-form-field>
-            </div>
-            <!-- Ingredients -->
-            <h4>Ingredients</h4>
-            <ng-container formArrayName="ingredients">
-              <ng-container
-                *ngFor="
-                  let ingredientForm of ingredients.controls;
-                  let i = index
-                "
+              <button
+                mat-icon-button
+                color="primary"
+                class="col-span-1"
+                (click)="deleteIngredient(i)"
               >
-                <div [formGroupName]="i">
-                  <!-- Quantity -->
-                  <mat-form-field appearance="fill" class="col-2">
-                    <mat-label>Quantity</mat-label>
-                    <input matInput formControlName="quantity" />
-                  </mat-form-field>
-                  <!-- Unit of Measurement -->
-                  <mat-form-field appearance="fill" class="col-2">
-                    <mat-label>Unit</mat-label>
-                    <input matInput formControlName="unit_of_measurement" />
-                  </mat-form-field>
-                  <!-- Name -->
-                  <mat-form-field appearance="fill" class="col-4">
-                    <mat-label>Name</mat-label>
-                    <input matInput formControlName="name" />
-                  </mat-form-field>
-                  <!-- Description -->
-                  <mat-form-field appearance="fill" class="col-3">
-                    <mat-label>Description</mat-label>
-                    <input matInput formControlName="description" />
-                  </mat-form-field>
-                  <button
-                    mat-icon-button
-                    color="primary"
-                    class="col-1"
-                    (click)="deleteIngredient(i)"
-                  >
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                </div>
-              </ng-container>
-            </ng-container>
-            <!-- Add Ingredient -->
-            <div class="text-center">
-              <button mat-mini-fab (click)="addIngredient()">
-                <mat-icon class="add-course-btn">add</mat-icon>
+                <mat-icon>remove</mat-icon>
               </button>
             </div>
-            <!-- Instructions -->
-            <h4>Instructions</h4>
-            <ng-container formArrayName="instructions">
-              <ng-container
-                *ngFor="
-                  let instructionForm of instructions.controls;
-                  let i = index
-                "
+          </ng-container>
+        </ng-container>
+        <!-- Add Ingredient -->
+        <div class="text-center">
+          <button mat-mini-fab color="primary" (click)="addIngredient()">
+            <mat-icon class="add-course-btn">add</mat-icon>
+          </button>
+        </div>
+        <!-- Instructions -->
+        <h4 class="font-bold my-4">Instructions</h4>
+        <ng-container formArrayName="instructions">
+          <ng-container
+            *ngFor="let instructionForm of instructions.controls; let i = index"
+          >
+            <div [formGroupName]="i" class="grid grid-cols-12 gap-4">
+              <mat-form-field class="col-span-11">
+                <textarea
+                  matInput
+                  rows="4"
+                  formControlName="description"
+                ></textarea>
+              </mat-form-field>
+              <button
+                mat-icon-button
+                color="primary"
+                class="col-span-1"
+                (click)="deleteInstruction(i)"
               >
-                <div [formGroupName]="i">
-                  <mat-form-field appearance="fill" class="col-11">
-                    <textarea
-                      matInput
-                      rows="4"
-                      formControlName="description"
-                    ></textarea>
-                  </mat-form-field>
-                  <button
-                    mat-icon-button
-                    color="primary"
-                    class="col-1"
-                    (click)="deleteInstruction(i)"
-                  >
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                </div>
-              </ng-container>
-            </ng-container>
-            <!-- Add Instruction -->
-            <div class="text-center">
-              <button mat-mini-fab (click)="addInstruction()">
-                <mat-icon class="add-course-btn">add</mat-icon>
+                <mat-icon>remove</mat-icon>
               </button>
             </div>
-          </div>
-        </form>
-      </div>
+          </ng-container>
+        </ng-container>
+        <!-- Add Instruction -->
+        <div class="text-center">
+          <button mat-mini-fab color="primary" (click)="addInstruction()">
+            <mat-icon class="add-course-btn">add</mat-icon>
+          </button>
+        </div>
+      </form>
     </div>
-    <div class="col-md-4">
+    <div class="lg:w-2/6">
       <!--       <h2>{{ post.author.firstName }} {{ post.author.lastName }}</h2>
-      <p class="lead">Recipe Author</p>
-      <p>
-        {{ post.summary }}
-      </p> -->
+        <p class="lead">Recipe Author</p>
+        <p>
+          {{ post.summary }}
+        </p> -->
     </div>
   </div>
   <ng-template #emptyPostDetails>
     <p>No data.</p>
   </ng-template>
-</div>
+  <!--/.Content-->
+</app-presentation-container>

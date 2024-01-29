@@ -4,11 +4,11 @@
   [loading]="loading"
 >
   <!--Header-->
-  <div title-append class="float-right">
-    <div *ngIf="!showSelect">
+  <div title-append class="flex gap-2 float-right">
+    <ng-container *ngIf="!showSelect">
       <button
         mat-raised-button
-        color="accent"
+        color="primary"
         routerLink="/storage/inventory/add"
       >
         Add
@@ -19,8 +19,8 @@
       <button mat-raised-button (click)="selectColumnToggle('set')">
         Edit
       </button>
-    </div>
-    <div *ngIf="showSelect">
+    </ng-container>
+    <ng-container *ngIf="showSelect">
       <span style="font-size: medium"
         >{{ option === "set" ? "You are updating " : "You are removing " }}
         {{ selection.selected.length }} items</span
@@ -28,7 +28,7 @@
       <button
         mat-raised-button
         [disabled]="selection.selected.length === 0"
-        color="accent"
+        color="primary"
         (click)="
           option === 'set'
             ? openUpdateDialog('Update', 'New values for the updated items')
@@ -38,14 +38,14 @@
         Save
       </button>
       <button mat-raised-button (click)="selectColumnToggle('')">Cancel</button>
-    </div>
+    </ng-container>
   </div>
   <!--/.Header-->
 
   <!--Actions-->
-  <div actions class="d-sm-flex justify-content-between">
+  <div actions class="flex justify-between">
     <!--Group actions-->
-    <div>
+    <div class="flex gap-2">
       <mat-form-field>
         <mat-label>Current group:</mat-label>
         <mat-select [(ngModel)]="selectedGroup" (ngModelChange)="getItems()">
@@ -72,7 +72,7 @@
   <!--/.Actions-->
 
   <!--Content-->
-  <table class="shadow-lg" mat-table [dataSource]="inventory" matSort>
+  <table mat-table [dataSource]="inventory" matSort>
     <!-- Checkbox Column -->
     <ng-container matColumnDef="select" *ngIf="showSelect">
       <th mat-header-cell *matHeaderCellDef>
@@ -99,7 +99,7 @@
       <td mat-cell *matCellDef="let item">
         <div *ngIf="selection.isSelected(item); else viewName">
           <div *ngIf="option === 'set'; else viewName">
-            <mat-form-field class="pr-2" style="width: 100%">
+            <mat-form-field>
               <input matInput type="text" [formControl]="f(item._id).name" />
               <mat-error *ngIf="f(item._id).name.errors">
                 <div *ngIf="f(item._id).name.errors.required">Required</div>
@@ -129,7 +129,7 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Quantity</th>
       <td mat-cell *matCellDef="let item">
         <div *ngIf="selection.isSelected(item); else viewQuantity">
-          <mat-form-field class="pr-2" style="width: 100%">
+          <mat-form-field>
             <input
               matInput
               type="text"
@@ -160,7 +160,7 @@
       <td mat-cell *matCellDef="let item">
         <div *ngIf="selection.isSelected(item); else viewGroup">
           <div *ngIf="option === 'set'; else viewGroup">
-            <mat-form-field class="pr-2" style="width: 100%">
+            <mat-form-field>
               <mat-select [formControl]="f(item._id).group">
                 <mat-option *ngFor="let group of groups" [value]="group">{{
                   group
@@ -186,7 +186,7 @@
       <td mat-cell *matCellDef="let item">
         <div *ngIf="selection.isSelected(item); else viewAddedDate">
           <div *ngIf="option === 'set'; else viewAddedDate">
-            <mat-form-field class="pr-2" style="width: 100%">
+            <mat-form-field>
               <input
                 matInput
                 [formControl]="f(item._id).addedDate"
@@ -219,7 +219,7 @@
       <td mat-cell *matCellDef="let item">
         <div *ngIf="selection.isSelected(item); else viewExpirationDate">
           <div *ngIf="option === 'set'; else viewExpirationDate">
-            <mat-form-field class="pr-2" style="width: 100%">
+            <mat-form-field>
               <input
                 matInput
                 [formControl]="f(item._id).expirationDate"

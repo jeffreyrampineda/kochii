@@ -1,8 +1,8 @@
 <app-auth-page [title]="title">
   <!-- Form -->
-  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col">
     <!-- username -->
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Username</mat-label>
       <input matInput formControlName="username" type="text" />
       <mat-error *ngIf="f['username'].hasError('required')">
@@ -20,7 +20,7 @@
     </mat-form-field>
 
     <!-- Password -->
-    <mat-form-field>
+    <mat-form-field appearance="outline">
       <mat-label>Password</mat-label>
       <input matInput formControlName="password" type="password" />
       <mat-error *ngIf="f['password'].hasError('required')">
@@ -35,9 +35,9 @@
     </mat-form-field>
 
     <!-- Extra -->
-    <div>
+    <div class="flex justify-between items-center">
       <mat-checkbox formControlName="rememberMe">Remember me</mat-checkbox>
-      <a href="">Forgot password?</a>
+      <a href="" class="text-sm">Forgot password?</a>
     </div>
 
     <!-- Messages -->
@@ -57,10 +57,9 @@
     </button>
 
     <!-- Register link -->
-    <div>
-      <p>Not a member?</p>
-      <a routerLink="/register">Register</a>
-    </div>
+    <p class="pt-4 text-center">
+      Not a member? <a routerLink="/register">Register</a>
+    </p>
   </form>
   <!-- Form -->
 </app-auth-page>

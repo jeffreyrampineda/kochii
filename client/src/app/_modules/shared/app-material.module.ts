@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 // -------------------------------------------------------------
 
@@ -37,6 +38,7 @@ const matModules = [
   MatTooltipModule,
   MatSelectModule,
   MatTabsModule,
+  MatSidenavModule,
 ];
 
 @NgModule({

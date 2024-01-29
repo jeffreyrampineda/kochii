@@ -9,35 +9,34 @@ block content
       span &nbsp;/&nbsp;
       span(aria-current="page") #{post.title}
     div(class="flex flex-col lg:flex-row gap-4")
-      div(class="flex-1")
-        div(class="shadow-2xl")
-          img(class="object-cover w-full" src= `data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
-          div(class="p-4")
-            p
-              each tag, index in post.tags
-                a(href="#") #{tag}
-                if index < post.tags.length - 1
-                  i(class="bi bi-dot")
-            h1(class="text-2xl font-bold my-4") #{post.title}
-            p #{post.createdAt_formatted} 
-              span(class="float-right")
-                button(class="btn" style="padding-top: 0; padding-bottom:0;") #[i(class="bi bi-hand-thumbs-up")] #{post.likes} 
-                button(class="btn" style="padding-top: 0; padding-bottom:0;") #[i(class="bi bi-hand-thumbs-down")] #{post.dislikes}
-            hr
-            div(class="flex justify-between my-4")
-              span Cooking Time: #[span(class="font-bold") #{post.cooking_time}]
-              span Preparation Time: #[span(class="font-bold") #{post.prep_time}]
-              span Calories: #[span(class="font-bold") #{post.calories} kcal]
-              span Servings: #[span(class="font-bold") #{post.servings}]
-            h4(class="font-bold") Ingredients
-            div(class="grid grid-cols-1 md:grid-cols-2 my-4 md:px-8")
-              each ingredient in post.ingredients
-                span #{ingredient.quantity} #{ingredient.unit_of_measurement} - #{ingredient.name}, #{ingredient.description}
-            h4(class="font-bold") Instructions 
-            ol
-              each instruction in post.instructions 
-                li(class="mt-3") #{instruction.description}
-            p(class="my-4") #{post.content}
+      div(class="flex-1 shadow-2xl")
+        img(class="object-cover w-full" src= `data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
+        div(class="p-4")
+          p
+            each tag, index in post.tags
+              a(href="#") #{tag}
+              if index < post.tags.length - 1
+                i(class="bi bi-dot")
+          h1(class="text-2xl font-bold my-4") #{post.title}
+          p #{post.createdAt_formatted} 
+            span(class="float-right")
+              button(class="btn" style="padding-top: 0; padding-bottom:0;") #[i(class="bi bi-hand-thumbs-up")] #{post.likes} 
+              button(class="btn" style="padding-top: 0; padding-bottom:0;") #[i(class="bi bi-hand-thumbs-down")] #{post.dislikes}
+          hr
+          div(class="flex justify-between my-4")
+            span Cooking Time: #[span(class="font-bold") #{post.cooking_time}]
+            span Preparation Time: #[span(class="font-bold") #{post.prep_time}]
+            span Calories: #[span(class="font-bold") #{post.calories} kcal]
+            span Servings: #[span(class="font-bold") #{post.servings}]
+          h4(class="font-bold") Ingredients
+          div(class="grid grid-cols-1 md:grid-cols-2 my-4 md:px-8")
+            each ingredient in post.ingredients
+              span #{ingredient.quantity} #{ingredient.unit_of_measurement} - #{ingredient.name}, #{ingredient.description}
+          h4(class="font-bold") Instructions 
+          ol
+            each instruction in post.instructions 
+              li(class="mt-3") #{instruction.description}
+          p(class="my-4") #{post.content}
       div(class="lg:w-1/3")
         h2(class="text-xl mb-2") #{post.author.full_name_formatted}
         p #{post.summary}

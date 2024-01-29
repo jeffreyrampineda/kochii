@@ -1,147 +1,97 @@
-<!--Main Navigation-->
-<header>
-  <!-- Sidebar -->
-  <div
-    class="sidebar-fixed position-fixed"
-    [class.k-sidebar-display]="mobileDisplaySidebar"
-  >
-    <div class="logo-wrapper">
-      <a *ngIf="!mobileDisplaySidebar; else viewCloseSidebar" href="/"
-        ><img
-          alt="Kochii banner"
-          src="{{ domainUrl }}/public/images/kochii-banner.png"
-      /></a>
-      <ng-template #viewCloseSidebar>
-        <button
-          mat-button
-          (click)="toggleMobileDisplaySidebar()"
-          style="color: white"
-        >
-          Close
-        </button>
-      </ng-template>
-    </div>
-    <div class="k-sidebar-items">
-      <hr class="mt-0 mb-3" />
+<nav class="relative w-60">
+  <div class="fixed h-full w-60 bg-primary p-4">
+    <a href="/"
+      ><img
+        alt="Kochii banner"
+        src="{{ domainUrl }}/public/images/kochii-banner.png"
+        class="max-h-8 mr-auto ml-auto"
+    /></a>
+    <div class="mt-8">
       <app-link-group heading="Analytics">
         <a
           routerLink="overview"
-          routerLinkActive="active"
+          routerLinkActive="font-bold text-white"
           (click)="setTitle('Overview')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
         >
-          <mat-icon aria-hidden="true">dashboard</mat-icon>
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >dashboard</mat-icon
+          >
           Overview
         </a>
       </app-link-group>
       <app-link-group heading="Storage">
         <a
           routerLink="storage/inventory"
-          routerLinkActive="active"
+          routerLinkActive="font-bold text-white"
           (click)="setTitle('Inventory')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
         >
-          <mat-icon aria-hidden="true">list_alt</mat-icon>
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >list_alt</mat-icon
+          >
           Inventory
         </a>
         <a
           routerLink="storage/groceries"
-          routerLinkActive="active"
+          routerLinkActive="font-bold text-white"
           (click)="setTitle('Grocery')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
         >
-          <mat-icon aria-hidden="true">shopping_basket</mat-icon>
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >shopping_basket</mat-icon
+          >
           Groceries
         </a>
       </app-link-group>
       <app-link-group heading="Recipes">
         <a
           routerLink="recipes/creations"
-          routerLinkActive="active"
+          routerLinkActive="font-bold text-white"
           (click)="setTitle('Creations')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
         >
-          <mat-icon aria-hidden="true">menu_book</mat-icon>
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >menu_book</mat-icon
+          >
           Creations
         </a>
         <a
           routerLink="recipes/catalog"
-          routerLinkActive="active"
+          routerLinkActive="font-bold text-white"
           (click)="setTitle('Catalog')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
         >
-          <mat-icon aria-hidden="true">newspaper</mat-icon>
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >newspaper</mat-icon
+          >
           Catalog
         </a>
         <a
           routerLink="recipes/collections"
-          routerLinkActive="active"
+          routerLinkActive="font-bold text-white"
           (click)="setTitle('Collections')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
         >
-          <mat-icon aria-hidden="true">bookmarks</mat-icon>
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >bookmarks</mat-icon
+          >
           Collections
         </a>
       </app-link-group>
       <app-link-group heading="Other">
         <a
           routerLink="settings"
-          routerLinkActive="active"
+          routerLinkActive="font-bold text-white"
           (click)="setTitle('Settings')"
+          class="block p-4 no-underline text-slate-400 hover:text-white"
         >
-          <mat-icon aria-hidden="true">settings</mat-icon>
+          <mat-icon aria-hidden="true" class="align-bottom mr-2"
+            >settings</mat-icon
+          >
           Settings
         </a>
       </app-link-group>
     </div>
   </div>
-  <!-- Sidebar -->
-
-  <!--Navbar-->
-  <mat-toolbar class="shadow-sm" style="background-color: white">
-    <button
-      mat-icon-button
-      class="mr-2"
-      aria-label="Example icon-button with menu icon"
-      (click)="toggleMobileDisplaySidebar()"
-    >
-      <mat-icon>menu</mat-icon>
-    </button>
-    <span>Kochii</span>
-    <span class="k-spacer"></span>
-    <button mat-icon-button [matMenuTriggerFor]="notificationsMenu">
-      <mat-icon [matBadge]="notifications.length" matBadgeColor="warn"
-        >notifications</mat-icon
-      >
-    </button>
-    <mat-menu #notificationsMenu="matMenu" xPosition="before">
-      <div class="text-center skinny">Notifications</div>
-      <hr class="my-2" />
-      <button mat-menu-item *ngFor="let notify of notifications">
-        {{ notify }}
-      </button>
-    </mat-menu>
-    <button mat-button [matMenuTriggerFor]="profileMenu">
-      <mat-icon class="mr-2">account_circle</mat-icon>{{ username }}
-    </button>
-    <mat-menu #profileMenu="matMenu" xPosition="before">
-      <button
-        mat-menu-item
-        routerLink="settings/account"
-        (click)="setTitle('Account')"
-      >
-        <mat-icon aria-hidden="true">account_circle</mat-icon>
-        Account
-      </button>
-      <button
-        mat-menu-item
-        routerLink="settings/activity-log"
-        (click)="setTitle('Activity Log')"
-      >
-        <mat-icon aria-hidden="true">history</mat-icon>
-        Activity Log
-      </button>
-      <hr class="my-1" />
-      <button mat-menu-item (click)="logout()">
-        <mat-icon aria-hidden="true">power_settings_new</mat-icon>
-        Logout
-      </button>
-    </mat-menu>
-  </mat-toolbar>
-  <!--/.Navbar-->
-</header>
-<!--Main Navigation-->
+</nav>

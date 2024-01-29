@@ -8,7 +8,6 @@ import { Account } from '../../interfaces/account';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.css'],
 })
 export class AccountComponent implements OnInit {
   account!: Account;
@@ -36,8 +35,15 @@ export class AccountComponent implements OnInit {
         if (response) {
           this.account = response;
           this.accountForm = this.formBuilder.group({
+            username: [
+              {
+                value: this.account.username,
+                disabled: true,
+              },
+            ],
+            email: [{ value: this.account.email, disabled: true }],
             firstName: [
-              this.account.firstName,
+              { value: this.account.firstName, disabled: true },
               [
                 Validators.required,
                 Validators.minLength(2),
@@ -46,7 +52,7 @@ export class AccountComponent implements OnInit {
               ],
             ],
             lastName: [
-              this.account.lastName,
+              { value: this.account.lastName, disabled: true },
               [
                 Validators.required,
                 Validators.minLength(2),
@@ -96,6 +102,15 @@ export class AccountComponent implements OnInit {
 
   toggleEdit(): void {
     this.isEditting = !this.isEditting;
+    if (this.isEditting) {
+      this.f['firstName'].enable();
+      this.f['lastName'].enable();
+    } else {
+      this.f['firstName'].disable();
+      this.f['lastName'].disable();
+    }
+
+    // Reset values
     this.f['firstName'].setValue(this.account.firstName);
     this.f['lastName'].setValue(this.account.lastName);
   }

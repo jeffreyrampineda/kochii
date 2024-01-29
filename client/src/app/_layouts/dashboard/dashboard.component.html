@@ -1,10 +1,67 @@
-<app-navigation></app-navigation>
-
-<main class="mx-2">
-  <div class="container mt-4">
-    <router-outlet></router-outlet>
-    <!--Footer-->
-    <app-footer></app-footer>
-    <!--/Footer-->
-  </div>
-</main>
+<mat-sidenav-container autosize>
+  <!--Side Nav-->
+  <mat-sidenav
+    [ngClass]="!isCollapsed ? 'expanded' : ''"
+    [mode]="isMobile ? 'over' : 'side'"
+    [opened]="isMobile ? 'false' : 'true'"
+  >
+    <app-navigation></app-navigation>
+  </mat-sidenav>
+  <!--/Side Nav-->
+  <mat-sidenav-content class="bg-[#eee]">
+    <!--Top Nav-->
+    <div class="bg-white flex gap-2 items-center mat-elevation-z2 p-2">
+      <button *ngIf="isMobile" mat-icon-button (click)="toggleMenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <div class="flex-1"></div>
+      <button mat-icon-button [matMenuTriggerFor]="notificationsMenu">
+        <mat-icon [matBadge]="notifications.length" matBadgeColor="warn"
+          >notifications</mat-icon
+        >
+      </button>
+      <mat-menu #notificationsMenu="matMenu" xPosition="before">
+        <div class="text-center skinny my-2">Notifications</div>
+        <hr class="my-2" />
+        <button mat-menu-item *ngFor="let notify of notifications">
+          {{ notify }}
+        </button>
+      </mat-menu>
+      <button mat-button [matMenuTriggerFor]="profileMenu">
+        <mat-icon class="mr-2">account_circle</mat-icon>{{ username }}
+      </button>
+      <mat-menu #profileMenu="matMenu" xPosition="before">
+        <button
+          mat-menu-item
+          routerLink="settings/account"
+          (click)="setTitle('Account')"
+        >
+          <mat-icon aria-hidden="true">account_circle</mat-icon>
+          Account
+        </button>
+        <button
+          mat-menu-item
+          routerLink="settings/activity-log"
+          (click)="setTitle('Activity Log')"
+        >
+          <mat-icon aria-hidden="true">history</mat-icon>
+          Activity Log
+        </button>
+        <hr class="my-1" />
+        <button mat-menu-item (click)="logout()">
+          <mat-icon aria-hidden="true">power_settings_new</mat-icon>
+          Logout
+        </button>
+      </mat-menu>
+    </div>
+    <!--/Top Nav-->
+    <div class="container mx-auto p-4">
+      <!--Content-->
+      <router-outlet></router-outlet>
+      <!--/Content-->
+      <!--Footer-->
+      <app-footer></app-footer>
+      <!--/Footer-->
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

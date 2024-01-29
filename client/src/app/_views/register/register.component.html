@@ -1,8 +1,12 @@
 <app-auth-page title="Register">
   <!-- Form -->
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <form
+    [formGroup]="registerForm"
+    (ngSubmit)="onSubmit()"
+    class="flex flex-col"
+  >
     <!-- username -->
-    <mat-form-field class="w-100">
+    <mat-form-field appearance="outline">
       <input
         matInput
         formControlName="username"
@@ -24,7 +28,7 @@
     </mat-form-field>
 
     <!-- Password -->
-    <mat-form-field class="w-100">
+    <mat-form-field appearance="outline">
       <input
         matInput
         formControlName="password"
@@ -43,7 +47,7 @@
     </mat-form-field>
 
     <!-- Password repeat -->
-    <mat-form-field class="w-100">
+    <mat-form-field appearance="outline">
       <input
         matInput
         formControlName="passwordre"
@@ -56,7 +60,7 @@
     </mat-form-field>
 
     <!-- Email -->
-    <mat-form-field class="w-100">
+    <mat-form-field appearance="outline">
       <input matInput formControlName="email" type="text" placeholder="Email" />
       <mat-error *ngIf="f['email'].hasError('required')">
         Email is required
@@ -67,7 +71,7 @@
     </mat-form-field>
 
     <!-- firstName -->
-    <mat-form-field class="w-100">
+    <mat-form-field appearance="outline">
       <input
         matInput
         formControlName="firstName"
@@ -83,7 +87,7 @@
     </mat-form-field>
 
     <!-- lastName -->
-    <mat-form-field class="w-100">
+    <mat-form-field appearance="outline">
       <input
         matInput
         formControlName="lastName"
@@ -116,7 +120,7 @@
     </button>
 
     <!-- Login link -->
-    <p class="text-center">
+    <p class="pt-4 text-center">
       Already a member? <a routerLink="/login">Login</a>
     </p>
   </form>

@@ -1,10 +1,14 @@
-<div class="mat-elevation-z2" style="margin: auto; max-width: 400px">
-  <img
-    alt="Kochii logo"
-    src="{{ domainUrl }}/public/images/kochii-logo.png"
-    style="height: 64px; display: block; margin-right: auto; margin-left: auto"
-  />
-  <h4 class="my-4 text-center">{{ title }}</h4>
+<div
+  class="mat-elevation-z2 mt-4 bg-white sm-mt-16 m-auto max-w-[400px] flex flex-col gap-8 px-4 py-8"
+>
+  <div>
+    <img
+      class="h-16 mr-auto ml-auto"
+      alt="Kochii logo"
+      src="{{ domainUrl }}/public/images/kochii-logo.png"
+    />
+  </div>
+  <h1 class="text-3xl text-center">{{ title }}</h1>
   <ng-content></ng-content>
 </div>
 <!--Footer-->

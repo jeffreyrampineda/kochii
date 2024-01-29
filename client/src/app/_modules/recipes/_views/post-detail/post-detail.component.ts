@@ -9,6 +9,7 @@ import { RecipesService } from 'src/app/services/recipes.service';
 })
 export class PostDetailComponent implements OnInit {
   post!: Post;
+  loading = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -23,12 +24,18 @@ export class PostDetailComponent implements OnInit {
   }
 
   getPostById(id: string): void {
+    this.loading = true;
     this.recipesService.getPostById(id).subscribe({
       next: (result) => {
         this.post = result;
       },
-      error: () => {},
-      complete: () => {},
+      error: () => {
+        // Error
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
     });
   }
 

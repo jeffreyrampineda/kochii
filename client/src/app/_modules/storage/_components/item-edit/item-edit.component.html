@@ -4,8 +4,8 @@
     ><a routerLink="/storage/inventory">Inventory </a>
     /
   </span>
-  <div title-append class="float-right">
-    <button mat-raised-button color="accent" (click)="onSubmit()">Save</button>
+  <div title-append class="flex gap-2 float-right">
+    <button mat-raised-button color="primary" (click)="onSubmit()">Save</button>
     <button mat-raised-button routerLink="/storage/inventory">Cancel</button>
   </div>
   <!--/.Header -->
@@ -16,211 +16,169 @@
       *ngFor="let itemForm of itemEditForms; let idx = index"
       [label]="itemForm.value.name"
     >
-      <!--Grid row-->
-      <div class="container row p-2 mt-2">
-        <!--Form grid column-->
-        <div class="col-md-6 mb-4">
-          <form [formGroup]="itemForm">
-            <!-- Grid row -->
-            <div class="form-row">
-              <!-- Grid column -->
-              <div class="col-md-12" *ngIf="!isAdding">
-                <!-- Id -->
-                <mat-form-field class="mt-3" style="width: 100%">
-                  <mat-label>Id</mat-label>
-                  <input matInput formControlName="_id" type="text" />
-                </mat-form-field>
-              </div>
+      <div class="grid grid-cols-2 gap-4 p-4">
+        <!--Form-->
+        <form [formGroup]="itemForm" class="grid grid-cols-2 gap-2">
+          <!-- Id -->
+          <mat-form-field *ngIf="!isAdding" class="col-span-2">
+            <mat-label>Id</mat-label>
+            <input matInput formControlName="_id" type="text" />
+          </mat-form-field>
 
-              <!-- Grid column -->
-              <div class="col-md-12">
-                <!-- Name -->
-                <mat-form-field class="mt-3" style="width: 100%">
-                  <mat-label>Name</mat-label>
-                  <input
-                    matInput
-                    formControlName="name"
-                    type="text"
-                    placeholder="Name"
-                  />
-                  <button
-                    mat-button
-                    matSuffix
-                    (click)="checkNutrients(f(idx)['name'].value)"
-                  >
-                    Check nutrients<mat-icon>keyboard_arrow_right</mat-icon>
-                  </button>
-                  <mat-error *ngIf="f(idx)['name'].hasError('required')">
-                    Name is required
-                  </mat-error>
-                  <mat-error *ngIf="f(idx)['name'].hasError('minlength')">
-                    Minimum length is 2
-                  </mat-error>
-                  <mat-error *ngIf="f(idx)['name'].hasError('maxlength')">
-                    Maximum length is 30
-                  </mat-error>
-                  <mat-error *ngIf="f(idx)['name'].hasError('pattern')">
-                    Must only be an alphanumeric, space ( ), underscore (_), or
-                    dash (-)
-                  </mat-error>
-                </mat-form-field>
-              </div>
+          <!-- Name -->
+          <mat-form-field class="col-span-2">
+            <mat-label>Name</mat-label>
+            <input
+              matInput
+              formControlName="name"
+              type="text"
+              placeholder="Name"
+            />
+            <button
+              mat-button
+              matSuffix
+              (click)="checkNutrients(f(idx)['name'].value)"
+            >
+              Check nutrients<mat-icon>keyboard_arrow_right</mat-icon>
+            </button>
+            <mat-error *ngIf="f(idx)['name'].hasError('required')">
+              Name is required
+            </mat-error>
+            <mat-error *ngIf="f(idx)['name'].hasError('minlength')">
+              Minimum length is 2
+            </mat-error>
+            <mat-error *ngIf="f(idx)['name'].hasError('maxlength')">
+              Maximum length is 30
+            </mat-error>
+            <mat-error *ngIf="f(idx)['name'].hasError('pattern')">
+              Must only be an alphanumeric, space ( ), underscore (_), or dash
+              (-)
+            </mat-error>
+          </mat-form-field>
 
-              <!-- Grid column -->
-              <div class="col-md-6">
-                <!-- Cost -->
-                <mat-form-field class="mt-3" style="width: 100%">
-                  <mat-label>Cost</mat-label>
-                  <span matPrefix>$ &nbsp;</span>
-                  <input
-                    matInput
-                    formControlName="cost"
-                    type="text"
-                    placeholder="Ex. 0.20"
-                  />
-                  <mat-error *ngIf="f(idx)['cost'].hasError('required')">
-                    Cost is required
-                  </mat-error>
-                  <mat-error *ngIf="f(idx)['cost'].hasError('min')">
-                    Minimum cost is 0
-                  </mat-error>
-                  <mat-error *ngIf="f(idx)['cost'].hasError('max')">
-                    Maximum quantity is 999
-                  </mat-error>
-                </mat-form-field>
-              </div>
+          <!-- Cost -->
+          <mat-form-field>
+            <mat-label>Cost</mat-label>
+            <span matPrefix>$ &nbsp;</span>
+            <input
+              matInput
+              formControlName="cost"
+              type="text"
+              placeholder="Ex. 0.20"
+            />
+            <mat-error *ngIf="f(idx)['cost'].hasError('required')">
+              Cost is required
+            </mat-error>
+            <mat-error *ngIf="f(idx)['cost'].hasError('min')">
+              Minimum cost is 0
+            </mat-error>
+            <mat-error *ngIf="f(idx)['cost'].hasError('max')">
+              Maximum quantity is 999
+            </mat-error>
+          </mat-form-field>
 
-              <!-- Grid column -->
-              <div class="col-md-6">
-                <!-- Quantity -->
-                <mat-form-field class="mt-3" style="width: 100%">
-                  <mat-label>Quantity</mat-label>
-                  <span matPrefix>x &nbsp;</span>
-                  <input
-                    matInput
-                    formControlName="quantity"
-                    type="text"
-                    placeholder="Ex. 1"
-                  />
-                  <mat-error *ngIf="f(idx)['quantity'].hasError('required')">
-                    Quantity is required
-                  </mat-error>
-                  <mat-error *ngIf="f(idx)['quantity'].hasError('min')">
-                    Minimum quantity is 1
-                  </mat-error>
-                  <mat-error *ngIf="f(idx)['quantity'].hasError('max')">
-                    Maximum quantity is 999
-                  </mat-error>
-                </mat-form-field>
-              </div>
+          <!-- Quantity -->
+          <mat-form-field>
+            <mat-label>Quantity</mat-label>
+            <span matPrefix>x &nbsp;</span>
+            <input
+              matInput
+              formControlName="quantity"
+              type="text"
+              placeholder="Ex. 1"
+            />
+            <mat-error *ngIf="f(idx)['quantity'].hasError('required')">
+              Quantity is required
+            </mat-error>
+            <mat-error *ngIf="f(idx)['quantity'].hasError('min')">
+              Minimum quantity is 1
+            </mat-error>
+            <mat-error *ngIf="f(idx)['quantity'].hasError('max')">
+              Maximum quantity is 999
+            </mat-error>
+          </mat-form-field>
 
-              <!-- Grid column -->
-              <div class="col-md-12">
-                <!-- Group -->
-                <mat-form-field style="width: 100%">
-                  <mat-label>Select a group</mat-label>
-                  <mat-select formControlName="group">
-                    <mat-option *ngFor="let group of groups" [value]="group"
-                      >{{ group }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="f(idx)['group'].hasError('required')">
-                    Group is required
-                  </mat-error>
-                </mat-form-field>
-              </div>
+          <!-- Group -->
+          <mat-form-field class="col-span-2">
+            <mat-label>Select a group</mat-label>
+            <mat-select formControlName="group">
+              <mat-option *ngFor="let group of groups" [value]="group"
+                >{{ group }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="f(idx)['group'].hasError('required')">
+              Group is required
+            </mat-error>
+          </mat-form-field>
 
-              <!-- Grid column -->
-              <div class="col-md-6">
-                <!-- AddedDate field -->
-                <mat-form-field style="width: 100%">
-                  <mat-label>Added date</mat-label>
-                  <input
-                    matInput
-                    formControlName="addedDate"
-                    [matDatepicker]="picker"
-                  />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="picker"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                  <mat-error *ngIf="f(idx)['addedDate'].hasError('required')">
-                    Added date is required
-                  </mat-error>
-                </mat-form-field>
-              </div>
+          <!-- AddedDate field -->
+          <mat-form-field>
+            <mat-label>Added date</mat-label>
+            <input
+              matInput
+              formControlName="addedDate"
+              [matDatepicker]="picker"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="f(idx)['addedDate'].hasError('required')">
+              Added date is required
+            </mat-error>
+          </mat-form-field>
 
-              <!-- Grid column -->
-              <div class="col-md-6">
-                <!-- ExpirationDate -->
-                <mat-form-field style="width: 100%">
-                  <mat-label>Expiration date</mat-label>
-                  <input
-                    matInput
-                    formControlName="expirationDate"
-                    [matDatepicker]="picker2"
-                  />
-                  <mat-datepicker-toggle
-                    matSuffix
-                    [for]="picker2"
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #picker2></mat-datepicker>
-                  <mat-error
-                    *ngIf="f(idx)['expirationDate'].hasError('required')"
-                  >
-                    Expiration date is required
-                  </mat-error>
-                </mat-form-field>
-              </div>
+          <!-- ExpirationDate -->
+          <mat-form-field>
+            <mat-label>Expiration date</mat-label>
+            <input
+              matInput
+              formControlName="expirationDate"
+              [matDatepicker]="picker2"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker2"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+            <mat-error *ngIf="f(idx)['expirationDate'].hasError('required')">
+              Expiration date is required
+            </mat-error>
+          </mat-form-field>
 
-              <!-- Grid column -->
-              <div class="col-md-12">
-                <button mat-button *ngIf="idx !== 0" (click)="removeInput(idx)">
-                  Remove
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
-        <!--Grid column-->
-
-        <!--Image grid column-->
-        <div class="col-md-6 mb-4">
-          <!--Image-->
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <!-- <h6 class="card-title">{{ firstFood.description }} (Testing)</h6> -->
-              <mat-form-field appearance="fill" *ngIf="similarFoods.length > 0">
-                <mat-label>Food</mat-label>
-                <mat-select [(ngModel)]="selectedSimilarFood" name="food">
-                  <mat-option *ngFor="let food of similarFoods" [value]="food">
-                    {{ food.description }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <ul
-                class="list-group list-group-flush"
-                *ngIf="selectedSimilarFood.foodNutrients.length > 0"
-              >
-                <li
-                  class="list-group-item"
-                  *ngFor="
-                    let n of selectedSimilarFood.foodNutrients
-                      ? selectedSimilarFood.foodNutrients.slice(0, 12)
-                      : []
-                  "
-                >
-                  {{ n.nutrientName }}, {{ n.value }}, {{ n.unitName }}
-                </li>
-              </ul>
-            </div>
+          <div class="col-span-2">
+            <button mat-button *ngIf="idx !== 0" (click)="removeInput(idx)">
+              Remove
+            </button>
           </div>
-          <!--/.Image-->
+        </form>
+
+        <!--Image-->
+        <div class="mat-elevation-z2 p-4">
+          <!-- <h6 class="card-title">{{ firstFood.description }} (Testing)</h6> -->
+          <mat-form-field *ngIf="similarFoods.length > 0">
+            <mat-label>Food</mat-label>
+            <mat-select [(ngModel)]="selectedSimilarFood" name="food">
+              <mat-option *ngFor="let food of similarFoods" [value]="food">
+                {{ food.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <ul *ngIf="selectedSimilarFood.foodNutrients.length > 0">
+            <li
+              *ngFor="
+                let n of selectedSimilarFood.foodNutrients
+                  ? selectedSimilarFood.foodNutrients.slice(0, 12)
+                  : []
+              "
+            >
+              {{ n.nutrientName }}, {{ n.value }}, {{ n.unitName }}
+            </li>
+          </ul>
         </div>
-        <!--Image grid column-->
+        <!--/.Image-->
       </div>
-      <!--Grid row-->
     </mat-tab>
     <mat-tab disabled *ngIf="isAdding">
       <ng-template mat-tab-label>
