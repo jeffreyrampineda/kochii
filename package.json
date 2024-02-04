@@ -3,13 +3,13 @@
   "version": "0.0.3",
   "description": "Assists and encourages individuals for a manageable meal preparation lifestyle",
   "scripts": {
-    "start": "cd server && npm start",
-    "dev": "concurrently --raw \"npm run dev:server\" \"npm run dev:client\"",
-    "dev:server": "cd server && npm run dev",
-    "dev:client": "cd client && npm run dev",
-    "build:client": "cd client && npm run build",
+    "start": "cd server && yarn start",
+    "dev": "concurrently --raw \"yarn run dev:server\" \"yarn run dev:client\"",
+    "dev:server": "cd server && yarn run dev",
+    "dev:client": "cd client && yarn run dev",
+    "build:client": "cd client && yarn run build",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "(cd server && npm install); (cd client && npm install);"
+    "postinstall": "yarn install --cwd server && yarn install --cwd client"
   },
   "keywords": [],
   "author": "jeffrey ram pineda <jeffreyrampineda@gmail.com>",
