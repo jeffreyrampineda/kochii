@@ -49,9 +49,9 @@ app.use("/public", express.static(path.join(__dirname, "public")));
 app.use("/", routerPublic);
 
 // Redirect dashboard routes to ../client/dist.
-app.use("/dashboard", express.static(path.join(__dirname, "dist")));
+app.use("/dashboard", express.static(path.join(__dirname, "dist/browser")));
 app.use(["/login", "/register", "/dashboard"], function (req, res) {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
+  res.sendFile(path.join(__dirname, "dist/browser", "index.html"));
 });
 
 // Catch 404 error.
