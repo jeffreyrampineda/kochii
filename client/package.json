@@ -10,7 +10,8 @@
     "docker:build": "ng build --base-href /dashboard/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "postinstall": "yarn run build"
   },
   "private": true,
   "dependencies": {
