@@ -1,14 +1,14 @@
 extends ../layout
 
 block content
-  div(class="container mx-auto px-4 md:px-6 xl:px-32 pb-14 pt-40 text-center")
+  div(class="container mx-auto px-4 xl:px-32 pb-14 pt-40 text-center")
     h1(class="text-4xl mb-4") Recipes
     div(class="flex flex-col md:flex-row gap-4 justify-center mt-8")
       a(class="rounded-full border-black border py-2 px-12" href="#") All
       a(class="rounded-full border-black border py-2 px-12" href="#") Chicken
       a(class="rounded-full border-black border py-2 px-12" href="#") Pork
       a(class="rounded-full border-black border py-2 px-12" href="#") Beef
-  div(class="container mx-auto px-4 md:px-6 xl:px-32 pb-14" style="min-height:100vh;")
+  div(class="container mx-auto px-4 xl:px-32 pb-14" style="min-height:100vh;")
     div(Class="grid grid-cols-1 md:grid-cols-4 gap-4")
       each post, index in posts
         div(class="rounded-3xl relative overflow-hidden text-white")

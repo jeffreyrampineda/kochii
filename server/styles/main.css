@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  scroll-behavior: smooth;
-}
 .mobile-menu-container .mobile-menu {
   display: none;
 }

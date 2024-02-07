@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin");
+
 module.exports = {
   content: ["./views/**/*.{pug,html,js}"],
   theme: {
@@ -20,5 +22,11 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(({ addBase, theme }) => {
+      addBase({
+        html: { scrollBehavior: "smooth", color: theme("colors.primary") },
+      });
+    }),
+  ],
 };
