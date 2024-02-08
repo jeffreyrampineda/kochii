@@ -83,3 +83,31 @@ input[type="checkbox"]:checked#mobile-menu-toggle
 .accordion .accordion-content p {
   padding: 1.25rem 1rem;
 }
+
+ol {
+  padding: 0 0 0 36px;
+  list-style: none;
+  counter-reset: postList;
+}
+
+ol li {
+  position: relative;
+}
+
+ol li:before {
+  counter-increment: postList;
+  content: counter(postList);
+  float: left;
+  position: absolute;
+  left: -36px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  line-height: 26px;
+  width: 26px;
+  height: 26px;
+  color: #fff;
+  background: #303f9f;
+  -moz-border-radius: 999px;
+  border-radius: 999px;
+}

@@ -4,40 +4,39 @@ block content
   div(class="bg-gradient-to-r from-skyblue to-navyblue text-white text-center")
     div(class="container mx-auto px-4 xl:px-32 pb-28 pt-40")
       h1(class="text-6xl font-bold mb-4") About Us
-      h4(class="text-2xl font-light") Everything you need to know about Kochii
-  div(class="container mx-auto px-4 xl:px-32 py-16")
-    div(class="grid grid-cols-1 md:grid-cols-2 gap-8")
-      div(class="text-center md:col-span-1 md:text-left")
-        h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text mb-8") Who created Kochii?
-        p.
-          Kochii is a personal open source project created by Jeffrey Ram Pineda as a hobby. 
-          It is created with Angular as a frontend framework, Express.js for the backend server, 
-          and MongoDB as its database.
-        p. 
-          Have any questions? Got any suggestions? Fill the form on your
-          right or use kochii's primary email contact@kochii.app
-        h4(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text my-8") What is Kochii?
-        p.
-          Knowing how to prepare your meals in advance will help you save
-          money. Kochii is designed to keep track of busy people's cooking
-          ingredients with the intention of assisting and promoting
-          home-cooked meals.
-        p.
-          Through Kochii's upcoming recipe feature, cooking instructions
-          can be archived for later use and will reveal to the user which
-          recipes he/she can and cannot make in relation to his/her
-          recorded inventory.
-      div
-        h2(class="text-4xl text-center") Contact
-        form(method="POST" action="/send")
-          div(class="text-xl mb-4")
-            label(class="block my-2" for="name") Name
-            input(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="from_name" id="name" placeholder="Full Name *")
-          div(class="text-xl mb-4")
-            label(class="block my-2" for="email") Email address
-            input(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="from_email" id="email" placeholder="Email Address *")
-          div(class="text-xl mb-4")
-            label(class="block my-2" for="body") Message
-            textarea(class="shadow appearance-none border rounded w-full py-2 px-3" type="text" name="body" id="body" rows="7" placeholder="Message" style="resize: none;")
-          div(class="text-center")
-            button(class='rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' type="submit") Send
+      p(class="text-2xl") Everything you need to know about Kochii
+  section(class="container mx-auto px-4 xl:px-32 py-16 grid grid-cols-1 md:grid-cols-2 gap-8")
+    div(class="md:col-span-1")
+      h2(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text mb-4") Who created Kochii?
+      p.
+        Kochii is a personal open source project created by Jeffrey Ram Pineda as a hobby. 
+        It is created with Angular as a frontend framework, Express.js for the backend server, 
+        and MongoDB as its database.
+      p. 
+        Have any questions? Got any suggestions? Fill the form on your
+        right or use kochii's primary email contact@kochii.app
+      h2(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text my-4") What is Kochii?
+      p.
+        Knowing how to prepare your meals in advance will help you save
+        money. Kochii is designed to keep track of busy people's cooking
+        ingredients with the intention of assisting and promoting
+        home-cooked meals.
+      p.
+        Through Kochii's upcoming recipe feature, cooking instructions
+        can be archived for later use and will reveal to the user which
+        recipes he/she can and cannot make in relation to his/her
+        recorded inventory.
+    div
+      h2(class="text-4xl text-center mb-4") Contact
+      form(method="POST" action="/send")
+        div(class="text-xl mb-4")
+          label(class="block my-2" for="name") Name
+          input(class="appearance-none border rounded w-full py-2 px-3" type="text" name="from_name" id="name" placeholder="Full Name *")
+        div(class="text-xl mb-4")
+          label(class="block my-2" for="email") Email address
+          input(class="appearance-none border rounded w-full py-2 px-3" type="text" name="from_email" id="email" placeholder="Email Address *")
+        div(class="text-xl mb-4")
+          label(class="block my-2" for="body") Message
+          textarea(class="appearance-none border rounded w-full py-2 px-3" type="text" name="body" id="body" rows="7" placeholder="Message" style="resize: none;")
+        div(class="text-center")
+          button(class='font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' type="submit") Send

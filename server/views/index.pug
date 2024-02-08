@@ -7,8 +7,8 @@ block content
         h1(class="text-6xl font-bold") Organize your kitchen
         p(class="text-2xl") Kochii assists and encourages individuals for a manageable meal preparation lifestyle
         div(class="flex flex-col md:flex-row gap-4 text-center")
-          a(class='text-xl font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-16' href="/register" role="button") Sign Up
-          a(class='text-xl font-bold rounded-full text-white border py-4 px-16' href="/#features" role="button") Learn More
+          a(class='font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-16' href="/register" role="button") Sign Up
+          a(class='font-bold rounded-full text-white border py-4 px-16' href="/#features" role="button") Learn More
       div(class="absolute pb-16 w-full bottom-0 flex justify-center")
         a(href="/#features")
           i(class="bi bi-chevron-compact-down text-6xl")
@@ -59,18 +59,13 @@ block content
     if latest_posts.length > 0
       div(class="grid grid-cols-1 md:grid-cols-4 gap-4 text-white")
         each post, index in latest_posts
-          div(class="md:first:col-span-2 md:last:col-span-2 rounded-3xl relative overflow-hidden")
+          article(class="md:first:col-span-2 md:last:col-span-2 rounded-3xl relative overflow-hidden")
             a(style="display: block; height: 100%;" href=post.url)
               img(class="rounded-3xl object-cover w-full h-[20rem] brightness-50 hover:scale-110 hover:brightness-100 duration-200" src=`data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
               div(class="rounded-3xl w-full absolute bottom-0 p-4 flex flex-col justify-end pointer-events-none")
-                div
-                  h4(class="text-xl font-bold") #{post.title}
-                  p by Jeffrey Pineda
-                  div(class="bg-navyblue mt-4 inline-block rounded-full py-1 px-4")
-                    each tag, index in post.tags
-                      span #{tag}
-                      if index < post.tags.length - 1
-                        i(class="bi bi-dot")
+                div(class="rounded-3xl py-1 px-4 backdrop-brightness-50")
+                  h4(class="text-xl font-extrabold") #{post.title}
+                  p Jeffrey Pineda
     else
       p(class="text-center text-2xl") Be the first to share!
   div(class="bg-primary text-white pt-2")
@@ -99,7 +94,8 @@ block content
   div(class="bg-gray-100")
     div(class="container mx-auto px-4 xl:px-32")
       section(class="py-16" id="faq")
-        h2(class="text-4xl font-medium text-center mb-16") Frequently Asked Questions
+        h2(class="text-4xl font-medium text-center") Frequently Asked Questions
+        p(class="text-2xl bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text text-center mb-16") For quick answers to common queries.
         div(class="accordion")
           h3(class="text-2xl bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text") General:
           div(class="accordion-item shadow-2xl")
@@ -139,7 +135,7 @@ block content
         img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of FoodData Central's USDA " src="/public/images/usda-logo.svg")
         img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of ExpressJS" src="/public/images/expressjs-logo.svg")
         img(class="h-16 object-contain opacity-50 hover:opacity-100 duration-200" alt="Logo of MongoDB " src="/public/images/mongodb-logo.svg")
-  section(class="container mx-auto px-4 xl:px-32 py-16" id="faq")
+  section(class="container mx-auto px-4 xl:px-32 py-16" id="contact")
     h2(class="text-4xl font-medium text-center") Contact
     p(class="text-2xl bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text text-center mb-16") Get a hold of us. We're always happy to talk!
     form(method="POST" action="/send")
