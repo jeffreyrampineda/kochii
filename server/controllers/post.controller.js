@@ -1,7 +1,7 @@
-const debug = require("debug")("kochii:server-post.controller");
-const Post = require("../models/post");
-const Account = require("../models/account");
-const PostCollection = require("../models/postcollection");
+const debug = require('debug')('kochii:server-post.controller');
+const Post = require('../models/post');
+const Account = require('../models/account');
+const PostCollection = require('../models/postcollection');
 
 // Handle Post create.
 exports.post_create = async function (req, res, next) {
@@ -24,7 +24,7 @@ exports.post_create = async function (req, res, next) {
 
     res.send(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -33,26 +33,26 @@ exports.post_create = async function (req, res, next) {
 // Display list of all Post.
 exports.post_list = async function (req, res, next) {
   try {
-    const username = req.query.username ?? "";
+    const username = req.query.username ?? '';
 
-    const account = await Account.findOne({ username: username }, "_id").lean();
+    const account = await Account.findOne({ username: username }, '_id').lean();
     const query = account ? { author: account._id } : {};
 
     let posts = await Post.find(
       query,
-      "title tags createdAt summary banner likes dislikes author"
+      'title tags createdAt summary banner likes dislikes author',
     )
       .sort({ createdAt: -1, title: 1 })
-      .populate("author", "firstName lastName");
-    if (!req.accepts("html")) {
+      .populate('author', 'firstName lastName');
+    if (!req.accepts('html')) {
       // If does not expect html, return json.
       posts = posts.map((post) => post.toObject()); // Makes image a base64
       res.send(posts);
     } else {
-      res.render("recipes/post_list", { title: "Recipes | Kochii", posts });
+      res.render('recipes/post_list', { title: 'Recipes | Kochii', posts });
     }
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -62,11 +62,11 @@ exports.post_list = async function (req, res, next) {
 exports.post_detail = async function (req, res, next) {
   try {
     let post = await Post.findById(req.params.id).populate(
-      "author",
-      "firstName lastName"
+      'author',
+      'firstName lastName',
     );
 
-    if (!req.accepts("html")) {
+    if (!req.accepts('html')) {
       // If does not expect html, return json.
       post = post.toObject(); // Allows adding properties, makes image a base64.
       // If using /api/recipes/detail route, check if post is saved in collection.
@@ -78,7 +78,7 @@ exports.post_detail = async function (req, res, next) {
               _id: req.params.id,
             },
           },
-          "posts"
+          'posts',
         ).lean();
         if (post && isSaved) {
           post.saved = isSaved.posts ? true : false;
@@ -90,14 +90,14 @@ exports.post_detail = async function (req, res, next) {
         // Not Found
         next();
       } else {
-        res.render("recipes/post_detail", {
-          title: post.title + " | Recipes",
+        res.render('recipes/post_detail', {
+          title: post.title + ' | Recipes',
           post,
         });
       }
     }
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -135,11 +135,11 @@ exports.post_update = async function (req, res, next) {
         instructions,
         summary,
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true },
     );
     res.send(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -153,7 +153,7 @@ exports.post_delete = async function (req, res, next) {
 
     res.status(200).send({ success: 1 });
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -167,11 +167,11 @@ exports.postcollection_get = async function (req, res, next) {
     const postcollection = await PostCollection.findOne({
       owner: req.user,
     })
-      .populate("posts")
+      .populate('posts')
       .lean(); // Lean makes image a base64.
     res.send(postcollection);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -183,7 +183,7 @@ exports.postcollection_create = async function (req, res, next) {
     const post = await Post.findById(req.params.id);
 
     if (!post) {
-      throw { status: 400, error_messages: ["Post not found"] };
+      throw { status: 400, error_messages: ['Post not found'] };
     }
 
     const result = await PostCollection.findOneAndUpdate(
@@ -193,11 +193,11 @@ exports.postcollection_create = async function (req, res, next) {
         new: true,
         runValidators: true,
         upsert: true,
-      }
+      },
     );
     res.send(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -214,11 +214,11 @@ exports.postcollection_delete = async function (req, res, next) {
       },
       {
         new: true,
-      }
+      },
     ).lean();
     res.send(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }

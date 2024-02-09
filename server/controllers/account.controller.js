@@ -1,32 +1,28 @@
-const debug = require("debug")("kochii:server-activity.controller");
-const Account = require("../models/account");
-const mongoose = require("mongoose");
-const inventory_controller = require("../controllers/inventory.controller");
-const activity_controller = require("../controllers/activity.controller");
-//const cryptoRandomString = require("crypto-random-string");
+const debug = require('debug')('kochii:server-activity.controller');
+const Account = require('../models/account');
+const mongoose = require('mongoose');
+const inventoryController = require('../controllers/inventory.controller');
+const activityController = require('../controllers/activity.controller');
+// const cryptoRandomString = require('crypto-random-string');
 const sendVerificationEmail =
-  require("../util/external_api.service").sendVerificationEmail;
-const Validate = require("../validators/account");
-const jwt = require("jsonwebtoken");
+  require('../util/external_api.service').sendVerificationEmail;
+const Validate = require('../validators/account');
+const jwt = require('jsonwebtoken');
 
-/**
- * Signup the account to the database.
- * @requires { body } username, password, email, firstName, lastName
- * @response { JSON, error? } jwt if successful otherwise, an error.
- */
+// Creates a new account.
 exports.account_create = async function (req, res, next) {
   try {
     const { username, password, email, firstName, lastName } =
       await Validate.signup(req.body);
 
     // TODO: cryptoRandomString(...);
-    //const verificationToken = cryptoRandomString({
-    //  length: 16,
-    //  type: "url-safe",
-    //});
-    const verificationToken = "temp";
-    const activity_id = new mongoose.Types.ObjectId();
-    const inventory_id = new mongoose.Types.ObjectId();
+    // const verificationToken = cryptoRandomString({
+    //    length: 16,
+    //    type: "url-safe",
+    // });
+    const verificationToken = 'temp';
+    const activityId = new mongoose.Types.ObjectId();
+    const inventoryId = new mongoose.Types.ObjectId();
 
     const account = await Account.create({
       username,
@@ -36,21 +32,21 @@ exports.account_create = async function (req, res, next) {
       lastName,
       isVerified: false,
       verificationToken,
-      inventory: inventory_id,
-      activity: activity_id,
+      inventory: inventoryId,
+      activity: activityId,
     });
 
-    const initActivityResult = await activity_controller.init(
+    const initActivityResult = await activityController.init(
       account._id,
-      activity_id
+      activityId,
     );
-    const initInventoryResult = await inventory_controller.init(
+    const initInventoryResult = await inventoryController.init(
       account._id,
-      inventory_id
+      inventoryId,
     );
 
     if (initActivityResult && initInventoryResult) {
-      console.log("Account successfully created");
+      console.log('Account successfully created');
     }
 
     sendVerificationEmail(email, verificationToken);
@@ -65,17 +61,13 @@ exports.account_create = async function (req, res, next) {
       isVerified: account.isVerified,
     });
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Authenticates the Account to the database.
- * @requires { body } username, password
- * @response { JSON, error? } jwt if successful otherwise, an error.
- */
+// Authenticates the Account.
 exports.account_login = async function (req, res, next) {
   try {
     const { username, password } = await Validate.login(req.body);
@@ -94,49 +86,42 @@ exports.account_login = async function (req, res, next) {
         isVerified: account.isVerified,
       });
     } else {
-      throw { status: 401, error_messages: ["Authentication failed"] };
+      throw { status: 401, error_messages: ['Authentication failed'] };
     }
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Verifies the token and email.
- * @requires { query } token, email
- * @response { JSON, error? } the result.
- */
+// Verifies the token and email.
 exports.account_verify = async function (req, res, next) {
   try {
     const { token, email } = await Validate.verify(req.query);
 
-    let response = "loading...";
+    let response = 'loading...';
 
     const result = await Account.findOneAndUpdate(
       { email: email, verificationToken: token },
       { isVerified: true },
-      { runValidators: true, rawResult: true }
+      { runValidators: true, rawResult: true },
     );
 
     response =
       result.lastErrorObject.n === 1
-        ? "Account has been verified"
-        : "Verification failed.";
+        ? 'Account has been verified'
+        : 'Verification failed.';
 
     res.status(202).send(response);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Updates the current account.
- * @response { JSON, error? } updated account if successful otherwise, an error.
- */
+// Updates the account.
 exports.account_update = async function (req, res, next) {
   try {
     const { firstName, lastName } = await Validate.update(req.body);
@@ -144,31 +129,28 @@ exports.account_update = async function (req, res, next) {
     const result = await Account.findOneAndUpdate(
       { _id: req.user },
       { firstName, lastName },
-      { new: true, runValidators: true }
-    ).select("-_id firstName lastName");
+      { new: true, runValidators: true },
+    ).select('-_id firstName lastName');
 
     res.status(200).json(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Delete the current account.
- * @response { JSON, error? } delete's ok result otherwise, an error.
- */
+// Delete the account.
 exports.account_delete = async function (req, res, next) {
   try {
     let result = {
       deletedCount: 0,
     };
-    const activityResult = await activity_controller.deleteActivitiesByOwnerId(
-      req.user
+    const activityResult = await activityController.deleteActivitiesByOwnerId(
+      req.user,
     );
-    const inventoryResult = await inventory_controller.deleteInventoryByOwnerId(
-      req.user
+    const inventoryResult = await inventoryController.deleteInventoryByOwnerId(
+      req.user,
     );
     if (activityResult.deletedCount && inventoryResult.deletedCount) {
       result = await Account.deleteOne({ _id: req.user });
@@ -176,15 +158,20 @@ exports.account_delete = async function (req, res, next) {
 
     res.status(200).json(result.deletedCount);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-function generateToken(account_id) {
+/**
+ * Generates a JSON Web Token from the provided information.
+ * @param {string} accountId The provided information.
+ * @return {object} The JSON Web Token string.
+ */
+function generateToken(accountId) {
   const payload = {
-    _id: account_id,
+    _id: accountId,
   };
   return jwt.sign(payload, process.env.SECRET_KEY);
 }

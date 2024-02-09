@@ -1,36 +1,33 @@
-const debug = require("debug")("kochii:server-activity.controller");
-const Activity = require("../models/activity");
+const debug = require('debug')('kochii:server-activity.controller');
+const Activity = require('../models/activity');
 
-exports.init = async function (account_id, activity_id) {
+// Initializes a new activity document.
+exports.init = async function (accountId, activityId) {
   const result = await Activity.create({
-    _id: activity_id,
-    owner: account_id,
+    _id: activityId,
+    owner: accountId,
     activity: [
       {
-        method: "create",
-        target: "Account",
+        method: 'create',
+        target: 'Account',
         quantity: 0,
         addedDate: new Date(),
-        description: "Account created",
+        description: 'Account created',
       },
     ],
   });
   return result;
 };
 
-/**
- * Creates a new activity.
- * @param { method, target, addedDate, quantity, description } activity
- * @return { Promise<Document> } create's result.
- */
+// Creates a new activity entry.
 exports.create = async function (activity) {
   const {
-    owner = "",
-    method = "",
-    target = "",
+    owner = '',
+    method = '',
+    target = '',
     addedDate,
     quantity = 0,
-    description = "",
+    description = '',
   } = activity;
   const result = await Activity.findOneAndUpdate(
     { owner },
@@ -50,7 +47,7 @@ exports.create = async function (activity) {
         },
       },
     },
-    { new: true, runValidators: true, rawResult: true }
+    { new: true, runValidators: true, rawResult: true },
   );
 
   return result;
@@ -60,40 +57,33 @@ exports.deleteActivitiesByOwnerId = async function (_id) {
   return await Activity.deleteOne({ owner: _id });
 };
 
-/**
- * Get all the account's activities from the database.
- * @response { JSON, error? } array of activities objects if successful otherwise, an error.
- */
+// Get all activity entries.
 exports.activity_list = async function (req, res, next) {
   try {
     const activities = await Activity.aggregate([
       { $match: { owner: req.user } },
-      { $unwind: "$activity" },
+      { $unwind: '$activity' },
       {
         $project: {
-          _id: "$activity._id",
-          created_at: "$activity.created_at",
-          method: "$activity.method",
-          target: "$activity.target",
-          addedDate: "$activity.addedDate",
-          quantity: "$activity.quantity",
-          description: "$activity.description",
+          _id: '$activity._id',
+          created_at: '$activity.created_at',
+          method: '$activity.method',
+          target: '$activity.target',
+          addedDate: '$activity.addedDate',
+          quantity: '$activity.quantity',
+          description: '$activity.description',
         },
       },
     ]);
     res.status(200).json(activities);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Gets all items and activities from the database since the specified days.
- * @requires { number } days
- * @response { JSON, error? } An object that contains activities and items.
- */
+// Gets all activity entries since the specified days.
 exports.activity_list_period = async function (req, res, next) {
   try {
     const { days = 1 } = req.params;
@@ -103,29 +93,30 @@ exports.activity_list_period = async function (req, res, next) {
     fromDay.setDate(fromDay.getDate() - days);
     fromDay.setHours(0, 0, 0, 0);
 
-    const history = await Activity.findOne({ owner: req.user }, "activity");
+    const history = await Activity.findOne({ owner: req.user }, 'activity');
     const activities = history.activity.filter(
-      (hi) => hi.addedDate.getTime() > fromDay.getTime()
+      (hi) => hi.addedDate.getTime() > fromDay.getTime(),
     );
 
     res.status(200).json(activities);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
+// Clear activity document.
 exports.activity_delete = async function (req, res, next) {
   try {
     const result = await Activity.findOneAndUpdate(
       { owner: req.user },
       { $pull: { activity: {} } },
-      { new: true, rawResult: true }
+      { new: true, rawResult: true },
     );
     res.status(200).json(result.ok);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }

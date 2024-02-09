@@ -1,29 +1,30 @@
-const debug = require("debug")("kochii:server-inventory.controller");
-const Inventory = require("../models/inventory");
-const ObjectId = require("mongoose").Types.ObjectId;
-const activity_controller = require("../controllers/activity.controller");
-const Validate = require("../validators/item");
-const searchRawFood = require("../util/external_api.service").searchRawFood;
-const io = require("../io");
+const debug = require('debug')('kochii:server-inventory.controller');
+const Inventory = require('../models/inventory');
+const ObjectId = require('mongoose').Types.ObjectId;
+const activity_controller = require('../controllers/activity.controller');
+const Validate = require('../validators/item');
+const searchRawFood = require('../util/external_api.service').searchRawFood;
+const io = require('../io');
 
 const itemProject = {
-  _id: "$items._id",
-  name: "$items.name",
-  cost: "$items.cost",
-  quantity: "$items.quantity",
-  addedDate: "$items.addedDate",
-  expirationDate: "$items.expirationDate",
-  group: "$items.group",
+  _id: '$items._id',
+  name: '$items.name',
+  cost: '$items.cost',
+  quantity: '$items.quantity',
+  addedDate: '$items.addedDate',
+  expirationDate: '$items.expirationDate',
+  group: '$items.group',
 };
 
-exports.init = async function (account_id, inventory_id) {
+// Initializes a new inventory document.
+exports.init = async function (accountId, inventoryId) {
   const result = await Inventory.create({
-    _id: inventory_id,
-    owner: account_id,
-    groups: ["Default"],
+    _id: inventoryId,
+    owner: accountId,
+    groups: ['Default'],
     items: [
       {
-        name: "Sample",
+        name: 'Sample',
         quantity: 1,
         cost: 0,
       },
@@ -31,12 +32,12 @@ exports.init = async function (account_id, inventory_id) {
   });
 
   await activity_controller.create({
-    owner: account_id,
-    method: "add",
-    target: "item",
+    owner: accountId,
+    method: 'add',
+    target: 'item',
     addedDate: new Date(),
     quantity: 1,
-    description: "Item created",
+    description: 'Item created',
   });
 
   return result;
@@ -46,52 +47,40 @@ exports.deleteInventoryByOwnerId = async function (_id) {
   return await Inventory.deleteOne({ owner: _id });
 };
 
-/**
- * Get all items from the database.
- * @response { JSON, error? } array of item objects if successful otherwise, an error.
- */
+// Get all items.
 exports.item_list = async function (req, res, next) {
   try {
     const result = await Inventory.aggregate([
       { $match: { owner: req.user } },
-      { $unwind: "$items" },
+      { $unwind: '$items' },
       { $project: itemProject },
     ]);
 
     res.status(200).json(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Get all items starting with the specified pattern from the database.
- * @requires { params } name
- * @response { JSON, error? } array of item objects if successful otherwise, an error.
- */
+// Get all items starting with the specified pattern.
 exports.item_list_search = async function (req, res, next) {
   try {
     const { name } = await Validate.searchByName(req.params);
 
-    const i = await Inventory.findOne({ owner: req.user }, "items");
-    const re = new RegExp("^" + name);
+    const i = await Inventory.findOne({ owner: req.user }, 'items');
+    const re = new RegExp('^' + name);
     const result = i.items.filter((item) => re.test(item.name));
     res.status(200).json(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Get all items added between the given date belonging to req.user.
- * @param { object } req.user
- * @param { date } startDate
- * @param { date } endDate
- */
+// Get all items added between the given date belonging to req.user
 exports.item_list_between_dates = async function (req, res, next) {
   try {
     const { startDate, endDate } = Validate.getAddedBetween(req.query);
@@ -103,36 +92,32 @@ exports.item_list_between_dates = async function (req, res, next) {
 
     const result = await Inventory.aggregate([
       { $match: { owner: req.user } },
-      { $unwind: "$items" },
+      { $unwind: '$items' },
       {
         $match: {
-          "items.addedDate": { $gte: startDateObject, $lte: endDateObject },
+          'items.addedDate': { $gte: startDateObject, $lte: endDateObject },
         },
       },
       { $project: itemProject },
     ]);
     res.status(200).json(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Get all items within the specified names list from the database.
- * @requires { query } names
- * @response { JSON, error? } array of item objects if successful otherwise, an error.
- */
+// Get all items within the specified names list.
 exports.item_list_names = async function (req, res, next) {
   try {
     const { refined } = await Validate.getByNames(req.query);
 
-    const i = await Inventory.findOne({ owner: req.user }, "items");
+    const i = await Inventory.findOne({ owner: req.user }, 'items');
     const result = i.items.filter((item) => refined.includes(item.name));
     res.status(200).json(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -145,39 +130,32 @@ exports.item_nutrition = async function (req, res, next) {
     const result = await searchRawFood(query);
     res.status(200).json(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Get item from the database by _id.
- * @response { JSON, error? } Item objects if successful otherwise, an error.
- */
+// Get item by _id.
 exports.item_detail = async function (req, res, next) {
   try {
     const { _id } = req.params;
 
     const result = await Inventory.aggregate([
       { $match: { owner: req.user } },
-      { $unwind: "$items" },
-      { $match: { "items._id": new ObjectId(_id) } },
+      { $unwind: '$items' },
+      { $match: { 'items._id': new ObjectId(_id) } },
       { $project: itemProject },
     ]);
     res.status(200).json(result[0]);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Creates a new item.
- * @requires { body } name, quantity, cost, addedDate, expirationDate, group
- * @response { JSON, error? } new item if successful otherwise, an error.
- */
+// Creates a new item.
 exports.item_create = async function (req, res, next) {
   try {
     const { name, quantity, cost, addedDate, expirationDate, group } =
@@ -202,7 +180,7 @@ exports.item_create = async function (req, res, next) {
           },
         },
       },
-      { new: true, runValidators: true, rawResult: true }
+      { new: true, runValidators: true, rawResult: true },
     );
 
     if (result.ok === 1) {
@@ -210,31 +188,27 @@ exports.item_create = async function (req, res, next) {
 
       await activity_controller.create({
         owner: req.user,
-        method: "add",
-        target: "item",
+        method: 'add',
+        target: 'item',
         addedDate: item.addedDate,
         quantity: item.quantity,
-        description: "Item created",
+        description: 'Item created',
       });
-      io.room(req.user.toString()).emit("item_create", item);
+      io.room(req.user.toString()).emit('item_create', item);
       //return item;
       res.status(200).json(item);
     } else {
       res.status(200).json(result.ok);
     }
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Updates an existing item. If the updated item's quantity is less than or
- * equal to 0, delete the item.
- * @requires { body, params } _id, name, quantity, cost, addedDate, expirationDate, group, option
- * @response { JSON, error? } updated item if successful otherwise, an error.
- */
+// Updates an existing item. If the updated item's quantity is less than or
+// equal to 0, delete the item.
 exports.item_update = async function (req, res, next) {
   try {
     const {
@@ -250,30 +224,30 @@ exports.item_update = async function (req, res, next) {
 
     let itemData = {
       $set: {
-        "items.$.name": name,
-        "items.$.cost": cost,
-        "items.$.addedDate": addedDate,
-        "items.$.expirationDate": expirationDate,
-        "items.$.group": group,
+        'items.$.name': name,
+        'items.$.cost': cost,
+        'items.$.addedDate': addedDate,
+        'items.$.expirationDate': expirationDate,
+        'items.$.group': group,
       },
       $inc: {},
     };
 
     // Setting or incrementing.
-    itemData["$" + option]["items.$.quantity"] = quantity;
+    itemData['$' + option]['items.$.quantity'] = quantity;
 
     const i = await Inventory.findOne(
-      { owner: req.user, "items._id": _id },
-      { "items.$": 1 }
+      { owner: req.user, 'items._id': _id },
+      { 'items.$': 1 },
     );
     const oldVItem = i.items[0];
     const result = await Inventory.findOneAndUpdate(
       {
         owner: req.user,
-        "items._id": _id,
+        'items._id': _id,
       },
       itemData,
-      { new: true, runValidators: true, rawResult: true }
+      { new: true, runValidators: true, rawResult: true },
     );
 
     if (result.ok === 1) {
@@ -285,72 +259,72 @@ exports.item_update = async function (req, res, next) {
       ) {
         await activity_controller.create({
           owner: req.user,
-          method: "delete",
-          target: "item",
+          method: 'delete',
+          target: 'item',
           addedDate: oldVItem.addedDate,
           quantity: -oldVItem.quantity,
-          description: "Changed dates",
+          description: 'Changed dates',
         });
         await activity_controller.create({
           owner: req.user,
-          method: "add",
-          target: "item",
+          method: 'add',
+          target: 'item',
           addedDate: item.addedDate,
           quantity: item.quantity,
-          description: "Changed dates",
+          description: 'Changed dates',
         });
       }
       if (oldVItem.group != group) {
         await activity_controller.create({
           owner: req.user,
-          method: "edit",
-          target: "item",
+          method: 'edit',
+          target: 'item',
           addedDate,
           quantity,
-          description: "Changed groups",
+          description: 'Changed groups',
         });
       }
-      if (option === "set") {
+      if (option === 'set') {
         const newQuantity = item.quantity - oldVItem.quantity;
 
         if (newQuantity < 0) {
           await activity_controller.create({
             owner: req.user,
-            method: "delete",
-            target: "item",
+            method: 'delete',
+            target: 'item',
             addedDate: new Date(),
             quantity: newQuantity,
-            description: "Updated item",
+            description: 'Updated item',
           });
         } else if (newQuantity > 0) {
           await activity_controller.create({
             owner: req.user,
-            method: "add",
-            target: "item",
+            method: 'add',
+            target: 'item',
             addedDate: item.addedDate,
             quantity: newQuantity,
-            description: "Updated item",
+            description: 'Updated item',
           });
         }
       }
-      if (option === "inc") {
+      if (option === 'inc') {
         if (quantity <= 0) {
           await activity_controller.create({
             owner: req.user,
-            method: "delete",
-            target: "item",
+            method: 'delete',
+            target: 'item',
             addedDate: new Date(),
             quantity,
-            description: "Decreased quantities",
+            description: 'Decreased quantities',
           });
         } else {
           await activity_controller.create({
             owner: req.user,
-            method: "add",
-            target: "item",
+            method: 'add',
+            target: 'item',
             addedDate: item.addedDate,
             quantity,
-            description: "Increased quantities",
+            description: 'Increased quantities',
           });
         }
       }
@@ -359,24 +333,20 @@ exports.item_update = async function (req, res, next) {
       if (item.quantity <= 0) {
         await deleteItemById(req.user, _id);
       } else {
-        io.room(req.user.toString()).emit("item_update", item);
+        io.room(req.user.toString()).emit('item_update', item);
       }
       res.status(200).json(item);
     } else {
       res.status(200).json(result.ok);
     }
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
 };
 
-/**
- * Deletes an item by _id.
- * @requires { params } _id
- * @response { JSON, error? } delete's ok result otherwise, an error.
- */
+// Deletes an item by _id.
 exports.item_delete = async function (req, res, next) {
   try {
     const { _id } = Validate.del(req.params, req.user);
@@ -384,7 +354,7 @@ exports.item_delete = async function (req, res, next) {
     const result = { ok: await InventoryService.deleteItemById(req.user, _id) };
     res.status(200).json(result);
   } catch (error) {
-    debug("Error");
+    debug('Error');
 
     next(error);
   }
@@ -392,30 +362,26 @@ exports.item_delete = async function (req, res, next) {
 
 // -------------------------------------------------------------
 
-/**
- * Deletes an item by _id. If successful, emits 'item_delete' to the
- * connected socket(s).
- * @param { string } _id
- * @returns { number } delete's result.
- */
-async function deleteItemById(account_id, _id) {
+// Deletes an item by _id.
+async function deleteItemById(accountId, _id) {
   try {
     const result = await Inventory.findOneAndUpdate(
-      { owner: account_id },
+      { owner: accountId },
       { $pull: { items: { _id } } },
-      { new: true, rawResult: true }
+      { new: true, rawResult: true },
     );
 
     if (result.ok === 1) {
       await activity_controller.create({
-        owner: account_id,
-        method: "removed",
-        target: "item",
+        owner: accountId,
+        method: 'removed',
+        target: 'item',
         addedDate: new Date(),
         quantity: 0,
-        description: "Permanently removed",
+        description: 'Permanently removed',
       });
-      io.room(account_id.toString()).emit("item_delete", _id);
+      // emits 'item_delete' to the connected socket(s).
+      io.room(accountId.toString()).emit('item_delete', _id);
     }
     return result.ok;
   } catch (error) {

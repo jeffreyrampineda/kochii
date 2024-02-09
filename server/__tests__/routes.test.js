@@ -1,6 +1,6 @@
-const request = require("supertest");
-const server = require("../index.js");
-const mongoose = require("mongoose");
+const request = require('supertest');
+const server = require('../index.js');
+const mongoose = require('mongoose');
 
 // Set up database connection before any tests
 beforeAll(async () => {
@@ -18,61 +18,61 @@ afterAll(async () => {
   await server.close();
 });
 
-describe("/api route", () => {
-  test("GET /api/inventory without token should give Unauthorized", async () => {
-    const response = await request(server).get("/api/inventory");
+describe('/api route', () => {
+  test('GET /api/inventory without token should give Unauthorized', async () => {
+    const response = await request(server).get('/api/inventory');
 
     expect(response.status).toEqual(401);
-    expect(response.text).toContain("Unauthorized");
+    expect(response.text).toContain('Unauthorized');
   });
-  test("GET /api/groups without token should give Unauthorized", async () => {
-    const response = await request(server).get("/api/groups");
+  test('GET /api/groups without token should give Unauthorized', async () => {
+    const response = await request(server).get('/api/groups');
 
     expect(response.status).toEqual(401);
-    expect(response.text).toContain("Unauthorized");
+    expect(response.text).toContain('Unauthorized');
   });
-  test("GET /api/activities without token should give Unauthorized", async () => {
-    const response = await request(server).get("/api/activities");
+  test('GET /api/activities without token should give Unauthorized', async () => {
+    const response = await request(server).get('/api/activities');
 
     expect(response.status).toEqual(401);
-    expect(response.text).toContain("Unauthorized");
+    expect(response.text).toContain('Unauthorized');
   });
 });
 
-describe("/api authentication route", () => {
+describe('/api authentication route', () => {
   const correct_account = {
-    username: "correct_username",
-    password: "correct_password",
-    email: "correct_email@correct.com",
-    firstName: "correctFirstName",
-    lastName: "correctLastName",
+    username: 'correct_username',
+    password: 'correct_password',
+    email: 'correct_email@correct.com',
+    firstName: 'correctFirstName',
+    lastName: 'correctLastName',
   };
 
-  test("POST /signup with correct data should give 202 status /w token", async () => {
+  test('POST /signup with correct data should give 202 status /w token', async () => {
     const response = await request(server)
-      .post("/signup")
+      .post('/signup')
       .send(correct_account);
 
     expect(response.status).toEqual(202);
-    expect(response.text).toContain("token");
+    expect(response.text).toContain('token');
   });
-  test("POST /login with correct data should give 202 status /w token", async () => {
-    const response = await request(server).post("/login").send(correct_account);
+  test('POST /login with correct data should give 202 status /w token', async () => {
+    const response = await request(server).post('/login').send(correct_account);
 
     expect(response.status).toEqual(202);
-    expect(response.text).toContain("token");
+    expect(response.text).toContain('token');
   });
-  test("POST /login with incorrect auth should give 401 status", async () => {
+  test('POST /login with incorrect auth should give 401 status', async () => {
     const incorrect_account = {
-      username: "incorrect_username",
-      password: "incorrect_password",
+      username: 'incorrect_username',
+      password: 'incorrect_password',
     };
 
     const response = await request(server)
-      .post("/login")
+      .post('/login')
       .send(incorrect_account);
 
     expect(response.status).toEqual(401);
-    expect(response.text).toContain("Authentication failed");
+    expect(response.text).toContain('Authentication failed');
   });
 });

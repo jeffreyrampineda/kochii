@@ -1,12 +1,12 @@
-const axios = require("axios");
-//const sgMail = require("@sendgrid/mail");
-const Validator = require("validator");
+const axios = require('axios');
+// const sgMail = require("@sendgrid/mail");
+const Validator = require('validator');
 
-//sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 async function searchRawFood(query) {
   try {
-    const apiUrlBase = "https://api.nal.usda.gov/fdc/v1/foods/search?";
+    const apiUrlBase = 'https://api.nal.usda.gov/fdc/v1/foods/search?';
     const apiKey = process.env.FDC_API_KEY;
     const apiQuery = query;
     // const apiUrl = `${apiUrlBase}api_key=${apiKey}&query=${apiQuery}&dataType=Survey%20(FNDDS)%20&pageSize=3`;
@@ -37,8 +37,8 @@ function sendVerificationEmail(to, verificationToken) {
   const msg = {
     to,
     from: {
-      email: "no-reply@kochii.app",
-      name: "Kochii",
+      email: 'no-reply@kochii.app',
+      name: 'Kochii',
     },
     dynamic_template_data: {
       confirmation_url: confirmation_url,
@@ -76,13 +76,13 @@ async function sendContactEmail(from_email, from_name, body) {
   */
 
   const response = await axios.post(
-    "https://getform.io/f/6d51dd34-0841-481d-9fc2-611871ea5ca0",
+    'https://getform.io/f/6d51dd34-0841-481d-9fc2-611871ea5ca0',
     {
       email: clean_email,
       name: clean_name,
       body: clean_body,
     },
-    { headers: { Accept: "application/json" } }
+    { headers: { Accept: 'application/json' } },
   );
 
   return response;
