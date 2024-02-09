@@ -8,11 +8,11 @@ import { Title } from '@angular/platform-browser';
 // -------------------------------------------------------------
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
+  selector: 'app-signup',
+  templateUrl: './signup.component.html',
 })
-export class RegisterComponent implements OnInit {
-  registerForm!: FormGroup;
+export class SignupComponent implements OnInit {
+  signupForm!: FormGroup;
   loading = false;
   error_messages = [];
 
@@ -26,13 +26,13 @@ export class RegisterComponent implements OnInit {
   // -------------------------------------------------------------
 
   ngOnInit() {
-    this.titleService.setTitle('Register | Kochii');
+    this.titleService.setTitle('Sign Up | Kochii');
     // If currently logged in, redirect to dashboard.
     if (this.accountService.isLoggedIn) {
       this.router.navigate(['/overview']);
     }
 
-    this.registerForm = this.formBuilder.group(
+    this.signupForm = this.formBuilder.group(
       {
         username: [
           '',
@@ -68,7 +68,7 @@ export class RegisterComponent implements OnInit {
 
   /** convenience getter for easy access to form fields */
   get f() {
-    return this.registerForm.controls;
+    return this.signupForm.controls;
   }
 
   onSubmit() {
@@ -76,10 +76,10 @@ export class RegisterComponent implements OnInit {
     this.error_messages = [];
 
     const { username, password, email, firstName, lastName } =
-      this.registerForm.value;
+      this.signupForm.value;
 
     this.accountService
-      .register({ username, password, email, firstName, lastName })
+      .signup({ username, password, email, firstName, lastName })
       .subscribe({
         next: (response) => {
           if (response && response.token) {

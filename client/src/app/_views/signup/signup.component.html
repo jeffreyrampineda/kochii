@@ -1,7 +1,7 @@
-<app-auth-page title="Register">
+<app-auth-page title="Sign Up">
   <!-- Form -->
   <form
-    [formGroup]="registerForm"
+    [formGroup]="signupForm"
     (ngSubmit)="onSubmit()"
     class="flex flex-col"
   >
@@ -108,15 +108,15 @@
       [loading]="loading"
     ></app-error-messages>
 
-    <!-- Register button -->
+    <!-- Sign Up button -->
     <button
       mat-raised-button
       color="primary"
       type="submit"
       class="btn-block my-4"
-      [disabled]="loading || registerForm.invalid"
+      [disabled]="loading || signupForm.invalid"
     >
-      Register
+      Sign Up
     </button>
 
     <!-- Login link -->

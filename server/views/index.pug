@@ -7,7 +7,7 @@ block content
         h1(class="text-6xl font-bold") Organize your kitchen
         p(class="text-2xl") Kochii assists and encourages individuals for a manageable meal preparation lifestyle
         div(class="flex flex-col md:flex-row gap-4 text-center")
-          a(class='font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-16' href="/register" role="button") Sign Up
+          a(class='font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-16' href="/signup" role="button") Sign Up
           a(class='font-bold rounded-full text-white border py-4 px-16' href="/#features" role="button") Learn More
       div(class="absolute pb-16 w-full bottom-0 flex justify-center")
         a(href="/#features")
@@ -50,7 +50,7 @@ block content
               i(class='bi bi-wallet2 text-6xl bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text')
               h3(class="text-xl font-medium mt-4") Save Money
           div(class="mt-16 flex flex-col justify-center md:flex-row lg:justify-start")
-            a(class='font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' href="/register" role="button") Sign Up
+            a(class='font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' href="/signup" role="button") Sign Up
         div(class="hidden lg:block flex-1")
           img(class="h-full w-full rounded-ee-3xl" alt="A white grocery bag filled with apples, asparagus, potatoes, and tomatoes" src="/public/images/different-vegetables-textile-bag-beige.png" loading="lazy")
   section(class="container mx-auto px-4 xl:px-32 pt-16 pb-32" id="featured-recipes")
@@ -103,7 +103,10 @@ block content
               span How do I sign up?
                 span(class="icon" aria-hidden="true")
             div(class="accordion-content")
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+              p. 
+                To sign up, click the "Sign Up" button at the top of our website or use the direct link 
+                #[a(href='/signup' target='_blank' class="text-navyblue underline") sign up]. Fill in the required information on 
+                the registration page, and you'll be all set to start using our platform.
           div(class="accordion-item shadow-2xl")
             button(class="hover:text-skyblue" aria-expanded="false")
               span Can I remove a recipe?

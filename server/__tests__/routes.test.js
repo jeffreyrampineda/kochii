@@ -48,9 +48,9 @@ describe("/api authentication route", () => {
     lastName: "correctLastName",
   };
 
-  test("POST /register with correct data should give 202 status /w token", async () => {
+  test("POST /signup with correct data should give 202 status /w token", async () => {
     const response = await request(server)
-      .post("/register")
+      .post("/signup")
       .send(correct_account);
 
     expect(response.status).toEqual(202);

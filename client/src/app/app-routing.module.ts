@@ -9,7 +9,7 @@ import { SettingsComponent } from './_layouts/settings/settings.component';
 
 // Views
 import { LoginComponent } from './_views/login/login.component';
-import { RegisterComponent } from './_views/register/register.component';
+import { SignupComponent } from './_views/signup/signup.component';
 import { ActivityLogComponent } from './_views/activity-log/activity-log.component';
 import { OverviewComponent } from './_views/overview/overview.component';
 import { AccountComponent } from './_views/account/account.component';
@@ -18,7 +18,7 @@ import { AccountComponent } from './_views/account/account.component';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
+  { path: 'signup', component: SignupComponent },
   {
     path: '',
     component: DashboardComponent,

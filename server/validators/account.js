@@ -41,12 +41,12 @@ async function login(body) {
 }
 
 /**
- * Sanitizes and validates all data required to register.Throws
+ * Sanitizes and validates all data required to signup.Throws
  * an HTTP error status 400 if invalid.
  * @param { JSON } body received from the request.
  * @return { JSON } object containing all sanitized data.
  */
-async function register(body) {
+async function signup(body) {
   let {
     username = "",
     password = "",
@@ -183,7 +183,7 @@ async function verify(query) {
 
 module.exports = {
   login,
-  register,
+  signup,
   verify,
   update,
 };

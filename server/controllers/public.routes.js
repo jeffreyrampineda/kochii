@@ -37,8 +37,8 @@ router.get("/recipes", post_controller.post_list);
 // POST /login request to login Account.
 router.post("/login", account_controller.account_login);
 
-// POST /register request to create Account.
-router.post("/register", account_controller.account_create);
+// POST /signup request to create Account.
+router.post("/signup", account_controller.account_create);
 
 // GET /verification?token=token&email=email request to verify Account.
 router.get("/verification", account_controller.account_verify);

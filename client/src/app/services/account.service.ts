@@ -67,11 +67,11 @@ export class AccountService {
    * Creates a new account.
    * @param account - The new account to be created.
    */
-  register(account: Account): Observable<Account> {
-    this.log('registering');
+  signup(account: Account): Observable<Account> {
+    this.log('signing up');
 
     return this.http
-      .post<Account>(`${this.accountPublicUrl}/register`, account)
+      .post<Account>(`${this.accountPublicUrl}/signup`, account)
       .pipe(
         map((response) => {
           // Login if successful.

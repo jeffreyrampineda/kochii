@@ -10,14 +10,14 @@ const Validate = require("../validators/account");
 const jwt = require("jsonwebtoken");
 
 /**
- * Registers the account to the database.
+ * Signup the account to the database.
  * @requires { body } username, password, email, firstName, lastName
  * @response { JSON, error? } jwt if successful otherwise, an error.
  */
 exports.account_create = async function (req, res, next) {
   try {
     const { username, password, email, firstName, lastName } =
-      await Validate.register(req.body);
+      await Validate.signup(req.body);
 
     // TODO: cryptoRandomString(...);
     //const verificationToken = cryptoRandomString({

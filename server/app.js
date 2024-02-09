@@ -50,7 +50,7 @@ app.use("/", routerPublic);
 
 // Redirect dashboard routes to ../client/dist.
 app.use("/dashboard", express.static(path.join(__dirname, "dist/browser")));
-app.use(["/login", "/register", "/dashboard"], function (req, res) {
+app.use(["/login", "/signup", "/dashboard"], function (req, res) {
   res.sendFile(path.join(__dirname, "dist/browser", "index.html"));
 });
 

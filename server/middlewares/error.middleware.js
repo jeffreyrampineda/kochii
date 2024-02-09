@@ -19,7 +19,7 @@ exports.error_handler = function (error, req, res, next) {
   debug(error);
   // render the error page
   res.status(error.status || 500);
-  if (["login", "register", "api"].includes(req.originalUrl.split("/")[1])) {
+  if (["login", "signup", "api"].includes(req.originalUrl.split("/")[1])) {
     res.send(error);
   } else {
     res.render(res.locals.render_view, res.locals.render_data);
