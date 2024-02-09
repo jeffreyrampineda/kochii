@@ -116,7 +116,7 @@ block content
         .col-span-3(class="md:col-span-2")
           h3.text-2xl.bg-gradient-to-r.from-skyblue.to-navyblue.text-transparent.bg-clip-text Who created Kochii?
           p.my-4.
-            Kochii is a personal open source project created by Jeffrey Ram Pineda as a hobby. 
+            Kochii is a personal open source project created by Jeffrey Ram Pineda as a hobby since early college. 
             It is created with Angular as a frontend framework, Express.js for the backend server, 
             and MongoDB as its database.
           h3.text-2xl.bg-gradient-to-r.from-skyblue.to-navyblue.text-transparent.bg-clip-text What is Kochii?
@@ -135,38 +135,65 @@ block content
           h3.text-2xl.bg-gradient-to-r.from-skyblue.to-navyblue.text-transparent.bg-clip-text General:
           .accordion-item.shadow-2xl
             button(class="hover:text-skyblue", aria-expanded="false")
-              span How do I sign up?
+              span.font-medium How do I sign up?
                 span.icon(aria-hidden="true")
             .accordion-content
               p.
-                To sign up, click the "Sign Up" button at the top of our website or use the direct link 
+                To sign up, click the &quot;Sign Up&quot; button at the top of our website or use the direct link 
                 #[a.text-navyblue.underline(href="/signup", target="_blank") sign up]. Fill in the required information on 
                 the registration page, and you'll be all set to start using our platform.
           .accordion-item.shadow-2xl
             button(class="hover:text-skyblue", aria-expanded="false")
-              span Can I remove a recipe?
+              span.font-medium Can I remove a recipe?
                 span.icon(aria-hidden="true")
             .accordion-content
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+              p Yes, you can remove a recipe you have created by following these steps:
+              ol.list-decimal.list-inside
+                li Log into your account.
+                li Navigate to the &quot;Creations&quot; page.
+                li Select the recipe you want to delete.
+                li Click the &quot;Delete&quot; button located at the top right of the page.
+              p.
+                To remove recipes not created by you, send us an email at #[a.text-navyblue.underline(href="mailto:contact@kochii.app") contact@kochii.app].
+                Include a reason as to why you want it to be removed and we will review your request.
           h3.text-2xl.bg-gradient-to-r.from-skyblue.to-navyblue.text-transparent.bg-clip-text.mt-8 Account:
           .accordion-item.shadow-2xl
             button(class="hover:text-skyblue", aria-expanded="false")
-              span How do I change my password?
+              span.font-medium How do I change my password?
                 span.icon(aria-hidden="true")
             .accordion-content
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+              p Currently, you cannot change your password. This feature is expected to be implemented in the next version.
           .accordion-item.shadow-2xl
             button(class="hover:text-skyblue", aria-expanded="false")
-              span How do I delete my account?
+              span.font-medium How do I delete my account?
                 span.icon(aria-hidden="true")
             .accordion-content
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+              p Be careful, deleting your account is irreversible. You can delete your account by following these steps: 
+              ol.list-decimal.list-inside
+                li Log into your account.
+                li Navigate to the &quot;Settings&quot; page.
+                li Navigate to the &quot;Account&quot; section/sub-page.
+                li Scroll down to the Danger Zone.
+                li Click the &quot;Delete your account&quot; button.
+              p.
+                If there are any issues or concerns, feel free to send us an email at #[a.text-navyblue.underline(href="mailto:contact@kochii.app") contact@kochii.app].
+                We&apos;re always happy to talk!
           .accordion-item.shadow-2xl
             button(class="hover:text-skyblue", aria-expanded="false")
-              span How do I change my account settings?
+              span.font-medium How do I change my account settings?
                 span.icon(aria-hidden="true")
             .accordion-content
-              p Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Elementum sagittis vitae et leo duis ut. Ut tortor pretium viverra suspendisse potenti.
+              p You can change your account settings by following these steps: 
+              ol.list-decimal.list-inside
+                li Log into your account.
+                li Navigate to the &quot;Settings&quot; page.
+                li Navigate to the &quot;Account&quot; section/sub-page.
+                li Click the &quot;Edit&quot; button located at the top right of the page.
+                li Make your edits.
+                li Click the &quot;Save&quot; button located at the top right of the page.
+              p.
+                If there are any issues or concerns, feel free to send us an email at #[a.text-navyblue.underline(href="mailto:contact@kochii.app") contact@kochii.app].
+                We&apos;re always looking for feedbacks!
       section.flex.flex-col.justify-center.gap-8.pb-16(class="md:flex-row")
         img.h-16.object-contain.opacity-50.duration-200(
           class="hover:opacity-100",

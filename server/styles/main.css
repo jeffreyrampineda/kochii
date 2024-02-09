@@ -5,10 +5,10 @@
 .mobile-menu-container .mobile-menu {
   display: none;
 }
-input[type="checkbox"]#mobile-menu-toggle {
+input[type='checkbox']#mobile-menu-toggle {
   display: none;
 }
-input[type="checkbox"]:checked#mobile-menu-toggle
+input[type='checkbox']:checked#mobile-menu-toggle
   + .mobile-menu-container
   .mobile-menu {
   display: block;
@@ -47,7 +47,7 @@ input[type="checkbox"]:checked#mobile-menu-toggle
 .accordion button .icon::before {
   display: block;
   position: absolute;
-  content: "";
+  content: '';
   top: 9px;
   left: 5px;
   width: 10px;
@@ -57,44 +57,44 @@ input[type="checkbox"]:checked#mobile-menu-toggle
 .accordion button .icon::after {
   display: block;
   position: absolute;
-  content: "";
+  content: '';
   top: 5px;
   left: 9px;
   width: 2px;
   height: 10px;
   background: currentColor;
 }
-.accordion button[aria-expanded="true"] .icon::after {
+.accordion button[aria-expanded='true'] .icon::after {
   width: 0;
 }
-.accordion button[aria-expanded="true"] + .accordion-content {
+.accordion button[aria-expanded='true'] + .accordion-content {
   opacity: 1;
-  max-height: 9rem;
-  transition: all 200ms linear;
-  will-change: opacity, max-height;
+  max-height: inherit;
 }
 .accordion .accordion-content {
-  opacity: 0;
   max-height: 0;
   overflow: hidden;
-  transition: opacity 200ms linear, max-height 200ms linear;
-  will-change: opacity, max-height;
-}
-.accordion .accordion-content p {
-  padding: 1.25rem 1rem;
 }
 
-ol {
+.accordion .accordion-content p {
+  padding: 0 1rem 1rem;
+}
+
+.accordion .accordion-content ol {
+  padding: 0 1rem 1rem;
+}
+
+ol.circle-counter {
   padding: 0 0 0 36px;
   list-style: none;
   counter-reset: postList;
 }
 
-ol li {
+ol.circle-counter li {
   position: relative;
 }
 
-ol li:before {
+ol.circle-counter li:before {
   counter-increment: postList;
   content: counter(postList);
   float: left;
