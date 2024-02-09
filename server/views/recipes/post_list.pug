@@ -1,23 +1,26 @@
 extends ../layout
 
 block content
-  div(class="container mx-auto px-4 xl:px-32 pb-8 pt-40 text-center")
-    h1(class="text-4xl font-bold mb-4") Recipes
-    div(class="flex flex-col md:flex-row gap-4 justify-center mt-8")
-      a(class="rounded-full border-black border py-2 px-12" href="#") All
-      a(class="rounded-full border-black border py-2 px-12" href="#") Chicken
-      a(class="rounded-full border-black border py-2 px-12" href="#") Pork
-      a(class="rounded-full border-black border py-2 px-12" href="#") Beef
-  div(class="container mx-auto px-4 xl:px-32 pb-16" style="min-height:25vh;")
+  .container.mx-auto.px-4.pb-8.pt-40.text-center(class="xl:px-32")
+    h1.text-4xl.font-bold.mb-4 Recipes
+    .flex.flex-col.gap-4.justify-center.mt-8(class="md:flex-row")
+      a.rounded-full.border-black.border.py-2.px-12(href="#") All
+      a.rounded-full.border-black.border.py-2.px-12(href="#") Chicken
+      a.rounded-full.border-black.border.py-2.px-12(href="#") Pork
+      a.rounded-full.border-black.border.py-2.px-12(href="#") Beef
+  .container.mx-auto.px-4.pb-16(class="xl:px-32", style="min-height: 25vh")
     if posts.length > 0
       div(Class="grid grid-cols-1 md:grid-cols-4 gap-4")
         each post, index in posts
-          article(class="rounded-3xl relative overflow-hidden text-white")
-            a(style="display: block; height: 100%;" href=post.url)
-              img(class="rounded-3xl object-cover w-full h-[20rem] brightness-50 hover:scale-110 hover:brightness-100 duration-200" src=`data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
-              div(class="rounded-3xl w-full absolute bottom-0 p-4 flex flex-col justify-end pointer-events-none")
-                div(class="rounded-3xl py-1 px-4 backdrop-brightness-50")
-                  h4(class="text-xl font-extrabold") #{post.title}
+          article.rounded-3xl.relative.overflow-hidden.text-white
+            a(style="display: block; height: 100%", href=post.url)
+              img.rounded-3xl.object-cover.w-full.brightness-50.duration-200(
+                class="h-[20rem] hover:scale-110 hover:brightness-100",
+                src=`data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`
+              )
+              .rounded-3xl.w-full.absolute.bottom-0.p-4.flex.flex-col.justify-end.pointer-events-none
+                .rounded-3xl.py-1.px-4.backdrop-brightness-50
+                  h4.text-xl.font-extrabold #{ post.title }
                   p Jeffrey Pineda
     else
-      p(class="text-center text-2xl") Be the first to share!
+      p.text-center.text-2xl Be the first to share!

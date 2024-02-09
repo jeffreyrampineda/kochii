@@ -1,89 +1,143 @@
 doctype html
-html(lang='en')
+html(lang="en")
   head
     title= title
-    meta(charset='utf-8')
-    meta(name='viewport' content='width=device-width, initial-scale=1')
-    link(rel="icon" href="/public/images/kochii-logo.png" type="image/png")
-    link(rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css")
-    link(rel='stylesheet' href='/public/css/main.css')
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1")
+    link(rel="icon", href="/public/images/kochii-logo.png", type="image/png")
+    link(
+      rel="stylesheet",
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css"
+    )
+    link(rel="stylesheet", href="/public/css/main.css")
   body
     block navigation
-      nav(class='z-40 fixed w-full bg-primary text-slate-400')
-        div(class='container mx-auto p-4 xl:px-32 flex justify-between items-center gap-x-12')
-          a(class='' href="/")
-            img(class="max-h-6" alt="Kochii banner" src="/public/images/kochii-banner.png")
-          div(class='flex lg:hidden')
-            input(type="checkbox" id="mobile-menu-toggle")
-            div(class="mobile-menu-container")
-              label(class='cursor-pointer -m-2.5 inline-flex items-center justify-center rounded-md p-2.5' for="mobile-menu-toggle")
-                img(class='h-8' alt="Three horizontal lines indicating more menus" src='/public/images/icons/bars-3.svg')
-              div(class="mobile-menu fixed inset-y-0 right-0 z-50 w-full bg-primary")
-                div(class='h-full container mx-auto p-4')
-                  div(class='flex items-center justify-end')
-                    label(class='cursor-pointer -m-2.5 rounded-md p-2.5' for="mobile-menu-toggle")
-                      img(class='h-8' alt="An X mark indicating cancellation" src='/public/images/icons/x-mark.svg')
-                  div(class='h-full space-y-8 tracking-wide flex flex-col justify-center')
-                    a(class='w-full text-center hover:text-white' href='/') Home
-                    a(class='w-full text-center hover:text-white' href='/recipes') Recipes
-                    a(class='w-full text-center hover:text-white' href='/about-us') About Us
-                    a(class='rounded-full text-white bg-slate-600 py-4 w-full text-center' href='/login') Login
-                    a(class='rounded-full text-primary bg-white py-4 w-full text-center' href='/signup') Sign Up
-          div(class='hidden lg:flex justify-between items-center w-full')
-            div(class="flex gap-4 items-center")
-              a(href='/') Home
-              a(href='/recipes') Recipes
-              a(href='/about-us') About Us
-            div(class="flex gap-4 items-center")
-              a(class='rounded-full text-white bg-slate-600 py-2 px-8' href='/login') Login
-              a(class='rounded-full text-primary bg-white py-2 px-8' href='/signup') Sign Up
-              a(href='https://twitter.com/kochiiapp' target='_blank' rel='noreferrer')
-                i(class='bi bi-twitter')
-              a(href='https://github.com/jeffreyrampineda/kochii' target='_blank' rel='noreferrer')
-                i(class='bi bi-github')
+      nav.z-40.fixed.w-full.bg-primary.text-slate-400
+        .container.mx-auto.p-4.flex.justify-between.items-center.gap-x-12(
+          class="xl:px-32"
+        )
+          a(class="", href="/")
+            img.max-h-6(
+              alt="Kochii banner",
+              src="/public/images/kochii-banner.png"
+            )
+          .flex(class="lg:hidden")
+            input#mobile-menu-toggle(type="checkbox")
+            .mobile-menu-container
+              label.cursor-pointer.inline-flex.items-center.justify-center.rounded-md(
+                class="-m-2.5 p-2.5",
+                for="mobile-menu-toggle"
+              )
+                img.h-8(
+                  alt="Three horizontal lines indicating more menus",
+                  src="/public/images/icons/bars-3.svg"
+                )
+              .mobile-menu.fixed.inset-y-0.right-0.z-50.w-full.bg-primary
+                .h-full.container.mx-auto.p-4
+                  .flex.items-center.justify-end
+                    label.cursor-pointer.rounded-md(
+                      class="-m-2.5 p-2.5",
+                      for="mobile-menu-toggle"
+                    )
+                      img.h-8(
+                        alt="An X mark indicating cancellation",
+                        src="/public/images/icons/x-mark.svg"
+                      )
+                  .h-full.space-y-8.tracking-wide.flex.flex-col.justify-center
+                    a.w-full.text-center(class="hover:text-white", href="/") Home
+                    a.w-full.text-center(class="hover:text-white", href="/recipes") Recipes
+                    a.w-full.text-center(class="hover:text-white", href="/about-us") About Us
+                    a.rounded-full.text-white.bg-slate-600.py-4.w-full.text-center(
+                      href="/login"
+                    ) Login
+                    a.rounded-full.text-primary.bg-white.py-4.w-full.text-center(
+                      href="/signup"
+                    ) Sign Up
+          .hidden.justify-between.items-center.w-full(class="lg:flex")
+            .flex.gap-4.items-center
+              a(href="/") Home
+              a(href="/recipes") Recipes
+              a(href="/about-us") About Us
+            .flex.gap-4.items-center
+              a.rounded-full.text-white.bg-slate-600.py-2.px-8(href="/login") Login
+              a.rounded-full.text-primary.bg-white.py-2.px-8(href="/signup") Sign Up
+              a(
+                href="https://twitter.com/kochiiapp",
+                target="_blank",
+                rel="noreferrer"
+              )
+                i.bi.bi-twitter
+              a(
+                href="https://github.com/jeffreyrampineda/kochii",
+                target="_blank",
+                rel="noreferrer"
+              )
+                i.bi.bi-github
     block content
-    footer(class="text-slate-400")
-      div(class='bg-gradient-to-r from-skyblue to-navyblue text-white')
-        div(class="container mx-auto p-4 py-8 xl:px-32 flex flex-col lg:flex-row justify-between text-center gap-4")
+    footer.text-slate-400
+      .bg-gradient-to-r.from-skyblue.to-navyblue.text-white
+        .container.mx-auto.p-4.py-8.flex.flex-col.justify-between.text-center.gap-4(
+          class="xl:px-32 lg:flex-row"
+        )
           p Get connected with us on social networks!
-          div(class='flex gap-8 justify-center')
-            a(href='https://twitter.com/kochiiapp' target='_blank' rel='noreferrer')
-              i(class='bi bi-twitter')
-            a(href='https://www.reddit.com/user/kochiiapp' target='_blank' rel='noreferrer')
-              i(class='bi bi-reddit')
-            a(href='https://www.linkedin.com/in/jeffreyrampineda' target='_blank' rel='noreferrer')
-              i(class='bi bi-linkedin')
-            a(href='https://www.instagram.com/kochiiapp' target='_blank' rel='noreferrer')
-              i(class='bi bi-instagram')
-      div(class="bg-primary")
-        div(class="container mx-auto p-4 py-8 xl:px-32 text-center lg:py-16 grid grid-cols-1 lg:grid-cols-6 gap-8 lg:text-left")
-          div(class="lg:col-span-3 flex flex-col gap-2")
-            h4(class="text-lg font-bold") Company
+          .flex.gap-8.justify-center
+            a(
+              href="https://twitter.com/kochiiapp",
+              target="_blank",
+              rel="noreferrer"
+            )
+              i.bi.bi-twitter
+            a(
+              href="https://www.reddit.com/user/kochiiapp",
+              target="_blank",
+              rel="noreferrer"
+            )
+              i.bi.bi-reddit
+            a(
+              href="https://www.linkedin.com/in/jeffreyrampineda",
+              target="_blank",
+              rel="noreferrer"
+            )
+              i.bi.bi-linkedin
+            a(
+              href="https://www.instagram.com/kochiiapp",
+              target="_blank",
+              rel="noreferrer"
+            )
+              i.bi.bi-instagram
+      .bg-primary
+        .container.mx-auto.p-4.py-8.text-center.grid.grid-cols-1.gap-8(
+          class="xl:px-32 lg:py-16 lg:grid-cols-6 lg:text-left"
+        )
+          .flex.flex-col.gap-2(class="lg:col-span-3")
+            h4.text-lg.font-bold Company
             p.
               Kochii is a personal open source project created by Jeffrey Ram
               Pineda as a hobby. It is created with Angular as a frontend
               framework, Express.js for the backend server, and MongoDB as its
               database.
-          div(class="flex flex-col gap-2")
-            h4(class="text-lg font-bold") Technologies
-            p #[a(class="" href="https://fdc.nal.usda.gov") Food Data Central]
-            p #[a(class="" href="https://angular.io") Angular]
-            p #[a(class="" href="https://expressjs.com") Express]
-            p #[a(class="" href="https://www.mongodb.com") MongoDB]
-          div(class="flex flex-col gap-2")
-            h4(class="text-lg font-bold") Useful Links
-            p #[a(class="" href="#") Become an Affiliate]
-            p #[a(class="" href="#") Help]
-          div(class="flex flex-col gap-2")
-            h4(class="text-lg font-bold") Contact
-            p #[i(class="bi bi-house-door-fill")  Toronto, ON, Canada]
-            p #[i(class="bi bi-envelope-fill")  contact@kochii.app]
-            p #[i(class="bi bi-telephone-fill")  + 01 234 567 8910]
-      div(class="bg-primary-dark")
-        div(class="container mx-auto p-4 py-8 xl:px-32 text-center flex flex-col lg:flex-row justify-between gap-4")
-          p(class="text-sm text-white")
-            a(href='/legal/terms-of-service') Terms of Service
+          .flex.flex-col.gap-2
+            h4.text-lg.font-bold Technologies
+            p #[a(class="", href="https://fdc.nal.usda.gov") Food Data Central]
+            p #[a(class="", href="https://angular.io") Angular]
+            p #[a(class="", href="https://expressjs.com") Express]
+            p #[a(class="", href="https://www.mongodb.com") MongoDB]
+          .flex.flex-col.gap-2
+            h4.text-lg.font-bold Useful Links
+            p #[a(class="", href="#") Become an Affiliate]
+            p #[a(class="", href="#") Help]
+          .flex.flex-col.gap-2
+            h4.text-lg.font-bold Contact
+            p #[i.bi.bi-house-door-fill Toronto, ON, Canada]
+            p #[i.bi.bi-envelope-fill contact@kochii.app]
+            p #[i.bi.bi-telephone-fill + 01 234 567 8910]
+      .bg-primary-dark
+        .container.mx-auto.p-4.py-8.text-center.flex.flex-col.justify-between.gap-4(
+          class="xl:px-32 lg:flex-row"
+        )
+          p.text-sm.text-white
+            a(href="/legal/terms-of-service") Terms of Service
             | &nbsp;&nbsp;|&nbsp;&nbsp;
-            a(href='/legal/privacy-policy') Privacy Policy
+            a(href="/legal/privacy-policy") Privacy Policy
           p Kochii &copy; 2024 All Rights Reserved.
     script(src="/public/js/main.js")

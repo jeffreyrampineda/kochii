@@ -1,10 +1,15 @@
 extends layout
 
 block content
-  div(class="container mx-auto px-4 xl:px-32 flex flex-col justify-center gap-4 text-center" style="height: 100vh")
-    h1(class="text-6xl font-bold")= message_title
-    h2(class="text-6xl font-bold")= message_subtitle
+  .container.mx-auto.px-4.flex.flex-col.justify-center.gap-4.text-center(
+    class="xl:px-32",
+    style="height: 100vh"
+  )
+    h1.text-6xl.font-bold= message_title
+    h2.text-6xl.font-bold= message_subtitle
     hr
-    p(class="text-2xl bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text")= message_description
-    div(class="mt-8")
-      a(class='font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' href="/") Go home
+    p.text-2xl.bg-gradient-to-r.from-skyblue.to-navyblue.text-transparent.bg-clip-text= message_description
+    .mt-8
+      a.font-bold.rounded-full.bg-gradient-to-r.from-skyblue.to-navyblue.text-white.py-4.px-12(
+        href="/"
+      ) Go home

@@ -1,21 +1,23 @@
 extends layout
 
 block content
-  div(class="bg-gradient-to-r from-skyblue to-navyblue text-white text-center")
-    div(class="container mx-auto px-4 xl:px-32 pb-28 pt-40")
-      h1(class="text-6xl font-bold mb-4") About Us
-      p(class="text-2xl") Everything you need to know about Kochii
-  section(class="container mx-auto px-4 xl:px-32 py-16 grid grid-cols-1 md:grid-cols-2 gap-8")
+  .bg-gradient-to-r.from-skyblue.to-navyblue.text-white.text-center
+    .container.mx-auto.px-4.pb-28.pt-40(class="xl:px-32")
+      h1.text-6xl.font-bold.mb-4 About Us
+      p.text-2xl Everything you need to know about Kochii
+  section.container.mx-auto.px-4.py-16.grid.grid-cols-1.gap-8(
+    class="xl:px-32 md:grid-cols-2"
+  )
     div(class="md:col-span-1")
-      h2(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text mb-4") Who created Kochii?
+      h2.text-4xl.font-light.bg-gradient-to-r.from-skyblue.to-navyblue.text-transparent.bg-clip-text.mb-4 Who created Kochii?
       p.
         Kochii is a personal open source project created by Jeffrey Ram Pineda as a hobby. 
         It is created with Angular as a frontend framework, Express.js for the backend server, 
         and MongoDB as its database.
-      p. 
+      p.
         Have any questions? Got any suggestions? Fill the form on your
         right or use kochii's primary email contact@kochii.app
-      h2(class="text-4xl font-light bg-gradient-to-r from-skyblue to-navyblue text-transparent bg-clip-text my-4") What is Kochii?
+      h2.text-4xl.font-light.bg-gradient-to-r.from-skyblue.to-navyblue.text-transparent.bg-clip-text.my-4 What is Kochii?
       p.
         Knowing how to prepare your meals in advance will help you save
         money. Kochii is designed to keep track of busy people's cooking
@@ -27,16 +29,32 @@ block content
         recipes he/she can and cannot make in relation to his/her
         recorded inventory.
     div
-      h2(class="text-4xl text-center mb-4") Contact
-      form(method="POST" action="/send")
-        div(class="text-xl mb-4")
-          label(class="block my-2" for="name") Name
-          input(class="appearance-none border rounded w-full py-2 px-3" type="text" name="from_name" id="name" placeholder="Full Name *")
-        div(class="text-xl mb-4")
-          label(class="block my-2" for="email") Email address
-          input(class="appearance-none border rounded w-full py-2 px-3" type="text" name="from_email" id="email" placeholder="Email Address *")
-        div(class="text-xl mb-4")
-          label(class="block my-2" for="body") Message
-          textarea(class="appearance-none border rounded w-full py-2 px-3" type="text" name="body" id="body" rows="7" placeholder="Message" style="resize: none;")
-        div(class="text-center")
-          button(class='font-bold rounded-full bg-gradient-to-r from-skyblue to-navyblue text-white py-4 px-12' type="submit") Send
+      h2.text-4xl.text-center.mb-4 Contact
+      form(method="POST", action="/send")
+        .text-xl.mb-4
+          label.block.my-2(for="name") Name
+          input#name.appearance-none.border.rounded.w-full.py-2.px-3(
+            type="text",
+            name="from_name",
+            placeholder="Full Name *"
+          )
+        .text-xl.mb-4
+          label.block.my-2(for="email") Email address
+          input#email.appearance-none.border.rounded.w-full.py-2.px-3(
+            type="text",
+            name="from_email",
+            placeholder="Email Address *"
+          )
+        .text-xl.mb-4
+          label.block.my-2(for="body") Message
+          textarea#body.appearance-none.border.rounded.w-full.py-2.px-3(
+            type="text",
+            name="body",
+            rows="7",
+            placeholder="Message",
+            style="resize: none"
+          )
+        .text-center
+          button.font-bold.rounded-full.bg-gradient-to-r.from-skyblue.to-navyblue.text-white.py-4.px-12(
+            type="submit"
+          ) Send

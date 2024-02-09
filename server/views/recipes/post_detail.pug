@@ -1,45 +1,47 @@
 extends ../layout
 
 block content
-  article(class="container mx-auto px-4 xl:px-32 pb-16 pt-28")
-    nav(class="my-4" aria-label="breadcrumb")
-      a(class="text-navyblue" href="/") Home
+  article.container.mx-auto.px-4.pb-16.pt-28(class="xl:px-32")
+    nav.my-4(aria-label="breadcrumb")
+      a.text-navyblue(href="/") Home
       span &nbsp;/&nbsp;
-      a(class="text-navyblue" href="/recipes") Recipes
+      a.text-navyblue(href="/recipes") Recipes
       span &nbsp;/&nbsp;
-      span(aria-current="page") #{post.title}
-    div(class="flex flex-col lg:flex-row gap-4")
-      div(class="flex-1 shadow-2xl rounded-3xl")
-        img(class="object-cover w-full rounded-t-3xl" src= `data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`)
-        div(class="p-4")
+      span(aria-current="page") #{ post.title }
+    .flex.flex-col.gap-4(class="lg:flex-row")
+      .flex-1.shadow-2xl.rounded-3xl
+        img.object-cover.w-full.rounded-t-3xl(
+          src=`data:${post.banner.contentType};base64,${post.banner.data.toString('base64')}`
+        )
+        .p-4
           each tag, index in post.tags
-            a(href="#" class="text-navyblue") #{tag}
+            a.text-navyblue(href="#") #{ tag }
             if index < post.tags.length - 1
-              i(class="bi bi-dot")
-          div(class="flex flex-col justify-between gap-4 md:flex-row md:place-items-end")
-            h1(class="text-2xl font-bold") #{post.title}
-            div(class="flex gap-2")
-              button(class="font-bold rounded-full border py-2 px-4") #[i(class="bi bi-hand-thumbs-up")] #{post.likes} 
-              button(class="font-bold rounded-full border py-2 px-4") #[i(class="bi bi-hand-thumbs-down")] #{post.dislikes}
-          hr(class="my-4")
-          div(class="grid grid-cols-2 gap-4 md:grid-cols-4")
-            span Servings: #[span(class="text-lg font-bold") #{post.servings}]
-            span Cook time: #[span(class="text-lg font-bold") #{post.cooking_time}]
-            span Prep time: #[span(class="text-lg font-bold") #{post.prep_time}]
-            span Calories: #[span(class="text-lg font-bold") #{post.calories} kcal]
-          hr(class="my-4")
-          h4(class="text-xl font-bold") Ingredients
-          div(class="grid grid-cols-1 md:grid-cols-2 my-4 md:px-8")
+              i.bi.bi-dot
+          .flex.flex-col.justify-between.gap-4(class="md:flex-row md:place-items-end")
+            h1.text-2xl.font-bold #{ post.title }
+            .flex.gap-2
+              button.font-bold.rounded-full.border.py-2.px-4 #[i.bi.bi-hand-thumbs-up] #{ post.likes } 
+              button.font-bold.rounded-full.border.py-2.px-4 #[i.bi.bi-hand-thumbs-down] #{ post.dislikes }
+          hr.my-4
+          .grid.grid-cols-2.gap-4(class="md:grid-cols-4")
+            span Servings: #[span.text-lg.font-bold #{ post.servings }]
+            span Cook time: #[span.text-lg.font-bold #{ post.cooking_time }]
+            span Prep time: #[span.text-lg.font-bold #{ post.prep_time }]
+            span Calories: #[span.text-lg.font-bold #{ post.calories } kcal]
+          hr.my-4
+          h4.text-xl.font-bold Ingredients
+          .grid.grid-cols-1.my-4(class="md:grid-cols-2 md:px-8")
             each ingredient in post.ingredients
               div
-                input(class="mr-2" type="checkbox" id=ingredient._id)
-                label(for=ingredient._id) #{ingredient.quantity} #{ingredient.unit_of_measurement} - #{ingredient.name}, #{ingredient.description}
-          hr(class="my-4")
-          h4(class="text-xl font-bold") Instructions 
+                input.mr-2(type="checkbox", id=ingredient._id)
+                label(for=ingredient._id) #{ ingredient.quantity } #{ ingredient.unit_of_measurement } - #{ ingredient.name }, #{ ingredient.description }
+          hr.my-4
+          h4.text-xl.font-bold Instructions
           ol(role="list")
             each instruction in post.instructions
-              li(class="my-4") #{instruction.description}
-          p(class="my-4") #{post.content}
+              li.my-4 #{ instruction.description }
+          p.my-4 #{ post.content }
       article(class="lg:w-1/4 xl:w-1/3")
-        h2(class="text-xl mb-2") #{post.author.full_name_formatted}
-        p #{post.summary}
+        h2.text-xl.mb-2 #{ post.author.full_name_formatted }
+        p #{ post.summary }
